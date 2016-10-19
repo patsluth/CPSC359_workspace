@@ -1,0 +1,59 @@
+
+build/output.elf:     file format elf32-littlearm
+
+
+Disassembly of section .init:
+
+00008000 <_start>:
+    8000:	eaffffff 	b	8004 <main>
+
+Disassembly of section .text:
+
+00008004 <main>:
+    8004:	e3a0d902 	mov	sp, #32768	; 0x8000
+    8008:	eb000001 	bl	8014 <EnableJTAG>
+    800c:	e3a0000a 	mov	r0, #10
+
+00008010 <haltLoop$>:
+    8010:	eafffffe 	b	8010 <haltLoop$>
+
+00008014 <EnableJTAG>:
+    8014:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    8018:	e59f0064 	ldr	r0, [pc, #100]	; 8084 <dowaitloop+0xc>
+    801c:	e0211001 	eor	r1, r1, r1
+    8020:	e5801000 	str	r1, [r0]
+    8024:	eb000012 	bl	8074 <dowait>
+    8028:	e59f0058 	ldr	r0, [pc, #88]	; 8088 <dowaitloop+0x10>
+    802c:	e59f1058 	ldr	r1, [pc, #88]	; 808c <dowaitloop+0x14>
+    8030:	e5801000 	str	r1, [r0]
+    8034:	eb00000e 	bl	8074 <dowait>
+    8038:	e0211001 	eor	r1, r1, r1
+    803c:	e5801000 	str	r1, [r0]
+    8040:	e59f0048 	ldr	r0, [pc, #72]	; 8090 <dowaitloop+0x18>
+    8044:	e5901000 	ldr	r1, [r0]
+    8048:	e3c11a07 	bic	r1, r1, #28672	; 0x7000
+    804c:	e3811a02 	orr	r1, r1, #8192	; 0x2000
+    8050:	e5801000 	str	r1, [r0]
+    8054:	e59f0038 	ldr	r0, [pc, #56]	; 8094 <dowaitloop+0x1c>
+    8058:	e5901000 	ldr	r1, [r0]
+    805c:	e59f2034 	ldr	r2, [pc, #52]	; 8098 <dowaitloop+0x20>
+    8060:	e1c11002 	bic	r1, r1, r2
+    8064:	e59f2030 	ldr	r2, [pc, #48]	; 809c <dowaitloop+0x24>
+    8068:	e1811002 	orr	r1, r1, r2
+    806c:	e5801000 	str	r1, [r0]
+    8070:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+
+00008074 <dowait>:
+    8074:	e3a02f4b 	mov	r2, #300	; 0x12c
+
+00008078 <dowaitloop>:
+    8078:	e2522001 	subs	r2, r2, #1
+    807c:	1afffffd 	bne	8078 <dowaitloop>
+    8080:	e12fff1e 	bx	lr
+    8084:	3f200094 	.word	0x3f200094
+    8088:	3f200098 	.word	0x3f200098
+    808c:	0bc00010 	.word	0x0bc00010
+    8090:	3f200000 	.word	0x3f200000
+    8094:	3f200008 	.word	0x3f200008
+    8098:	00e3ffc0 	.word	0x00e3ffc0
+    809c:	0061b6c0 	.word	0x0061b6c0
