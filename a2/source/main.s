@@ -12,7 +12,6 @@ main:
 	bl InitUART                   // Initialize the UART
 
 
-
 	ldr r1, =inputBuffer
   ldrb r0, [r1]
 
@@ -62,12 +61,67 @@ getNumberListSize:
   bgt  wrongListFormat
 
 
-//TODO
 
-//If we make it this far, the value should be an integer from 1-9
-  //Save this value to a register/array for later use.
 
-//Need to build the main loop tonight
+  //If we make it this far, value should be good. 
+  
+  //NJE TODO: Subtract 48 from r0 to convert to decimal
+  //Save this into r12
+  mov r12, r0
+
+  
+/////////////////////////////////////////////////////////////////  
+  
+  
+  //Setup for while loop//
+  //r11 will be used to store iteration counter
+  mov r11, #0
+  
+  //NJE TODO: make a character vector thing of the words "first" through "ninth"
+
+ 
+  //Beginning of the while r11 < r12 loop
+  bl  test
+  nop
+  
+  
+test: 
+  cmp r11, r12
+  bl mainLoop
+  bge doneLoop
+  
+mainLoop:
+
+  //This is where the stuff happens for the main loop
+    //NJE TODO: Write "Please enter xth number"
+    //NJE TODO: Take in UART input
+      //NJE TODO: Check input
+        //NJE TODO: If good, continue
+        //NJE TODO: Otherwise, print error message, bl mainLoop
+    
+  
+
+  ////////
+    //NJE TODO: Convert from ascii to int
+    //NJE TODO: Save value to array
+  
+  
+  //end of loop
+  inc r11       //I'm not sure if inc is a command in arm assembly
+  bl test     //We always want to jump back to test
+  
+
+//Stuff after loop
+doneLoop:
+
+  //NJE TODO: Print sorted list
+  //NJE TODO: Print median
+  
+  //NJE TODO: Print "###################"
+  
+
+
+
 
 
 
@@ -77,39 +131,9 @@ getNumberListSize:
   //ldrb r6, [r4, #1]
   //mov r1, r1
   //nop
-  //
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+////////////////////////////////////////////////////////////////////////////
 
 	// PRINT INT ARRAY EXAMPLE (IN ASCII)
 	ldr r0, =testArray
