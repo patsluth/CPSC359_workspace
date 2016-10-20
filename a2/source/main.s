@@ -63,33 +63,33 @@ getNumberListSize:
 
 
 
-  //If we make it this far, value should be good. 
-  
+  //If we make it this far, value should be good.
+
   //NJE TODO: Subtract 48 from r0 to convert to decimal
   //Save this into r12
   mov r12, r0
 
-  
-/////////////////////////////////////////////////////////////////  
-  
-  
+
+/////////////////////////////////////////////////////////////////
+
+
   //Setup for while loop//
   //r11 will be used to store iteration counter
   mov r11, #0
-  
+
   //NJE TODO: make a character vector thing of the words "first" through "ninth"
 
- 
+
   //Beginning of the while r11 < r12 loop
   bl  test
   nop
-  
-  
-test: 
+
+
+test:
   cmp r11, r12
   bl mainLoop
   bge doneLoop
-  
+
 mainLoop:
 
   //This is where the stuff happens for the main loop
@@ -98,28 +98,31 @@ mainLoop:
       //NJE TODO: Check input
         //NJE TODO: If good, continue
         //NJE TODO: Otherwise, print error message, bl mainLoop
-    
-  
+
+
 
   ////////
     //NJE TODO: Convert from ascii to int
     //NJE TODO: Save value to array
-  
-  
+
+
   //end of loop
-  inc r11       //I'm not sure if inc is a command in arm assembly
+  add r11, r11, #1       //increment r11
   bl test     //We always want to jump back to test
-  
+
 
 //Stuff after loop
 doneLoop:
 
   //NJE TODO: Print sorted list
   //NJE TODO: Print median
-  
-  //NJE TODO: Print "###################"
-  
 
+
+  //NJE: Print "###################"
+  ldr r0, =endOfRun
+  mov r1, #21
+  bl WriteStringUART
+  nop
 
 
 
@@ -370,6 +373,10 @@ listSizeStringEnd:
 wrongListSizeFormatString:
   .ascii "Wrong number format! Please input int from [1-9]\n\r"
 wrongListSizeFormatStringEnd:
+
+endOfRun:
+  .ascii "###################\n\r"
+endofRunEnd:
 
 newline:
 	.asciz "\n"
