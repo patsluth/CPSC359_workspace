@@ -1,5 +1,5 @@
 .section    .init
-.globl     _start
+.global     _start
 
 _start:
     b       main
@@ -18,14 +18,143 @@ main:
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+	ldr r1, =inputBuffer
+  ldrb r0, [r1]
+
+  //NJE:
+  ldr r0, =creatorString
+  mov r1, #47
+  bl WriteStringUART
+  nop
+
+  //NJE:
+  ldr r0, =listSizeString
+  mov r1, #43
+  bl  WriteStringUART
+  bl  getNumberListSize
+
+//Go back here if get number list size doesn't work properly
+wrongListFormat:
+  ldr r0, =wrongListSizeFormatString
+  mov r1, #50
+  bl  WriteStringUART
+  //NJE: Get size of number list
+
+getNumberListSize:
+  ldr r0, =inputBuffer
+  mov r1, #4
+  bl  ReadLineUART
+  nop
+
+  //NJE: Make sure that it's within [1-9].
+  // Otherwise, branch to get number list again.
+
+  // after calling readLineUART, r0 holds length of input buffer (I THINK??)
+  // if r0 != 1, wrong format.
+  cmp r0, #1
+  bne wrongListFormat
+
+  // Otherwise, load value from input buffer, continue with checks
+  ldr r4, =inputBuffer
+  ldrb r0, [r4]
+
+  // if r0 (ascii value) < 489 (ascii for 1), wrong format
+  cmp r0, #49
+  blt  wrongListFormat
+
+  // if r0 (ascii value) > 57 (ascii for 9), wrong format
+  cmp r0, #57
+  bgt  wrongListFormat
+
+
+
+
+  //If we make it this far, value should be good.
+
+  //NJE TODO: Subtract 48 from r0 to convert to decimal
+  //Save this into r12
+  mov r12, r0
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+  //Setup for while loop//
+  //r11 will be used to store iteration counter
+  mov r11, #0
+
+  //NJE TODO: make a character vector thing of the words "first" through "ninth"
+
+
+  //Beginning of the while r11 < r12 loop
+  bl  test
+  nop
+
+
+test:
+  cmp r11, r12
+  bl mainLoop
+  bge doneLoop
+
+mainLoop:
+
+  //This is where the stuff happens for the main loop
+    //NJE TODO: Write "Please enter xth number"
+    //NJE TODO: Take in UART input
+      //NJE TODO: Check input
+        //NJE TODO: If good, continue
+        //NJE TODO: Otherwise, print error message, bl mainLoop
+
+
+
+  ////////
+    //NJE TODO: Convert from ascii to int
+    //NJE TODO: Save value to array
+
+
+  //end of loop
+  add r11, r11, #1       //increment r11
+  bl test     //We always want to jump back to test
+
+
+//Stuff after loop
+doneLoop:
+
+  //NJE TODO: Print sorted list
+  //NJE TODO: Print median
+
+
+  //NJE: Print "###################"
+  ldr r0, =endOfRun
+  mov r1, #21
+  bl WriteStringUART
+  nop
+
+
+
+
+
+
+
+  //NJE: This is how to load
+  //ldr r4, =inputBuffer
+  //ldrb r5, [r4]
+  //ldrb r6, [r4, #1]
+  //mov r1, r1
+  //nop
 
 
 
@@ -36,29 +165,31 @@ main:
 	bl WriteStringUART
 
 
-	
 	// Print new line
 	ldr r0, =newline
 	mov	r1, #1
 	bl WriteStringUART
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	// Sort array
 	ldr r0, =testArray
 	ldr r1, =testArrayEnd
 	bl sortArray
-	
-	
-	
-	
+
+
+
+
 	// Get median value of sorted array
 	ldr r0, =testArray
 	ldr r1, =testArrayEnd
 	bl getMedian
+	
+	
+	
 	
 	
 	
@@ -101,19 +232,19 @@ mov r2, r0      // save reference to arrayStart
 		strb r4, [r0]
 		mov r0, r2          		// reset r0 to arrayStart
 		b loopBody
-	
+
 	loopEnd:
 
 	mov pc, r14			 			// return
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
 // input r0 = arrayStart
 // input r1 = arrayEnd
 // output r2  = median value
@@ -126,13 +257,13 @@ mov r2, r0      // save reference to arrayStart
 	add r0, #1						// advance array start 1 index
 	sub r1, #1						// advance array end -1 index
 
-    cmp r0, r1           			
+    cmp r0, r1
     bge loopEnd_					// if (start index >= end index) then found mid
 
     b loopBody_
 
   loopEnd_:
-  
+
 	// if the array size is even, r1 will be r0 - 1
 	// if the array size is odd, r1 will equal r0
 	ldrb r2, [r1]
@@ -181,7 +312,7 @@ uDecToASCII:
 		// r1 = length of string (bytes)
 		ldr r1, =uDecToASCIIBufferEnd
 		sub	r1, r0
-
+		
 		mov pc, r14						// return
 		
 		
@@ -240,6 +371,10 @@ listSizeStringEnd:
 wrongListSizeFormatString:
   .ascii "Wrong number format! Please input int from [1-9]\n\r"
 wrongListSizeFormatStringEnd:
+
+endOfRun:
+  .ascii "###################\n\r"
+endofRunEnd:
 
 newline:
 	.asciz "\n"
