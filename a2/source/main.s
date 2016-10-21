@@ -12,16 +12,38 @@ main:
 	bl InitUART                   // Initialize the UART
 
 
-	ldr r1, =inputBuffer
-  ldrb r0, [r1]
 
-  //NJE:
+  //NJE: This is how to load
+  //ldr r4, =inputBuffer
+  //ldrb r5, [r4]
+  //ldrb r6, [r4, #1]
+  //mov r1, r1
+  //nop
+
+
+  //TODO: Trying to figure out how to print from array
+  //NOTE: Look at "Inputbuffer" to change the way that the array is stored
+  //ldr r4, =loopNumberString
+  //ldrb r0, [r4, #4]
+  //ldr r0, [r4, #4]
+  //mov r1, #6
+  //bl WriteStringUART
+
+  //ldr r4, =loopNumberSize
+  //ldrb r1, [r4, #4]
+  //bl WriteStringUART
+  //nop
+  //nop
+  //nop
+  //ENDTODO
+
+  //NJE: Print names of creators
   ldr r0, =creatorString
   mov r1, #47
   bl WriteStringUART
   nop
 
-  //NJE:
+  //NJE: Asking for size of list
   ldr r0, =listSizeString
   mov r1, #43
   bl  WriteStringUART
@@ -74,11 +96,8 @@ getNumberListSize:
 
 
   //Setup for while loop//
-  //r11 will be used to store iteration counter
+  //NOTES: r11 will be used to store iteration counter
   mov r11, #0
-
-  //NJE TODO: make a character vector thing of the words "first" through "ninth"
-
 
   //Beginning of the while r11 < r12 loop
   bl  test
@@ -87,15 +106,40 @@ getNumberListSize:
 
 test:
   cmp r11, r12
+
+  bge doneLoop    //might have to switch order. not sure if there's a delay slot
   bl mainLoop
-  bge doneLoop
 
 mainLoop:
 
   //This is where the stuff happens for the main loop
+
+
+
     //NJE TODO: Write "Please enter xth number"
+    ldr r0, =inputRequest   //"Please enter the "
+    mov r1, #17
+    bl WriteStringUART
+
+      //!!!!!Number goes here!!!!!
+
+    ldr r0, =inputRequest2  //" number\n\r"
+    mov r1, #9
+    bl WriteStringUART
+
+//------------------------------------------------------//
     //NJE TODO: Take in UART input
+
+    ldr r0, =inputBuffer
+    mov r1, #4
+    bl  ReadLineUART
+    nop
+
+
+//------------------------------------------------------//
       //NJE TODO: Check input
+
+
         //NJE TODO: If good, continue
         //NJE TODO: Otherwise, print error message, bl mainLoop
 
@@ -370,6 +414,8 @@ listSizeString:
   .ascii "Please enter the size of the number list:\n\r"
 listSizeStringEnd:
 
+
+
 wrongListSizeFormatString:
   .ascii "Wrong number format! Please input int from [1-9]\n\r"
 wrongListSizeFormatStringEnd:
@@ -381,6 +427,30 @@ endofRunEnd:
 newline:
 	.asciz "\n"
 
+inputRequest:
+  .ascii "Please enter the "
+inputRequestEnd:
+
+inputRequest2:
+  .ascii " number\n\r"
+inputRequest2End:
+
+.align 4
+.global loopNumberString
+loopNumberString: .word n_1, n_2, n_3, n_4, n_5, n_6, n_7, n_8, n_9
+n_1: .ascii "first\n"
+n_2: .ascii "second"
+n_3: .ascii "third"
+n_4: .ascii "fourth"
+n_5: .ascii "fifth"
+n_6: .ascii "sixth"
+n_7: .ascii "seventh"
+n_8: .ascii "eighth"
+n_9: .ascii "ninth"
+
+loopNumberSize:
+  .byte 6, 7, 6, 7, 6, 6, 8, 7, 6
+loopNumberSizeEnd:
 
 
 .end
