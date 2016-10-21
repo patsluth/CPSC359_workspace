@@ -23,11 +23,11 @@ main:
 
   //TODO: Trying to figure out how to print from array
   //NOTE: Look at "Inputbuffer" to change the way that the array is stored
-  //ldr r4, =loopNumberString
-  //ldrb r0, [r4, #4]
+  ldr r4, =loopNumberString
+  ldrb r0, [r4]
   //ldr r0, [r4, #4]
-  //mov r1, #6
-  //bl WriteStringUART
+  mov r1, #5
+  bl WriteStringUART
 
   //ldr r4, =loopNumberSize
   //ldrb r1, [r4, #4]
@@ -435,21 +435,12 @@ inputRequest2:
   .ascii " number\n\r"
 inputRequest2End:
 
-.align 4
-.global loopNumberString
-loopNumberString: .word n_1, n_2, n_3, n_4, n_5, n_6, n_7, n_8, n_9
-n_1: .ascii "first\n"
-n_2: .ascii "second"
-n_3: .ascii "third"
-n_4: .ascii "fourth"
-n_5: .ascii "fifth"
-n_6: .ascii "sixth"
-n_7: .ascii "seventh"
-n_8: .ascii "eighth"
-n_9: .ascii "ninth"
+loopNumberString:
+  .ascii "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth"
+loopNumberStringEnd:
 
 loopNumberSize:
-  .byte 6, 7, 6, 7, 6, 6, 8, 7, 6
+  .byte 5, 6, 5, 6, 5, 5, 7, 6, 5
 loopNumberSizeEnd:
 
 
