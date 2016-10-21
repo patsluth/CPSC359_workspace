@@ -10,6 +10,14 @@ main:
 	mov sp, #0x8000               // Initializing the stack pointer
 	bl EnableJTAG                 // Enable JTAG
 	bl InitUART                   // Initialize the UART
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 
@@ -90,9 +98,20 @@ getNumberListSize:
   //NJE TODO: Subtract 48 from r0 to convert to decimal
   //Save this into r12
   mov r12, r0
-
-
-/////////////////////////////////////////////////////////////////
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
 
   //Setup for while loop//
@@ -172,6 +191,8 @@ doneLoop:
 
 
 
+
+
   //NJE: This is how to load
   //ldr r4, =inputBuffer
   //ldrb r5, [r4]
@@ -180,31 +201,13 @@ doneLoop:
   //nop
 
 
-////////////////////////////////////////////////////////////////////////////
 
 	// PRINT INT ARRAY EXAMPLE (IN ASCII)
 	ldr r0, =testArray
 	ldr r1, =testArrayEnd
-	sub	r1, r0						// r1 = length of testArray
+	sub r1, r0						// r1 = length of testArray
 	bl WriteStringUART
 
-
-
-
-	// Print new line
-	ldr r0, =newline
-	mov	r1, #1
-	bl WriteStringUART
-
-	// Print new line
-	ldr r0, =newline
-	mov	r1, #1
-	bl WriteStringUART
-
-	// Print new line
-	ldr r0, =newline
-	mov	r1, #1
-	bl WriteStringUART
 
 	// Print new line
 	ldr r0, =newline
@@ -228,89 +231,21 @@ doneLoop:
 	ldr r0, =testArray
 	ldr r1, =testArrayEnd
 	bl getMedian
-
-
-
-
-	// decimal to asci
-
-	ldr r0, =decToASCIBuffer
-	mov r3, r2
-	mov r4, #10
-
-	// iterate digits
-	// let r2 = n
-	// let r3 = n copy
-
-	loooooop:
-
-		udiv r3, r3, r4			// n /= 10
-		mul r5, r3, r4			// r3 * 10
-		sub r5, r2, r5			// n - (n / 10)
-		// r5 = (n % 10) at this point
-
-		strb r5, [r0]
-		ldrb r7, [r0]
-
-		mov r2, r3				// update n
-
-		cmp r2, #0				// if (n <= 0) then done
-
-		ble donelooooop
-
-
-		b loooooop
-
-	donelooooop:
-
-
-
-
-
-
-
-
-
-
-
-
-
-	ldr r0, =testArray
-	ldr r1, =testArrayEnd
-	sub	r1, r0						// r1 = length of testArray
-	bl WriteStringUART
-
-
-
-
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	bl uDecToASCIITest
+	
 	b stop
 
-
-
-
-
-
-
-  b stop
-
-
-
-  // SORT BYTE ARRAY OF INTS (WORKING)
-	ldr r0, =testArray
-  ldr r1, =testArrayEnd
-  bl sortArray
-
-
-  ldr r0, =testArray
-  ldrb r3, [r0], #1
-
-
-
-
-
 stop:
-	b	stop
+	b stop
 
 
 
@@ -378,29 +313,92 @@ mov r2, r0      // save reference to arrayStart
 	ldrb r2, [r1]
 
 	mov pc, r14						// return
+	
+	
+	
+	
 
+// Unsigned Decimal to ASCII
+// input r0 = n (decimal)
+// output r0 = pointer to stringStart 
+// output r1 = length of string (bytes)
+uDecToASCII:
 
+	// let r3 = r4 = n
+	mov r3, r0				
+	mov r4, r3		
+	mov r5, #10
+	ldr r0, =uDecToASCIIBufferEnd	
+	add r0, $-1						// last byte of uDecToASCIIBuffer
+	
+	// iterate digits
+	// curDigit = n % 10
+	// n /= 20
+	// until n <= 0
+	loopBody__:
+	
+		udiv r4, r4, r5				// n /= 10 (truncate)
+		mul r6, r4, r5				// nCopy * 10
+		// r6 = { k | k is divisble by 10 && k <= n }
+		sub r6, r3, r6				// n - ((n / 10) * 10)
+		// r6 = (n % 10)
+		add r6, #48					// to ascii
+		strb r6, [r0], #-1			// store ascii character in buffer
+		mov r3, r4					// update n
+		
+		cmp r3, #0					// if (n <= 0) 
+		ble loopEnd__				// then done
+		b loopBody__				// else loopBody__
+		
+	loopEnd__:
+	
+		// r0 = pointer to stringStart
+		// r1 = length of string (bytes)
+		ldr r1, =uDecToASCIIBufferEnd
+		sub	r1, r0
+		
+		mov pc, r14						// return
+		
+		
+		
+		
+		
+// loop 0 to n and print ASCII string
+uDecToASCIITest:
 
-
-
-
-
-
-
-
-
-
-
-
-
+	mov r8, #0
+	mov r9, #150
+	
+	loopBody___:
+	
+		mov r0, r8
+		add r8, #1
+		mov r13, r14					// save return address
+		bl uDecToASCII
+		bl WriteStringUART
+		mov r14, r13					// restore return address
+		
+		cmp r8, r9
+		bgt loopEnd___
+		b loopBody___
+	
+	loopEnd___:
+	
+		mov pc, r14						// return
+		
+		
+		
+		
+		
 	.section .data
 
 testArray:
 	.byte 99, 97, 120, 100, 101, 102, 106, 105, 104
 testArrayEnd:
 
-decToASCIBuffer:
-	.asciz "000000"
+uDecToASCIIBuffer:	// 10 byte buffer
+	.ascii "          "
+uDecToASCIIBufferEnd:
 
 inputBuffer:
   .ascii "", "", ""
@@ -426,6 +424,7 @@ endofRunEnd:
 
 newline:
 	.asciz "\n"
+<<<<<<< HEAD
 
 inputRequest:
   .ascii "Please enter the "
@@ -453,4 +452,11 @@ loopNumberSize:
 loopNumberSizeEnd:
 
 
+=======
+	
+	
+	
+	
+	
+>>>>>>> 85a3bebce63bdfb6e42e57a33bfa7e32dca190f5
 .end
