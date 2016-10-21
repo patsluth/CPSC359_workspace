@@ -21,18 +21,24 @@ main:
   //nop
 
 
-  //TODO: Trying to figure out how to print from array
-  //NOTE: Might have to change to asciz (null term if I get those weird "?" chars)
-  ldr r4, =loopNumberString
-  ldrb r0, [r4]
-  //ldr r0, [r4, #4]
-  mov r1, #5
-  bl WriteStringUART
 
-  ldr r4, =loopNumberString
-  ldrb r0, [r4, #1]
-  mov r1, #6
-  bl WriteStringUART
+
+
+  //NOTE: THIS WORKS NOW. THIS IS HOW TO READ FROM ARRAY
+      //I just don't know how to access individual elements.
+        //Think it has to do with the "This is how to load"
+  //ldr r4, =loopNumberString
+  //mov r0, r4
+  //mov r1, #7
+  //bl WriteStringUART
+
+
+  bl stop
+
+  //ldr r4, =loopNumberString
+  //ldrb r0, [r4, #1]
+  //mov r1, #6
+  //bl WriteStringUART
 
   //ldr r4, =loopNumberSize
   //ldrb r1, [r4, #4]
@@ -41,6 +47,7 @@ main:
   //nop
   //nop
   //ENDTODO
+
 
   //NJE: Print names of creators
   ldr r0, =creatorString
@@ -79,7 +86,7 @@ getNumberListSize:
   ldr r4, =inputBuffer
   ldrb r0, [r4]
 
-  // if r0 (ascii value) < 489 (ascii for 1), wrong format
+  // if r0 (ascii value) < 49 (ascii for 1), wrong format
   cmp r0, #49
   blt  wrongListFormat
 
@@ -115,10 +122,14 @@ test:
   bge doneLoop    //might have to switch order. not sure if there's a delay slot
   bl mainLoop
 
+badInt:
+  //We go here if input is not int.
+
+  //TODO: Print that it's the wrong input.
+
 mainLoop:
 
   //This is where the stuff happens for the main loop
-
 
 
     //NJE TODO: Write "Please enter xth number"
@@ -132,8 +143,14 @@ mainLoop:
     mov r1, #9
     bl WriteStringUART
 
+    nop
+    bl intInput
+
+
 //------------------------------------------------------//
     //NJE TODO: Take in UART input
+
+intInput:
 
     ldr r0, =inputBuffer
     mov r1, #4
@@ -142,15 +159,43 @@ mainLoop:
 
 
 //------------------------------------------------------//
-      //NJE TODO: Check input
+    //NJE TODO: Check input
+    //r9 is my iterator
+    //r10 used to keep track of how many elements to look at
+
+    mov r9, #0
+    mov r10, r0
+
+    //NOTE TODO: Actually want to offset inputBuffer by r9
+    ldr r1, =inputBuffer
+    ldrb r0, [r1, r9]
+
+    //while loop
+    intTest:
+      cmp r9, r10
+      bge doneIntTest
 
 
-        //NJE TODO: If good, continue
-        //NJE TODO: Otherwise, print error message, bl mainLoop
+      //if construct (test to see if the ascii code isn't an int)
+      // if r0 (ascii value) < 48 (ascii for 0), wrong format
+      cmp r0, #48
+      blt  badInt
+
+      // if r0 (ascii value) > 57 (ascii for 9), wrong format
+      cmp r0, #57
+      bgt  badInt
 
 
 
-  ////////
+      add r9, r9, #1    //increment r9
+      bl intTest
+
+
+
+    //If it gets here, the value is good and can be stored
+    doneIntTest:
+
+
     //NJE TODO: Convert from ascii to int
     //NJE TODO: Save value to array
 
@@ -163,11 +208,157 @@ mainLoop:
 //Stuff after loop
 doneLoop:
 
+
+
+// PATRICK'S STUFF GOES HERE////////////////////////////////////////////////////
+
+
+
+// PRINT INT ARRAY EXAMPLE (IN ASCII)
+ldr r0, =testArray
+ldr r1, =testArrayEnd
+sub	r1, r0						// r1 = length of testArray
+bl WriteStringUART
+
+// Sort array
+ldr r0, =testArray
+ldr r1, =testArrayEnd
+bl sortArray
+
+// Get median value of sorted array
+ldr r0, =testArray
+ldr r1, =testArrayEnd
+bl getMedian
+
+
+// decimal to ascii
+ldr r0, =decToASCIBuffer
+mov r3, r2
+mov r4, #10
+
+// iterate digits
+// let r2 = n
+// let r3 = n copy
+
+loooooop:
+
+  udiv r3, r3, r4			// n /= 10
+  mul r5, r3, r4			// r3 * 10
+  sub r5, r2, r5			// n - (n / 10)
+  // r5 = (n % 10) at this point
+
+  strb r5, [r0]
+  ldrb r7, [r0]
+
+  mov r2, r3				// update n
+
+  cmp r2, #0				// if (n <= 0) then done
+
+  ble donelooooop
+
+
+  b loooooop
+
+donelooooop:
+
+
+
+ldr r0, =testArray
+ldr r1, =testArrayEnd
+sub	r1, r0						// r1 = length of testArray
+bl WriteStringUART
+
+b stop
+b stop
+
+// SORT BYTE ARRAY OF INTS (WORKING)
+ldr r0, =testArray
+ldr r1, =testArrayEnd
+bl sortArray
+
+
+ldr r0, =testArray
+ldrb r3, [r0], #1
+
+stop:
+b	stop
+
+
+// input r0 = arrayStart
+// input r1 = arrayEnd
+// output r0  = arrayStart
+sortArray:
+
+mov r2, r0      // save reference to arrayStart
+
+loopBody:
+
+  ldrb r3, [r0], #1				// r3 = r0[0]; r0 += 1;
+ldrb r4, [r0]					// r4 = r0[0];
+
+  cmp r0, r1            			// end of array?
+  beq loopEnd
+
+  cmp r3, r4            			// if (r3 < r4) then array is not sorted
+  blt notSorted
+
+  b loopBody
+
+  notSorted:
+  strb r3, [r0], #-1
+  strb r4, [r0]
+  mov r0, r2          		// reset r0 to arrayStart
+  b loopBody
+
+loopEnd:
+
+mov pc, r14			 			// return
+
+
+// input r0 = arrayStart
+// input r1 = arrayEnd
+// output r2  = median value
+getMedian:
+
+mov r2, r0      // save reference to arrayStart
+
+loopBody_:
+
+add r0, #1						// advance array start 1 index
+sub r1, #1						// advance array end -1 index
+
+  cmp r0, r1
+  bge loopEnd_					// if (start index >= end index) then found mid
+
+  b loopBody_
+
+loopEnd_:
+
+// if the array size is even, r1 will be r0 - 1
+// if the array size is odd, r1 will equal r0
+ldrb r2, [r1]
+
+mov pc, r14						// return
+
+
+
+
+
+
+
+
+
+
+
+
+
+// END OF PATRICK'S STUFF //////////////////////////////////////////////////////
+
   //NJE TODO: Print sorted list
   //NJE TODO: Print median
 
 
-  //NJE: Print "###################"
+  //NJE: End of program. Print "###################"
   ldr r0, =endOfRun
   mov r1, #21
   bl WriteStringUART
@@ -183,214 +374,6 @@ doneLoop:
   //ldrb r6, [r4, #1]
   //mov r1, r1
   //nop
-
-
-////////////////////////////////////////////////////////////////////////////
-
-	// PRINT INT ARRAY EXAMPLE (IN ASCII)
-	ldr r0, =testArray
-	ldr r1, =testArrayEnd
-	sub	r1, r0						// r1 = length of testArray
-	bl WriteStringUART
-
-
-
-
-	// Print new line
-	ldr r0, =newline
-	mov	r1, #1
-	bl WriteStringUART
-
-	// Print new line
-	ldr r0, =newline
-	mov	r1, #1
-	bl WriteStringUART
-
-	// Print new line
-	ldr r0, =newline
-	mov	r1, #1
-	bl WriteStringUART
-
-	// Print new line
-	ldr r0, =newline
-	mov	r1, #1
-	bl WriteStringUART
-
-
-
-
-
-
-	// Sort array
-	ldr r0, =testArray
-	ldr r1, =testArrayEnd
-	bl sortArray
-
-
-
-
-	// Get median value of sorted array
-	ldr r0, =testArray
-	ldr r1, =testArrayEnd
-	bl getMedian
-
-
-
-
-	// decimal to asci
-
-	ldr r0, =decToASCIBuffer
-	mov r3, r2
-	mov r4, #10
-
-	// iterate digits
-	// let r2 = n
-	// let r3 = n copy
-
-	loooooop:
-
-		udiv r3, r3, r4			// n /= 10
-		mul r5, r3, r4			// r3 * 10
-		sub r5, r2, r5			// n - (n / 10)
-		// r5 = (n % 10) at this point
-
-		strb r5, [r0]
-		ldrb r7, [r0]
-
-		mov r2, r3				// update n
-
-		cmp r2, #0				// if (n <= 0) then done
-
-		ble donelooooop
-
-
-		b loooooop
-
-	donelooooop:
-
-
-
-
-
-
-
-
-
-
-
-
-
-	ldr r0, =testArray
-	ldr r1, =testArrayEnd
-	sub	r1, r0						// r1 = length of testArray
-	bl WriteStringUART
-
-
-
-
-
-	b stop
-
-
-
-
-
-
-
-  b stop
-
-
-
-  // SORT BYTE ARRAY OF INTS (WORKING)
-	ldr r0, =testArray
-  ldr r1, =testArrayEnd
-  bl sortArray
-
-
-  ldr r0, =testArray
-  ldrb r3, [r0], #1
-
-
-
-
-
-stop:
-	b	stop
-
-
-
-
-
-// input r0 = arrayStart
-// input r1 = arrayEnd
-// output r0  = arrayStart
-sortArray:
-
-mov r2, r0      // save reference to arrayStart
-
-  loopBody:
-
-    ldrb r3, [r0], #1				// r3 = r0[0]; r0 += 1;
-	ldrb r4, [r0]					// r4 = r0[0];
-
-    cmp r0, r1            			// end of array?
-    beq loopEnd
-
-    cmp r3, r4            			// if (r3 < r4) then array is not sorted
-    blt notSorted
-
-    b loopBody
-
-    notSorted:
-		strb r3, [r0], #-1
-		strb r4, [r0]
-		mov r0, r2          		// reset r0 to arrayStart
-		b loopBody
-
-	loopEnd:
-
-	mov pc, r14			 			// return
-
-
-
-
-
-
-
-
-
-// input r0 = arrayStart
-// input r1 = arrayEnd
-// output r2  = median value
-getMedian:
-
-mov r2, r0      // save reference to arrayStart
-
-  loopBody_:
-
-	add r0, #1						// advance array start 1 index
-	sub r1, #1						// advance array end -1 index
-
-    cmp r0, r1
-    bge loopEnd_					// if (start index >= end index) then found mid
-
-    b loopBody_
-
-  loopEnd_:
-
-	// if the array size is even, r1 will be r0 - 1
-	// if the array size is odd, r1 will equal r0
-	ldrb r2, [r1]
-
-	mov pc, r14						// return
-
-
-
-
-
-
-
-
 
 
 
@@ -419,11 +402,13 @@ listSizeString:
   .ascii "Please enter the size of the number list:\n\r"
 listSizeStringEnd:
 
-
-
 wrongListSizeFormatString:
   .ascii "Wrong number format! Please input int from [1-9]\n\r"
 wrongListSizeFormatStringEnd:
+
+wrongIntInput:
+  .ascii "Wrong input format! Please input int from [1-100]\n\r"
+wrongIntInputEnd:
 
 endOfRun:
   .ascii "###################\n\r"
@@ -440,8 +425,10 @@ inputRequest2:
   .ascii " number\n\r"
 inputRequest2End:
 
+
+.align 8
 loopNumberString:
-  .ascii "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth"
+  .asciz "first\0", "second\0", "third\0", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth"
 loopNumberStringEnd:
 
 loopNumberSize:
