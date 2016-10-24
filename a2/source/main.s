@@ -243,6 +243,8 @@ ldr r0, =atodArray
 ldr r1, =atodArrayEnd
 bl getMedian
 
+mov r6, r2  //Going to hold this value in r6 for now.
+
 //decimal to ascii
 ldr r0, =decToASCIBuffer
 mov r3, r2
@@ -281,7 +283,7 @@ ldr r1, =atodArrayEnd
 sub	r1, r0						// r1 = length of testArray
 bl WriteStringUART
 
-b stop
+//b stop
 
 // SORT BYTE ARRAY OF INTS (WORKING)
 ldr r0, =testArray
@@ -293,7 +295,7 @@ ldr r0, =testArray
 ldrb r3, [r0], #1
 
 stop:
-  b finalPrint
+  bl finalPrint
 
 
 // input r0 = arrayStart
@@ -352,17 +354,6 @@ ldrb r2, [r1]
 mov pc, r14						// return
 
 
-
-
-
-
-
-
-
-
-
-
-
 // END OF PATRICK'S STUFF //////////////////////////////////////////////////////
 
 finalPrint:
@@ -388,7 +379,7 @@ finalPrint:
 
   //NJE: End of program. Print "###################"
   ldr r0, =endOfRun
-  mov r1, #21
+  mov r1, #22
   bl WriteStringUART
   nop
 
@@ -441,7 +432,7 @@ medianMessage:
 medianMessageEnd:
 
 endOfRun:
-  .ascii "###################\n\r"
+  .ascii "###################\n\n\r"
 endofRunEnd:
 
 newline:
