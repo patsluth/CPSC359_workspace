@@ -1,3 +1,20 @@
+// CPSC 359, Assignment 2
+// By: Nathan Escandor and Patrick Sluth
+// Tutorial 3
+// Submitted: October 23, 2016
+
+//Caveats about this program:
+//  - Median calculation does not always work as intended
+//
+//  ~ (I suspect that the following issues are due to memory being overwritten when it's
+//     not supposed to be. Perhaps because of memory alignment issues)
+//  - On subsequent runs of the program in one screen session, the first couple of characters
+//    of the word "Created" often get corrupted, instead printing "4reated by: ..."
+//  - the Sort function works as intended but sometimes outputs different values without a
+//    space character in between them.
+//  - I'm not sure why but after the "###################" output at the end of a run,
+//    I can't seem to use the newline and carriage return characters properly.
+
 .section    .init
 .global     _start
 
@@ -11,14 +28,13 @@ main:
 	bl EnableJTAG                 // Enable JTAG
 	bl InitUART                   // Initialize the UART
 
-
-  //NJE: Print names of creators
+  //Print names of creators
   ldr r0, =creatorString
-  mov r1, #47
+  mov r1, #48
   bl WriteStringUART
   nop
 
-  //NJE: Asking for size of list
+  //Get list size from user
   ldr r0, =listSizeString
   mov r1, #43
   bl  WriteStringUART
@@ -39,9 +55,7 @@ getNumberListSize:
 
   //NJE: Make sure that it's within [1-9].
   // Otherwise, branch to get number list again.
-
-  // after calling readLineUART, r0 holds length of input buffer (I THINK??)
-  // if r0 != 1, wrong format.
+  // if r0 != 1, did not read in any characters.
   cmp r0, #1
   bne wrongListFormat
 
@@ -65,12 +79,9 @@ getNumberListSize:
   bgt  wrongListFormat
 
 
-
-
-
   //If we make it this far, value for list size should be good.
   //Subtract 48 from r0 to convert to decimal
-  //Save this into r12
+  //Save this into r12 for later use
   sub r0, r0, #48
   mov r12, r0
 
@@ -83,49 +94,44 @@ getNumberListSize:
 
 
 test:
-  cmp r11, r12
+  cmp r11, r12    //r11 is iterator, r12 holds list number size
 
   bge doneLoop    //might have to switch order. not sure if there's a delay slot
   bl mainLoop
 
 badInt:
-  //We go here if input is not int or is wrong value.
 
+  //We go here if input is not int or is wrong value.
   ldr r0, =wrongIntInput
-  mov r1, #52
+  mov r1, #54
   bl WriteStringUART
 
 mainLoop:
 
-  //This is where the stuff happens for the main loops
+    //Printing "Please enter xth number"
 
-    //Write "Please enter xth number"
-    ldr r0, =inputRequest   //"Please enter the "
+    //"Please enter the "
+    ldr r0, =inputRequest
     mov r1, #17
     bl WriteStringUART
 
-
+    //Choosing the number from list (1st, 2nd, 3rd, etc) based on iteration counter, r11
     mov r4, #4
-
     ldr r0, =loopNumberString
     mul r3, r11, r4
     add r0, r0, r3
-
-
-
     mov r1, #4
     bl WriteStringUART
 
+    //Finish the string by printing " number"
     ldr r0, =inputRequest2  //" number\n\r"
     mov r1, #9
     bl WriteStringUART
 
-    nop
-    bl intInput
-
+    bl intInput             //not sure if I need this or if it's an artifact from before.
 
 //------------------------------------------------------//
-    //NJE TODO: Take in UART input
+    //Taking in UART input from user
 
 intInput:
 
@@ -137,7 +143,7 @@ intInput:
 
 //------------------------------------------------------//
     //CHECKING INPUT
-    //After ReadLine, r0 holds the number of characters read in
+    //After ReadLine, r0 holds the number of characters read in.
     //r8 is my result (converting from ascii string to decimal)
     //r9 is my iterator
     //r10 used to keep track of how many elements to look at
@@ -152,10 +158,8 @@ intInput:
       ldr r1, =inputBuffer
       ldrb r0, [r1, r9]
 
-    //ASDF 5:01 - this part looks good. I'm pretty sure it's offsetting properly
 
-    //while loop
-
+    //while loop (while i = 0; i < r10; i++)
       cmp r9, r10
       bge doneIntTest
 
@@ -173,17 +177,16 @@ intInput:
       cmp r10, #1
       bne atoi
 
+      //convert and skip the ascii to int (atoi) section
       sub r8, r0, #48
-      bl doneIntTest //og had this as endOfIteration
-      //ASDF 5:19 - This condition works.
+      bl doneIntTest
 
       atoi:
         //convert to decimal, add it to result (r8)
-        //num places is r10 - r9
-        sub r7, r10, r9     //r7 is number of spaces
-        mov r6, #0          //r6 is iterator to get r5 to the right multipplication factor
+        sub r7, r10, r9     //r7 is number of places in the ascii number string
+        mov r6, #0          //r6 is iterator to get r5 to the correct multiplication factor
         mov r5, #1          //r5 is multiplication factor
-        mov r4, #10         //I guess multiplication can't take constants??
+        mov r4, #10         //I guess multiplication can't take constants?? Storing 10 in r4
 
 
       expLoop:
@@ -200,17 +203,15 @@ intInput:
 
         sub r0, r0, #48   //convert to int value
         mul r0, r0, r5    //raise it to the appropriate power
-        add r8, r8, r0    //add it to my result
+        add r8, r8, r0    //add it to result
 
 
       endOfIteration:
-
       add r9, r9, #1    //increment r9
       bl intTest
 
-      //If it gets here, the value is good and can be stored
 
-
+    //If it gets here, the value is good and can be stored
     doneIntTest:
 
       //At this point, need to div r8 by #10 if we went through the atoi label.
@@ -219,11 +220,11 @@ intInput:
 
       udiv r8, r8, r4
 
-      //if value is >100, not good.
+      //if value is >100, wrong format. Get new input from user
       cmp r8, #100
       bgt badInt
 
-      //Store value in r8 into the array (atodArray), offset by r11
+    //Store value in r8 into the array (atodArray), offset by r11
     noDiv:
       ldr r0, =atodArray
       ldr r1, =atodArrayEnd
@@ -233,83 +234,88 @@ intInput:
 
 
       //end of loop
-      add r11, r11, #1       //increment r11
-      bl test     //We always want to jump back to test
+      add r11, r11, #1        //increment r11
+      bl test                 //We always want to jump back to test
 
 
 //Stuff after loop
 doneLoop:
 
-// PATRICK'S STUFF GOES HERE////////////////////////////////////////////////////
+// ----- DONE MAIN LOOP ----- //
 
 //Sort array
 ldr r0, =atodArray
 ldr r1, =atodArrayEnd
 bl sortArray
 
+//Print sorted list
+ldr r0, =storedListMessage
+mov r1, #20
+bl WriteStringUART
+nop
 
+
+mov r11, #0     //r11 is my iterator
+beginListPrint:
+
+  //print while i = 0; i < r12; i++
+  cmp r11, r12
+  bge afterListPrint
+
+  ldr r0, =atodArray
+  ldrb r3, [r0, r11]    //This is loaded properly. Need to convert to ascii
+
+  mov r0, r3
+  bl uDecToASCII
+  bl WriteStringUART
+
+  add r11, r11, #1
+  bl beginListPrint
+
+afterListPrint:
+
+
+//-----------//
+
+
+//Print median message
+ldr r0, =medianMessage
+mov r1, #17
+bl WriteStringUART
+nop
 
 //Get median of sorted array
 ldr r0, =atodArray
 ldr r1, =atodArrayEnd
 bl getMedian
-mov r6, r2  //Going to hold this value in r6 for now.
 
-bl finalPrint
+//At this point, r2 should hold the median value.
+mov r0, r2
+bl uDecToASCII
+bl WriteStringUART
 
 
-// END OF PATRICK'S STUFF //////////////////////////////////////////////////////
 
-finalPrint:
+//NJE: End of program. Print "###################"
+ldr r0, =endOfRun
+mov r1, #24
+bl WriteStringUART
 
-  //Print sorted list
-  ldr r0, =storedListMessage
+ldr r0, =newline
+mov r1, #1
+bl WriteStringUART
+
+bl main
+
+
+killProgram:
+  ldr r0, =exitMessage
   mov r1, #20
   bl WriteStringUART
-  nop
 
-
-
-    mov r11, #0
-
-  beginListPrint:
-
-    //print while i = 0; i < r12; i++
-    cmp r11, r12
-    bge afterListPrint
-
-    ldr r0, =atodArray
-    ldrb r3, [r0, r11]    //This is loaded properly. Need to convert to ascii
-
-    mov r0, r3
-    bl uDecToASCII
-    bl WriteStringUART
-
-    add r11, r11, #1
-    bl beginListPrint
-
-  afterListPrint:
-
-
-
-
-  //Print median
-  ldr r0, =medianMessage
-  mov r1, #17
-  bl WriteStringUART
-  nop
-
-    //Print value
-    //Should be stored in r2
-
-  //NJE: End of program. Print "###################"
-  ldr r0, =endOfRun
-  mov r1, #24
-  bl WriteStringUART
-  nop
-
-
-  bl main
+  mov r0, #1
+  mov r7, #1
+  SWI 0
 
 ////////////////////////FUNCTIONS///////////////////////////////////////////////
 
@@ -343,7 +349,7 @@ mov r2, r0      // save reference to arrayStart
 
 	mov pc, r14			 			// return
 
-
+  //---------------//
 
 
 // input r0 = arrayStart
@@ -371,9 +377,7 @@ mov r2, r0      // save reference to arrayStart
 
 	mov pc, r14						// return
 
-
-
-
+//---------------//
 
 // Unsigned Decimal to ASCII
 // input r0 = n (decimal)
@@ -416,6 +420,7 @@ uDecToASCII:
 
 		mov pc, r14						// return
 
+//---------------//
 
 // loop 0 to n and print ASCII string
 uDecToASCIITest:
@@ -442,12 +447,6 @@ uDecToASCIITest:
 
 
 
-killProgram:
-  mov r0, #1
-  mov r7, #1
-  SWI 0
-
-
 //##############################################################//
 
 	.section .data
@@ -468,7 +467,7 @@ inputBuffer:
 inputBufferEnd:
 
 creatorString:
-  .ascii "Created by: Patrick Sluth and Nathan Escandor\n\r"
+  .ascii "\rCreated by: Patrick Sluth and Nathan Escandor\n\r"
 creatorStringEnd:
 
 listSizeString:
@@ -480,12 +479,16 @@ wrongListSizeFormatString:
 wrongListSizeFormatStringEnd:
 
 wrongIntInput:
-  .ascii "Wrong input format! Please input int from [1-100]\n\r"
+  .ascii "\n\rWrong input format! Please input int from [1-100]\n\r"
 wrongIntInputEnd:
 
 storedListMessage:
   .ascii "The sorted list is: "
 storedListMessageEnd:
+
+exitMessage:
+  .ascii "Exiting program...\n\r"
+exitMessageEnd:
 
 medianMessage:
   .ascii "\n\rThe median is: "
@@ -497,6 +500,7 @@ endofRunEnd:
 
 newline:
 	.ascii "\n"
+newlineEnd:
 
 inputRequest:
   .ascii "Please enter the "
