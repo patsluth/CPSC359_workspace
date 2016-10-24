@@ -64,6 +64,7 @@ getNumberListSize:
   sub r0, r0, #48
   mov r12, r0
 
+  //ASDF 4:52 - Tested up to this point
 
 /////////////////////////////////////////////////////////////////
 
@@ -80,22 +81,22 @@ test:
   bl mainLoop
 
 badInt:
-  //We go here if input is not int.
+  //We go here if input is not int or is wrong value.
 
-  //TODO: Print that it's the wrong input.
-
+  ldr r0, =wrongIntInput
+  mov r1, #52
+  bl WriteStringUART
 
 mainLoop:
 
-  //This is where the stuff happens for the main loop
-
+  //This is where the stuff happens for the main loops
 
     //Write "Please enter xth number"
     ldr r0, =inputRequest   //"Please enter the "
     mov r1, #17
     bl WriteStringUART
 
-      //!!!!!Number goes here!!!!!
+      //!!!!!Number goes here!!!!!, r11
 
     ldr r0, =inputRequest2  //" number\n\r"
     mov r1, #9
@@ -127,12 +128,16 @@ intInput:
     mov r9, #0
     mov r10, r0
 
-    //NOTE TODO: Actually want to offset inputBuffer by r9
-    ldr r1, =inputBuffer
-    ldrb r0, [r1, r9]
+
+    intTest:
+      //load the value of the input buffer specified by our iterator (r9)
+      ldr r1, =inputBuffer
+      ldrb r0, [r1, r9]
+
+    //ASDF 5:01 - this part looks good. I'm pretty sure it's offsetting properly
 
     //while loop
-    intTest:
+
       cmp r9, r10
       bge doneIntTest
 
@@ -151,14 +156,14 @@ intInput:
       bne atoi
 
       sub r8, r0, #48
-      bl endOfIteration
-
+      bl doneIntTest //og had this as endOfIteration
+      //ASDF 5:19 - This condition works.
 
       atoi:
         //convert to decimal, add it to result (r8)
         //num places is r10 - r9
-        sub r7, r10, r9
-        mov r6, #0
+        sub r7, r10, r9     //r7 is number of spaces
+        mov r6, #0          //r6 is iterator to get r5 to the right multipplication factor
         mov r5, #1          //r5 is multiplication factor
         mov r4, #10         //I guess multiplication can't take constants??
 
@@ -171,16 +176,13 @@ intInput:
         //while r6 < r7
         mul r5, r5, r4
         add r6, r6, #1  //increment r6
+        bl expLoop
 
       afterExpLoop:
 
         sub r0, r0, #48   //convert to int value
         mul r0, r0, r5    //raise it to the appropriate power
         add r8, r8, r0    //add it to my result
-        bl endOfIteration
-
-
-
 
 
       endOfIteration:
@@ -193,14 +195,23 @@ intInput:
 
     doneIntTest:
 
-      //NJE TODO: Save value in r8 array
-      //Store value in r8 into the array (atodArray), offset by r9
+      //At this point, need to div r8 by #10 if we went through the atoi label.
+      cmp r10, #1
+      beq noDiv
 
+      udiv r8, r8, r4
+
+      //if value is >100, not good.
+      cmp r8, #100
+      bgt badInt
+
+      //Store value in r8 into the array (atodArray), offset by r11
+    noDiv:
       ldr r0, =atodArray
       ldr r1, =atodArrayEnd
       sub r1, r0
 
-      strb r8, [r0, r9]
+      strb r8, [r0, r11]
 
 
       //end of loop
@@ -211,36 +222,40 @@ intInput:
 //Stuff after loop
 doneLoop:
 
+
+//ASDF: 6:05 - I'm pretty sure my loop is good and done now!!!!
+
+
+
+//TODO: Make sure that it's saving properly.
+
+
 // PATRICK'S STUFF GOES HERE////////////////////////////////////////////////////
 
 
-
-// PRINT INT ARRAY EXAMPLE (IN ASCII)
-ldr r0, =testArray
-ldr r1, =testArrayEnd
-sub	r1, r0						// r1 = length of testArray
-bl WriteStringUART
-
-// Sort array
-ldr r0, =testArray
-ldr r1, =testArrayEnd
+//Sort array
+ldr r0, =atodArray
+ldr r1, =atodArrayEnd
 bl sortArray
 
-// Get median value of sorted array
-ldr r0, =testArray
-ldr r1, =testArrayEnd
+//Get median of sorted array
+ldr r0, =atodArray
+ldr r1, =atodArrayEnd
 bl getMedian
 
-
-// decimal to ascii
+//decimal to ascii
 ldr r0, =decToASCIBuffer
 mov r3, r2
 mov r4, #10
 
+
+
+
 // iterate digits
 // let r2 = n
 // let r3 = n copy
-
+mov r2, r12
+mov r3, r12
 loooooop:
 
   udiv r3, r3, r4			// n /= 10
@@ -261,11 +276,8 @@ loooooop:
   b loooooop
 
 donelooooop:
-
-
-
-ldr r0, =testArray
-ldr r1, =testArrayEnd
+ldr r0, =atodArray
+ldr r1, =atodArrayEnd
 sub	r1, r0						// r1 = length of testArray
 bl WriteStringUART
 
@@ -281,14 +293,12 @@ ldr r0, =testArray
 ldrb r3, [r0], #1
 
 stop:
-b	stop
+  b finalPrint
 
 
 // input r0 = arrayStart
 // input r1 = arrayEnd
 // output r0  = arrayStart
-
-
 sortArray:
 
   mov r2, r0      // save reference to arrayStart
@@ -355,6 +365,8 @@ mov pc, r14						// return
 
 // END OF PATRICK'S STUFF //////////////////////////////////////////////////////
 
+finalPrint:
+
   //Print sorted list
   ldr r0, =storedListMessage
   mov r1, #20
@@ -362,6 +374,7 @@ mov pc, r14						// return
   nop
 
     //Print values
+    //
 
 
   //Print median
@@ -371,7 +384,7 @@ mov pc, r14						// return
   nop
 
     //Print value
-
+    //Should be stored in r2
 
   //NJE: End of program. Print "###################"
   ldr r0, =endOfRun
@@ -380,8 +393,11 @@ mov pc, r14						// return
   nop
 
 
+  bl main
+
 //##############################################################//
 
+killProgram:
 
 	.section .data
 
@@ -442,7 +458,7 @@ inputRequest2End:
 
 .align 8
 loopNumberString:
-  .asciz "first\0", "second\0", "third\0", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth"
+  .asciz "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth"
 loopNumberStringEnd:
 
 loopNumberSize:
@@ -492,3 +508,36 @@ loopNumberSizeEnd:
 //nop
 //nop
 //ENDTODO
+
+
+
+
+
+
+
+//PATRICK'S NOTES
+// PRINT INT ARRAY EXAMPLE (IN ASCII)
+ldr r0, =testArray
+ldr r1, =testArrayEnd
+sub	r1, r0						// r1 = length of testArray
+bl WriteStringUART
+
+// Sort array
+ldr r0, =testArray
+ldr r1, =testArrayEnd
+bl sortArray
+
+// Get median value of sorted array
+ldr r0, =testArray
+ldr r1, =testArrayEnd
+bl getMedian
+
+
+// decimal to ascii
+ldr r0, =decToASCIBuffer
+mov r3, r2
+mov r4, #10
+
+// iterate digits
+// let r2 = n
+// let r3 = n copy

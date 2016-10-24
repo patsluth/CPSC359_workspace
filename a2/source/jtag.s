@@ -30,7 +30,7 @@ EnableJTAG:
 	bl		dowait		//	wait	150	cycles	again
 	eor		r1,r1
 	str		r1,[r0]
-	
+
 	//	define	ALT5	function	for	GPIO4	(JTAG	TDI	line)
 	ldr		r0,	=GPFSEL0
 	ldr		r1,[r0]
