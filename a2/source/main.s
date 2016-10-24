@@ -49,6 +49,13 @@ getNumberListSize:
   ldr r4, =inputBuffer
   ldrb r0, [r4]
 
+  // if r0 == "Q" or "q", exit program.
+  cmp r0, #81
+  beq killProgram
+
+  cmp r0, #113
+  beq killProgram
+
   // if r0 (ascii value) < 49 (ascii for 1), wrong format
   cmp r0, #49
   blt  wrongListFormat
@@ -58,19 +65,20 @@ getNumberListSize:
   bgt  wrongListFormat
 
 
+
+
+
   //If we make it this far, value for list size should be good.
   //Subtract 48 from r0 to convert to decimal
   //Save this into r12
   sub r0, r0, #48
   mov r12, r0
 
-  //ASDF 4:52 - Tested up to this point
-
 /////////////////////////////////////////////////////////////////
 
 
   //Setup for while loop//
-  //NOTES: r11 will be used to store iteration counter
+  //NOTE: r11 will be used to store iteration counter
   mov r11, #0
 
 
@@ -96,7 +104,17 @@ mainLoop:
     mov r1, #17
     bl WriteStringUART
 
-      //!!!!!Number goes here!!!!!, r11
+
+    mov r4, #4
+
+    ldr r0, =loopNumberString
+    mul r3, r11, r4
+    add r0, r0, r3
+
+
+
+    mov r1, #4
+    bl WriteStringUART
 
     ldr r0, =inputRequest2  //" number\n\r"
     mov r1, #9
@@ -222,136 +240,22 @@ intInput:
 //Stuff after loop
 doneLoop:
 
-
-//ASDF: 6:05 - I'm pretty sure my loop is good and done now!!!!
-
-
-
-//TODO: Make sure that it's saving properly.
-
-
 // PATRICK'S STUFF GOES HERE////////////////////////////////////////////////////
-
 
 //Sort array
 ldr r0, =atodArray
 ldr r1, =atodArrayEnd
 bl sortArray
 
+
+
 //Get median of sorted array
 ldr r0, =atodArray
 ldr r1, =atodArrayEnd
 bl getMedian
-
 mov r6, r2  //Going to hold this value in r6 for now.
 
-//decimal to ascii
-ldr r0, =decToASCIBuffer
-mov r3, r2
-mov r4, #10
-
-
-
-
-// iterate digits
-// let r2 = n
-// let r3 = n copy
-mov r2, r12
-mov r3, r12
-loooooop:
-
-  udiv r3, r3, r4			// n /= 10
-  mul r5, r3, r4			// r3 * 10
-  sub r5, r2, r5			// n - (n / 10)
-  // r5 = (n % 10) at this point
-
-  strb r5, [r0]
-  ldrb r7, [r0]
-
-  mov r2, r3				// update n
-
-  cmp r2, #0				// if (n <= 0) then done
-
-  ble donelooooop
-
-
-  b loooooop
-
-donelooooop:
-ldr r0, =atodArray
-ldr r1, =atodArrayEnd
-sub	r1, r0						// r1 = length of testArray
-bl WriteStringUART
-
-//b stop
-
-// SORT BYTE ARRAY OF INTS (WORKING)
-ldr r0, =testArray
-ldr r1, =testArrayEnd
-bl sortArray
-
-
-ldr r0, =testArray
-ldrb r3, [r0], #1
-
-stop:
-  bl finalPrint
-
-
-// input r0 = arrayStart
-// input r1 = arrayEnd
-// output r0  = arrayStart
-sortArray:
-
-  mov r2, r0      // save reference to arrayStart
-
-  loopBody:
-    ldrb r3, [r0], #1				// r3 = r0[0]; r0 += 1;
-    ldrb r4, [r0]					// r4 = r0[0];
-
-    cmp r0, r1            			// end of array?
-    beq loopEnd
-
-    cmp r3, r4            			// if (r3 < r4) then array is not sorted
-    blt notSorted
-
-    b loopBody
-
-
-  notSorted:
-    strb r3, [r0], #-1
-    strb r4, [r0]
-    mov r0, r2          		// reset r0 to arrayStart
-    b loopBody
-
-    loopEnd:
-
-mov pc, r14			 			// return
-
-
-// input r0 = arrayStart
-// input r1 = arrayEnd
-// output r2  = median value
-getMedian:
-
-  mov r2, r0      // save reference to arrayStart
-
-  loopBody_:
-
-    add r0, #1						// advance array start 1 index
-    sub r1, #1						// advance array end -1 index
-
-    cmp r0, r1
-    bge loopEnd_					// if (start index >= end index) then found mid
-
-    b loopBody_
-
-  loopEnd_:
-
-// if the array size is even, r1 will be r0 - 1
-// if the array size is odd, r1 will equal r0
-ldrb r2, [r1]
-mov pc, r14						// return
+bl finalPrint
 
 
 // END OF PATRICK'S STUFF //////////////////////////////////////////////////////
@@ -364,13 +268,34 @@ finalPrint:
   bl WriteStringUART
   nop
 
-    //Print values
-    //
+
+
+    mov r11, #0
+
+  beginListPrint:
+
+    //print while i = 0; i < r12; i++
+    cmp r11, r12
+    bge afterListPrint
+
+    ldr r0, =atodArray
+    ldrb r3, [r0, r11]    //This is loaded properly. Need to convert to ascii
+
+    mov r0, r3
+    bl uDecToASCII
+    bl WriteStringUART
+
+    add r11, r11, #1
+    bl beginListPrint
+
+  afterListPrint:
+
+
 
 
   //Print median
   ldr r0, =medianMessage
-  mov r1, #15
+  mov r1, #17
   bl WriteStringUART
   nop
 
@@ -379,22 +304,157 @@ finalPrint:
 
   //NJE: End of program. Print "###################"
   ldr r0, =endOfRun
-  mov r1, #22
+  mov r1, #24
   bl WriteStringUART
   nop
 
 
   bl main
 
-//##############################################################//
+////////////////////////FUNCTIONS///////////////////////////////////////////////
+
+// input r0 = arrayStart
+// input r1 = arrayEnd
+// output r0  = arrayStart
+sortArray:
+
+mov r2, r0      // save reference to arrayStart
+
+  loopBody:
+
+    ldrb r3, [r0], #1				// r3 = r0[0]; r0 += 1;
+	ldrb r4, [r0]					// r4 = r0[0];
+
+    cmp r0, r1            			// end of array?
+    beq loopEnd
+
+    cmp r3, r4            			// if (r3 < r4) then array is not sorted
+    blt notSorted
+
+    b loopBody
+
+    notSorted:
+		strb r3, [r0], #-1
+		strb r4, [r0]
+		mov r0, r2          		// reset r0 to arrayStart
+		b loopBody
+
+	loopEnd:
+
+	mov pc, r14			 			// return
+
+
+
+
+// input r0 = arrayStart
+// input r1 = arrayEnd
+// output r2  = median value
+getMedian:
+
+mov r2, r0      // save reference to arrayStart
+
+  loopBody_:
+
+	add r0, #1						// advance array start 1 index
+	sub r1, #1						// advance array end -1 index
+
+    cmp r0, r1
+    bge loopEnd_					// if (start index >= end index) then found mid
+
+    b loopBody_
+
+  loopEnd_:
+
+	// if the array size is even, r1 will be r0 - 1
+	// if the array size is odd, r1 will equal r0
+	ldrb r2, [r1]
+
+	mov pc, r14						// return
+
+
+
+
+
+// Unsigned Decimal to ASCII
+// input r0 = n (decimal)
+// output r0 = pointer to stringStart
+// output r1 = length of string (bytes)
+uDecToASCII:
+
+	// let r3 = r4 = n
+	mov r3, r0
+	mov r4, r3
+	mov r5, #10
+	ldr r0, =uDecToASCIIBufferEnd
+	add r0, $-1						// last byte of uDecToASCIIBuffer
+
+	// iterate digits
+	// curDigit = n % 10
+	// n /= 20
+	// until n <= 0
+	loopBody__:
+
+		udiv r4, r4, r5				// n /= 10 (truncate)
+		mul r6, r4, r5				// nCopy * 10
+		// r6 = { k | k is divisble by 10 && k <= n }
+		sub r6, r3, r6				// n - ((n / 10) * 10)
+		// r6 = (n % 10)
+		add r6, #48					// to ascii
+		strb r6, [r0], #-1			// store ascii character in buffer
+		mov r3, r4					// update n
+
+		cmp r3, #0					// if (n <= 0)
+		ble loopEnd__				// then done
+		b loopBody__				// else loopBody__
+
+	loopEnd__:
+
+		// r0 = pointer to stringStart
+		// r1 = length of string (bytes)
+		ldr r1, =uDecToASCIIBufferEnd
+		sub	r1, r0
+
+		mov pc, r14						// return
+
+
+// loop 0 to n and print ASCII string
+uDecToASCIITest:
+
+	mov r8, #0
+	mov r9, #150
+
+	loopBody___:
+
+		mov r0, r8
+		add r8, #1
+		mov r13, r14					// save return address
+		bl uDecToASCII
+		bl WriteStringUART
+		mov r14, r13					// restore return address
+
+		cmp r8, r9
+		bgt loopEnd___
+		b loopBody___
+
+	loopEnd___:
+
+		mov pc, r14						// return
+
+
 
 killProgram:
+  mov r0, #1
+  mov r7, #1
+  SWI 0
+
+
+//##############################################################//
 
 	.section .data
 
-testArray:
-	.byte 99, 97, 120, 100, 101, 102, 106, 105, 104
-testArrayEnd:
+uDecToASCIIBuffer:	// 10 byte buffer
+  .ascii "          "
+uDecToASCIIBufferEnd:
 
 decToASCIBuffer:
 	.asciz "000000"
@@ -428,15 +488,15 @@ storedListMessage:
 storedListMessageEnd:
 
 medianMessage:
-  .ascii "The median is: "
+  .ascii "\n\rThe median is: "
 medianMessageEnd:
 
 endOfRun:
-  .ascii "###################\n\n\r"
+  .ascii "\n\r###################\n\n\r"
 endofRunEnd:
 
 newline:
-	.asciz "\n"
+	.ascii "\n"
 
 inputRequest:
   .ascii "Please enter the "
@@ -446,89 +506,9 @@ inputRequest2:
   .ascii " number\n\r"
 inputRequest2End:
 
-
-.align 8
 loopNumberString:
-  .asciz "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth"
+  .ascii "1st ", "2nd ", "3rd ", "4th ", "5th ", "6th ", "7th ", "8th ", "9th "
 loopNumberStringEnd:
-
-loopNumberSize:
-  .byte 5, 6, 5, 6, 5, 5, 7, 6, 5
-loopNumberSizeEnd:
 
 
 .end
-
-
-
-
-
-
-
-
-
-
-
-
-//TODO: DELETE THIS SECTION AFTER DONE. THIS IS NOTES.
-
-//NJE: This is how to load
-//ldr r4, =inputBuffer
-//ldrb r5, [r4]
-//ldrb r6, [r4, #1]
-//mov r1, r1
-//nop
-
-//NOTE: THIS WORKS NOW. THIS IS HOW TO READ FROM ARRAY
-    //I just don't know how to access individual elements.
-      //Think it has to do with the "This is how to load"
-//ldr r4, =loopNumberString
-//mov r0, r4
-//mov r1, #7
-//bl WriteStringUART
-
-//ldr r4, =loopNumberString
-//ldrb r0, [r4, #1]
-//mov r1, #6
-//bl WriteStringUART
-
-//ldr r4, =loopNumberSize
-//ldrb r1, [r4, #4]
-//bl WriteStringUART
-//nop
-//nop
-//nop
-//ENDTODO
-
-
-
-
-
-
-
-//PATRICK'S NOTES
-// PRINT INT ARRAY EXAMPLE (IN ASCII)
-ldr r0, =testArray
-ldr r1, =testArrayEnd
-sub	r1, r0						// r1 = length of testArray
-bl WriteStringUART
-
-// Sort array
-ldr r0, =testArray
-ldr r1, =testArrayEnd
-bl sortArray
-
-// Get median value of sorted array
-ldr r0, =testArray
-ldr r1, =testArrayEnd
-bl getMedian
-
-
-// decimal to ascii
-ldr r0, =decToASCIBuffer
-mov r3, r2
-mov r4, #10
-
-// iterate digits
-// let r2 = n
-// let r3 = n copy
