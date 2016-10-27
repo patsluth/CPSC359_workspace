@@ -346,6 +346,8 @@ mov r2, r0      // save reference to arrayStart
 		b loopBody
 
 	loopEnd:
+	
+	mov r0, r2
 
 	mov pc, r14			 			// return
 
