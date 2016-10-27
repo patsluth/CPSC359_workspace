@@ -29,65 +29,55 @@ main:
 	
 	
 	
-	/*
 	
-	ldr r0, =0x3F003000				// Load System Timer interface
 	
-	// r2 = CLO - Timer Counter (Low 32 bits)
-	// r3 = previous value of r2
 	
-	mov r3, #0
+	//*******************************************************
+	//*******************************************************
+	//*******************************************************
 	
-	loop:
+	// CLO increments every 1 microsecond (according to docs)
+	// 'timerInvoke' branch will be invoked every 'timerInterval' microseconds
+	
+	//!!!!!!!!!!!!!!!!!!
+	//!!!!!!!!!!!!!!!!!!
+	// NATHAN!!
+	// Not sure if this is right The Tut06 pdf says something about using the 
+	// Timer Compare's, which I'm not doing. But we might not have to for a simple timer.
+	
+	
+	mov r2, #0						// r2 = currentTime + delay
+	mov r3, #0						// Tick count
+	mov r4, #0						// Invoke count
+	
+	timerLoop:
+	
+		add r3, #1						// Increment Tick count
 	
 		ldr r0, =0x3F003000				// Timer Control Status
 		ldr r1, =0x3F003004				// CLO - Timer Counter (Low 32 bits)
-		ldr r2, =0x3F003008				// CLO - Timer Counter (High 32 bits)	
-		ldr r3, =0x3F00300C				// Timer Compare 0
-		ldr r3, [r3]					
-		ldr r4, =0x3F003010				// Timer Compare 1
-		ldr r4, [r4]					
-		ldr r5, =0x3F003014				// Timer Compare 2
-		ldr r5, [r5]					
-		ldr r6, =0x3F003018				// Timer Compare 3	
-		ldr r6, [r6]
+		ldr r1, [r1]
 		
+		cmp r1, r2						// if (currentTime >= (currentTime + delay))
+		bge timerInvoke					// then Invoke
 		
-		//cmp r3, #0
-		//ble print
+		b timerLoop
 		
-		//sub r2, r3
-		//cmp r2, r3
-		//ldr r2, [r0]
-		//blt dontPrint
-		
-		
-	
-		//print:
-		
-		//	ldr r3, =timerInterval
-		//	ldr r3, [r3]
-		//	add r3, r2
-		
-		//	mov r0, r1
-		//	mov r1, #10
-		//	bl  WriteStringUART
-		
-		//	ldr r0, =newline
-		//	mov r1, #2
-		//	bl WriteStringUART
-		
-		//dontPrint:
-		
-			b loop
-		
-		
-		
-		
-		
+		timerInvoke:
+			add r4, #1						// Increment Tick count
+			ldr r2, =timerInterval			
+			ldr r2, [r2]
+			add r2, r1						// update r2 to equal (currentTime + delay)
+			
+			b timerLoop
+			
 	loopEnd:
 	
-	*/
+	//*******************************************************
+	//*******************************************************
+	//*******************************************************
+	
+	
 	
 	
 	
@@ -129,7 +119,7 @@ exitMessage:
 exitMessageEnd:
 
 timerInterval:
-	.int 9999999
+	.int 6
 
 newline:
 	.ascii "\n\r"
