@@ -54,18 +54,18 @@ Disassembly of section .text:
     9168:	e3a0d902 	mov	sp, #32768	; 0x8000
     916c:	ebffffda 	bl	90dc <EnableJTAG>
     9170:	eb000022 	bl	9200 <InitUART>
-    9174:	e59f0068 	ldr	r0, [pc, #104]	; 91e4 <timerInvoke_+0x4>
+    9174:	e59f0068 	ldr	r0, [pc, #104]	; 91e4 <timerComplete_+0x4>
     9178:	e3a01030 	mov	r1, #48	; 0x30
     917c:	eb00005d 	bl	92f8 <WriteStringUART>
     9180:	e320f000 	nop	{0}
 
-00009184 <onTimerInvoke>:
-    9184:	e59f005c 	ldr	r0, [pc, #92]	; 91e8 <timerInvoke_+0x8>
-    9188:	e59f105c 	ldr	r1, [pc, #92]	; 91ec <timerInvoke_+0xc>
+00009184 <onTimerComplete>:
+    9184:	e59f005c 	ldr	r0, [pc, #92]	; 91e8 <timerComplete_+0x8>
+    9188:	e59f105c 	ldr	r1, [pc, #92]	; 91ec <timerComplete_+0xc>
     918c:	e0411000 	sub	r1, r1, r0
     9190:	eb000058 	bl	92f8 <WriteStringUART>
-    9194:	e59f0054 	ldr	r0, [pc, #84]	; 91f0 <timerInvoke_+0x10>
-    9198:	e59f1054 	ldr	r1, [pc, #84]	; 91f4 <timerInvoke_+0x14>
+    9194:	e59f0054 	ldr	r0, [pc, #84]	; 91f0 <timerComplete_+0x10>
+    9198:	e59f1054 	ldr	r1, [pc, #84]	; 91f4 <timerComplete_+0x14>
     919c:	e5911000 	ldr	r1, [r1]
     91a0:	eb000006 	bl	91c0 <killProgramEnd>
 
@@ -73,7 +73,7 @@ Disassembly of section .text:
     91a4:	eaffffff 	b	91a8 <killProgram>
 
 000091a8 <killProgram>:
-    91a8:	e59f0048 	ldr	r0, [pc, #72]	; 91f8 <timerInvoke_+0x18>
+    91a8:	e59f0048 	ldr	r0, [pc, #72]	; 91f8 <timerComplete_+0x18>
     91ac:	e3a01014 	mov	r1, #20
     91b0:	eb000050 	bl	92f8 <WriteStringUART>
     91b4:	e3a00001 	mov	r0, #1
@@ -81,18 +81,18 @@ Disassembly of section .text:
     91bc:	ef000000 	svc	0x00000000
 
 000091c0 <killProgramEnd>:
-    91c0:	e59f2034 	ldr	r2, [pc, #52]	; 91fc <timerInvoke_+0x1c>
+    91c0:	e59f2034 	ldr	r2, [pc, #52]	; 91fc <timerComplete_+0x1c>
     91c4:	e5922000 	ldr	r2, [r2]
     91c8:	e0822001 	add	r2, r2, r1
 
-000091cc <timerLoop_>:
-    91cc:	e59f1028 	ldr	r1, [pc, #40]	; 91fc <timerInvoke_+0x1c>
+000091cc <timerTick_>:
+    91cc:	e59f1028 	ldr	r1, [pc, #40]	; 91fc <timerComplete_+0x1c>
     91d0:	e5911000 	ldr	r1, [r1]
     91d4:	e1510002 	cmp	r1, r2
-    91d8:	aa000000 	bge	91e0 <timerInvoke_>
-    91dc:	eafffffa 	b	91cc <timerLoop_>
+    91d8:	aa000000 	bge	91e0 <timerComplete_>
+    91dc:	eafffffa 	b	91cc <timerTick_>
 
-000091e0 <timerInvoke_>:
+000091e0 <timerComplete_>:
     91e0:	e1a0f000 	mov	pc, r0
     91e4:	00009080 	.word	0x00009080
     91e8:	000090c4 	.word	0x000090c4

@@ -37,14 +37,14 @@ main:
 	
 	
 	
-	onTimerInvoke:
+	onTimerComplete:
 
 		ldr r0, =timerMessage
 		ldr r1, =timerMessageEnd
 		sub r1, r0
 		bl WriteStringUART
 		
-		ldr r0, =onTimerInvoke
+		ldr r0, =onTimerComplete
 		ldr r1, =timerInterval			
 		ldr r1, [r1]
 		bl timer
@@ -77,7 +77,7 @@ killProgramEnd:
 
 
 
-// Unsigned Decimal to ASCII
+// Timer - Will jump to supplied return address after specified delay
 // input r0 	= address to jump to on invoke
 // input r1 	= delay in microseconds
 timer:
@@ -86,19 +86,17 @@ timer:
 	ldr r2, [r2]					// CLO - Timer Counter (Low 32 bits)
 	add r2, r1						// r1 = currentTime + delay
 	
-	timerLoop_:
-	
-		// onTick
+	timerTick_:
 	
 		ldr r1, =0x3F003004						
 		ldr r1, [r1]					// CLO - Timer Counter (Low 32 bits)
 		
 		cmp r1, r2						// if (currentTime >= (currentTime + delay))
-		bge timerInvoke_				// then Invoke
+		bge timerComplete_				// then Invoke
 		
-		b timerLoop_
+		b timerTick_
 		
-		timerInvoke_:
+		timerComplete_:
 		
 			mov pc, r0						// return
   
