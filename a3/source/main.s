@@ -27,59 +27,35 @@ main:
 	bl InitUART                  	// Initialize the UART
 	
 	
+	//Print names of creators
+	ldr r0, =creatorString
+	mov r1, #48
+	bl WriteStringUART
+	nop
 	
 	
 	
 	
 	
-	//*******************************************************
-	//*******************************************************
-	//*******************************************************
-	
-	// CLO increments every 1 microsecond (according to docs)
-	// 'timerInvoke' branch will be invoked every 'timerInterval' microseconds
-	
-	
-	mov r2, #0						// r2 = currentTime + delay
-	mov r3, #0						// Tick count
-	mov r4, #0						// Invoke count
-	
-	timerLoop:
-	
-		add r3, #1						// Increment Tick count
-	
-		ldr r0, =0x3F003000				// Timer Control Status
-		ldr r1, =0x3F003004				// CLO - Timer Counter (Low 32 bits)
-		ldr r1, [r1]
-		
-		cmp r1, r2						// if (currentTime >= (currentTime + delay))
-		bge timerInvoke					// then Invoke
-		
-		b timerLoop
-		
-		timerInvoke:
-			add r4, #1						// Increment Tick count
-			ldr r2, =timerInterval			
-			ldr r2, [r2]
-			add r2, r1						// update r2 to equal (currentTime + delay)
-			
-			b timerLoop
-			
-	loopEnd:
-	
-	//*******************************************************
-	//*******************************************************
-	//*******************************************************
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	onTimerInvoke:
 
+		ldr r0, =timerMessage
+		ldr r1, =timerMessageEnd
+		sub r1, r0
+		bl WriteStringUART
+		
+		ldr r0, =onTimerInvoke
+		ldr r1, =timerInterval			
+		ldr r1, [r1]
+		bl timer
+		
+		
+		
+		
+		
+		
+		
+	
 mainEnd:
 	b killProgram
 	
@@ -96,6 +72,35 @@ killProgram:
 	mov r7, #1
 	SWI 0
 killProgramEnd:
+
+
+
+
+
+// Unsigned Decimal to ASCII
+// input r0 	= address to jump to on invoke
+// input r1 	= delay in microseconds
+timer:
+
+	ldr r2, =0x3F003004				// r2 = currentTime
+	ldr r2, [r2]					// CLO - Timer Counter (Low 32 bits)
+	add r2, r1						// r1 = currentTime + delay
+	
+	timerLoop_:
+	
+		// onTick
+	
+		ldr r1, =0x3F003004						
+		ldr r1, [r1]					// CLO - Timer Counter (Low 32 bits)
+		
+		cmp r1, r2						// if (currentTime >= (currentTime + delay))
+		bge timerInvoke_				// then Invoke
+		
+		b timerLoop_
+		
+		timerInvoke_:
+		
+			mov pc, r0						// return
   
   
   
@@ -112,8 +117,12 @@ exitMessage:
 	.ascii "Exiting program...\n\r"
 exitMessageEnd:
 
+timerMessage:
+	.ascii "Timer Complete\n\r"
+timerMessageEnd:
+
 timerInterval:
-	.int 6
+	.int 1000000
 
 newline:
 	.ascii "\n\r"
