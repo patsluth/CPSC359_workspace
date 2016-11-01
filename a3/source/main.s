@@ -39,12 +39,6 @@ main:
 	// CLO increments every 1 microsecond (according to docs)
 	// 'timerInvoke' branch will be invoked every 'timerInterval' microseconds
 	
-	//!!!!!!!!!!!!!!!!!!
-	//!!!!!!!!!!!!!!!!!!
-	// NATHAN!!
-	// Not sure if this is right The Tut06 pdf says something about using the 
-	// Timer Compare's, which I'm not doing. But we might not have to for a simple timer.
-	
 	
 	mov r2, #0						// r2 = currentTime + delay
 	mov r3, #0						// Tick count
