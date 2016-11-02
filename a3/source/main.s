@@ -38,24 +38,28 @@ main:
 	
 	
 	
-	// SNES
-	// GPFSEL1 (General Purpose Function Select Register)
-		// PIN 9  = LATCH
-		// PIN 10 = DATA
-		// PIN 11 = CLOCK
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	loooopy:
 	
 	// LATCH TEST
 	
 	
 	mov r0, #0b000			// Input
-	bl setLATCHFunction		
-	
-	mov r1, #1
-	lsl r1, #19
-	bl startTimer
+	bl setLATCHFunction
 	
 	mov r0, #1
 	bl writeLATCH
@@ -67,9 +71,24 @@ main:
 	mov r0, #0b001			// Output
 	bl setLATCHFunction
 	
+	bl readLATCH
+	
 	mov r1, #1
 	lsl r1, #19
 	bl startTimer
+	
+	mov r0, #0b000			// Input
+	bl setLATCHFunction
+	
+	mov r0, #0
+	bl writeLATCH
+	
+	mov r1, #1
+	lsl r1, #19
+	bl startTimer
+	
+	mov r0, #0b001			// Output
+	bl setLATCHFunction
 	
 	bl readLATCH
 	
@@ -77,13 +96,10 @@ main:
 	lsl r1, #19
 	bl startTimer
 	
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
+	
+	
+	
+	b loooopy
 	
 	
 	
@@ -330,33 +346,8 @@ readClock:
 // LATCH = PIN 21 = GPFSEL2
 // input r0 = GP Function Select (ex #0b0001 -> Output)
 setLATCHFunction:
-
-	ldr r0, =0x3F200008	//GFPSEL2
-	mov r1, #8
-	str r1, [r0]
 	
-	//mov r1, #1
-	//lsl r1, #19
-	//bl startTimer
-	
-	
-	ldr r9, [r0]
-	
-	//mov r1, #1
-	//lsl r1, #19
-	//bl startTimer
-
-
-	mov pc, r14						// return
-
-
-
-
-
-
-
-	
-	ldr r1, =0x7F200000				// base GPIO Register
+	ldr r1, =0x3F200000				// base GPIO Register
 	ldr r2, [r1, #0x08]				// GPFSEL2			
 	
 	// clear bits 3-6 (for PIN 21)
@@ -367,68 +358,32 @@ setLATCHFunction:
 	orr r2, r0, lsl #3
 	
 	str r2, [r1, #0x08]				// write back to GPFSEL2
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-		
-	ldr r1, =0x7F200000				// base GPIO Register
-	ldr r2, [r1, #0x08]				// GPFSEL2	
-		
-		
-	//lsl r0, #3						// align for bits 3-6 (PIN 1)
-	//bic r2, r0						// clear bits for PIN 1
-	//str r2, [r1]					// write back to GPFSEL2
 	
 	mov pc, r14						// return
 	
 	
 	
-	
-	
-	
-
-
-
 // LATCH = PIN 21 = GPSET0
 // input r0 = writeValue {0, 1}
 writeLATCH:
 
-	ldr r1, =0x7F200000				// base GPIO Register
+	ldr r1, =0x3F200000				// base GPIO Register
 	mov r2, #0b01					// 
 	lsl r2, #21						// align for PIN 21
 	
 	teq r0, #0						// if (writeValue == 0)			
-	streq r0, [r1, #0x28]			// GPCLR0
-	strne r0, [r1, #0x1C]			// GPSET0
+	streq r2, [r1, #0x28]			// GPCLR0
+	strne r2, [r1, #0x1C]			// GPSET0
 
 	mov pc, r14						// return
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-
-
 // LATCH = PIN 21 = GPLEV0
 // output r0 = PIN 21 (LATCH) value
 readLATCH:
 
-	ldr r1, =0x7F200000				// base GPIO Register
+	ldr r1, =0x3F200000				// base GPIO Register
 	ldr r2, [r1, #0x34]				// GPLEV0			
 	mov r3, #0b01
 	lsl r3, #21						// align for PIN 21
