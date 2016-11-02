@@ -37,7 +37,7 @@ main:
 	
 	
 	
-	
+	tempStart:
 	
 	
 	
@@ -55,7 +55,7 @@ main:
 	
 	
 	//2
-	mov r0, #0b000			// Input
+	mov r0, #0b001			// Input
 	bl setCLOCKFunction
 	mov r0, #1
 	bl writeCLOCK
@@ -63,7 +63,7 @@ main:
 	
 	
 	// 3
-	mov r0, #0b000			// Input
+	mov r0, #0b001			// Input
 	bl setLATCHFunction
 	mov r0, #1
 	bl writeLATCH
@@ -72,13 +72,11 @@ main:
 	
 	//4
 	startSNESButtonSampleTimer:
-		//ldr r0, =onTimerComplete
-		//mov r1, #12
-		mov r1, #1
-		lsl r1, #19
+	
+		mov r1, #12
 		bl startTimer
 		
-		mov r0, #0b000			// Input
+		mov r0, #0b001			// Input
 		bl setLATCHFunction
 		mov r0, #0
 		bl writeLATCH
@@ -93,52 +91,55 @@ main:
 		pulseLoop:	
 		
 			//6.2
-			//mov r1, #6
-			mov r1, #1
-			lsl r1, #19
+			mov r1, #6
+			//mov r1, #1
+			//lsl r1, #19
 			bl startTimer
 	
-			ldr r0, =timerMessage
-			ldr r1, =timerMessageEnd
-			sub r1, r0
-			bl WriteStringUART
-	
-	
+			// falling edge
+			
 	
 			// 6.3
-			mov r0, #0b000			// Input
+			mov r0, #0b001			// Input
 			bl setCLOCKFunction
 			mov r0, #0
 			bl writeCLOCK
 		
-		
-		
 			// 6.4
-			//mov r1, #6
-			mov r1, #1
-			lsl r1, #19
+			mov r1, #6
+			//mov r1, #1
+			//lsl r1, #19
 			bl startTimer
-	
-			ldr r0, =timerMessage2
-			ldr r1, =timerMessage2End
-			sub r1, r0
-			bl WriteStringUART
-	
-	
+			
 	
 			//6.5
 			// TODO: Read GPIO data bit (r2 = index)
-			// DATA
-	
-	
+			mov r0, #0b000			// Output
+			bl setDATAFunction
+			bl readDATA
+			
+			
+			// print bit
+			mov r11, r0
+			add r11, #48
+			ldr r0, =timerMessage
+			strb r11, [r0]
+			ldr r1, =timerMessageEnd
+			sub r1, r0
+			bl WriteStringUART
+			
+			
 	
 	
 			// 6.6
 			// write to SNESButtonBuffer at index
 			// SNESButtonBuffer
 			
+			
+			// rising edge
+			
 			//6.7
-			mov r0, #0b000			// Input
+			mov r0, #0b001			// Input
 			bl setCLOCKFunction
 			mov r0, #1
 			bl writeCLOCK
@@ -149,6 +150,8 @@ main:
 			blt pulseLoop
 			
 		pulseLoopEnd:
+		
+			b tempStart
 		
 		
 	
@@ -227,41 +230,78 @@ startTimer:
 			
 			
 			
-			
 		
-	
-	
-	
-	
-	
-	
-// LATCH = PIN 21 = GPFSEL2
+		
+		
+//****************************************************
+//					SNES FUNCTIONS
+//****************************************************
+		
+// DATA = PIN 10 = GPFSEL1
 // input r0 = GP Function Select (ex #0b0001 -> Output)
-setLATCHFunction:
+setDATAFunction:
 	
 	ldr r1, =0x3F200000				// base GPIO Register
-	ldr r2, [r1, #0x08]				// GPFSEL2			
+	ldr r2, [r1, #0x04]				// GPFSEL1			
 	
-	// clear bits 3-6 (for PIN 21)
+	// clear bits 0-3 (for PIN 10)
 	mov r3, #0b111
-	bic r2, r3, lsl #3	
+	bic r2, r3, lsl #0	
 	
-	// set bits 3-6 (for PIN 21) to r0 (Function)			
-	orr r2, r0, lsl #3
+	// set bits 0-3 (for PIN 10) to r0 (Function)			
+	orr r2, r0, lsl #0
 	
-	str r2, [r1, #0x08]				// write back to GPFSEL2
+	str r2, [r1, #0x04]				// write back to GPFSEL1
 	
 	mov pc, r14						// return
 	
 	
 	
-// LATCH = PIN 21 = GPSET0
+// DATA = PIN 10 = GPLEV0
+// output r0 = PIN 10 (DATA) value
+readDATA:
+
+	ldr r1, =0x3F200000				// base GPIO Register
+	ldr r2, [r1, #0x34]				// GPLEV0			
+	mov r3, #0b01
+	lsl r3, #10						// align for PIN 10
+	and r2, r3						// mask everything else
+	
+	teq r2, #0						// if (value == 0)
+	moveq r0, #0					// return 0
+	movne r0, #1					// return 1
+	
+	mov pc, r14						// return		
+	
+	
+	
+// LATCH = PIN 9 = GPFSEL0
+// input r0 = GP Function Select (ex #0b0001 -> Output)
+setLATCHFunction:
+	
+	ldr r1, =0x3F200000				// base GPIO Register
+	ldr r2, [r1, #0x00]				// GPFSEL0			
+	
+	// clear bits 27-29 (for PIN 9)
+	mov r3, #0b111
+	bic r2, r3, lsl #3	
+	
+	// set bits 3-6 (for PIN 9) to r0 (Function)			
+	orr r2, r0, lsl #3
+	
+	str r2, [r1, #0x00]				// write back to GPFSEL0
+	
+	mov pc, r14						// return
+	
+	
+	
+// LATCH = PIN 9 = GPSET0
 // input r0 = writeValue {0, 1}
 writeLATCH:
 
 	ldr r1, =0x3F200000				// base GPIO Register
 	mov r2, #0b01					// 
-	lsl r2, #21						// align for PIN 21
+	lsl r2, #9						// align for PIN 9
 	
 	teq r0, #0						// if (writeValue == 0)			
 	streq r2, [r1, #0x28]			// GPCLR0
@@ -271,14 +311,14 @@ writeLATCH:
 	
 	
 	
-// LATCH = PIN 21 = GPLEV0
-// output r0 = PIN 21 (LATCH) value
+// LATCH = PIN 9 = GPLEV0
+// output r0 = PIN 9 (LATCH) value
 readLATCH:
 
 	ldr r1, =0x3F200000				// base GPIO Register
 	ldr r2, [r1, #0x34]				// GPLEV0			
 	mov r3, #0b01
-	lsl r3, #21						// align for PIN 21
+	lsl r3, #9						// align for PIN 21
 	and r2, r3						// mask everything else
 	
 	teq r2, #0						// if (value == 0)
@@ -301,33 +341,33 @@ readLATCH:
 	
 	
 	
-// CLOCK = PIN 23 = GPFSEL2
+// CLOCK = PIN 11 = GPFSEL1
 // input r0 = GP Function Select (ex #0b0001 -> Output)
 setCLOCKFunction:
 	
 	ldr r1, =0x3F200000				// base GPIO Register
-	ldr r2, [r1, #0x08]				// GPFSEL2			
+	ldr r2, [r1, #0x04]				// GPFSEL1			
 	
-	// clear bits 9-11 (for PIN 23)
+	// clear bits 3-5 (for PIN 11)
 	mov r3, #0b111
-	bic r2, r3, lsl #9	
+	bic r2, r3, lsl #3	
 	
-	// set bits 9-11 (for PIN 23) to r0 (Function)			
-	orr r2, r0, lsl #9
+	// set bits 3-5 (for PIN 11) to r0 (Function)			
+	orr r2, r0, lsl #3
 	
-	str r2, [r1, #0x08]				// write back to GPFSEL2
+	str r2, [r1, #0x04]				// write back to GPFSEL1
 	
 	mov pc, r14						// return
 	
 	
 	
-// LATCH = PIN 23 = GPSET0
+// CLOCK = PIN 11 = GPSET0
 // input r0 = writeValue {0, 1}
 writeCLOCK:
 
 	ldr r1, =0x3F200000				// base GPIO Register
 	mov r2, #0b01					// 
-	lsl r2, #23						// align for PIN 23
+	lsl r2, #11						// align for PIN 11
 	
 	teq r0, #0						// if (writeValue == 0)			
 	streq r2, [r1, #0x28]			// GPCLR0
@@ -337,14 +377,14 @@ writeCLOCK:
 	
 	
 	
-// LATCH = PIN 23 = GPLEV0
-// output r0 = PIN 23 (LATCH) value
+// CLOCK = PIN 11 = GPLEV1
+// output r0 = PIN 11 (CLOCK) value
 readCLOCK:
 
 	ldr r1, =0x3F200000				// base GPIO Register
 	ldr r2, [r1, #0x34]				// GPLEV0			
 	mov r3, #0b01
-	lsl r3, #23						// align for PIN 23
+	lsl r3, #11						// align for PIN 11
 	and r2, r3						// mask everything else
 	
 	teq r2, #0						// if (value == 0)
@@ -378,10 +418,6 @@ exitMessageEnd:
 timerMessage:
 	.ascii "Timer Complete\n\r"
 timerMessageEnd:
-
-timerMessage2:
-	.ascii "\t\tTimer Complete\n\r"
-timerMessage2End:
 
 timerInterval:
 	.int 1000000
