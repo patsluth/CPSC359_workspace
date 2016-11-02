@@ -46,65 +46,7 @@ main:
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	loooopy:
-	
-	// LATCH TEST
-	
-	
-	mov r0, #0b000			// Input
-	bl setLATCHFunction
-	
-	mov r0, #1
-	bl writeLATCH
-	
-	mov r1, #1
-	lsl r1, #19
-	bl startTimer
-	
-	mov r0, #0b001			// Output
-	bl setLATCHFunction
-	
-	bl readLATCH
-	
-	mov r1, #1
-	lsl r1, #19
-	bl startTimer
-	
-	mov r0, #0b000			// Input
-	bl setLATCHFunction
-	
-	mov r0, #0
-	bl writeLATCH
-	
-	mov r1, #1
-	lsl r1, #19
-	bl startTimer
-	
-	mov r0, #0b001			// Output
-	bl setLATCHFunction
-	
-	bl readLATCH
-	
-	mov r1, #1
-	lsl r1, #19
-	bl startTimer
-	
-	
-	
-	
-	b loooopy
-	
-	
-	
-	
-	
+
 	
 	
 	//1
@@ -113,11 +55,16 @@ main:
 	
 	
 	//2
-	bl writeClock1
+	mov r0, #0b000			// Input
+	bl setCLOCKFunction
+	mov r0, #1
+	bl writeCLOCK
 	
 	
 	
 	// 3
+	mov r0, #0b000			// Input
+	bl setLATCHFunction
 	mov r0, #1
 	bl writeLATCH
 	
@@ -130,7 +77,9 @@ main:
 		mov r1, #1
 		lsl r1, #19
 		bl startTimer
-	
+		
+		mov r0, #0b000			// Input
+		bl setLATCHFunction
 		mov r0, #0
 		bl writeLATCH
 		
@@ -157,7 +106,10 @@ main:
 	
 	
 			// 6.3
-			bl writeClock0
+			mov r0, #0b000			// Input
+			bl setCLOCKFunction
+			mov r0, #0
+			bl writeCLOCK
 		
 		
 		
@@ -177,14 +129,6 @@ main:
 			//6.5
 			// TODO: Read GPIO data bit (r2 = index)
 			// DATA
-			ldr r0, =0x7F200000
-			ldr r1, [r0, #52]
-			mov r2, #1
-			lsl r2, #10						// pin 10
-			and r1, r2						// mask everything else
-			teq r1, #0
-			moveq r3, #0					// return 0
-			movne r3, #1					// return 1
 	
 	
 	
@@ -194,7 +138,10 @@ main:
 			// SNESButtonBuffer
 			
 			//6.7
-			bl writeClock1
+			mov r0, #0b000			// Input
+			bl setCLOCKFunction
+			mov r0, #1
+			bl writeCLOCK
 		
 			// 6.8 && 6.9	
 			add r9, #1
@@ -281,62 +228,7 @@ startTimer:
 			
 			
 			
-			
-// TODO
-// INPUTS - function code, GPOI pin #	
-writeClock0:
-
-	// clear bits 21-23 (for Line 47)
-	mov		r2, #0b111
-	bic		r1, r2, lsl #21
-	
-	// set bits 21-23 (for line 47) to 001 (Output function)
-	mov		r2, #0b001
-	orr		r1, r2, lsl #21
-
-	// write back to Function Select Register 5
-	str		r1, [r0]
-
-
-
-
-
-
-
-	ldr r0, =0x7F200004				// GPFSEL1
-	ldr r1, [r0]
-	
-	mov r2, #0b001					// Output (Function Select)
-	bic r1, r2, lsl #11				// set bits for pin 11
-	
-	lsl r1, #11						// pin 11
-	str r1, [r1]
-	
-	mov pc, r14						// return
-	
-writeClock1:
-	
-	ldr r0, =0x7F200004				// GPFSEL1
-	mov r1, #0b001					// function select code
-	lsl r1, #11						// pin 11
-	str r1, [r1]
-	
-	mov pc, r14						// return
-	
-readClock:
-
-	ldr r0, =0x3F200038				// GPLEV1
-	ldr r1, [r0]
-	
-	mov pc, r14						// return
-	mov r2, #1
-	lsl r2, #11						// pin 11
-	and r1, r2
-	teq r1, #0
-	moveq r10, #0
-	movne r10, #1
-
-	mov pc, r14						// return
+		
 	
 	
 	
@@ -394,6 +286,79 @@ readLATCH:
 	movne r0, #1					// return 1
 	
 	mov pc, r14						// return
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+// CLOCK = PIN 23 = GPFSEL2
+// input r0 = GP Function Select (ex #0b0001 -> Output)
+setCLOCKFunction:
+	
+	ldr r1, =0x3F200000				// base GPIO Register
+	ldr r2, [r1, #0x08]				// GPFSEL2			
+	
+	// clear bits 9-11 (for PIN 23)
+	mov r3, #0b111
+	bic r2, r3, lsl #9	
+	
+	// set bits 9-11 (for PIN 23) to r0 (Function)			
+	orr r2, r0, lsl #9
+	
+	str r2, [r1, #0x08]				// write back to GPFSEL2
+	
+	mov pc, r14						// return
+	
+	
+	
+// LATCH = PIN 23 = GPSET0
+// input r0 = writeValue {0, 1}
+writeCLOCK:
+
+	ldr r1, =0x3F200000				// base GPIO Register
+	mov r2, #0b01					// 
+	lsl r2, #23						// align for PIN 23
+	
+	teq r0, #0						// if (writeValue == 0)			
+	streq r2, [r1, #0x28]			// GPCLR0
+	strne r2, [r1, #0x1C]			// GPSET0
+
+	mov pc, r14						// return
+	
+	
+	
+// LATCH = PIN 23 = GPLEV0
+// output r0 = PIN 23 (LATCH) value
+readCLOCK:
+
+	ldr r1, =0x3F200000				// base GPIO Register
+	ldr r2, [r1, #0x34]				// GPLEV0			
+	mov r3, #0b01
+	lsl r3, #23						// align for PIN 23
+	and r2, r3						// mask everything else
+	
+	teq r2, #0						// if (value == 0)
+	moveq r0, #0					// return 0
+	movne r0, #1					// return 1
+	
+	mov pc, r14						// return
+	
+	
+	
+	
+	
+	
+	
   
   
   
