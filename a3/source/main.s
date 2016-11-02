@@ -48,20 +48,42 @@ main:
 	
 	
 	// LATCH TEST
-	nop
-	bl readLATCH
-	nop
+	
+	
+	mov r0, #0b000			// Input
+	bl setLATCHFunction		
+	
+	mov r1, #1
+	lsl r1, #19
+	bl startTimer
+	
 	mov r0, #1
 	bl writeLATCH
-	nop
+	
+	mov r1, #1
+	lsl r1, #19
+	bl startTimer
+	
+	mov r0, #0b001			// Output
+	bl setLATCHFunction
+	
+	mov r1, #1
+	lsl r1, #19
+	bl startTimer
+	
 	bl readLATCH
+	
+	mov r1, #1
+	lsl r1, #19
+	bl startTimer
+	
 	nop
-	mov r0, #0
-	bl writeLATCH
 	nop
-	
-	
-	
+	nop
+	nop
+	nop
+	nop
+	nop
 	
 	
 	
@@ -106,7 +128,6 @@ main:
 		pulseLoop:	
 		
 			//6.2
-			//ldr r0, =onTimerComplete2
 			//mov r1, #6
 			mov r1, #1
 			lsl r1, #19
@@ -125,7 +146,6 @@ main:
 		
 		
 			// 6.4
-			//ldr r0, =onTimerComplete3
 			//mov r1, #6
 			mov r1, #1
 			lsl r1, #19
@@ -184,29 +204,6 @@ main:
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	/*
-	// WORKING TIMER EXAMPLE
-	
-	onTimerComplete:
-
-		ldr r0, =timerMessage
-		ldr r1, =timerMessageEnd
-		sub r1, r0
-		bl WriteStringUART
-		
-		ldr r0, =onTimerComplete
-		ldr r1, =timerInterval			
-		ldr r1, [r1]
-		bl timer
-		
-	*/
 		
 		
 		
@@ -325,29 +322,119 @@ readClock:
 
 	mov pc, r14						// return
 	
-// input r0 = value to write {0, 1}
-writeLATCH:
+	
+	
+	
+	
+	
+// LATCH = PIN 21 = GPFSEL2
+// input r0 = GP Function Select (ex #0b0001 -> Output)
+setLATCHFunction:
+
+	ldr r0, =0x3F200008	//GFPSEL2
+	mov r1, #8
+	str r1, [r0]
+	
+	//mov r1, #1
+	//lsl r1, #19
+	//bl startTimer
+	
+	
+	ldr r9, [r0]
+	
+	//mov r1, #1
+	//lsl r1, #19
+	//bl startTimer
+
+
+	mov pc, r14						// return
+
+
+
+
+
+
+
 	
 	ldr r1, =0x7F200000				// base GPIO Register
-	mov r2, #9						// PIN 9 = LATCH Line
-	mov r3, #0b0010					// Input (Function Select)
-	lsl r3, r2						// Align bit for PIN 9
-	teq r0, #0
-	streq r3, [r1, #40]				// GPCLR0
-	streq r3, [r1, #28]				// GPSET0
+	ldr r2, [r1, #0x08]				// GPFSEL2			
+	
+	// clear bits 3-6 (for PIN 21)
+	mov r3, #0b111
+	bic r2, r3, lsl #3	
+	
+	// set bits 3-6 (for PIN 21) to r0 (Function)			
+	orr r2, r0, lsl #3
+	
+	str r2, [r1, #0x08]				// write back to GPFSEL2
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+		
+	ldr r1, =0x7F200000				// base GPIO Register
+	ldr r2, [r1, #0x08]				// GPFSEL2	
+		
+		
+	//lsl r0, #3						// align for bits 3-6 (PIN 1)
+	//bic r2, r0						// clear bits for PIN 1
+	//str r2, [r1]					// write back to GPFSEL2
 	
 	mov pc, r14						// return
 	
-// output r0
+	
+	
+	
+	
+	
+
+
+
+// LATCH = PIN 21 = GPSET0
+// input r0 = writeValue {0, 1}
+writeLATCH:
+
+	ldr r1, =0x7F200000				// base GPIO Register
+	mov r2, #0b01					// 
+	lsl r2, #21						// align for PIN 21
+	
+	teq r0, #0						// if (writeValue == 0)			
+	streq r0, [r1, #0x28]			// GPCLR0
+	strne r0, [r1, #0x1C]			// GPSET0
+
+	mov pc, r14						// return
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+// LATCH = PIN 21 = GPLEV0
+// output r0 = PIN 21 (LATCH) value
 readLATCH:
 
-	ldr r0, =0x7F200000				// base GPIO Register
-	ldr r1, [r0, #52]				// GPLEV0
-	mov r2, #9						// PIN 9 = LATCH Line
-	mov r3, #0b001					// Output (Function Select)
-	lsl r3, r2						// Align bit for PIN 9
-	and r1, r3						// mask everything else
-	teq r1, #0
+	ldr r1, =0x7F200000				// base GPIO Register
+	ldr r2, [r1, #0x34]				// GPLEV0			
+	mov r3, #0b01
+	lsl r3, #21						// align for PIN 21
+	and r2, r3						// mask everything else
+	
+	teq r2, #0						// if (value == 0)
 	moveq r0, #0					// return 0
 	movne r0, #1					// return 1
 	
