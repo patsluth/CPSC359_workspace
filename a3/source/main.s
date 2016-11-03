@@ -55,7 +55,7 @@ main:
 	
 	
 	//2
-	mov r0, #0b001			// Input
+	mov r0, #0b001			// Output
 	bl setCLOCKFunction
 	mov r0, #1
 	bl writeCLOCK
@@ -63,10 +63,13 @@ main:
 	
 	
 	// 3
-	mov r0, #0b001			// Input
+	mov r0, #0b001			// Output
 	bl setLATCHFunction
 	mov r0, #1
 	bl writeLATCH
+	
+	mov r0, #0b000			// Input
+	bl setDATAFunction
 	
 	
 	
@@ -76,8 +79,6 @@ main:
 		mov r1, #12
 		bl startTimer
 		
-		mov r0, #0b001			// Input
-		bl setLATCHFunction
 		mov r0, #0
 		bl writeLATCH
 		
@@ -100,8 +101,6 @@ main:
 			
 	
 			// 6.3
-			mov r0, #0b001			// Input
-			bl setCLOCKFunction
 			mov r0, #0
 			bl writeCLOCK
 		
@@ -114,17 +113,16 @@ main:
 	
 			//6.5
 			// TODO: Read GPIO data bit (r2 = index)
-			mov r0, #0b000			// Output
-			bl setDATAFunction
+			
 			bl readDATA
 			
 			
 			// print bit
 			mov r11, r0
 			add r11, #48
-			ldr r0, =timerMessage
+			ldr r0, =buttonMessage
 			strb r11, [r0]
-			ldr r1, =timerMessageEnd
+			ldr r1, =buttonMessageEnd
 			sub r1, r0
 			bl WriteStringUART
 			
@@ -139,8 +137,6 @@ main:
 			// rising edge
 			
 			//6.7
-			mov r0, #0b001			// Input
-			bl setCLOCKFunction
 			mov r0, #1
 			bl writeCLOCK
 		
@@ -246,10 +242,10 @@ setDATAFunction:
 	
 	// clear bits 0-3 (for PIN 10)
 	mov r3, #0b111
-	bic r2, r3, lsl #0	
+	bic r2, r3	
 	
 	// set bits 0-3 (for PIN 10) to r0 (Function)			
-	orr r2, r0, lsl #0
+	orr r2, r0
 	
 	str r2, [r1, #0x04]				// write back to GPFSEL1
 	
@@ -280,16 +276,18 @@ readDATA:
 setLATCHFunction:
 	
 	ldr r1, =0x3F200000				// base GPIO Register
-	ldr r2, [r1, #0x00]				// GPFSEL0			
+	ldr r2, [r1]					// GPFSEL0			
 	
 	// clear bits 27-29 (for PIN 9)
 	mov r3, #0b111
-	bic r2, r3, lsl #3	
+	lsl r3, #27
+	bic r2, r3	
 	
-	// set bits 3-6 (for PIN 9) to r0 (Function)			
-	orr r2, r0, lsl #3
+	// set bits 3-6 (for PIN 9) to r0 (Function)	
+	lsl r0, #27		
+	orr r2, r0
 	
-	str r2, [r1, #0x00]				// write back to GPFSEL0
+	str r2, [r1]					// write back to GPFSEL0
 	
 	mov pc, r14						// return
 	
@@ -350,10 +348,12 @@ setCLOCKFunction:
 	
 	// clear bits 3-5 (for PIN 11)
 	mov r3, #0b111
-	bic r2, r3, lsl #3	
+	lsl r3, #3						
+	bic r2, r3	
 	
-	// set bits 3-5 (for PIN 11) to r0 (Function)			
-	orr r2, r0, lsl #3
+	// set bits 3-5 (for PIN 11) to r0 (Function)	
+	lsl r0, #3		
+	orr r2, r0
 	
 	str r2, [r1, #0x04]				// write back to GPFSEL1
 	
@@ -415,9 +415,9 @@ exitMessage:
 	.ascii "Exiting program...\n\r"
 exitMessageEnd:
 
-timerMessage:
-	.ascii "Timer Complete\n\r"
-timerMessageEnd:
+buttonMessage:
+	.ascii "x Button State\n\r"
+buttonMessageEnd:
 
 timerInterval:
 	.int 1000000
