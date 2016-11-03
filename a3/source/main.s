@@ -337,11 +337,11 @@ readCLOCK:
 // output r1 = boolean (1 = true, 0 = false)
 areAnySNESButtonsPressed:
 
-	ldr r1, =0xFFFF						
-	sub r1, r0
+	ldr r1, =0xFFFF						// 1111 1111 1111 1111					
+	sub r1, r0					
 	
-	// if the and is 0 then all values of the bitmask are 1
-	// so no buttons are pressed
+	// if the subtraction is 0, then the bitmask was 0xFFFF
+	// and no buttons were pressed
 	teq r1, #0
 	moveq r1, #0
 	movne r1, #1						
