@@ -114,37 +114,18 @@ main:
 				mov r0, r8
 				bl areAnySNESButtonsPressed
 				
-				// print button down message if any buttons are pressed
-				teq r1, #1						
-				bleq printSNESButtonDownMessage
+				teq r1, #1								// if (1 or more buttons are pressed)					
+				bleq printSNESButtonPressedMessage		// print pressed button message
+				blne startSamplingSNESButtons			// Sample buttons again
+				
+				mov r1, #3								// if (start button is pressed)
+				bl isSNESButtonPressedForIndex			
+				teq r1, #1
+				beq killProgram
 				
 				b startSamplingSNESButtons
-		
-		
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		
-		
-		
-		
-		
-		
-		
-	
+				
+				
 mainEnd:
 	b killProgram
 	
@@ -351,7 +332,7 @@ readCLOCK:
 	
 // input r0 = button bitmask (1 == up, 0 == down)
 // output r0 = original button bitmask
-// output r1 = boolean (0 if no buttons pressed, 1 otherwise)
+// output r1 = boolean (1 = true, 0 = false)
 areAnySNESButtonsPressed:
 
 	ldr r1, =0xFFFF						
@@ -364,12 +345,46 @@ areAnySNESButtonsPressed:
 	movne r1, #1						
 
 	mov pc, lr							// return
-
 	
+	
+	
+
+// Available buttons
+// 0 = B
+// 1 = Y
+// 2 = Select
+// 3 = Start
+// 4 = Up
+// 5 = Down
+// 6 = Left
+// 7 = Right
+// 8 = A
+// 9 = X
+// 10 = L
+// 11 = R
+//
+// input r0 = button bitmask (1 == up, 0 == down)
+// input r1 = buttonIndex
+// output r0 = original button bitmask
+// output r1 = boolean (1 = true, 0 = false)
+isSNESButtonPressedForIndex:
+
+	push { r0 }
+	
+	lsr r0, r1
+	and r0, #1
+	
+	teq r0, #0
+	moveq r1, #1
+	movne r1, #0
+	
+	pop { r0 }
+	
+	mov pc, lr							// return
 	
 	
 // input r0 = button bitmask (1 == up, 0 == down)
-printSNESButtonDownMessage:
+printSNESButtonPressedMessage:
 
 	push { lr }							// save return address
 	push { r0 }
@@ -602,10 +617,6 @@ exitMessage:
 	.ascii "Exiting program...\n\r"
 exitMessageEnd:
 
-buttonMessage:
-	.ascii "x Button Down\n\r"
-buttonMessageEnd:
-
 SNESPleasePressButtonText:
 	.ascii "Please press a button...\n\r"
 SNESPleasePressButtonTextEnd:
@@ -615,51 +626,51 @@ SNESYouHavePressedText:
 SNESYouHavePressedTextEnd:
 
 SNES_B_ButtonText:
-	.ascii " B "
+	.ascii "B "
 SNES_B_ButtonTextEnd:
 
 SNES_Y_ButtonText:
-	.ascii " Y "
+	.ascii "Y "
 SNES_Y_ButtonTextEnd:
 
 SNES_Select_ButtonText:
-	.ascii " Select "
+	.ascii "Select "
 SNES_Select_ButtonTextEnd:
 
 SNES_Start_ButtonText:
-	.ascii " Start "
+	.ascii "Start "
 SNES_Start_ButtonTextEnd:
 
 SNES_Up_ButtonText:
-	.ascii " Up "
+	.ascii "Up "
 SNES_Up_ButtonTextEnd:
 
 SNES_Down_ButtonText:
-	.ascii " Down "
+	.ascii "Down "
 SNES_Down_ButtonTextEnd:
 
 SNES_Left_ButtonText:
-	.ascii " Left "
+	.ascii "Left "
 SNES_Left_ButtonTextEnd:
 
 SNES_Right_ButtonText:
-	.ascii " Right "
+	.ascii "Right "
 SNES_Right_ButtonTextEnd:
 
 SNES_A_ButtonText:
-	.ascii " A "
+	.ascii "A "
 SNES_A_ButtonTextEnd:
 
 SNES_X_ButtonText:
-	.ascii " X "
+	.ascii "X "
 SNES_X_ButtonTextEnd:
 
 SNES_L_ButtonText:
-	.ascii " L "
+	.ascii "L "
 SNES_L_ButtonTextEnd:
 
 SNES_R_ButtonText:
-	.ascii " R "
+	.ascii "R "
 SNES_R_ButtonTextEnd:
 
 
