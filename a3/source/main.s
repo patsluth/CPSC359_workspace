@@ -35,9 +35,6 @@ main:
 	
 	
 	
-	
-	
-	
 	initSNES:
 	
 		mov r0, #0b001			// Output
@@ -63,16 +60,15 @@ main:
 			mov r0, #1
 			bl writeLATCH
 
-			mov r1, #12
+			mov r0, #12
 			// TODO: uncomment long timer
-				mov r1, #1
-				lsl r1, #20
+				mov r0, #1
+				lsl r0, #20
 			bl startTimer
 		
 			mov r0, #0
 			bl writeLATCH
 		
-			//6
 			// 6.1
 			mov r8, #0
 			mov r9, #0	// r9 = button index
@@ -121,9 +117,9 @@ main:
 				mov r1, #3								// if (start button is pressed)
 				bl isSNESButtonPressedForIndex			
 				teq r1, #1
-				beq killProgram
+				beq killProgram							// killProgram
+				bne startSamplingSNESButtons			// else resample
 				
-				b startSamplingSNESButtons
 				
 				
 mainEnd:
@@ -147,14 +143,13 @@ killProgramEnd:
 
 
 
-// Will jump to supplied return address after specified delay
-// input r0 	= address to jump to on invoke
-// input r1 	= delay in microseconds
+// Will bl after specified delay
+// input r0 	= delay in microseconds
 startTimer:
 
-	ldr r2, =0x3F003004				// r2 = currentTime
+	ldr r2, =0x3F003004				// r1 = currentTime
 	ldr r2, [r2]					// CLO - Timer Counter (Low 32 bits)
-	add r2, r1						// r1 = currentTime + delay
+	add r2, r0						// r2 = currentTime + delay
 	
 	timerTick_:
 	

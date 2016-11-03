@@ -73,9 +73,9 @@ Disassembly of section .text:
     91f4:	eb000063 	bl	9388 <writeCLOCK>
     91f8:	e3a00001 	mov	r0, #1
     91fc:	eb000048 	bl	9324 <writeLATCH>
-    9200:	e3a0100c 	mov	r1, #12
-    9204:	e3a01001 	mov	r1, #1
-    9208:	e1a01a01 	lsl	r1, r1, #20
+    9200:	e3a0000c 	mov	r0, #12
+    9204:	e3a00001 	mov	r0, #1
+    9208:	e1a00a00 	lsl	r0, r0, #20
     920c:	eb000022 	bl	929c <killProgramEnd>
     9210:	e3a00000 	mov	r0, #0
     9214:	eb000042 	bl	9324 <writeLATCH>
@@ -108,7 +108,7 @@ Disassembly of section .text:
     9270:	eb00005a 	bl	93e0 <isSNESButtonPressedForIndex>
     9274:	e3310001 	teq	r1, #1
     9278:	0a000001 	beq	9284 <killProgram>
-    927c:	eaffffda 	b	91ec <startSamplingSNESButtons>
+    927c:	1affffda 	bne	91ec <startSamplingSNESButtons>
 
 00009280 <mainEnd>:
     9280:	eaffffff 	b	9284 <killProgram>
@@ -124,7 +124,7 @@ Disassembly of section .text:
 0000929c <killProgramEnd>:
     929c:	e59f2374 	ldr	r2, [pc, #884]	; 9618 <printCarriageReturn+0x24>
     92a0:	e5922000 	ldr	r2, [r2]
-    92a4:	e0822001 	add	r2, r2, r1
+    92a4:	e0822000 	add	r2, r2, r0
 
 000092a8 <timerTick_>:
     92a8:	e59f1368 	ldr	r1, [pc, #872]	; 9618 <printCarriageReturn+0x24>
