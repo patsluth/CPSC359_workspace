@@ -78,7 +78,7 @@ main:
 		//6
 		
 		// 6.1
-		//ldr r8, =SNESButtonBuffer
+		mov r8, #0
 		mov r9, #0	// r9 = button index
 	
 		pulseLoop:	
@@ -103,23 +103,20 @@ main:
 			//6.5
 			bl readDATA
 			
-			// at this point if r0 = 0, then button at index r9 is DOWN
 			
-			push { r0 }
-			mov r0, r9
-			
-			bl printSNESMessage
-			
-			pop { r0 }
+			lsl r0, r9
+			orr r8, r0
 			
 			
 			
-			cmp r0, #0
-			bne buttonNotDown
 			
 			
 			
-			buttonNotDown:
+			// if (r0 == 0) then button at index r9 is DOWN
+			//teq r0, #0
+			//moveq r0, r9
+			//bleq printSNESMessage
+			
 	
 	
 			// 6.6
@@ -136,11 +133,14 @@ main:
 			// 6.8 && 6.9	
 			add r9, #1
 			cmp r9, #16			// if (i < 16)
-			blt pulseLoop
+			blt pulseLoop	
 			
 		pulseLoopEnd:
 		
-			b tempStart
+			mov r0, r8
+			bl printSNESMessage
+		
+			//b tempStart
 		
 		
 	
@@ -209,7 +209,7 @@ startTimer:
 		
 		timerComplete_:
 		
-			mov pc, r14						// return
+			mov pc, lr						// return
 			
 			
 			
@@ -242,7 +242,7 @@ setDATAFunction:
 	
 	str r2, [r1, #0x04]				// write back to GPFSEL1
 	
-	mov pc, r14						// return
+	mov pc, lr						// return
 	
 	
 	
@@ -260,7 +260,7 @@ readDATA:
 	moveq r0, #0					// return 0
 	movne r0, #1					// return 1
 	
-	mov pc, r14						// return		
+	mov pc, lr						// return		
 	
 	
 	
@@ -282,7 +282,7 @@ setLATCHFunction:
 	
 	str r2, [r1]					// write back to GPFSEL0
 	
-	mov pc, r14						// return
+	mov pc, lr						// return
 	
 	
 	
@@ -298,7 +298,7 @@ writeLATCH:
 	streq r2, [r1, #0x28]			// GPCLR0
 	strne r2, [r1, #0x1C]			// GPSET0
 
-	mov pc, r14						// return
+	mov pc, lr						// return
 	
 	
 	
@@ -316,7 +316,7 @@ readLATCH:
 	moveq r0, #0					// return 0
 	movne r0, #1					// return 1
 	
-	mov pc, r14						// return
+	mov pc, lr						// return
 	
 	
 	
@@ -350,7 +350,7 @@ setCLOCKFunction:
 	
 	str r2, [r1, #0x04]				// write back to GPFSEL1
 	
-	mov pc, r14						// return
+	mov pc, lr						// return
 	
 	
 	
@@ -366,7 +366,7 @@ writeCLOCK:
 	streq r2, [r1, #0x28]			// GPCLR0
 	strne r2, [r1, #0x1C]			// GPSET0
 
-	mov pc, r14						// return
+	mov pc, lr						// return
 	
 	
 	
@@ -384,76 +384,110 @@ readCLOCK:
 	moveq r0, #0					// return 0
 	movne r0, #1					// return 1
 	
-	mov pc, r14						// return
+	mov pc, lr						// return
 	
 	
 	
-	
-	
-	
-	
-	
-	
-// input r0 = button index
+// input r0 = button bitmask (1 == up, 0 == down)
 printSNESMessage:
 
-	//cmp r0, #0
-	//movlt r0, #0
+	push { lr }						// save return address
+	push { r0 }
 	
 	
-	push { r14 }						// save return address
-
-
-	mov r2, r0
+	// lsr r0, #0
+	and r0, #1
 	
-	ldr r0, =SNESButtonText
-	mov r1, #27
-	mul r2, r1
-	add r0, r2							
+	teq r0, #0
+	ldreq r0, =SNES_B_ButtonText
+	ldreq r1, =SNES_B_ButtonTextEnd
+	subeq r1, r0
+	bleq WriteStringUART
 	
-	ldr r3, =SNESButtonEnd
-	cmp r0, r3
-	bge printSNESMessageEnd
 	
-	bl WriteStringUART
+	pop { r0 }
+	push { r0 }
+	
+	
+	lsr r0, #1
+	and r0, #1
+	
+	teq r0, #0
+	ldreq r0, =SNES_Y_ButtonText
+	ldreq r1, =SNES_Y_ButtonTextEnd
+	subeq r1, r0
+	bleq WriteStringUART
+	
+	
+	pop { r0 }
+	push { r0 }
+	
+	
+	lsr r0, #8
+	and r0, #1
+	
+	teq r0, #0
+	ldreq r0, =SNES_A_ButtonText
+	ldreq r1, =SNES_A_ButtonTextEnd
+	subeq r1, r0
+	bleq WriteStringUART
+	
+	
+	pop { r0 }
+	push { r0 }
+	
+	
+	lsr r0, #9
+	and r0, #1
+	
+	teq r0, #0
+	ldreq r0, =SNES_X_ButtonText
+	ldreq r1, =SNES_X_ButtonTextEnd
+	subeq r1, r0
+	bleq WriteStringUART
+	
 	bl printNewline
+	bl printCarriageReturn
 	
-printSNESMessageEnd:
-
-	pop { r14 }							// restore return address
-	mov pc, r14							// return
+	
+	pop { r0 }
+	pop { lr }							// restore return address
+	mov pc, lr							// return
 	
 	
 	
 printNewline:
 
-	push { r14 }						// save return address
+	push { lr }						// save return address
 	
 	ldr r0, =newline
 	ldr r1, =newlineEnd
 	sub r1, r1, r0
 	bl WriteStringUART
 	
-	pop { r14 }							// restore return address
+	pop { lr }							// restore return address
 
-	mov pc, r14							// return
+	mov pc, lr							// return
+	
+	
+	
+printCarriageReturn:
+
+	push { lr }						// save return address
+	
+	ldr r0, =carriageReturn
+	ldr r1, =carriageReturnEnd
+	sub r1, r1, r0
+	bl WriteStringUART
+	
+	pop { lr }							// restore return address
+
+	mov pc, lr							// return
 	
 	
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-  
-  
-  
-  
-  
 //##############################################################//
 .section .data
 	
@@ -473,24 +507,47 @@ SNESPleasePressButtonText:
 	.ascii "Please press a button...\n\r"
 SNESPleasePressButtonTextEnd:
 
+SNESYouHavePressedText:
+	.ascii "You have pressed "
+SNESYouHavePressedTextEnd:
 
 
-
-// 27 characters each
+// 10 characters each
 SNESButtonText:
-	.ascii "You have pressed B         "
-	.ascii "You have pressed Y         "
-	.ascii "You have pressed Select    "
-	.ascii "You have pressed Start     "
-	.ascii "You have pressed Up        "
-	.ascii "You have pressed Down      "
-	.ascii "You have pressed Left      "
-	.ascii "You have pressed Right     "
-	.ascii "You have pressed A         "
-	.ascii "You have pressed X         "
-	.ascii "You have pressed L         "
-	.ascii "You have pressed R         "
+	.ascii "\tB      \n\r"
+	.ascii "\tY      \n\r"
+	.ascii "\tSelect \n\r"
+	.ascii "\tStart  \n\r"
+	.ascii "\tUp     \n\r"
+	.ascii "\tDown   \n\r"
+	.ascii "\tLeft   \n\r"
+	.ascii "\tRight  \n\r"
+	.ascii "\tA      \n\r"
+	.ascii "\tX      \n\r"
+	.ascii "\tL      \n\r"
+	.ascii "\tR      \n\r"
 SNESButtonEnd:
+
+
+
+SNES_B_ButtonText:
+	.ascii " B "
+SNES_B_ButtonTextEnd:
+
+SNES_Y_ButtonText:
+	.ascii " Y "
+SNES_Y_ButtonTextEnd:
+
+
+
+
+SNES_A_ButtonText:
+	.ascii " A "
+SNES_A_ButtonTextEnd:
+
+SNES_X_ButtonText:
+	.ascii " X "
+SNES_X_ButtonTextEnd:
 
 
 
@@ -503,14 +560,14 @@ SNESButtonEnd:
 SNESButtonTest:
 	.ascii "BYsSuplrAXLR"
 SNESButtonTestEnd:
-	
-SNESButtonBuffer:
-	.int 0b11111111111111111111111111111111
-SNESButtonBufferEnd:
 
 newline:
-	.ascii "\n\r"
+	.ascii "\n"
 newlineEnd:
+
+carriageReturn:
+	.ascii "\r"
+carriageReturnEnd:
 
 .end
 
