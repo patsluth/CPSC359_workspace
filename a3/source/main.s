@@ -567,7 +567,6 @@ printSNESButtonPressedMessage:
 	
 	
 	bl printNewline
-	bl printCarriageReturn
 	
 	
 	pop { r0 }
@@ -582,21 +581,6 @@ printNewline:
 	
 	ldr r0, =newline
 	ldr r1, =newlineEnd
-	sub r1, r1, r0
-	bl WriteStringUART
-	
-	pop { lr }							// restore return address
-
-	mov pc, lr							// return
-	
-	
-	
-printCarriageReturn:
-
-	push { lr }							// save return address
-	
-	ldr r0, =carriageReturn
-	ldr r1, =carriageReturnEnd
 	sub r1, r1, r0
 	bl WriteStringUART
 	
@@ -675,25 +659,9 @@ SNES_R_ButtonText:
 	.ascii "R "
 SNES_R_ButtonTextEnd:
 
-
-
-
-
-
-
-
-
-SNESButtonTest:
-	.ascii "BYsSuplrAXLR"
-SNESButtonTestEnd:
-
 newline:
-	.ascii "\n"
+	.ascii "\n\r"
 newlineEnd:
-
-carriageReturn:
-	.ascii "\r"
-carriageReturnEnd:
 
 .end
 
