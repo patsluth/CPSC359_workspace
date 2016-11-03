@@ -27,48 +27,48 @@ LOAD gpio.o
 .igot.plt       0x00009190        0x0
  .igot.plt      0x00000000        0x0 build/jtag.o
 
-.text           0x00009190      0x61c
+.text           0x00009190      0x648
  *.c.o(.text)
  *(.text)
  .text          0x00009190       0x8c build/jtag.o
                 0x00009190                EnableJTAG
- .text          0x0000921c      0x300 build/main.o
- .text          0x0000951c      0x1b8 uart.o
-                0x0000951c                InitUART
-                0x000095dc                PutCharUART
-                0x000095f8                GetCharUART
-                0x00009614                WriteStringUART
-                0x00009644                ReadLineUART
- .text          0x000096d4       0xd8 gpio.o
-                0x000096d4                GetGpioAddress
-                0x000096dc                SetGpioFunction
-                0x00009728                SetGpio
-                0x00009764                GetGpio
+ .text          0x0000921c      0x32c build/main.o
+ .text          0x00009548      0x1b8 uart.o
+                0x00009548                InitUART
+                0x00009608                PutCharUART
+                0x00009624                GetCharUART
+                0x00009640                WriteStringUART
+                0x00009670                ReadLineUART
+ .text          0x00009700       0xd8 gpio.o
+                0x00009700                GetGpioAddress
+                0x00009708                SetGpioFunction
+                0x00009754                SetGpio
+                0x00009790                GetGpio
 OUTPUT(build/output.elf elf32-littlearm)
 
-.glue_7         0x000097ac        0x0
+.glue_7         0x000097d8        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x000097ac        0x0
+.glue_7t        0x000097d8        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x000097ac        0x0
+.vfp11_veneer   0x000097d8        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x000097ac        0x0
+.v4_bx          0x000097d8        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x000097ac        0x0
+.iplt           0x000097d8        0x0
  .iplt          0x00000000        0x0 build/jtag.o
 
-.rel.dyn        0x000097ac        0x0
+.rel.dyn        0x000097d8        0x0
  .rel.iplt      0x00000000        0x0 build/jtag.o
 
-.bss            0x000097ac        0x0
- .bss           0x000097ac        0x0 build/jtag.o
- .bss           0x000097ac        0x0 build/main.o
- .bss           0x000097ac        0x0 uart.o
- .bss           0x000097ac        0x0 gpio.o
+.bss            0x000097d8        0x0
+ .bss           0x000097d8        0x0 build/jtag.o
+ .bss           0x000097d8        0x0 build/main.o
+ .bss           0x000097d8        0x0 uart.o
+ .bss           0x000097d8        0x0 gpio.o
 
 .ARM.attributes
                 0x00000000       0x29
@@ -81,11 +81,11 @@ OUTPUT(build/output.elf elf32-littlearm)
  .ARM.attributes
                 0x0000007b       0x29 gpio.o
 
-.debug_line     0x00000000      0x2bf
+.debug_line     0x00000000      0x2ca
  .debug_line    0x00000000       0x61 build/jtag.o
- .debug_line    0x00000061      0x12e build/main.o
- .debug_line    0x0000018f       0xb7 uart.o
- .debug_line    0x00000246       0x79 gpio.o
+ .debug_line    0x00000061      0x139 build/main.o
+ .debug_line    0x0000019a       0xb7 uart.o
+ .debug_line    0x00000251       0x79 gpio.o
 
 .debug_info     0x00000000      0x19c
  .debug_info    0x00000000       0x63 build/jtag.o

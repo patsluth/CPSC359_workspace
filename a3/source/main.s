@@ -37,110 +37,84 @@ main:
 	
 	
 	
-	tempStart:
 	
+	initSNES:
 	
+		mov r0, #0b001			// Output
+		bl setCLOCKFunction
 	
-	//1
-	mov r7, #0
+		mov r0, #0b001			// Output
+		bl setLATCHFunction
 	
-	
-	
-	//2
-	mov r0, #0b001			// Output
-	bl setCLOCKFunction
-	mov r0, #1
-	bl writeCLOCK
-	
-	
-	
-	// 3
-	mov r0, #0b001			// Output
-	bl setLATCHFunction
-	mov r0, #1
-	bl writeLATCH
-	
-	mov r0, #0b000			// Input
-	bl setDATAFunction
-	
-	
-	
-	//4
-	startSNESButtonSampleTimer:
-	
-		mov r1, #12
-		bl startTimer
+		mov r0, #0b000			// Input
+		bl setDATAFunction
 		
-		mov r0, #0
-		bl writeLATCH
+		// 4
+		startSamplingSNESButtons:
 		
+			//1
+			mov r7, #0
 		
-		//6
-		
-		// 6.1
-		mov r8, #0
-		mov r9, #0	// r9 = button index
-	
-		pulseLoop:	
-		
-			//6.2
-			// Wait 6ms (falling edge)
-			mov r1, #6
-			bl startTimer
-			
-			
-			
-			// 6.3
-			mov r0, #0
-			bl writeCLOCK
-		
-			// 6.4
-			// Wait 6ms (rising edge)
-			mov r1, #6
-			bl startTimer
-			
-	
-			//6.5
-			bl readDATA
-			
-			
-			lsl r0, r9
-			orr r8, r0
-			
-			
-			
-			
-			
-			
-			// if (r0 == 0) then button at index r9 is DOWN
-			//teq r0, #0
-			//moveq r0, r9
-			//bleq printSNESMessage
-			
-	
-	
-			// 6.6
-			// write to SNESButtonBuffer at index
-			// SNESButtonBuffer
-			
-			
-			// rising edge
-			
-			//6.7
+			// 2
 			mov r0, #1
 			bl writeCLOCK
+	
+			// 3
+			mov r0, #1
+			bl writeLATCH
+
+			mov r1, #12
+			// TODO: uncomment long timer
+				mov r1, #1
+				lsl r1, #20
+			bl startTimer
 		
-			// 6.8 && 6.9	
-			add r9, #1
-			cmp r9, #16			// if (i < 16)
-			blt pulseLoop	
+			mov r0, #0
+			bl writeLATCH
+		
+			//6
+			// 6.1
+			mov r8, #0
+			mov r9, #0	// r9 = button index
+	
+			pulseLoop:	
+		
+				//6.2
+				// Wait 6ms (falling edge)
+				mov r1, #6
+				bl startTimer
+				
+				// 6.3
+				mov r0, #0
+				bl writeCLOCK
+		
+				// 6.4
+				// Wait 6ms (rising edge)
+				mov r1, #6
+				bl startTimer
 			
-		pulseLoopEnd:
+				// 6.5
+				bl readDATA
+			
+				// 6.6 - Write button bitmask
+				lsl r0, r9
+				orr r8, r0
+			
+				//6.7
+				mov r0, #1
+				bl writeCLOCK
 		
-			mov r0, r8
-			bl printSNESMessage
+				// 6.8 && 6.9	
+				add r9, #1
+				cmp r9, #16			// if (i < 16)
+				blt pulseLoop	
+			
+			pulseLoopEnd:
 		
-			//b tempStart
+				mov r0, r8
+				bl printSNESButtonDownMessage
+				
+				b startSamplingSNESButtons
 		
 		
 	
@@ -389,9 +363,19 @@ readCLOCK:
 	
 	
 // input r0 = button bitmask (1 == up, 0 == down)
-printSNESMessage:
+printSNESButtonDownMessage:
 
 	push { lr }						// save return address
+	push { r0 }
+	
+
+	ldr r0, =SNESYouHavePressedText
+	ldr r1, =SNESYouHavePressedTextEnd
+	sub r1, r0
+	bl WriteStringUART
+	
+	
+	pop { r0 }
 	push { r0 }
 	
 	
