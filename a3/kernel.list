@@ -5,214 +5,214 @@ build/output.elf:     file format elf32-littlearm
 Disassembly of section .init:
 
 00008000 <_start>:
-    8000:	ea000459 	b	916c <main>
+    8000:	ea00045b 	b	9174 <main>
 
 Disassembly of section .text:
 
-000090e0 <EnableJTAG>:
-    90e0:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    90e4:	e59f0064 	ldr	r0, [pc, #100]	; 9150 <dowaitloop+0xc>
-    90e8:	e0211001 	eor	r1, r1, r1
-    90ec:	e5801000 	str	r1, [r0]
-    90f0:	eb000012 	bl	9140 <dowait>
-    90f4:	e59f0058 	ldr	r0, [pc, #88]	; 9154 <dowaitloop+0x10>
-    90f8:	e59f1058 	ldr	r1, [pc, #88]	; 9158 <dowaitloop+0x14>
-    90fc:	e5801000 	str	r1, [r0]
-    9100:	eb00000e 	bl	9140 <dowait>
-    9104:	e0211001 	eor	r1, r1, r1
-    9108:	e5801000 	str	r1, [r0]
-    910c:	e59f0048 	ldr	r0, [pc, #72]	; 915c <dowaitloop+0x18>
-    9110:	e5901000 	ldr	r1, [r0]
-    9114:	e3c11a07 	bic	r1, r1, #28672	; 0x7000
-    9118:	e3811a02 	orr	r1, r1, #8192	; 0x2000
-    911c:	e5801000 	str	r1, [r0]
-    9120:	e59f0038 	ldr	r0, [pc, #56]	; 9160 <dowaitloop+0x1c>
-    9124:	e5901000 	ldr	r1, [r0]
-    9128:	e59f2034 	ldr	r2, [pc, #52]	; 9164 <dowaitloop+0x20>
-    912c:	e1c11002 	bic	r1, r1, r2
-    9130:	e59f2030 	ldr	r2, [pc, #48]	; 9168 <dowaitloop+0x24>
-    9134:	e1811002 	orr	r1, r1, r2
-    9138:	e5801000 	str	r1, [r0]
-    913c:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+000090e8 <EnableJTAG>:
+    90e8:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    90ec:	e59f0064 	ldr	r0, [pc, #100]	; 9158 <dowaitloop+0xc>
+    90f0:	e0211001 	eor	r1, r1, r1
+    90f4:	e5801000 	str	r1, [r0]
+    90f8:	eb000012 	bl	9148 <dowait>
+    90fc:	e59f0058 	ldr	r0, [pc, #88]	; 915c <dowaitloop+0x10>
+    9100:	e59f1058 	ldr	r1, [pc, #88]	; 9160 <dowaitloop+0x14>
+    9104:	e5801000 	str	r1, [r0]
+    9108:	eb00000e 	bl	9148 <dowait>
+    910c:	e0211001 	eor	r1, r1, r1
+    9110:	e5801000 	str	r1, [r0]
+    9114:	e59f0048 	ldr	r0, [pc, #72]	; 9164 <dowaitloop+0x18>
+    9118:	e5901000 	ldr	r1, [r0]
+    911c:	e3c11a07 	bic	r1, r1, #28672	; 0x7000
+    9120:	e3811a02 	orr	r1, r1, #8192	; 0x2000
+    9124:	e5801000 	str	r1, [r0]
+    9128:	e59f0038 	ldr	r0, [pc, #56]	; 9168 <dowaitloop+0x1c>
+    912c:	e5901000 	ldr	r1, [r0]
+    9130:	e59f2034 	ldr	r2, [pc, #52]	; 916c <dowaitloop+0x20>
+    9134:	e1c11002 	bic	r1, r1, r2
+    9138:	e59f2030 	ldr	r2, [pc, #48]	; 9170 <dowaitloop+0x24>
+    913c:	e1811002 	orr	r1, r1, r2
+    9140:	e5801000 	str	r1, [r0]
+    9144:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
 
-00009140 <dowait>:
-    9140:	e3a02f4b 	mov	r2, #300	; 0x12c
+00009148 <dowait>:
+    9148:	e3a02f4b 	mov	r2, #300	; 0x12c
 
-00009144 <dowaitloop>:
-    9144:	e2522001 	subs	r2, r2, #1
-    9148:	1afffffd 	bne	9144 <dowaitloop>
-    914c:	e12fff1e 	bx	lr
-    9150:	3f200094 	.word	0x3f200094
-    9154:	3f200098 	.word	0x3f200098
-    9158:	0bc00010 	.word	0x0bc00010
-    915c:	3f200000 	.word	0x3f200000
-    9160:	3f200008 	.word	0x3f200008
-    9164:	00e3ffc0 	.word	0x00e3ffc0
-    9168:	0061b6c0 	.word	0x0061b6c0
+0000914c <dowaitloop>:
+    914c:	e2522001 	subs	r2, r2, #1
+    9150:	1afffffd 	bne	914c <dowaitloop>
+    9154:	e12fff1e 	bx	lr
+    9158:	3f200094 	.word	0x3f200094
+    915c:	3f200098 	.word	0x3f200098
+    9160:	0bc00010 	.word	0x0bc00010
+    9164:	3f200000 	.word	0x3f200000
+    9168:	3f200008 	.word	0x3f200008
+    916c:	00e3ffc0 	.word	0x00e3ffc0
+    9170:	0061b6c0 	.word	0x0061b6c0
 
-0000916c <main>:
-    916c:	e3a0d902 	mov	sp, #32768	; 0x8000
-    9170:	ebffffda 	bl	90e0 <EnableJTAG>
-    9174:	eb00007f 	bl	9378 <InitUART>
-    9178:	e59f01e0 	ldr	r0, [pc, #480]	; 9360 <readCLOCK+0x24>
-    917c:	e3a01030 	mov	r1, #48	; 0x30
-    9180:	eb0000ba 	bl	9470 <WriteStringUART>
-    9184:	e320f000 	nop	{0}
+00009174 <main>:
+    9174:	e3a0d902 	mov	sp, #32768	; 0x8000
+    9178:	ebffffda 	bl	90e8 <EnableJTAG>
+    917c:	eb00007d 	bl	9378 <InitUART>
+    9180:	e59f01dc 	ldr	r0, [pc, #476]	; 9364 <readCLOCK+0x24>
+    9184:	e3a01030 	mov	r1, #48	; 0x30
+    9188:	eb0000b8 	bl	9470 <WriteStringUART>
+    918c:	e320f000 	nop	{0}
 
-00009188 <tempStart>:
-    9188:	e3a07000 	mov	r7, #0
-    918c:	e3a00001 	mov	r0, #1
-    9190:	eb000059 	bl	92fc <setCLOCKFunction>
+00009190 <tempStart>:
+    9190:	e3a07000 	mov	r7, #0
     9194:	e3a00001 	mov	r0, #1
-    9198:	eb000060 	bl	9320 <writeCLOCK>
+    9198:	eb000058 	bl	9300 <setCLOCKFunction>
     919c:	e3a00001 	mov	r0, #1
-    91a0:	eb00003c 	bl	9298 <setLATCHFunction>
+    91a0:	eb00005f 	bl	9324 <writeCLOCK>
     91a4:	e3a00001 	mov	r0, #1
-    91a8:	eb000043 	bl	92bc <writeLATCH>
-    91ac:	e3a00000 	mov	r0, #0
-    91b0:	eb000028 	bl	9258 <setDATAFunction>
+    91a8:	eb00003b 	bl	929c <setLATCHFunction>
+    91ac:	e3a00001 	mov	r0, #1
+    91b0:	eb000042 	bl	92c0 <writeLATCH>
+    91b4:	e3a00000 	mov	r0, #0
+    91b8:	eb000027 	bl	925c <setDATAFunction>
 
-000091b4 <startSNESButtonSampleTimer>:
-    91b4:	e3a0100c 	mov	r1, #12
-    91b8:	eb00001d 	bl	9234 <killProgramEnd>
-    91bc:	e3a00000 	mov	r0, #0
-    91c0:	eb00003d 	bl	92bc <writeLATCH>
-    91c4:	e3a09000 	mov	r9, #0
+000091bc <startSNESButtonSampleTimer>:
+    91bc:	e3a0100c 	mov	r1, #12
+    91c0:	eb00001c 	bl	9238 <killProgramEnd>
+    91c4:	e3a00000 	mov	r0, #0
+    91c8:	eb00003c 	bl	92c0 <writeLATCH>
+    91cc:	e3a09000 	mov	r9, #0
 
-000091c8 <pulseLoop>:
-    91c8:	e3a01006 	mov	r1, #6
-    91cc:	eb000018 	bl	9234 <killProgramEnd>
-    91d0:	e3a00000 	mov	r0, #0
-    91d4:	eb000051 	bl	9320 <writeCLOCK>
-    91d8:	e3a01006 	mov	r1, #6
-    91dc:	eb000014 	bl	9234 <killProgramEnd>
-    91e0:	eb000023 	bl	9274 <readDATA>
-    91e4:	e1a0b000 	mov	fp, r0
-    91e8:	e28bb030 	add	fp, fp, #48	; 0x30
-    91ec:	e59f0170 	ldr	r0, [pc, #368]	; 9364 <readCLOCK+0x28>
-    91f0:	e5c0b000 	strb	fp, [r0]
-    91f4:	e59f116c 	ldr	r1, [pc, #364]	; 9368 <readCLOCK+0x2c>
-    91f8:	e0411000 	sub	r1, r1, r0
-    91fc:	eb00009b 	bl	9470 <WriteStringUART>
-    9200:	e3a00001 	mov	r0, #1
-    9204:	eb000045 	bl	9320 <writeCLOCK>
-    9208:	e2899001 	add	r9, r9, #1
-    920c:	e3590010 	cmp	r9, #16
-    9210:	baffffec 	blt	91c8 <pulseLoop>
+000091d0 <pulseLoop>:
+    91d0:	e3a01006 	mov	r1, #6
+    91d4:	eb000017 	bl	9238 <killProgramEnd>
+    91d8:	e3a00000 	mov	r0, #0
+    91dc:	eb000050 	bl	9324 <writeCLOCK>
+    91e0:	e3a01006 	mov	r1, #6
+    91e4:	eb000013 	bl	9238 <killProgramEnd>
+    91e8:	eb000022 	bl	9278 <readDATA>
+    91ec:	e3500000 	cmp	r0, #0
+    91f0:	1a000003 	bne	9204 <buttonNotDown>
+    91f4:	e59f016c 	ldr	r0, [pc, #364]	; 9368 <readCLOCK+0x28>
+    91f8:	e0800009 	add	r0, r0, r9
+    91fc:	e3a01001 	mov	r1, #1
+    9200:	eb00009a 	bl	9470 <WriteStringUART>
 
-00009214 <pulseLoopEnd>:
-    9214:	eaffffdb 	b	9188 <tempStart>
+00009204 <buttonNotDown>:
+    9204:	e3a00001 	mov	r0, #1
+    9208:	eb000045 	bl	9324 <writeCLOCK>
+    920c:	e2899001 	add	r9, r9, #1
+    9210:	e3590010 	cmp	r9, #16
+    9214:	baffffed 	blt	91d0 <pulseLoop>
 
-00009218 <mainEnd>:
-    9218:	eaffffff 	b	921c <killProgram>
+00009218 <pulseLoopEnd>:
+    9218:	eaffffdc 	b	9190 <tempStart>
 
-0000921c <killProgram>:
-    921c:	e59f0148 	ldr	r0, [pc, #328]	; 936c <readCLOCK+0x30>
-    9220:	e3a01014 	mov	r1, #20
-    9224:	eb000091 	bl	9470 <WriteStringUART>
-    9228:	e3a00001 	mov	r0, #1
-    922c:	e3a07001 	mov	r7, #1
-    9230:	ef000000 	svc	0x00000000
+0000921c <mainEnd>:
+    921c:	eaffffff 	b	9220 <killProgram>
 
-00009234 <killProgramEnd>:
-    9234:	e59f2134 	ldr	r2, [pc, #308]	; 9370 <readCLOCK+0x34>
-    9238:	e5922000 	ldr	r2, [r2]
-    923c:	e0822001 	add	r2, r2, r1
+00009220 <killProgram>:
+    9220:	e59f0144 	ldr	r0, [pc, #324]	; 936c <readCLOCK+0x2c>
+    9224:	e3a01014 	mov	r1, #20
+    9228:	eb000090 	bl	9470 <WriteStringUART>
+    922c:	e3a00001 	mov	r0, #1
+    9230:	e3a07001 	mov	r7, #1
+    9234:	ef000000 	svc	0x00000000
 
-00009240 <timerTick_>:
-    9240:	e59f1128 	ldr	r1, [pc, #296]	; 9370 <readCLOCK+0x34>
-    9244:	e5911000 	ldr	r1, [r1]
-    9248:	e1510002 	cmp	r1, r2
-    924c:	aa000000 	bge	9254 <timerComplete_>
-    9250:	eafffffa 	b	9240 <timerTick_>
+00009238 <killProgramEnd>:
+    9238:	e59f2130 	ldr	r2, [pc, #304]	; 9370 <readCLOCK+0x30>
+    923c:	e5922000 	ldr	r2, [r2]
+    9240:	e0822001 	add	r2, r2, r1
 
-00009254 <timerComplete_>:
-    9254:	e1a0f00e 	mov	pc, lr
+00009244 <timerTick_>:
+    9244:	e59f1124 	ldr	r1, [pc, #292]	; 9370 <readCLOCK+0x30>
+    9248:	e5911000 	ldr	r1, [r1]
+    924c:	e1510002 	cmp	r1, r2
+    9250:	aa000000 	bge	9258 <timerComplete_>
+    9254:	eafffffa 	b	9244 <timerTick_>
 
-00009258 <setDATAFunction>:
-    9258:	e59f1114 	ldr	r1, [pc, #276]	; 9374 <readCLOCK+0x38>
-    925c:	e5912004 	ldr	r2, [r1, #4]
-    9260:	e3a03007 	mov	r3, #7
-    9264:	e1c22003 	bic	r2, r2, r3
-    9268:	e1822000 	orr	r2, r2, r0
-    926c:	e5812004 	str	r2, [r1, #4]
-    9270:	e1a0f00e 	mov	pc, lr
+00009258 <timerComplete_>:
+    9258:	e1a0f00e 	mov	pc, lr
 
-00009274 <readDATA>:
-    9274:	e59f10f8 	ldr	r1, [pc, #248]	; 9374 <readCLOCK+0x38>
-    9278:	e5912034 	ldr	r2, [r1, #52]	; 0x34
-    927c:	e3a03001 	mov	r3, #1
-    9280:	e1a03503 	lsl	r3, r3, #10
-    9284:	e0022003 	and	r2, r2, r3
-    9288:	e3320000 	teq	r2, #0
-    928c:	03a00000 	moveq	r0, #0
-    9290:	13a00001 	movne	r0, #1
-    9294:	e1a0f00e 	mov	pc, lr
+0000925c <setDATAFunction>:
+    925c:	e59f1110 	ldr	r1, [pc, #272]	; 9374 <readCLOCK+0x34>
+    9260:	e5912004 	ldr	r2, [r1, #4]
+    9264:	e3a03007 	mov	r3, #7
+    9268:	e1c22003 	bic	r2, r2, r3
+    926c:	e1822000 	orr	r2, r2, r0
+    9270:	e5812004 	str	r2, [r1, #4]
+    9274:	e1a0f00e 	mov	pc, lr
 
-00009298 <setLATCHFunction>:
-    9298:	e59f10d4 	ldr	r1, [pc, #212]	; 9374 <readCLOCK+0x38>
-    929c:	e5912000 	ldr	r2, [r1]
-    92a0:	e3a03007 	mov	r3, #7
-    92a4:	e1a03d83 	lsl	r3, r3, #27
-    92a8:	e1c22003 	bic	r2, r2, r3
-    92ac:	e1a00d80 	lsl	r0, r0, #27
-    92b0:	e1822000 	orr	r2, r2, r0
-    92b4:	e5812000 	str	r2, [r1]
-    92b8:	e1a0f00e 	mov	pc, lr
+00009278 <readDATA>:
+    9278:	e59f10f4 	ldr	r1, [pc, #244]	; 9374 <readCLOCK+0x34>
+    927c:	e5912034 	ldr	r2, [r1, #52]	; 0x34
+    9280:	e3a03001 	mov	r3, #1
+    9284:	e1a03503 	lsl	r3, r3, #10
+    9288:	e0022003 	and	r2, r2, r3
+    928c:	e3320000 	teq	r2, #0
+    9290:	03a00000 	moveq	r0, #0
+    9294:	13a00001 	movne	r0, #1
+    9298:	e1a0f00e 	mov	pc, lr
 
-000092bc <writeLATCH>:
-    92bc:	e59f10b0 	ldr	r1, [pc, #176]	; 9374 <readCLOCK+0x38>
-    92c0:	e3a02001 	mov	r2, #1
-    92c4:	e1a02482 	lsl	r2, r2, #9
-    92c8:	e3300000 	teq	r0, #0
-    92cc:	05812028 	streq	r2, [r1, #40]	; 0x28
-    92d0:	1581201c 	strne	r2, [r1, #28]
-    92d4:	e1a0f00e 	mov	pc, lr
+0000929c <setLATCHFunction>:
+    929c:	e59f10d0 	ldr	r1, [pc, #208]	; 9374 <readCLOCK+0x34>
+    92a0:	e5912000 	ldr	r2, [r1]
+    92a4:	e3a03007 	mov	r3, #7
+    92a8:	e1a03d83 	lsl	r3, r3, #27
+    92ac:	e1c22003 	bic	r2, r2, r3
+    92b0:	e1a00d80 	lsl	r0, r0, #27
+    92b4:	e1822000 	orr	r2, r2, r0
+    92b8:	e5812000 	str	r2, [r1]
+    92bc:	e1a0f00e 	mov	pc, lr
 
-000092d8 <readLATCH>:
-    92d8:	e59f1094 	ldr	r1, [pc, #148]	; 9374 <readCLOCK+0x38>
-    92dc:	e5912034 	ldr	r2, [r1, #52]	; 0x34
-    92e0:	e3a03001 	mov	r3, #1
-    92e4:	e1a03483 	lsl	r3, r3, #9
-    92e8:	e0022003 	and	r2, r2, r3
-    92ec:	e3320000 	teq	r2, #0
-    92f0:	03a00000 	moveq	r0, #0
-    92f4:	13a00001 	movne	r0, #1
-    92f8:	e1a0f00e 	mov	pc, lr
+000092c0 <writeLATCH>:
+    92c0:	e59f10ac 	ldr	r1, [pc, #172]	; 9374 <readCLOCK+0x34>
+    92c4:	e3a02001 	mov	r2, #1
+    92c8:	e1a02482 	lsl	r2, r2, #9
+    92cc:	e3300000 	teq	r0, #0
+    92d0:	05812028 	streq	r2, [r1, #40]	; 0x28
+    92d4:	1581201c 	strne	r2, [r1, #28]
+    92d8:	e1a0f00e 	mov	pc, lr
 
-000092fc <setCLOCKFunction>:
-    92fc:	e59f1070 	ldr	r1, [pc, #112]	; 9374 <readCLOCK+0x38>
-    9300:	e5912004 	ldr	r2, [r1, #4]
-    9304:	e3a03007 	mov	r3, #7
-    9308:	e1a03183 	lsl	r3, r3, #3
-    930c:	e1c22003 	bic	r2, r2, r3
-    9310:	e1a00180 	lsl	r0, r0, #3
-    9314:	e1822000 	orr	r2, r2, r0
-    9318:	e5812004 	str	r2, [r1, #4]
-    931c:	e1a0f00e 	mov	pc, lr
+000092dc <readLATCH>:
+    92dc:	e59f1090 	ldr	r1, [pc, #144]	; 9374 <readCLOCK+0x34>
+    92e0:	e5912034 	ldr	r2, [r1, #52]	; 0x34
+    92e4:	e3a03001 	mov	r3, #1
+    92e8:	e1a03483 	lsl	r3, r3, #9
+    92ec:	e0022003 	and	r2, r2, r3
+    92f0:	e3320000 	teq	r2, #0
+    92f4:	03a00000 	moveq	r0, #0
+    92f8:	13a00001 	movne	r0, #1
+    92fc:	e1a0f00e 	mov	pc, lr
 
-00009320 <writeCLOCK>:
-    9320:	e59f104c 	ldr	r1, [pc, #76]	; 9374 <readCLOCK+0x38>
-    9324:	e3a02001 	mov	r2, #1
-    9328:	e1a02582 	lsl	r2, r2, #11
-    932c:	e3300000 	teq	r0, #0
-    9330:	05812028 	streq	r2, [r1, #40]	; 0x28
-    9334:	1581201c 	strne	r2, [r1, #28]
-    9338:	e1a0f00e 	mov	pc, lr
+00009300 <setCLOCKFunction>:
+    9300:	e59f106c 	ldr	r1, [pc, #108]	; 9374 <readCLOCK+0x34>
+    9304:	e5912004 	ldr	r2, [r1, #4]
+    9308:	e3a03007 	mov	r3, #7
+    930c:	e1a03183 	lsl	r3, r3, #3
+    9310:	e1c22003 	bic	r2, r2, r3
+    9314:	e1a00180 	lsl	r0, r0, #3
+    9318:	e1822000 	orr	r2, r2, r0
+    931c:	e5812004 	str	r2, [r1, #4]
+    9320:	e1a0f00e 	mov	pc, lr
 
-0000933c <readCLOCK>:
-    933c:	e59f1030 	ldr	r1, [pc, #48]	; 9374 <readCLOCK+0x38>
-    9340:	e5912034 	ldr	r2, [r1, #52]	; 0x34
-    9344:	e3a03001 	mov	r3, #1
-    9348:	e1a03583 	lsl	r3, r3, #11
-    934c:	e0022003 	and	r2, r2, r3
-    9350:	e3320000 	teq	r2, #0
-    9354:	03a00000 	moveq	r0, #0
-    9358:	13a00001 	movne	r0, #1
-    935c:	e1a0f00e 	mov	pc, lr
-    9360:	00009080 	.word	0x00009080
-    9364:	000090c4 	.word	0x000090c4
-    9368:	000090d4 	.word	0x000090d4
+00009324 <writeCLOCK>:
+    9324:	e59f1048 	ldr	r1, [pc, #72]	; 9374 <readCLOCK+0x34>
+    9328:	e3a02001 	mov	r2, #1
+    932c:	e1a02582 	lsl	r2, r2, #11
+    9330:	e3300000 	teq	r0, #0
+    9334:	05812028 	streq	r2, [r1, #40]	; 0x28
+    9338:	1581201c 	strne	r2, [r1, #28]
+    933c:	e1a0f00e 	mov	pc, lr
+
+00009340 <readCLOCK>:
+    9340:	e59f102c 	ldr	r1, [pc, #44]	; 9374 <readCLOCK+0x34>
+    9344:	e5912034 	ldr	r2, [r1, #52]	; 0x34
+    9348:	e3a03001 	mov	r3, #1
+    934c:	e1a03583 	lsl	r3, r3, #11
+    9350:	e0022003 	and	r2, r2, r3
+    9354:	e3320000 	teq	r2, #0
+    9358:	03a00000 	moveq	r0, #0
+    935c:	13a00001 	movne	r0, #1
+    9360:	e1a0f00e 	mov	pc, lr
+    9364:	00009080 	.word	0x00009080
+    9368:	000090d3 	.word	0x000090d3
     936c:	000090b0 	.word	0x000090b0
     9370:	3f003004 	.word	0x3f003004
     9374:	3f200000 	.word	0x3f200000

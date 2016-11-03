@@ -41,14 +41,6 @@ main:
 	
 	
 	
-	
-	
-	
-	
-	
-
-	
-	
 	//1
 	mov r7, #0
 	
@@ -83,50 +75,52 @@ main:
 		bl writeLATCH
 		
 		
-		
 		//6
 		
 		// 6.1
+		//ldr r8, =SNESButtonBuffer
 		mov r9, #0	// r9 = button index
 	
 		pulseLoop:	
 		
 			//6.2
+			// Wait 6ms (falling edge)
 			mov r1, #6
-			//mov r1, #1
-			//lsl r1, #19
 			bl startTimer
-	
-			// falling edge
 			
-	
+			
+			
 			// 6.3
 			mov r0, #0
 			bl writeCLOCK
 		
 			// 6.4
+			// Wait 6ms (rising edge)
 			mov r1, #6
-			//mov r1, #1
-			//lsl r1, #19
 			bl startTimer
 			
 	
 			//6.5
-			// TODO: Read GPIO data bit (r2 = index)
-			
 			bl readDATA
 			
+			// at this point if r0 = 0, then button at index r9 is DOWN
 			
-			// print bit
-			mov r11, r0
-			add r11, #48
-			ldr r0, =buttonMessage
-			strb r11, [r0]
-			ldr r1, =buttonMessageEnd
-			sub r1, r0
+			cmp r0, #0
+			bne buttonNotDown
+			
+			
+			
+			
+			
+			
+			ldr r0, =SNESButtonTest
+			add r0, r9
+			mov r1, #1
 			bl WriteStringUART
 			
 			
+			
+			buttonNotDown:
 	
 	
 			// 6.6
@@ -283,7 +277,7 @@ setLATCHFunction:
 	lsl r3, #27
 	bic r2, r3	
 	
-	// set bits 3-6 (for PIN 9) to r0 (Function)	
+	// set bits 27-29 (for PIN 9) to r0 (Function)	
 	lsl r0, #27		
 	orr r2, r0
 	
@@ -399,6 +393,11 @@ readCLOCK:
 	
 	
 	
+	
+	
+	
+	
+	
   
   
   
@@ -416,14 +415,15 @@ exitMessage:
 exitMessageEnd:
 
 buttonMessage:
-	.ascii "x Button State\n\r"
+	.ascii "x Button Down\n\r"
 buttonMessageEnd:
 
-timerInterval:
-	.int 1000000
+SNESButtonTest:
+	.ascii "BYsSuplrAXLR"
+SNESButtonTestEnd:
 	
 SNESButtonBuffer:
-	.int 0b1111111111111111
+	.int 0b11111111111111111111111111111111
 SNESButtonBufferEnd:
 
 newline:

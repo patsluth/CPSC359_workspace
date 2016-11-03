@@ -16,23 +16,23 @@ LOAD gpio.o
  .init          0x00008000        0x4 build/main.o
                 0x00008000                _start
 
-.data           0x00009080       0x5e
+.data           0x00009080       0x65
  *(.data)
  .data          0x00009080        0x0 build/jtag.o
- .data          0x00009080       0x5e build/main.o
- .data          0x000090de        0x0 uart.o
- .data          0x000090de        0x0 gpio.o
+ .data          0x00009080       0x65 build/main.o
+ .data          0x000090e5        0x0 uart.o
+ .data          0x000090e5        0x0 gpio.o
  *.c.o(*)
 
-.igot.plt       0x000090e0        0x0
+.igot.plt       0x000090e8        0x0
  .igot.plt      0x00000000        0x0 build/jtag.o
 
-.text           0x000090e0      0x528
+.text           0x000090e8      0x520
  *.c.o(.text)
  *(.text)
- .text          0x000090e0       0x8c build/jtag.o
-                0x000090e0                EnableJTAG
- .text          0x0000916c      0x20c build/main.o
+ .text          0x000090e8       0x8c build/jtag.o
+                0x000090e8                EnableJTAG
+ .text          0x00009174      0x204 build/main.o
  .text          0x00009378      0x1b8 uart.o
                 0x00009378                InitUART
                 0x00009438                PutCharUART
@@ -81,11 +81,11 @@ OUTPUT(build/output.elf elf32-littlearm)
  .ARM.attributes
                 0x0000007b       0x29 gpio.o
 
-.debug_line     0x00000000      0x277
+.debug_line     0x00000000      0x275
  .debug_line    0x00000000       0x61 build/jtag.o
- .debug_line    0x00000061       0xe6 build/main.o
- .debug_line    0x00000147       0xb7 uart.o
- .debug_line    0x000001fe       0x79 gpio.o
+ .debug_line    0x00000061       0xe4 build/main.o
+ .debug_line    0x00000145       0xb7 uart.o
+ .debug_line    0x000001fc       0x79 gpio.o
 
 .debug_info     0x00000000      0x19c
  .debug_info    0x00000000       0x63 build/jtag.o

@@ -453,7 +453,7 @@ uDecToASCIITest:
 
 	.section .data
 
-uDecToASCIIBuffer:	// 10 byte buffer
+uDecToASCIIBuffer:	// 10 char buffer
   .ascii "          "
 uDecToASCIIBufferEnd:
 
