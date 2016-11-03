@@ -149,7 +149,7 @@ killProgramEnd:
 
 
 // Will bl after specified delay
-// input r0 	= delay in microseconds
+// input r0 = delay in microseconds
 startTimer:
 
 	ldr r2, =0x3F003004				// r1 = currentTime
@@ -177,6 +177,8 @@ startTimer:
 //****************************************************
 //					SNES FUNCTIONS
 //****************************************************
+
+// TODO: create single function with pin input
 		
 // DATA = PIN 10 = GPFSEL1
 // input r0 = GP Function Select (ex #0b0001 -> Output)
