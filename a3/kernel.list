@@ -78,8 +78,8 @@ Disassembly of section .text:
     9208:	eb000022 	bl	9298 <killProgramEnd>
     920c:	e3a00000 	mov	r0, #0
     9210:	eb000042 	bl	9320 <writeLATCH>
-    9214:	e3a07000 	mov	r7, #0
-    9218:	e3a08000 	mov	r8, #0
+    9214:	e3a08000 	mov	r8, #0
+    9218:	e3a07000 	mov	r7, #0
 
 0000921c <pulseLoop>:
     921c:	e3a00006 	mov	r0, #6
@@ -89,16 +89,16 @@ Disassembly of section .text:
     922c:	e3a00006 	mov	r0, #6
     9230:	eb000018 	bl	9298 <killProgramEnd>
     9234:	eb000027 	bl	92d8 <readDATA>
-    9238:	e1a00810 	lsl	r0, r0, r8
-    923c:	e1877000 	orr	r7, r7, r0
+    9238:	e1a00710 	lsl	r0, r0, r7
+    923c:	e1888000 	orr	r8, r8, r0
     9240:	e3a00001 	mov	r0, #1
     9244:	eb00004e 	bl	9384 <writeCLOCK>
-    9248:	e2888001 	add	r8, r8, #1
-    924c:	e3580010 	cmp	r8, #16
+    9248:	e2877001 	add	r7, r7, #1
+    924c:	e3570010 	cmp	r7, #16
     9250:	bafffff1 	blt	921c <pulseLoop>
 
 00009254 <pulseLoopEnd>:
-    9254:	e1a00007 	mov	r0, r7
+    9254:	e1a00008 	mov	r0, r8
     9258:	eb000059 	bl	93c4 <areAnySNESButtonsPressed>
     925c:	e3310001 	teq	r1, #1
     9260:	0b000065 	bleq	93fc <printSNESButtonPressedMessage>

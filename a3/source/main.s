@@ -108,12 +108,12 @@ main:
 				blt pulseLoop	
 				
 			pulseLoopEnd:
-			
-				.unreq buttonIndex
-				.unreq buttonBitmask
 		
 				mov r0, buttonBitmask
 				bl areAnySNESButtonsPressed
+				
+				.unreq buttonIndex
+				.unreq buttonBitmask
 				
 				teq r1, #1								// if (1 or more buttons are pressed)					
 				bleq printSNESButtonPressedMessage		// print pressed button message
