@@ -49,13 +49,13 @@ main:
 		// 4
 		startSamplingSNESButtons:
 		
-			//1
-			mov r7, #0
-		
+			// 1
+				// * Moved to 6.1
+				
 			// 2
 			mov r0, #1
 			bl writeCLOCK
-	
+
 			// 3
 			mov r0, #1
 			bl writeLATCH
@@ -70,14 +70,16 @@ main:
 			bl writeLATCH
 		
 			// 6.1
-			mov r8, #0
-			mov r9, #0	// r9 = button index
+			buttonBitmask	.req r7
+			buttonIndex		.req r8
+			mov buttonBitmask, #0
+			mov buttonIndex, #0	
 	
 			pulseLoop:	
 		
 				//6.2
 				// Wait 6ms (falling edge)
-				mov r1, #6
+				mov r0, #6
 				bl startTimer
 				
 				// 6.3
@@ -86,28 +88,30 @@ main:
 		
 				// 6.4
 				// Wait 6ms (rising edge)
-				mov r1, #6
+				mov r0, #6
 				bl startTimer
 			
 				// 6.5
 				bl readDATA
 			
 				// 6.6 - Write button bitmask
-				lsl r0, r9
-				orr r8, r0
+				lsl r0, buttonIndex
+				orr buttonBitmask, r0
 			
 				//6.7
 				mov r0, #1
 				bl writeCLOCK
 		
 				// 6.8 && 6.9	
-				add r9, #1
-				cmp r9, #16			// if (i < 16)
+				add buttonIndex, #1
+				cmp buttonIndex, #16			// if (i < 16)
 				blt pulseLoop	
-			
+				
 			pulseLoopEnd:
+			
+				.unreq	buttonIndex
 		
-				mov r0, r8
+				mov r0, buttonBitmask
 				bl areAnySNESButtonsPressed
 				
 				teq r1, #1								// if (1 or more buttons are pressed)					
