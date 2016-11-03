@@ -70,8 +70,8 @@ main:
 			bl writeLATCH
 		
 			// 6.1
-			buttonBitmask	.req r7
-			buttonIndex		.req r8
+			buttonIndex		.req r7
+			buttonBitmask	.req r8
 			mov buttonBitmask, #0
 			mov buttonIndex, #0	
 	
@@ -109,7 +109,8 @@ main:
 				
 			pulseLoopEnd:
 			
-				.unreq	buttonIndex
+				.unreq buttonIndex
+				.unreq buttonBitmask
 		
 				mov r0, buttonBitmask
 				bl areAnySNESButtonsPressed
