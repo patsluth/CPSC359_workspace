@@ -112,7 +112,11 @@ main:
 			pulseLoopEnd:
 		
 				mov r0, r8
-				bl printSNESButtonDownMessage
+				bl areAnySNESButtonsPressed
+				
+				// print button down message if any buttons are pressed
+				teq r1, #1						
+				bleq printSNESButtonDownMessage
 				
 				b startSamplingSNESButtons
 		
@@ -340,6 +344,27 @@ readCLOCK:
 	movne r0, #1						// return 1
 	
 	mov pc, lr							// return
+	
+	
+	
+	
+	
+// input r0 = button bitmask (1 == up, 0 == down)
+// output r0 = original button bitmask
+// output r1 = boolean (0 if no buttons pressed, 1 otherwise)
+areAnySNESButtonsPressed:
+
+	ldr r1, =0xFFFF						
+	sub r1, r0
+	
+	// if the and is 0 then all values of the bitmask are 1
+	// so no buttons are pressed
+	teq r1, #0
+	moveq r1, #0
+	movne r1, #1						
+
+	mov pc, lr							// return
+
 	
 	
 	
