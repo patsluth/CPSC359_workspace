@@ -105,18 +105,17 @@ main:
 			
 			// at this point if r0 = 0, then button at index r9 is DOWN
 			
+			push { r0 }
+			mov r0, r9
+			
+			bl printSNESMessage
+			
+			pop { r0 }
+			
+			
+			
 			cmp r0, #0
 			bne buttonNotDown
-			
-			
-			
-			
-			
-			
-			ldr r0, =SNESButtonTest
-			add r0, r9
-			mov r1, #1
-			bl WriteStringUART
 			
 			
 			
@@ -395,6 +394,58 @@ readCLOCK:
 	
 	
 	
+// input r0 = button index
+printSNESMessage:
+
+	//cmp r0, #0
+	//movlt r0, #0
+	
+	
+	push { r14 }						// save return address
+
+
+	mov r2, r0
+	
+	ldr r0, =SNESButtonText
+	mov r1, #27
+	mul r2, r1
+	add r0, r2							
+	
+	ldr r3, =SNESButtonEnd
+	cmp r0, r3
+	bge printSNESMessageEnd
+	
+	bl WriteStringUART
+	bl printNewline
+	
+printSNESMessageEnd:
+
+	pop { r14 }							// restore return address
+	mov pc, r14							// return
+	
+	
+	
+printNewline:
+
+	push { r14 }						// save return address
+	
+	ldr r0, =newline
+	ldr r1, =newlineEnd
+	sub r1, r1, r0
+	bl WriteStringUART
+	
+	pop { r14 }							// restore return address
+
+	mov pc, r14							// return
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -417,6 +468,37 @@ exitMessageEnd:
 buttonMessage:
 	.ascii "x Button Down\n\r"
 buttonMessageEnd:
+
+SNESPleasePressButtonText:
+	.ascii "Please press a button...\n\r"
+SNESPleasePressButtonTextEnd:
+
+
+
+
+// 27 characters each
+SNESButtonText:
+	.ascii "You have pressed B         "
+	.ascii "You have pressed Y         "
+	.ascii "You have pressed Select    "
+	.ascii "You have pressed Start     "
+	.ascii "You have pressed Up        "
+	.ascii "You have pressed Down      "
+	.ascii "You have pressed Left      "
+	.ascii "You have pressed Right     "
+	.ascii "You have pressed A         "
+	.ascii "You have pressed X         "
+	.ascii "You have pressed L         "
+	.ascii "You have pressed R         "
+SNESButtonEnd:
+
+
+
+
+
+
+
+
 
 SNESButtonTest:
 	.ascii "BYsSuplrAXLR"
