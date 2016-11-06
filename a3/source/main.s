@@ -29,7 +29,10 @@ main:
 	bl WriteStringUART
 	nop
 
-
+  //Print "Please press a button...\n\r"
+  ldr r0, =SNESPleasePressButtonText
+  mov r1, #26
+  bl WriteStringUART
 
 	initSNES:
 
@@ -45,7 +48,8 @@ main:
 		// 4
 		startSamplingSNESButtons:
 
-      //TODO: Print "Please press a button...\n\r"
+
+
 
 			// 1
 				// * Moved to 6.1
@@ -59,10 +63,10 @@ main:
 			bl writeLATCH
 
 
-			//mov r0, #12  //This is long timer
+			mov r0, #12  //This is long timer
 			// TODO: uncomment long timer
-				mov r0, #1
-				lsl r0, #20
+				//mov r0, #1
+				//lsl r0, #10
 			bl startTimer
 
 			mov r0, #0
@@ -149,25 +153,49 @@ killProgramEnd:
 
 // Will bl after specified delay
 // input r0 = delay in microseconds
+
+//r1 holds currentTime
+
+
+//NEW ONE BASED ON LEC SLIDES
 startTimer:
 
-	ldr r2, =0x3F003004				// r1 = currentTime
-	ldr r2, [r2]					// CLO - Timer Counter (Low 32 bits)
-	add r2, r0						// r2 = currentTime + delay
+  mov r3, r0            //r3 holds the delay length
+  ldr r0, =0x3F003004  //address of CLO og: 0x3F003004
+  ldr r1, [r0]          //read CLO
+  add r1, r3            //add delay (should just be 12 micros)
 
-	timerTick_:
+  waitLoop:
+    ldr r2, [r0]
+    cmp r1, r2          //stop when CLO = r1
+    bhi waitLoop
 
-		ldr r1, =0x3F003004
-		ldr r1, [r1]					// CLO - Timer Counter (Low 32 bits)
+  mov pc, lr            //return
 
-		cmp r1, r2						// if (currentTime >= (currentTime + delay))
-		bge timerComplete_				// then Invoke
 
-		b timerTick_
 
-		timerComplete_:
 
-			mov pc, lr						// return
+//OLD startTimer function
+//startTimer:
+
+//	ldr r2, =0x3F003004		//address of CLO
+//	ldr r2, [r2]					// CLO - Timer Counter (Low 32 bits)
+//	add r2, r0						// r2 = currentTime + delay
+                        // TODO note: in final version, should be adding 12 micros
+
+//	timerTick_:
+
+//		ldr r1, =0x3F003004
+//		ldr r1, [r1]					// CLO - Timer Counter (Low 32 bits)
+
+//		cmp r1, r2						// if (currentTime >= (currentTime + delay))
+//		bge timerComplete_				// then Invoke
+
+//		b timerTick_
+
+//		timerComplete_:
+
+//		mov pc, lr						// return
 
 
 
@@ -387,6 +415,8 @@ isSNESButtonPressedForIndex:
 // input r0 = button bitmask (1 == up, 0 == down)
 printSNESButtonPressedMessage:
 
+
+
 	push { lr }							// save return address
 	push { r0 }
 
@@ -566,6 +596,13 @@ printSNESButtonPressedMessage:
 
 
 	bl printNewline
+
+
+  //Print "Please press a button...\n\r"
+  ldr r0, =SNESPleasePressButtonText
+  mov r1, #26
+  bl WriteStringUART
+
 
 
 	pop { r0 }
