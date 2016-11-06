@@ -208,11 +208,11 @@ startTimer:
 
 
 
+//****************************************************
+//					GPIO FUNCTIONS
+//****************************************************
 
 
-//****************************************************
-//					SNES FUNCTIONS
-//****************************************************
 
 // input r0 = n where n = GPFSEL{n}
 // input r1 = GP Function Select (ex #0b001 -> Output)
@@ -283,6 +283,12 @@ writeGPIO:
 	
 	
 	
+//****************************************************
+//					SNES FUNCTIONS
+//****************************************************
+
+
+
 // input r0 = button bitmask (1 == up, 0 == down)
 // output r0 = original button bitmask
 // output r1 = boolean (1 = true, 0 = false)
