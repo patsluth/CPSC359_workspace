@@ -22,55 +22,62 @@ main:
 	bl EnableJTAG                 	// Enable JTAG
 	bl InitUART                  	// Initialize the UART
 
-
 	//Print names of creators
 	ldr r0, =creatorString
 	mov r1, #48
 	bl WriteStringUART
 	nop
 
-  //Print "Please press a button...\n\r"
-  ldr r0, =SNESPleasePressButtonText
-  mov r1, #26
-  bl WriteStringUART
-
+	//Print "Please press a button...\n\r"
+	ldr r0, =SNESPleasePressButtonText
+	mov r1, #26
+	bl WriteStringUART
+	
 	initSNES:
 
+		// CLOCK = PIN 11
 		mov r0, #0b001			// Output
-		bl setCLOCKFunction
-
+		mov r1, #1				// GPFSEL{1}
+		mov r2, #3				// bits 3-5
+		bl setGPIOFunction
+		
+		// LATCH = PIN 9
 		mov r0, #0b001			// Output
-		bl setLATCHFunction
+		mov r1, #0				// GPFSEL{0}
+		mov r2, #27				// bits 27-29
+		bl setGPIOFunction
 
+		// DATA = PIN 10
 		mov r0, #0b000			// Input
-		bl setDATAFunction
-
+		mov r1, #1				// GPFSEL{1}
+		mov r2, #0				// bits 0-2
+		bl setGPIOFunction
+		
 		// 4
 		startSamplingSNESButtons:
-
-
-
-
+		
 			// 1
 				// * Moved to 6.1
 
 			// 2
-			mov r0, #1
-			bl writeCLOCK
+			mov r0, #11			// CLOCK GPIO PIN
+			mov r1, #1
+			bl writeGPIO
 
 			// 3
-			mov r0, #1
-			bl writeLATCH
+			mov r0, #9			// LATCH GPIO PIN
+			mov r1, #1
+			bl writeGPIO
 
-
-			mov r0, #12  //This is long timer
-			// TODO: uncomment long timer
-				//mov r0, #1
-				//lsl r0, #10
+			// 4
+			mov r0, #12
+			//ldr r0, =0xFFFFF	// longer timer for testing
 			bl startTimer
 
-			mov r0, #0
-			bl writeLATCH
+			// 5
+			mov r0, #9			// LATCH GPIO PIN
+			mov r1, #0
+			bl writeGPIO
 
 			// 6.1
 			buttonIndex		.req r7
@@ -86,8 +93,9 @@ main:
 				bl startTimer
 
 				// 6.3
-				mov r0, #0
-				bl writeCLOCK
+				mov r0, #11			// CLOCK GPIO PIN
+				mov r1, #0
+				bl writeGPIO
 
 				// 6.4
 				// Wait 6ms (rising edge)
@@ -95,15 +103,18 @@ main:
 				bl startTimer
 
 				// 6.5
-				bl readDATA
+				mov r0, #10			// DATA GPIO PIN
+				mov r1, #0
+				bl readGPIO
 
 				// 6.6 - Write button bitmask
 				lsl r0, buttonIndex
 				orr buttonBitmask, r0
 
 				//6.7
-				mov r0, #1
-				bl writeCLOCK
+				mov r0, #11			// CLOCK GPIO PIN
+				mov r1, #1
+				bl writeGPIO
 
 				// 6.8 && 6.9
 				add buttonIndex, #1
@@ -151,9 +162,6 @@ killProgramEnd:
 
 
 
-// Will bl after specified delay
-// input r0 = delay in microseconds
-
 //r1 holds currentTime
 
 
@@ -176,6 +184,7 @@ startTimer:
 
 
 //OLD startTimer function
+// input r0 = delay in microseconds
 //startTimer:
 
 //	ldr r2, =0x3F003004		//address of CLO
@@ -205,36 +214,44 @@ startTimer:
 //					SNES FUNCTIONS
 //****************************************************
 
-// TODO: create single function with pin input
+// input r0 = n where n = GPFSEL{n}
+// input r1 = GP Function Select (ex #0b001 -> Output)
+// input r2 = bit offset for PIN
+setGPIOFunction:
 
-// DATA = PIN 10 = GPFSEL1
-// input r0 = GP Function Select (ex #0b0001 -> Output)
-setDATAFunction:
-
-	ldr r1, =0x3F200000					// base GPIO Register
-	ldr r2, [r1, #0x04]					// GPFSEL1
-
-	// clear bits 0-3 (for PIN 10)
-	mov r3, #0b111
-	bic r2, r3
-
-	// set bits 0-3 (for PIN 10) to r0 (Function)
-	orr r2, r0
-
-	str r2, [r1, #0x04]					// write back to GPFSEL1
+	ldr r3, =0x3F200000					// base GPIO Register
+	mov r4, #0x04
+	mul r0, r4
+	ldr r4, [r3, r0]					// GPFSEL{n}
+	
+	// clear bits r2 - r2 + 2 (for PIN)
+	mov r5, #0b111
+	lsl r5, r2
+	bic r3, r5
+	
+	// set bits r2 - r2 + 2 (for PIN) to r1 (Function)
+	lsl r1, r2
+	orr r4, r1
+	
+	str r4, [r3, r0]					// write back to GPFSEL{n}
 
 	mov pc, lr							// return
-
-
-
-// DATA = PIN 10 = GPLEV0
-// output r0 = PIN 10 (DATA) value
-readDATA:
+	
+	
+	
+// input r0 = GPIO PIN n
+// output r0 = output of GPIO PIN n
+readGPIO:
 
 	ldr r1, =0x3F200000					// base GPIO Register
-	ldr r2, [r1, #0x34]					// GPLEV0
+	
+	cmp r0, #32
+	ldrlt r2, [r1, #0x34]				// GPLEV0 (PIN 0-31)
+	ldrge r2, [r1, #0x38]				// GPLEV1 (PIN 32-64)
+	subge r0, #32						// correct offset for GP{n}
+	
 	mov r3, #0b01
-	lsl r3, #10							// align for PIN 10
+	lsl r3, r0							// align for PIN n
 	and r2, r3							// mask everything else
 
 	teq r2, #0							// if (value == 0)
@@ -242,123 +259,30 @@ readDATA:
 	movne r0, #1						// return 1
 
 	mov pc, lr							// return
+	
+	
+	
+// input r0 = GPIO PIN n
+// input r1 = writeValue {0, 1}
+writeGPIO:
 
-
-
-// LATCH = PIN 9 = GPFSEL0
-// input r0 = GP Function Select (ex #0b0001 -> Output)
-setLATCHFunction:
-
+	teq r1, #0							// if (writeValue == 0)
 	ldr r1, =0x3F200000					// base GPIO Register
-	ldr r2, [r1]						// GPFSEL0
-
-	// clear bits 27-29 (for PIN 9)
-	mov r3, #0b111
-	lsl r3, #27
-	bic r2, r3
-
-	// set bits 27-29 (for PIN 9) to r0 (Function)
-	lsl r0, #27
-	orr r2, r0
-
-	str r2, [r1]						// write back to GPFSEL0
+	addne r2, r1, #0x1C					// GPSET0
+	addeq r2, r1, #0x28					// GPCLR0
+	
+	cmp r0, #32							// get GP(CLR|SET){n}
+	subge r0, #32						// correct offset for GP(CLR|SET){n}
+	mov r1, #0b01						
+	lsl r1, r0							// align for PIN n
+	
+	strlt r1, [r2, #0x00]				// GP(CLR|SET){0}
+	strge r1, [r2, #0x04]				// GP(CLR|SET){1}
 
 	mov pc, lr							// return
-
-
-
-// LATCH = PIN 9 = GPSET0
-// input r0 = writeValue {0, 1}
-writeLATCH:
-
-	ldr r1, =0x3F200000					// base GPIO Register
-	mov r2, #0b01						//
-	lsl r2, #9							// align for PIN 9
-
-	teq r0, #0							// if (writeValue == 0)
-	streq r2, [r1, #0x28]				// GPCLR0
-	strne r2, [r1, #0x1C]				// GPSET0
-
-	mov pc, lr							// return
-
-
-
-// LATCH = PIN 9 = GPLEV0
-// output r0 = PIN 9 (LATCH) value
-readLATCH:
-
-	ldr r1, =0x3F200000					// base GPIO Register
-	ldr r2, [r1, #0x34]					// GPLEV0
-	mov r3, #0b01
-	lsl r3, #9							// align for PIN 21
-	and r2, r3							// mask everything else
-
-	teq r2, #0							// if (value == 0)
-	moveq r0, #0						// return 0
-	movne r0, #1						// return 1
-
-	mov pc, lr							// return
-
-
-
-// CLOCK = PIN 11 = GPFSEL1
-// input r0 = GP Function Select (ex #0b0001 -> Output)
-setCLOCKFunction:
-
-	ldr r1, =0x3F200000					// base GPIO Register
-	ldr r2, [r1, #0x04]					// GPFSEL1
-
-	// clear bits 3-5 (for PIN 11)
-	mov r3, #0b111
-	lsl r3, #3
-	bic r2, r3
-
-	// set bits 3-5 (for PIN 11) to r0 (Function)
-	lsl r0, #3
-	orr r2, r0
-
-	str r2, [r1, #0x04]					// write back to GPFSEL1
-
-	mov pc, lr							// return
-
-
-
-// CLOCK = PIN 11 = GPSET0
-// input r0 = writeValue {0, 1}
-writeCLOCK:
-
-	ldr r1, =0x3F200000					// base GPIO Register
-	mov r2, #0b01						//
-	lsl r2, #11							// align for PIN 11
-
-	teq r0, #0							// if (writeValue == 0)
-	streq r2, [r1, #0x28]				// GPCLR0
-	strne r2, [r1, #0x1C]				// GPSET0
-
-	mov pc, lr							// return
-
-
-
-// CLOCK = PIN 11 = GPLEV1
-// output r0 = PIN 11 (CLOCK) value
-readCLOCK:
-
-	ldr r1, =0x3F200000					// base GPIO Register
-	ldr r2, [r1, #0x34]					// GPLEV0
-	mov r3, #0b01
-	lsl r3, #11							// align for PIN 11
-	and r2, r3							// mask everything else
-
-	teq r2, #0							// if (value == 0)
-	moveq r0, #0						// return 0
-	movne r0, #1						// return 1
-
-	mov pc, lr							// return
-
-
-
-
-
+	
+	
+	
 // input r0 = button bitmask (1 == up, 0 == down)
 // output r0 = original button bitmask
 // output r1 = boolean (1 = true, 0 = false)
@@ -374,7 +298,6 @@ areAnySNESButtonsPressed:
 	movne r1, #1
 
 	mov pc, lr							// return
-
 
 
 
@@ -410,6 +333,7 @@ isSNESButtonPressedForIndex:
 	pop { r0 }
 
 	mov pc, lr							// return
+
 
 
 // input r0 = button bitmask (1 == up, 0 == down)
