@@ -1,7 +1,7 @@
 // CPSC 359, Assignment 3
 // By: Nathan Escandor and Patrick Sluth
 // Tutorial 3
-// Submitted: November XX, 20XX
+// Submitted: November 7, 2016
 
 
 
@@ -32,7 +32,7 @@ main:
 	ldr r0, =SNESPleasePressButtonText
 	mov r1, #26
 	bl WriteStringUART
-	
+
 	initSNES:
 
 		// CLOCK = PIN 11
@@ -40,7 +40,7 @@ main:
 		mov r1, #1				// GPFSEL{1}
 		mov r2, #3				// bits 3-5
 		bl setGPIOFunction
-		
+
 		// LATCH = PIN 9
 		mov r0, #0b001			// Output
 		mov r1, #0				// GPFSEL{0}
@@ -52,10 +52,10 @@ main:
 		mov r1, #1				// GPFSEL{1}
 		mov r2, #0				// bits 0-2
 		bl setGPIOFunction
-		
+
 		// 4
 		startSamplingSNESButtons:
-		
+
 			// 1
 				// * Moved to 6.1
 
@@ -223,33 +223,33 @@ setGPIOFunction:
 	mov r4, #0x04
 	mul r0, r4
 	ldr r4, [r3, r0]					// GPFSEL{n}
-	
+
 	// clear bits r2 - r2 + 2 (for PIN)
 	mov r5, #0b111
 	lsl r5, r2
 	bic r3, r5
-	
+
 	// set bits r2 - r2 + 2 (for PIN) to r1 (Function)
 	lsl r1, r2
 	orr r4, r1
-	
+
 	str r4, [r3, r0]					// write back to GPFSEL{n}
 
 	mov pc, lr							// return
-	
-	
-	
+
+
+
 // input r0 = GPIO PIN n
 // output r0 = output of GPIO PIN n
 readGPIO:
 
 	ldr r1, =0x3F200000					// base GPIO Register
-	
+
 	cmp r0, #32
 	ldrlt r2, [r1, #0x34]				// GPLEV0 (PIN 0-31)
 	ldrge r2, [r1, #0x38]				// GPLEV1 (PIN 32-64)
 	subge r0, #32						// correct offset for GP{n}
-	
+
 	mov r3, #0b01
 	lsl r3, r0							// align for PIN n
 	and r2, r3							// mask everything else
@@ -259,9 +259,9 @@ readGPIO:
 	movne r0, #1						// return 1
 
 	mov pc, lr							// return
-	
-	
-	
+
+
+
 // input r0 = GPIO PIN n
 // input r1 = writeValue {0, 1}
 writeGPIO:
@@ -270,19 +270,19 @@ writeGPIO:
 	ldr r1, =0x3F200000					// base GPIO Register
 	addne r2, r1, #0x1C					// GPSET0
 	addeq r2, r1, #0x28					// GPCLR0
-	
+
 	cmp r0, #32							// get GP(CLR|SET){n}
 	subge r0, #32						// correct offset for GP(CLR|SET){n}
-	mov r1, #0b01						
+	mov r1, #0b01
 	lsl r1, r0							// align for PIN n
-	
+
 	strlt r1, [r2, #0x00]				// GP(CLR|SET){0}
 	strge r1, [r2, #0x04]				// GP(CLR|SET){1}
 
 	mov pc, lr							// return
-	
-	
-	
+
+
+
 //****************************************************
 //					SNES FUNCTIONS
 //****************************************************
@@ -292,16 +292,34 @@ writeGPIO:
 // input r0 = button bitmask (1 == up, 0 == down)
 // output r0 = original button bitmask
 // output r1 = boolean (1 = true, 0 = false)
+
+// nathan: using r9 to generically store the previous input throughout program.
+
 areAnySNESButtonsPressed:
 
 	ldr r1, =0xFFFF						// 1111 1111 1111 1111
 	sub r1, r0
+
+
+  //compare this input to previous one (stored in r9)
+  cmp r0, r9
+  bne newButtonPress
+
+    //if it's the same input count it as no input.
+    mov r1, #0
+
+  newButtonPress:
 
 	// if the subtraction is 0, then the bitmask was 0xFFFF
 	// and no buttons were pressed
 	teq r1, #0
 	moveq r1, #0
 	movne r1, #1
+
+
+
+  //save current output to compare against next.
+  mov r9, r0
 
 	mov pc, lr							// return
 
@@ -630,4 +648,3 @@ newline:
 newlineEnd:
 
 .end
-
