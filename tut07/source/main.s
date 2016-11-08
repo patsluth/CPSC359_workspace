@@ -13,15 +13,12 @@ main:
 
 	bl		InitFrameBuffer
 
-	
+	mov		r0, #100
+	mov		r1, #100
+	ldr		r2,	=0xF000
+	bl		DrawPixel
     
 haltLoop$:
-	
-	mov		r0, #100		// x
-	mov		r1, #100		// y
-	ldr		r2,	=0xF000		// color
-	bl		DrawPixel
-
 	b		haltLoop$
 
 

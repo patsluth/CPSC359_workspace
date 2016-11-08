@@ -159,17 +159,17 @@ killProgramEnd:
 //NEW ONE BASED ON LEC SLIDES
 startTimer:
 
-  mov r3, r0            //r3 holds the delay length
-  ldr r0, =0x3F003004  //address of CLO og: 0x3F003004
-  ldr r1, [r0]          //read CLO
-  add r1, r3            //add delay (should just be 12 micros)
+  mov r3, r0            // r3 holds the delay length
+  ldr r0, =0x3F003004  	// address of CLO og: 0x3F003004
+  ldr r1, [r0]          // read CLO
+  add r1, r3            // add delay (should just be 12 micros)
 
   waitLoop:
     ldr r2, [r0]
-    cmp r1, r2          //stop when CLO = r1
+    cmp r1, r2          // stop when CLO = r1
     bhi waitLoop
 
-  mov pc, lr            //return
+  mov pc, lr            // return
 
 
 
