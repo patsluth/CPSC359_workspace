@@ -35,23 +35,14 @@ main:
 
 	initSNES:
 
-		// CLOCK = PIN 11
 		mov r0, #0b001			// Output
-		mov r1, #1				// GPFSEL{1}
-		mov r2, #3				// bits 3-5
-		bl setGPIOFunction
+		bl setCLOCKFunction
 
-		// LATCH = PIN 9
 		mov r0, #0b001			// Output
-		mov r1, #0				// GPFSEL{0}
-		mov r2, #27				// bits 27-29
-		bl setGPIOFunction
+		bl setLATCHFunction
 
-		// DATA = PIN 10
 		mov r0, #0b000			// Input
-		mov r1, #1				// GPFSEL{1}
-		mov r2, #0				// bits 0-2
-		bl setGPIOFunction
+		bl setDATAFunction
 
 		// 4
 		startSamplingSNESButtons:
@@ -236,6 +227,90 @@ setGPIOFunction:
 	str r4, [r3, r0]					// write back to GPFSEL{n}
 
 	mov pc, lr							// return
+	
+	
+	
+	
+	
+	
+	
+	
+// DATA = PIN 10 = GPFSEL1
+// input r0 = GP Function Select (ex #0b0001 -> Output)
+setDATAFunction:
+
+	ldr r1, =0x3F200000					// base GPIO Register
+	ldr r2, [r1, #0x04]					// GPFSEL1
+
+	// clear bits 0-3 (for PIN 10)
+	mov r3, #0b111
+	bic r2, r3
+
+	// set bits 0-3 (for PIN 10) to r0 (Function)
+	orr r2, r0
+
+	str r2, [r1, #0x04]					// write back to GPFSEL1
+
+	mov pc, lr							// return
+
+
+
+// LATCH = PIN 9 = GPFSEL0
+// input r0 = GP Function Select (ex #0b0001 -> Output)
+setLATCHFunction:
+
+	ldr r1, =0x3F200000					// base GPIO Register
+	ldr r2, [r1]						// GPFSEL0
+
+	// clear bits 27-29 (for PIN 9)
+	mov r3, #0b111
+	lsl r3, #27
+	bic r2, r3
+
+	// set bits 27-29 (for PIN 9) to r0 (Function)
+	lsl r0, #27
+	orr r2, r0
+
+	str r2, [r1]						// write back to GPFSEL0
+
+	mov pc, lr							// return
+	
+	
+	
+// CLOCK = PIN 11 = GPFSEL1
+// input r0 = GP Function Select (ex #0b0001 -> Output)
+setCLOCKFunction:
+
+	ldr r1, =0x3F200000					// base GPIO Register
+	ldr r2, [r1, #0x04]					// GPFSEL1
+
+	// clear bits 3-5 (for PIN 11)
+	mov r3, #0b111
+	lsl r3, #3
+	bic r2, r3
+
+	// set bits 3-5 (for PIN 11) to r0 (Function)
+	lsl r0, #3
+	orr r2, r0
+
+	str r2, [r1, #0x04]					// write back to GPFSEL1
+
+	mov pc, lr							// return
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 
