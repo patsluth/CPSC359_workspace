@@ -5,199 +5,225 @@ build/output.elf:     file format elf32-littlearm
 Disassembly of section .init:
 
 00008000 <_start>:
-    8000:	ea000481 	b	920c <main>
+    8000:	ea0006d9 	b	9b6c <main>
 
 Disassembly of section .text:
 
-00009100 <EnableJTAG>:
-    9100:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    9104:	e59f0064 	ldr	r0, [pc, #100]	; 9170 <dowaitloop+0xc>
-    9108:	e0211001 	eor	r1, r1, r1
-    910c:	e5801000 	str	r1, [r0]
-    9110:	eb000012 	bl	9160 <dowait>
-    9114:	e59f0058 	ldr	r0, [pc, #88]	; 9174 <dowaitloop+0x10>
-    9118:	e59f1058 	ldr	r1, [pc, #88]	; 9178 <dowaitloop+0x14>
-    911c:	e5801000 	str	r1, [r0]
-    9120:	eb00000e 	bl	9160 <dowait>
-    9124:	e0211001 	eor	r1, r1, r1
-    9128:	e5801000 	str	r1, [r0]
-    912c:	e59f0048 	ldr	r0, [pc, #72]	; 917c <dowaitloop+0x18>
-    9130:	e5901000 	ldr	r1, [r0]
-    9134:	e3c11a07 	bic	r1, r1, #28672	; 0x7000
-    9138:	e3811a02 	orr	r1, r1, #8192	; 0x2000
-    913c:	e5801000 	str	r1, [r0]
-    9140:	e59f0038 	ldr	r0, [pc, #56]	; 9180 <dowaitloop+0x1c>
-    9144:	e5901000 	ldr	r1, [r0]
-    9148:	e59f2034 	ldr	r2, [pc, #52]	; 9184 <dowaitloop+0x20>
-    914c:	e1c11002 	bic	r1, r1, r2
-    9150:	e59f2030 	ldr	r2, [pc, #48]	; 9188 <dowaitloop+0x24>
-    9154:	e1811002 	orr	r1, r1, r2
-    9158:	e5801000 	str	r1, [r0]
-    915c:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+00009a60 <EnableJTAG>:
+    9a60:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    9a64:	e59f0064 	ldr	r0, [pc, #100]	; 9ad0 <dowaitloop+0xc>
+    9a68:	e0211001 	eor	r1, r1, r1
+    9a6c:	e5801000 	str	r1, [r0]
+    9a70:	eb000012 	bl	9ac0 <dowait>
+    9a74:	e59f0058 	ldr	r0, [pc, #88]	; 9ad4 <dowaitloop+0x10>
+    9a78:	e59f1058 	ldr	r1, [pc, #88]	; 9ad8 <dowaitloop+0x14>
+    9a7c:	e5801000 	str	r1, [r0]
+    9a80:	eb00000e 	bl	9ac0 <dowait>
+    9a84:	e0211001 	eor	r1, r1, r1
+    9a88:	e5801000 	str	r1, [r0]
+    9a8c:	e59f0048 	ldr	r0, [pc, #72]	; 9adc <dowaitloop+0x18>
+    9a90:	e5901000 	ldr	r1, [r0]
+    9a94:	e3c11a07 	bic	r1, r1, #28672	; 0x7000
+    9a98:	e3811a02 	orr	r1, r1, #8192	; 0x2000
+    9a9c:	e5801000 	str	r1, [r0]
+    9aa0:	e59f0038 	ldr	r0, [pc, #56]	; 9ae0 <dowaitloop+0x1c>
+    9aa4:	e5901000 	ldr	r1, [r0]
+    9aa8:	e59f2034 	ldr	r2, [pc, #52]	; 9ae4 <dowaitloop+0x20>
+    9aac:	e1c11002 	bic	r1, r1, r2
+    9ab0:	e59f2030 	ldr	r2, [pc, #48]	; 9ae8 <dowaitloop+0x24>
+    9ab4:	e1811002 	orr	r1, r1, r2
+    9ab8:	e5801000 	str	r1, [r0]
+    9abc:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
 
-00009160 <dowait>:
-    9160:	e3a02f4b 	mov	r2, #300	; 0x12c
+00009ac0 <dowait>:
+    9ac0:	e3a02f4b 	mov	r2, #300	; 0x12c
 
-00009164 <dowaitloop>:
-    9164:	e2522001 	subs	r2, r2, #1
-    9168:	1afffffd 	bne	9164 <dowaitloop>
-    916c:	e12fff1e 	bx	lr
-    9170:	3f200094 	.word	0x3f200094
-    9174:	3f200098 	.word	0x3f200098
-    9178:	0bc00010 	.word	0x0bc00010
-    917c:	3f200000 	.word	0x3f200000
-    9180:	3f200008 	.word	0x3f200008
-    9184:	00e3ffc0 	.word	0x00e3ffc0
-    9188:	0061b6c0 	.word	0x0061b6c0
+00009ac4 <dowaitloop>:
+    9ac4:	e2522001 	subs	r2, r2, #1
+    9ac8:	1afffffd 	bne	9ac4 <dowaitloop>
+    9acc:	e12fff1e 	bx	lr
+    9ad0:	3f200094 	.word	0x3f200094
+    9ad4:	3f200098 	.word	0x3f200098
+    9ad8:	0bc00010 	.word	0x0bc00010
+    9adc:	3f200000 	.word	0x3f200000
+    9ae0:	3f200008 	.word	0x3f200008
+    9ae4:	00e3ffc0 	.word	0x00e3ffc0
+    9ae8:	0061b6c0 	.word	0x0061b6c0
 
-0000918c <InitFrameBuffer>:
-    918c:	e59f2068 	ldr	r2, [pc, #104]	; 91fc <pointerWaitLoop$+0x1c>
-    9190:	e59f3068 	ldr	r3, [pc, #104]	; 9200 <pointerWaitLoop$+0x20>
+00009aec <InitFrameBuffer>:
+    9aec:	e59f2068 	ldr	r2, [pc, #104]	; 9b5c <pointerWaitLoop$+0x1c>
+    9af0:	e59f3068 	ldr	r3, [pc, #104]	; 9b60 <pointerWaitLoop$+0x20>
 
-00009194 <mBoxFullLoop$>:
-    9194:	e5920018 	ldr	r0, [r2, #24]
-    9198:	e3100102 	tst	r0, #-2147483648	; 0x80000000
-    919c:	1afffffc 	bne	9194 <mBoxFullLoop$>
-    91a0:	e2830101 	add	r0, r3, #1073741824	; 0x40000000
-    91a4:	e3800008 	orr	r0, r0, #8
-    91a8:	e5820020 	str	r0, [r2, #32]
+00009af4 <mBoxFullLoop$>:
+    9af4:	e5920018 	ldr	r0, [r2, #24]
+    9af8:	e3100102 	tst	r0, #-2147483648	; 0x80000000
+    9afc:	1afffffc 	bne	9af4 <mBoxFullLoop$>
+    9b00:	e2830101 	add	r0, r3, #1073741824	; 0x40000000
+    9b04:	e3800008 	orr	r0, r0, #8
+    9b08:	e5820020 	str	r0, [r2, #32]
 
-000091ac <mBoxEmptyLoop$>:
-    91ac:	e5920018 	ldr	r0, [r2, #24]
-    91b0:	e3100101 	tst	r0, #1073741824	; 0x40000000
-    91b4:	1afffffc 	bne	91ac <mBoxEmptyLoop$>
-    91b8:	e5920000 	ldr	r0, [r2]
-    91bc:	e200100f 	and	r1, r0, #15
-    91c0:	e3310008 	teq	r1, #8
-    91c4:	1afffff8 	bne	91ac <mBoxEmptyLoop$>
-    91c8:	e59f0030 	ldr	r0, [pc, #48]	; 9200 <pointerWaitLoop$+0x20>
-    91cc:	e5901004 	ldr	r1, [r0, #4]
-    91d0:	e3310102 	teq	r1, #-2147483648	; 0x80000000
-    91d4:	0a000001 	beq	91e0 <pointerWaitLoop$>
-    91d8:	13a00000 	movne	r0, #0
-    91dc:	112fff1e 	bxne	lr
+00009b0c <mBoxEmptyLoop$>:
+    9b0c:	e5920018 	ldr	r0, [r2, #24]
+    9b10:	e3100101 	tst	r0, #1073741824	; 0x40000000
+    9b14:	1afffffc 	bne	9b0c <mBoxEmptyLoop$>
+    9b18:	e5920000 	ldr	r0, [r2]
+    9b1c:	e200100f 	and	r1, r0, #15
+    9b20:	e3310008 	teq	r1, #8
+    9b24:	1afffff8 	bne	9b0c <mBoxEmptyLoop$>
+    9b28:	e59f0030 	ldr	r0, [pc, #48]	; 9b60 <pointerWaitLoop$+0x20>
+    9b2c:	e5901004 	ldr	r1, [r0, #4]
+    9b30:	e3310102 	teq	r1, #-2147483648	; 0x80000000
+    9b34:	0a000001 	beq	9b40 <pointerWaitLoop$>
+    9b38:	13a00000 	movne	r0, #0
+    9b3c:	112fff1e 	bxne	lr
 
-000091e0 <pointerWaitLoop$>:
-    91e0:	e59f001c 	ldr	r0, [pc, #28]	; 9204 <pointerWaitLoop$+0x24>
-    91e4:	e5900000 	ldr	r0, [r0]
-    91e8:	e3300000 	teq	r0, #0
-    91ec:	0afffffb 	beq	91e0 <pointerWaitLoop$>
-    91f0:	e59f3010 	ldr	r3, [pc, #16]	; 9208 <pointerWaitLoop$+0x28>
-    91f4:	e5830000 	str	r0, [r3]
-    91f8:	e12fff1e 	bx	lr
-    91fc:	3f00b880 	.word	0x3f00b880
-    9200:	00009080 	.word	0x00009080
-    9204:	000090cc 	.word	0x000090cc
-    9208:	000090e0 	.word	0x000090e0
+00009b40 <pointerWaitLoop$>:
+    9b40:	e59f001c 	ldr	r0, [pc, #28]	; 9b64 <pointerWaitLoop$+0x24>
+    9b44:	e5900000 	ldr	r0, [r0]
+    9b48:	e3300000 	teq	r0, #0
+    9b4c:	0afffffb 	beq	9b40 <pointerWaitLoop$>
+    9b50:	e59f3010 	ldr	r3, [pc, #16]	; 9b68 <pointerWaitLoop$+0x28>
+    9b54:	e5830000 	str	r0, [r3]
+    9b58:	e12fff1e 	bx	lr
+    9b5c:	3f00b880 	.word	0x3f00b880
+    9b60:	00009080 	.word	0x00009080
+    9b64:	000090cc 	.word	0x000090cc
+    9b68:	000090e0 	.word	0x000090e0
 
-0000920c <main>:
-    920c:	e3a0d902 	mov	sp, #32768	; 0x8000
-    9210:	ebffffba 	bl	9100 <EnableJTAG>
-    9214:	ebffffdc 	bl	918c <InitFrameBuffer>
+00009b6c <main>:
+    9b6c:	e3a0d902 	mov	sp, #32768	; 0x8000
+    9b70:	ebffffba 	bl	9a60 <EnableJTAG>
+    9b74:	ebffffdc 	bl	9aec <InitFrameBuffer>
+    9b78:	e59f01a4 	ldr	r0, [pc, #420]	; 9d24 <drawPixel+0x28>
+    9b7c:	e280000c 	add	r0, r0, #12
+    9b80:	e59f11a0 	ldr	r1, [pc, #416]	; 9d28 <drawPixel+0x2c>
 
-00009218 <mainLoop>:
-    9218:	e59f0148 	ldr	r0, [pc, #328]	; 9368 <drawPixel+0x28>
-    921c:	e5909014 	ldr	r9, [r0, #20]
-    9220:	e590a018 	ldr	sl, [r0, #24]
-    9224:	e1a0000d 	mov	r0, sp
-    9228:	e24dd014 	sub	sp, sp, #20
-    922c:	e3a01000 	mov	r1, #0
-    9230:	e58d1000 	str	r1, [sp]
-    9234:	e3a01000 	mov	r1, #0
-    9238:	e58d1004 	str	r1, [sp, #4]
-    923c:	e58d9008 	str	r9, [sp, #8]
-    9240:	e58da00c 	str	sl, [sp, #12]
-    9244:	e3a02000 	mov	r2, #0
-    9248:	e58d2010 	str	r2, [sp, #16]
-    924c:	eb000003 	bl	9260 <drawRect>
-    9250:	e28dd014 	add	sp, sp, #20
-    9254:	eb000017 	bl	92b8 <drawTetrisGrid>
-    9258:	eaffffee 	b	9218 <mainLoop>
+00009b84 <looop>:
+    9b84:	e3a02000 	mov	r2, #0
+    9b88:	e5802000 	str	r2, [r0]
+    9b8c:	e2800004 	add	r0, r0, #4
+    9b90:	e0412000 	sub	r2, r1, r0
+    9b94:	e3520000 	cmp	r2, #0
+    9b98:	cafffff9 	bgt	9b84 <looop>
+    9b9c:	e59f0180 	ldr	r0, [pc, #384]	; 9d24 <drawPixel+0x28>
+    9ba0:	e280000c 	add	r0, r0, #12
+    9ba4:	e59f2180 	ldr	r2, [pc, #384]	; 9d2c <drawPixel+0x30>
+    9ba8:	e580203c 	str	r2, [r0, #60]	; 0x3c
+    9bac:	e5802040 	str	r2, [r0, #64]	; 0x40
+    9bb0:	e5802044 	str	r2, [r0, #68]	; 0x44
+    9bb4:	e58020b4 	str	r2, [r0, #180]	; 0xb4
+    9bb8:	e59f2170 	ldr	r2, [pc, #368]	; 9d30 <drawPixel+0x34>
+    9bbc:	e58021e0 	str	r2, [r0, #480]	; 0x1e0
+    9bc0:	e58021e4 	str	r2, [r0, #484]	; 0x1e4
+    9bc4:	e5802258 	str	r2, [r0, #600]	; 0x258
+    9bc8:	e58022d0 	str	r2, [r0, #720]	; 0x2d0
+    9bcc:	e58021e4 	str	r2, [r0, #484]	; 0x1e4
 
-0000925c <mainEnd>:
-    925c:	eafffffe 	b	925c <mainEnd>
+00009bd0 <mainLoop>:
+    9bd0:	e59f015c 	ldr	r0, [pc, #348]	; 9d34 <drawPixel+0x38>
+    9bd4:	e5909014 	ldr	r9, [r0, #20]
+    9bd8:	e590a018 	ldr	sl, [r0, #24]
+    9bdc:	e1a0000d 	mov	r0, sp
+    9be0:	e24dd014 	sub	sp, sp, #20
+    9be4:	e3a01000 	mov	r1, #0
+    9be8:	e58d1000 	str	r1, [sp]
+    9bec:	e3a01000 	mov	r1, #0
+    9bf0:	e58d1004 	str	r1, [sp, #4]
+    9bf4:	e58d9008 	str	r9, [sp, #8]
+    9bf8:	e58da00c 	str	sl, [sp, #12]
+    9bfc:	e3a02000 	mov	r2, #0
+    9c00:	e58d2010 	str	r2, [sp, #16]
+    9c04:	eb000002 	bl	9c14 <drawRect>
+    9c08:	e28dd014 	add	sp, sp, #20
+    9c0c:	eb000016 	bl	9c6c <drawTetrisGrid>
 
-00009260 <drawRect>:
-    9260:	e59d3000 	ldr	r3, [sp]
-    9264:	e59d4004 	ldr	r4, [sp, #4]
-    9268:	e59d5008 	ldr	r5, [sp, #8]
-    926c:	e59d600c 	ldr	r6, [sp, #12]
-    9270:	e59d7010 	ldr	r7, [sp, #16]
-    9274:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    9278:	e0855003 	add	r5, r5, r3
-    927c:	e0866004 	add	r6, r6, r4
+00009c10 <mainEnd>:
+    9c10:	eafffffe 	b	9c10 <mainEnd>
 
-00009280 <drawRectForLoopX>:
-    9280:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
+00009c14 <drawRect>:
+    9c14:	e59d3000 	ldr	r3, [sp]
+    9c18:	e59d4004 	ldr	r4, [sp, #4]
+    9c1c:	e59d5008 	ldr	r5, [sp, #8]
+    9c20:	e59d600c 	ldr	r6, [sp, #12]
+    9c24:	e59d7010 	ldr	r7, [sp, #16]
+    9c28:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    9c2c:	e0855003 	add	r5, r5, r3
+    9c30:	e0866004 	add	r6, r6, r4
 
-00009284 <drawRectForLoopY>:
-    9284:	e1a00003 	mov	r0, r3
-    9288:	e1a01004 	mov	r1, r4
-    928c:	e1a02007 	mov	r2, r7
-    9290:	eb00002a 	bl	9340 <drawPixel>
-    9294:	e2844001 	add	r4, r4, #1
-    9298:	e1540006 	cmp	r4, r6
-    929c:	bafffff8 	blt	9284 <drawRectForLoopY>
-    92a0:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
-    92a4:	e2833001 	add	r3, r3, #1
-    92a8:	e1530005 	cmp	r3, r5
-    92ac:	bafffff3 	blt	9280 <drawRectForLoopX>
-    92b0:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    92b4:	e1a0f00e 	mov	pc, lr
+00009c34 <drawRectForLoopX>:
+    9c34:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
 
-000092b8 <drawTetrisGrid>:
-    92b8:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    92bc:	e59f00a8 	ldr	r0, [pc, #168]	; 936c <drawPixel+0x2c>
-    92c0:	e5901000 	ldr	r1, [r0]
-    92c4:	e5902004 	ldr	r2, [r0, #4]
-    92c8:	e5903008 	ldr	r3, [r0, #8]
-    92cc:	e3a04000 	mov	r4, #0
-    92d0:	e3a05000 	mov	r5, #0
-    92d4:	e59f6094 	ldr	r6, [pc, #148]	; 9370 <drawPixel+0x30>
+00009c38 <drawRectForLoopY>:
+    9c38:	e1a00003 	mov	r0, r3
+    9c3c:	e1a01004 	mov	r1, r4
+    9c40:	e1a02007 	mov	r2, r7
+    9c44:	eb00002c 	bl	9cfc <drawPixel>
+    9c48:	e2844001 	add	r4, r4, #1
+    9c4c:	e1540006 	cmp	r4, r6
+    9c50:	bafffff8 	blt	9c38 <drawRectForLoopY>
+    9c54:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+    9c58:	e2833001 	add	r3, r3, #1
+    9c5c:	e1530005 	cmp	r3, r5
+    9c60:	bafffff3 	blt	9c34 <drawRectForLoopX>
+    9c64:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    9c68:	e1a0f00e 	mov	pc, lr
 
-000092d8 <drawTetrisGridLoopX>:
-    92d8:	e52d5004 	push	{r5}		; (str r5, [sp, #-4]!)
+00009c6c <drawTetrisGrid>:
+    9c6c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    9c70:	e59f00ac 	ldr	r0, [pc, #172]	; 9d24 <drawPixel+0x28>
+    9c74:	e5901000 	ldr	r1, [r0]
+    9c78:	e5902004 	ldr	r2, [r0, #4]
+    9c7c:	e5903008 	ldr	r3, [r0, #8]
+    9c80:	e280600c 	add	r6, r0, #12
+    9c84:	e3a04000 	mov	r4, #0
+    9c88:	e3a05000 	mov	r5, #0
 
-000092dc <drawTetrisGridLoopY>:
-    92dc:	e92d007e 	push	{r1, r2, r3, r4, r5, r6}
-    92e0:	e24dd014 	sub	sp, sp, #20
-    92e4:	e1a00004 	mov	r0, r4
-    92e8:	e0000093 	mul	r0, r3, r0
-    92ec:	e58d0000 	str	r0, [sp]
-    92f0:	e1a00005 	mov	r0, r5
-    92f4:	e0000093 	mul	r0, r3, r0
-    92f8:	e58d0004 	str	r0, [sp, #4]
-    92fc:	e58d3008 	str	r3, [sp, #8]
-    9300:	e58d300c 	str	r3, [sp, #12]
-    9304:	e58d6010 	str	r6, [sp, #16]
-    9308:	ebffffd4 	bl	9260 <drawRect>
-    930c:	e28dd014 	add	sp, sp, #20
-    9310:	e8bd007e 	pop	{r1, r2, r3, r4, r5, r6}
-    9314:	e59f0058 	ldr	r0, [pc, #88]	; 9374 <drawPixel+0x34>
-    9318:	e0866000 	add	r6, r6, r0
-    931c:	e2855001 	add	r5, r5, #1
-    9320:	e1550002 	cmp	r5, r2
-    9324:	baffffec 	blt	92dc <drawTetrisGridLoopY>
-    9328:	e49d5004 	pop	{r5}		; (ldr r5, [sp], #4)
-    932c:	e2844001 	add	r4, r4, #1
-    9330:	e1540001 	cmp	r4, r1
-    9334:	baffffe7 	blt	92d8 <drawTetrisGridLoopX>
-    9338:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    933c:	e1a0f00e 	mov	pc, lr
+00009c8c <drawTetrisGridLoopX>:
+    9c8c:	e52d5004 	push	{r5}		; (str r5, [sp, #-4]!)
 
-00009340 <drawPixel>:
-    9340:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    9344:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
-    9348:	e0804501 	add	r4, r0, r1, lsl #10
-    934c:	e1a04084 	lsl	r4, r4, #1
-    9350:	e59f0020 	ldr	r0, [pc, #32]	; 9378 <drawPixel+0x38>
-    9354:	e5900000 	ldr	r0, [r0]
-    9358:	e18020b4 	strh	r2, [r0, r4]
-    935c:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
-    9360:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    9364:	e1a0f00e 	mov	pc, lr
-    9368:	00009080 	.word	0x00009080
-    936c:	000090f0 	.word	0x000090f0
-    9370:	00ffccff 	.word	0x00ffccff
-    9374:	00abcdef 	.word	0x00abcdef
-    9378:	000090e0 	.word	0x000090e0
+00009c90 <drawTetrisGridLoopY>:
+    9c90:	e92d007e 	push	{r1, r2, r3, r4, r5, r6}
+    9c94:	e24dd014 	sub	sp, sp, #20
+    9c98:	e1a00004 	mov	r0, r4
+    9c9c:	e0000093 	mul	r0, r3, r0
+    9ca0:	e58d0000 	str	r0, [sp]
+    9ca4:	e1a00005 	mov	r0, r5
+    9ca8:	e0000093 	mul	r0, r3, r0
+    9cac:	e58d0004 	str	r0, [sp, #4]
+    9cb0:	e58d3008 	str	r3, [sp, #8]
+    9cb4:	e58d300c 	str	r3, [sp, #12]
+    9cb8:	e0010591 	mul	r1, r1, r5
+    9cbc:	e0811004 	add	r1, r1, r4
+    9cc0:	e1a01101 	lsl	r1, r1, #2
+    9cc4:	e7960001 	ldr	r0, [r6, r1]
+    9cc8:	e58d0010 	str	r0, [sp, #16]
+    9ccc:	ebffffd0 	bl	9c14 <drawRect>
+    9cd0:	e28dd014 	add	sp, sp, #20
+    9cd4:	e8bd007e 	pop	{r1, r2, r3, r4, r5, r6}
+    9cd8:	e2855001 	add	r5, r5, #1
+    9cdc:	e1550002 	cmp	r5, r2
+    9ce0:	baffffea 	blt	9c90 <drawTetrisGridLoopY>
+    9ce4:	e49d5004 	pop	{r5}		; (ldr r5, [sp], #4)
+    9ce8:	e2844001 	add	r4, r4, #1
+    9cec:	e1540001 	cmp	r4, r1
+    9cf0:	baffffe5 	blt	9c8c <drawTetrisGridLoopX>
+    9cf4:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    9cf8:	e1a0f00e 	mov	pc, lr
+
+00009cfc <drawPixel>:
+    9cfc:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    9d00:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
+    9d04:	e0804501 	add	r4, r0, r1, lsl #10
+    9d08:	e1a04084 	lsl	r4, r4, #1
+    9d0c:	e59f0024 	ldr	r0, [pc, #36]	; 9d38 <drawPixel+0x3c>
+    9d10:	e5900000 	ldr	r0, [r0]
+    9d14:	e18020b4 	strh	r2, [r0, r4]
+    9d18:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+    9d1c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    9d20:	e1a0f00e 	mov	pc, lr
+    9d24:	000090f0 	.word	0x000090f0
+    9d28:	00009a5c 	.word	0x00009a5c
+    9d2c:	00ffabcc 	.word	0x00ffabcc
+    9d30:	0000aabb 	.word	0x0000aabb
+    9d34:	00009080 	.word	0x00009080
+    9d38:	000090e0 	.word	0x000090e0

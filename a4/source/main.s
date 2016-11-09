@@ -25,6 +25,52 @@ main:
 	
 	
 	
+	
+	ldr 		r0, =TetrisGrid
+	add r0, #12
+	ldr 		r1, =TetrisGridEnd
+	//ldr		r1, [r0, #0]
+	//ldr		cols, [r0, #4]
+	//ldr		r2, [r0, #8]
+	
+	looop:
+		
+		// init to black
+		ldr		r2, =0x000000
+		str		r2, [r0, #0]	// color
+		add 	r0, #4
+		
+		sub 	r2, r1, r0
+		cmp 	r2, #0
+		bgt 	looop
+		
+		
+		
+		
+		
+	// temp set blocks
+	ldr 		r0, =TetrisGrid
+	add r0, #12
+	
+	ldr		r2, =0xFFABCC
+	str		r2, [r0, #60]	// color
+	str		r2, [r0, #64]	// color
+	str		r2, [r0, #68]	// color
+	str		r2, [r0, #180]	// color
+	
+	ldr		r2, =0x00AABB
+	str		r2, [r0, #480]	// color
+	str		r2, [r0, #484]	// color
+	str		r2, [r0, #600]	// color
+	str		r2, [r0, #720]	// color
+	
+	
+	str		r2, [r0, #484]	// color
+	
+	
+	
+	
+	
 	mainLoop:
 	
 	
@@ -54,51 +100,29 @@ main:
 		
 		
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		bl drawTetrisGrid
 		
-		b mainLoop
+		// b mainLoop
 		
 		
 		
-		
-		/*
-		
-		
-		
-		mov 	r3, #0						// x
-		mov 	r4, #100					// y
-		mov 	r5, #100					// width
-		mov 	r6, #100					// height
-		ldr		r7,	=0x99FF00				// color
-		stmfd 	sp!, { r3, r4, r5, r6, r7 }
-		bl		drawRect
-		
-		
-		
-		mov 	r3, #100					// x
-		mov 	r4, #100					// y
-		mov 	r5, #400					// width
-		mov 	r6, #400					// height
-		ldr		r7,	=0xFFCC00				// color
-		stmfd 	sp!, { r3, r4, r5, r6, r7 }
-		bl		drawRect
-		
-		
-		
-		mov 	r3, #500					// x
-		mov 	r4, #0						// y
-		mov 	r5, #500					// width
-		mov 	r6, #250					// height
-		ldr		r7,	=0xFFCCFF				// color
-		stmfd 	sp!, { r3, r4, r5, r6, r7 }
-		bl		drawRect
-		*/
-		
-	
-	
-	
-	
-	
 	
 	
 	
@@ -118,11 +142,11 @@ mainEnd:
 	
 // INPUT
 //		ON STACK
-// 		r3 = x
-// 		r4 = y
-// 		r5 = width
-// 		r6 = height
-// 		r7 = color
+// 		0 = x
+// 		1 = y
+// 		2 = width
+// 		3 = height
+// 		4 = color
 // OUTPUT
 //
 drawRect:
@@ -132,8 +156,6 @@ drawRect:
 	width	.req r5
 	height	.req r6
 	color	.req r7
-	
-	//ldmfd sp!, { x, y, width, height, color }
 	
 	ldr 	x, [sp, #0]
 	ldr 	y, [sp, #4]
@@ -177,8 +199,7 @@ drawRect:
 	
 	
 	
-	
-	
+
 	
 	
 	
@@ -197,10 +218,10 @@ drawTetrisGrid:
 	ldr		rows, [r0, #0]
 	ldr		cols, [r0, #4]
 	ldr		size, [r0, #8]
+	add		color, r0, #12
 	
 	mov		curRow, #0
 	mov		curCol, #0
-	ldr		color, =0xFFCCFF
 	
 	drawTetrisGridLoopX:
 		
@@ -229,7 +250,18 @@ drawTetrisGrid:
 			str 	size, [sp, #8]				// width
 			str 	size, [sp, #12]				// height
 			
-			str 	color, [sp, #16]				// color
+			
+			
+			
+			
+			
+			// calculate color array offset
+			mul		r1, rows, curCol
+			add		r1, curRow
+			lsl		r1, #2
+			
+			ldr		r0, [color, r1]
+			str 	r0, [sp, #16]			// color
 			
 			bl		drawRect
 			
@@ -243,8 +275,6 @@ drawTetrisGrid:
 			
 			
 			pop { rows, cols, size, curRow, curCol, color }
-			ldr r0, =0xABCDEF
-			add color, r0
 			
 			add 	curCol, #1
 			cmp 	curCol, cols
@@ -311,9 +341,10 @@ drawPixel:
 
 .align 4
 TetrisGrid:
-	.int	30			// rows
-	.int	20			// columns
-	.int	30			// nxn block size (pixels)
+	.int	30				// rows
+	.int	20				// cols
+	.int	30				// nxn block size (pixels)
+	.space 	30 * 20 * 4		// grid data (rows x cols)
 TetrisGridEnd:
 
 .end
