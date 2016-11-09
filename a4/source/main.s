@@ -37,14 +37,29 @@ main:
 		
 		
 		// Example to clear screen
-		mov 	r3, #0						// x
-		mov 	r4, #0						// y
-		mov 	r5, r9						// width
-		mov 	r6, r10						// height
-		ldr		r7,	=0x000000				// color
-		stmfd 	sp!, { r3, r4, r5, r6, r7 }
-		
+		mov		r0, sp
+		sub		sp, #20						// 5 args
+		mov		r1, #0						// x
+		str 	r1, [sp, #0]				// x
+		mov		r1, #0						// y
+		str 	r1, [sp, #4]				// y
+		str 	r9, [sp, #8]				// width
+		str 	r10, [sp, #12]				// height
+		ldr		r2,	=0x000000				// color
+		str 	r2, [sp, #16]				// color
+		//stmfd 	sp!, { r3, r4, r5, r6, r7 }
 		bl		drawRect
+		
+		add sp, #20
+		
+		
+		
+		bl drawTetrisGrid
+		
+		
+		
+		
+		/*
 		
 		
 		
@@ -54,7 +69,6 @@ main:
 		mov 	r6, #100					// height
 		ldr		r7,	=0x99FF00				// color
 		stmfd 	sp!, { r3, r4, r5, r6, r7 }
-		
 		bl		drawRect
 		
 		
@@ -65,7 +79,6 @@ main:
 		mov 	r6, #400					// height
 		ldr		r7,	=0xFFCC00				// color
 		stmfd 	sp!, { r3, r4, r5, r6, r7 }
-		
 		bl		drawRect
 		
 		
@@ -76,12 +89,9 @@ main:
 		mov 	r6, #250					// height
 		ldr		r7,	=0xFFCCFF				// color
 		stmfd 	sp!, { r3, r4, r5, r6, r7 }
-		
 		bl		drawRect
+		*/
 		
-		
-		
-		b mainLoop
 	
 	
 	
@@ -105,6 +115,7 @@ mainEnd:
 	
 	
 // INPUT
+//		ON STACK
 // 		r3 = x
 // 		r4 = y
 // 		r5 = width
@@ -120,7 +131,13 @@ drawRect:
 	height	.req r6
 	color	.req r7
 	
-	ldmfd sp!, { x, y, width, height, color }
+	//ldmfd sp!, { x, y, width, height, color }
+	
+	ldr 	x, [sp, #0]
+	ldr 	y, [sp, #4]
+	ldr 	width, [sp, #8]
+	ldr 	height, [sp, #12]
+	ldr 	color, [sp, #16]
 	
 	push 	{ lr }
 	
@@ -163,7 +180,80 @@ drawRect:
 	
 	
 	
+drawTetrisGrid:
+
+	push 	{ lr }
 	
+	rows		.req r1
+	cols		.req r2
+	size		.req r3
+	curRow		.req r4
+	curCol		.req r5
+	color		.req r6
+	
+	ldr 	r0, =TetrisGrid
+	ldr		rows, [r0, #0]
+	ldr		cols, [r0, #4]
+	ldr		size, [r0, #8]
+	
+	mov		curRow, #0
+	mov		curCol, #0
+	ldr		color, =0xFFCCFF
+	
+	drawTetrisGridLoopX:
+		
+		push 	{ curCol } 
+	
+		drawTetrisGridLoopY:
+		
+		
+		
+		
+			// TODO: clean up
+			
+			push { rows, cols, size, curRow, curCol, color }
+			
+			sub		sp, #20						// 5 args
+			
+			mov		r0, curRow					// x
+			mul 	r0, size
+			str 	r0, [sp, #0]				// x
+			
+			mov		r0, curCol					// y
+			mul 	r0, size
+			str 	r0, [sp, #4]				// y
+			
+			
+			str 	size, [sp, #8]				// width
+			str 	size, [sp, #12]				// height
+			
+			str 	color, [sp, #16]				// color
+			
+			bl		drawRect
+			
+			add		sp, #20
+			
+			
+			
+			
+			
+			
+			
+			
+			pop { rows, cols, size, curRow, curCol, color }
+			add color, #0xAA
+			
+			add 	curCol, #1
+			cmp 	curCol, cols
+			blt 	drawTetrisGridLoopY
+		
+		pop 	{ curCol } 
+		add 	curRow, #1
+		cmp 	curRow, rows
+		blt 	drawTetrisGridLoopX
+	
+	pop 	{ lr }
+	mov 	pc, lr            // return
 	
 	
 	
@@ -216,10 +306,12 @@ drawPixel:
 //##############################################################//
 .section .data
 
-.globl Rect
-Rect: 
-	.int 0, 0, 0, 0
-RectEnd:
+.align 4
+TetrisGrid:
+	.int	10			// rows
+	.int	15			// columns
+	.int	30			// nxn block size (pixels)
+TetrisGridEnd:
 
 .end
 
