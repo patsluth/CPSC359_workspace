@@ -56,6 +56,8 @@ main:
 		
 		bl drawTetrisGrid
 		
+		b mainLoop
+		
 		
 		
 		
@@ -241,7 +243,8 @@ drawTetrisGrid:
 			
 			
 			pop { rows, cols, size, curRow, curCol, color }
-			add color, #0xAA
+			ldr r0, =0xABCDEF
+			add color, r0
 			
 			add 	curCol, #1
 			cmp 	curCol, cols
@@ -308,8 +311,8 @@ drawPixel:
 
 .align 4
 TetrisGrid:
-	.int	10			// rows
-	.int	15			// columns
+	.int	30			// rows
+	.int	20			// columns
 	.int	30			// nxn block size (pixels)
 TetrisGridEnd:
 
