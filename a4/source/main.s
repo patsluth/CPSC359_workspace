@@ -29,77 +29,57 @@ main:
 	
 	
 	
-	
 		// Get width/height
-		ldr r0, =FrameBufferInit
-		ldr	r9, [r0, #20]
-		ldr	r10, [r0, #24]
-
+		ldr	 	r0, =FrameBufferInit
+		ldr		r9, [r0, #20]
+		ldr		r10, [r0, #24]
+		
+		
+		
 		// Example to clear screen
-		ldr r0, =Rect
-		mov r1, #0
-		str r1, [r0, #0]
-		mov r1, #0
-		str r1, [r0, #4]
-		mov r1, r9
-		str r1, [r0, #8]
-		mov r1, r10
-		str r1, [r0, #12]
-		ldr		r1,	=0x000000				// Color
+		mov 	r3, #0						// x
+		mov 	r4, #0						// y
+		mov 	r5, r9						// width
+		mov 	r6, r10						// height
+		ldr		r7,	=0x000000				// color
+		stmfd 	sp!, { r3, r4, r5, r6, r7 }
+		
 		bl		drawRect
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		ldr r0, =Rect
-		mov r1, #0
-		str r1, [r0, #0]
-		mov r1, #0
-		str r1, [r0, #4]
-		mov r1, #100
-		str r1, [r0, #8]
-		mov r1, #100
-		str r1, [r0, #12]
-		ldr		r1,	=0x99FF00				// Color
+		
+		
+		
+		mov 	r3, #0						// x
+		mov 	r4, #100					// y
+		mov 	r5, #100					// width
+		mov 	r6, #100					// height
+		ldr		r7,	=0x99FF00				// color
+		stmfd 	sp!, { r3, r4, r5, r6, r7 }
+		
 		bl		drawRect
-	
-	
-	
-	
-	
-	
-		ldr r0, =Rect
-		mov r1, #100
-		str r1, [r0, #0]
-		mov r1, #100
-		str r1, [r0, #4]
-		mov r1, #400
-		str r1, [r0, #8]
-		mov r1, #400
-		str r1, [r0, #12]
-		ldr		r1,	=0xFFCC00				// Color
+		
+		
+		
+		mov 	r3, #100					// x
+		mov 	r4, #100					// y
+		mov 	r5, #400					// width
+		mov 	r6, #400					// height
+		ldr		r7,	=0xFFCC00				// color
+		stmfd 	sp!, { r3, r4, r5, r6, r7 }
+		
 		bl		drawRect
-	
-	
-	
-	
-	
-		ldr r0, =Rect
-		mov r1, #500
-		str r1, [r0, #0]
-		mov r1, #0
-		str r1, [r0, #4]
-		mov r1, #500
-		str r1, [r0, #8]
-		mov r1, #250
-		str r1, [r0, #12]
-		ldr		r1,	=0xFFCCFF				// Color
+		
+		
+		
+		mov 	r3, #500					// x
+		mov 	r4, #0						// y
+		mov 	r5, #500					// width
+		mov 	r6, #250					// height
+		ldr		r7,	=0xFFCCFF				// color
+		stmfd 	sp!, { r3, r4, r5, r6, r7 }
+		
 		bl		drawRect
+		
+		
 		
 		b mainLoop
 	
@@ -111,62 +91,66 @@ main:
 	
 	
 mainEnd:
-	b mainEnd
+	b	mainEnd
+	
+	
+	
+	
+	
+
+	
 	
 	
 	
 	
 	
 // INPUT
-// 		r0 = Rect:
-// 		r1 = Color
+// 		r3 = x
+// 		r4 = y
+// 		r5 = width
+// 		r6 = height
+// 		r7 = color
 // OUTPUT
 //
 drawRect:
 
+	x		.req r3
+	y		.req r4
+	width	.req r5
+	height	.req r6
+	color	.req r7
+	
+	ldmfd sp!, { x, y, width, height, color }
+	
 	push 	{ lr }
-
-	positionX	.req r3
-	positionY	.req r4
-	sizeWidth	.req r5
-	sizeHeight	.req r6
-	color		.req r7
-	push 	{ positionX, positionY, sizeWidth, sizeHeight, color }
 	
-	ldr 	positionX, [r0, #0]
-	ldr 	positionY, [r0, #4]
-	ldr 	sizeWidth, [r0, #8]
-	ldr 	sizeHeight, [r0, #12]
-	mov 	color, r1
+	add 	width, x
+	add 	height, y
 	
-	add 	sizeWidth, positionX
-	add 	sizeHeight, positionY
-	
-	forLoopX:
+	drawRectForLoopX:
 		
-		push 	{ positionY } 
+		push 	{ y } 
 	
-		forLoopY:
+		drawRectForLoopY:
 		
-			mov 	r0, positionX	
-			mov		r1, positionY			
+			mov 	r0, x	
+			mov		r1, y			
 			mov		r2,	color				
 			bl 		drawPixel
 			
-			add 	positionY, #1
-			cmp 	positionY, sizeHeight
-			blt 	forLoopY
+			add 	y, #1
+			cmp 	y, height
+			blt 	drawRectForLoopY
 		
-		pop 	{ positionY } 
-		add 	positionX, #1
-		cmp 	positionX, sizeWidth
-		blt 	forLoopX
-
-	pop 	{ positionX, positionY, sizeWidth, sizeHeight, color }
-	.unreq		positionX
-	.unreq 		positionY
-	.unreq 		sizeWidth
-	.unreq 		sizeHeight
+		pop 	{ y } 
+		add 	x, #1
+		cmp 	x, width
+		blt 	drawRectForLoopX
+		
+	.unreq		x
+	.unreq 		y
+	.unreq 		width
+	.unreq 		height
 	.unreq 		color
 	
 	pop 	{ lr }
@@ -176,9 +160,28 @@ drawRect:
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 // INPUT
-// 		r0 = positionX
-// 		r1 = positionY
+// 		r0 = x
+// 		r1 = y
 // 		r2 = Color
 // OUTPUT
 //

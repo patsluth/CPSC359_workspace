@@ -96,102 +96,79 @@ Disassembly of section .text:
     9214:	ebffffdc 	bl	918c <InitFrameBuffer>
 
 00009218 <mainLoop>:
-    9218:	e59f0144 	ldr	r0, [pc, #324]	; 9364 <drawPixel+0x28>
+    9218:	e59f00ec 	ldr	r0, [pc, #236]	; 930c <drawPixel+0x28>
     921c:	e5909014 	ldr	r9, [r0, #20]
     9220:	e590a018 	ldr	sl, [r0, #24]
-    9224:	e59f013c 	ldr	r0, [pc, #316]	; 9368 <drawPixel+0x2c>
-    9228:	e3a01000 	mov	r1, #0
-    922c:	e5801000 	str	r1, [r0]
-    9230:	e3a01000 	mov	r1, #0
-    9234:	e5801004 	str	r1, [r0, #4]
-    9238:	e1a01009 	mov	r1, r9
-    923c:	e5801008 	str	r1, [r0, #8]
-    9240:	e1a0100a 	mov	r1, sl
-    9244:	e580100c 	str	r1, [r0, #12]
-    9248:	e3a01000 	mov	r1, #0
-    924c:	eb000022 	bl	92dc <drawRect>
-    9250:	e59f0110 	ldr	r0, [pc, #272]	; 9368 <drawPixel+0x2c>
-    9254:	e3a01000 	mov	r1, #0
-    9258:	e5801000 	str	r1, [r0]
-    925c:	e3a01000 	mov	r1, #0
-    9260:	e5801004 	str	r1, [r0, #4]
-    9264:	e3a01064 	mov	r1, #100	; 0x64
-    9268:	e5801008 	str	r1, [r0, #8]
-    926c:	e3a01064 	mov	r1, #100	; 0x64
-    9270:	e580100c 	str	r1, [r0, #12]
-    9274:	e59f10f0 	ldr	r1, [pc, #240]	; 936c <drawPixel+0x30>
-    9278:	eb000017 	bl	92dc <drawRect>
-    927c:	e59f00e4 	ldr	r0, [pc, #228]	; 9368 <drawPixel+0x2c>
-    9280:	e3a01064 	mov	r1, #100	; 0x64
-    9284:	e5801000 	str	r1, [r0]
-    9288:	e3a01064 	mov	r1, #100	; 0x64
-    928c:	e5801004 	str	r1, [r0, #4]
-    9290:	e3a01e19 	mov	r1, #400	; 0x190
-    9294:	e5801008 	str	r1, [r0, #8]
-    9298:	e3a01e19 	mov	r1, #400	; 0x190
-    929c:	e580100c 	str	r1, [r0, #12]
-    92a0:	e59f10c8 	ldr	r1, [pc, #200]	; 9370 <drawPixel+0x34>
-    92a4:	eb00000c 	bl	92dc <drawRect>
-    92a8:	e59f00b8 	ldr	r0, [pc, #184]	; 9368 <drawPixel+0x2c>
-    92ac:	e3a01f7d 	mov	r1, #500	; 0x1f4
-    92b0:	e5801000 	str	r1, [r0]
-    92b4:	e3a01000 	mov	r1, #0
-    92b8:	e5801004 	str	r1, [r0, #4]
-    92bc:	e3a01f7d 	mov	r1, #500	; 0x1f4
-    92c0:	e5801008 	str	r1, [r0, #8]
-    92c4:	e3a010fa 	mov	r1, #250	; 0xfa
-    92c8:	e580100c 	str	r1, [r0, #12]
-    92cc:	e59f10a0 	ldr	r1, [pc, #160]	; 9374 <drawPixel+0x38>
-    92d0:	eb000001 	bl	92dc <drawRect>
-    92d4:	eaffffcf 	b	9218 <mainLoop>
+    9224:	e3a03000 	mov	r3, #0
+    9228:	e3a04000 	mov	r4, #0
+    922c:	e1a05009 	mov	r5, r9
+    9230:	e1a0600a 	mov	r6, sl
+    9234:	e3a07000 	mov	r7, #0
+    9238:	e92d00f8 	push	{r3, r4, r5, r6, r7}
+    923c:	eb000016 	bl	929c <drawRect>
+    9240:	e3a03000 	mov	r3, #0
+    9244:	e3a04064 	mov	r4, #100	; 0x64
+    9248:	e3a05064 	mov	r5, #100	; 0x64
+    924c:	e3a06064 	mov	r6, #100	; 0x64
+    9250:	e59f70b8 	ldr	r7, [pc, #184]	; 9310 <drawPixel+0x2c>
+    9254:	e92d00f8 	push	{r3, r4, r5, r6, r7}
+    9258:	eb00000f 	bl	929c <drawRect>
+    925c:	e3a03064 	mov	r3, #100	; 0x64
+    9260:	e3a04064 	mov	r4, #100	; 0x64
+    9264:	e3a05e19 	mov	r5, #400	; 0x190
+    9268:	e3a06e19 	mov	r6, #400	; 0x190
+    926c:	e59f70a0 	ldr	r7, [pc, #160]	; 9314 <drawPixel+0x30>
+    9270:	e92d00f8 	push	{r3, r4, r5, r6, r7}
+    9274:	eb000008 	bl	929c <drawRect>
+    9278:	e3a03f7d 	mov	r3, #500	; 0x1f4
+    927c:	e3a04000 	mov	r4, #0
+    9280:	e3a05f7d 	mov	r5, #500	; 0x1f4
+    9284:	e3a060fa 	mov	r6, #250	; 0xfa
+    9288:	e59f7088 	ldr	r7, [pc, #136]	; 9318 <drawPixel+0x34>
+    928c:	e92d00f8 	push	{r3, r4, r5, r6, r7}
+    9290:	eb000001 	bl	929c <drawRect>
+    9294:	eaffffdf 	b	9218 <mainLoop>
 
-000092d8 <mainEnd>:
-    92d8:	eafffffe 	b	92d8 <mainEnd>
+00009298 <mainEnd>:
+    9298:	eafffffe 	b	9298 <mainEnd>
 
-000092dc <drawRect>:
-    92dc:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    92e0:	e92d00f8 	push	{r3, r4, r5, r6, r7}
-    92e4:	e5903000 	ldr	r3, [r0]
-    92e8:	e5904004 	ldr	r4, [r0, #4]
-    92ec:	e5905008 	ldr	r5, [r0, #8]
-    92f0:	e590600c 	ldr	r6, [r0, #12]
-    92f4:	e1a07001 	mov	r7, r1
-    92f8:	e0855003 	add	r5, r5, r3
-    92fc:	e0866004 	add	r6, r6, r4
+0000929c <drawRect>:
+    929c:	e8bd00f8 	pop	{r3, r4, r5, r6, r7}
+    92a0:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    92a4:	e0855003 	add	r5, r5, r3
+    92a8:	e0866004 	add	r6, r6, r4
 
-00009300 <forLoopX>:
-    9300:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
+000092ac <drawRectForLoopX>:
+    92ac:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
 
-00009304 <forLoopY>:
-    9304:	e1a00003 	mov	r0, r3
-    9308:	e1a01004 	mov	r1, r4
-    930c:	e1a02007 	mov	r2, r7
-    9310:	eb000009 	bl	933c <drawPixel>
-    9314:	e2844001 	add	r4, r4, #1
-    9318:	e1540006 	cmp	r4, r6
-    931c:	bafffff8 	blt	9304 <forLoopY>
-    9320:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
-    9324:	e2833001 	add	r3, r3, #1
-    9328:	e1530005 	cmp	r3, r5
-    932c:	bafffff3 	blt	9300 <forLoopX>
-    9330:	e8bd00f8 	pop	{r3, r4, r5, r6, r7}
-    9334:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    9338:	e1a0f00e 	mov	pc, lr
+000092b0 <drawRectForLoopY>:
+    92b0:	e1a00003 	mov	r0, r3
+    92b4:	e1a01004 	mov	r1, r4
+    92b8:	e1a02007 	mov	r2, r7
+    92bc:	eb000008 	bl	92e4 <drawPixel>
+    92c0:	e2844001 	add	r4, r4, #1
+    92c4:	e1540006 	cmp	r4, r6
+    92c8:	bafffff8 	blt	92b0 <drawRectForLoopY>
+    92cc:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+    92d0:	e2833001 	add	r3, r3, #1
+    92d4:	e1530005 	cmp	r3, r5
+    92d8:	bafffff3 	blt	92ac <drawRectForLoopX>
+    92dc:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    92e0:	e1a0f00e 	mov	pc, lr
 
-0000933c <drawPixel>:
-    933c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    9340:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
-    9344:	e0804501 	add	r4, r0, r1, lsl #10
-    9348:	e1a04084 	lsl	r4, r4, #1
-    934c:	e59f0024 	ldr	r0, [pc, #36]	; 9378 <drawPixel+0x3c>
-    9350:	e5900000 	ldr	r0, [r0]
-    9354:	e18020b4 	strh	r2, [r0, r4]
-    9358:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
-    935c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    9360:	e1a0f00e 	mov	pc, lr
-    9364:	00009080 	.word	0x00009080
-    9368:	000090f0 	.word	0x000090f0
-    936c:	0099ff00 	.word	0x0099ff00
-    9370:	00ffcc00 	.word	0x00ffcc00
-    9374:	00ffccff 	.word	0x00ffccff
-    9378:	000090e0 	.word	0x000090e0
+000092e4 <drawPixel>:
+    92e4:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    92e8:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
+    92ec:	e0804501 	add	r4, r0, r1, lsl #10
+    92f0:	e1a04084 	lsl	r4, r4, #1
+    92f4:	e59f0020 	ldr	r0, [pc, #32]	; 931c <drawPixel+0x38>
+    92f8:	e5900000 	ldr	r0, [r0]
+    92fc:	e18020b4 	strh	r2, [r0, r4]
+    9300:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+    9304:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    9308:	e1a0f00e 	mov	pc, lr
+    930c:	00009080 	.word	0x00009080
+    9310:	0099ff00 	.word	0x0099ff00
+    9314:	00ffcc00 	.word	0x00ffcc00
+    9318:	00ffccff 	.word	0x00ffccff
+    931c:	000090e0 	.word	0x000090e0
