@@ -27,38 +27,38 @@ LOAD build/main.o
 .igot.plt       0x00009a70        0x0
  .igot.plt      0x00000000        0x0 build/jtag.o
 
-.text           0x00009a70      0x3c8
+.text           0x00009a70      0x3d0
  *.c.o(.text)
  *(.text)
  .text          0x00009a70       0x8c build/jtag.o
                 0x00009a70                EnableJTAG
  .text          0x00009afc       0x80 build/framebuffer.o
                 0x00009afc                InitFrameBuffer
- .text          0x00009b7c      0x2bc build/main.o
+ .text          0x00009b7c      0x2c4 build/main.o
 OUTPUT(build/output.elf elf32-littlearm)
 
-.glue_7         0x00009e38        0x0
+.glue_7         0x00009e40        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x00009e38        0x0
+.glue_7t        0x00009e40        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x00009e38        0x0
+.vfp11_veneer   0x00009e40        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x00009e38        0x0
+.v4_bx          0x00009e40        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x00009e38        0x0
+.iplt           0x00009e40        0x0
  .iplt          0x00000000        0x0 build/jtag.o
 
-.rel.dyn        0x00009e38        0x0
+.rel.dyn        0x00009e40        0x0
  .rel.iplt      0x00000000        0x0 build/jtag.o
 
-.bss            0x00009e38        0x0
- .bss           0x00009e38        0x0 build/jtag.o
- .bss           0x00009e38        0x0 build/framebuffer.o
- .bss           0x00009e38        0x0 build/main.o
+.bss            0x00009e40        0x0
+ .bss           0x00009e40        0x0 build/jtag.o
+ .bss           0x00009e40        0x0 build/framebuffer.o
+ .bss           0x00009e40        0x0 build/main.o
 
 .ARM.attributes
                 0x00000000       0x29

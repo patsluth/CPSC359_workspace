@@ -169,11 +169,16 @@ main:
 					lsl		r11, #2
 					// R11 is the block in the tetris grid
 					
+					push { blockX, blockY }
+					
+					//sub		blockX, r8, blockX
+					//sub		blockY, r9, blockY
 					
 					mov		r10, #4
 					mul		r10, r10, blockY
 					add		r10, blockX
 					
+					pop { blockX, blockY }
 					push { blockGridData }
 					
 					mov		r7, #0b1000000000000000
@@ -187,7 +192,7 @@ main:
 					push { r0, blockColor }
 					ldr 		r0, =TetrisGrid
 					add 		r0, #12
-					ldreq		blockColor, #0x000000	// black
+					ldreq		blockColor, =0x000000	// black
 					str			blockColor, [r0, r11]	// color
 					//streq		r7, [r0, r11]	// color
 					pop { r0, blockColor }
