@@ -143,7 +143,7 @@ tetrisSetGridBlockColor:
 	x					.req r0
 	y					.req r1
 	blockColor			.req r2
-	tetrisGrid			.req r4
+	tetrisGridData		.req r4
 	tetrisGridSize		.req r5
 	tetrisGridOffset	.req r6
 	
@@ -156,23 +156,22 @@ tetrisSetGridBlockColor:
 	push 	{ lr }
 	push	{ r4 - r6 }
 	
-	// load tetrisGrid data
-	ldr 	tetrisGrid, =TetrisGrid
-	ldr 	tetrisGridSize, [tetrisGrid, #8]
-	add 	tetrisGrid, #12
+	ldr 	tetrisGridData, =TetrisGrid
+	ldr 	tetrisGridSize, [tetrisGridData, #8]
+	add 	tetrisGridData, #12
 	
 	// calculate tetris grid offset for block position
 	mul		tetrisGridOffset, tetrisGridSize, y			
 	add		tetrisGridOffset, x
 	lsl		tetrisGridOffset, #2
 
-	// write block
-	str		blockColor, [tetrisGrid, tetrisGridOffset]
+	// write color to tetrisGridData
+	str		blockColor, [tetrisGridData, tetrisGridOffset]
 	
 	.unreq		x
 	.unreq		y
 	.unreq 		blockColor
-	.unreq		tetrisGrid
+	.unreq		tetrisGridData
 	.unreq		tetrisGridSize
 	.unreq		tetrisGridOffset
 	
@@ -194,7 +193,7 @@ drawTetrisGrid:
 	curRow				.req r7
 	curCol				.req r8
 	color				.req r9
-	tetrisGrid			.req r10
+	tetrisGridData		.req r10
 	tetrisGridOffset	.req r11
 	
 	push 	{ rows - tetrisGridOffset }
@@ -203,7 +202,7 @@ drawTetrisGrid:
 	ldr		rows, [r0, #0]
 	ldr		cols, [r0, #4]
 	ldr		size, [r0, #8]
-	add		tetrisGrid, r0, #12
+	add		tetrisGridData, r0, #12
 	
 	mov		curRow, #0
 	mov		curCol, #0
@@ -216,7 +215,6 @@ drawTetrisGrid:
 			
 			push 	{ rows - color }
 			
-			
 				// drawRect(int x, int y, int width, int height, int color)
 				// initialize paramaters
 				
@@ -224,7 +222,7 @@ drawTetrisGrid:
 				mul		tetrisGridOffset, rows, curCol			
 				add		tetrisGridOffset, curRow
 				lsl		tetrisGridOffset, #2
-				ldr		color, [tetrisGrid, tetrisGridOffset]				
+				ldr		color, [tetrisGridData, tetrisGridOffset]				
 				
 				x		.req r0
 				y		.req r1
@@ -264,7 +262,7 @@ drawTetrisGrid:
 	.unreq 			curRow
 	.unreq 			curCol
 	.unreq 			color
-	.unreq 			tetrisGrid
+	.unreq 			tetrisGridData
 	.unreq 			tetrisGridOffset
 	
 	pop 	{ lr }
@@ -723,7 +721,7 @@ TetrisGrid:
 	.int	30				// rows
 	.int	20				// cols
 	.int	30				// nxn block size (pixels)
-	.space 	30 * 20 * 4		// grid data (rows x cols)
+	.space 	30 * 20 * 4		// tetrisGridData (rows x cols)
 TetrisGridEnd:
 
 

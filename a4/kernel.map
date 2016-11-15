@@ -69,10 +69,10 @@ OUTPUT(build/output.elf elf32-littlearm)
  .ARM.attributes
                 0x00000052       0x29 build/main.o
 
-.debug_line     0x00000000      0x239
+.debug_line     0x00000000      0x237
  .debug_line    0x00000000       0x61 build/jtag.o
  .debug_line    0x00000061       0x67 build/framebuffer.o
- .debug_line    0x000000c8      0x171 build/main.o
+ .debug_line    0x000000c8      0x16f build/main.o
 
 .debug_info     0x00000000      0x12c
  .debug_info    0x00000000       0x63 build/jtag.o
