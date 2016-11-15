@@ -71,7 +71,8 @@ main:
 	
 	
 	
-	mainLoop:
+	
+	
 	
 	
 	
@@ -79,8 +80,6 @@ main:
 		ldr	 	r0, =FrameBufferInit
 		ldr		r9, [r0, #20]
 		ldr		r10, [r0, #24]
-		
-		
 		
 		// Example to clear screen
 		mov		r0, sp
@@ -97,11 +96,141 @@ main:
 		bl		drawRect
 		
 		add sp, #20
+	
+	
+	
+	
+	
+	
+	
+	
+	mainLoop:
+	
+	
+	
 		
 		
 		
 		
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		blockX			.req r1
+		blockY			.req r2
+		blockColor		.req r3
+		blockGridData	.req r4
+	
+		
+		// Load current block
+		ldr		r0, 				=CurrentTetrisBlock
+		ldr		blockX, 			[r0, #0]
+		ldr		blockY, 			[r0, #4]
+		ldr		blockColor,			[r0, #8]
+		ldrh	blockGridData, 		[r0, #12]
+		
+		teq		blockGridData,		#0
+		beq		generateBlock
+		b 		generateBlockEnd
+		
+		generateBlock:
+		
+			mov		blockX, 		#0
+			mov		blockY, 		#0
+			//	0xC440
+			//	11--
+			//	-1--
+			//	-1--
+			//	----
+			ldr		blockGridData, 	=0xC440
+			str		blockGridData,	[r0, #12]
+		
+		generateBlockEnd:
+		
+			add	r8, blockX, #4
+			add r9, blockY, #4
+			
+			iterateBlockLoopX:
+		
+				push 	{ blockY } 
+			
+				iterateBlockLoopY:
+					
+					mov		r10, #30	// TEMP HARDCODED ROWS
+					mul		r11, r10, blockY			// calculate tetris grid offset
+					add		r11, blockX
+					lsl		r11, #2
+					// R11 is the block in the tetris grid
+					
+					
+					mov		r10, #4
+					mul		r10, r10, blockY
+					add		r10, blockX
+					
+					push { blockGridData }
+					
+					mov		r7, #0b1000000000000000
+					lsl		blockGridData, r10
+					and		r7, blockGridData
+					teq		r7, #0
+					movne	r7, #1
+					
+					
+					// write block
+					push { r0, blockColor }
+					ldr 		r0, =TetrisGrid
+					add 		r0, #12
+					ldreq		blockColor, #0x000000	// black
+					str			blockColor, [r0, r11]	// color
+					//streq		r7, [r0, r11]	// color
+					pop { r0, blockColor }
+					
+					
+					
+					
+					// R7 is the bit corresponding to X,Y at this point
+					
+					pop { blockGridData }
+	
+					
+					
+					add 	blockY, #1
+					cmp 	blockY, r9
+					blt 	iterateBlockLoopY
+				
+				pop 	{ blockY } 
+				add 	blockX, #1
+				cmp 	blockX, r8
+				blt 	iterateBlockLoopX
+				
+		add		blockY, 			#1
+		str		blockY, 			[r0, #4]
+				
+			
+				
+			
+			
+			
+			
+		
+			
+		
+		
+		
+		
+		
+		
+		.unreq			blockX
+		.unreq 			blockY
+		.unreq 			blockColor
+		.unreq 			blockGridData
 		
 		
 		
@@ -119,7 +248,10 @@ main:
 		
 		bl drawTetrisGrid
 		
-		// b mainLoop
+		ldr r0, =0xFFFFF
+		bl startTimer
+		
+		b mainLoop
 		
 		
 		
@@ -234,47 +366,30 @@ drawTetrisGrid:
 		
 			// TODO: clean up
 			
-			push { rows, cols, size, curRow, curCol, color }
+			push 	{ rows, cols, size, curRow, curCol, color }
 			
-			sub		sp, #20						// 5 args
+			sub		sp, #20						// push 5 args
 			
 			mov		r0, curRow					// x
 			mul 	r0, size
 			str 	r0, [sp, #0]				// x
-			
 			mov		r0, curCol					// y
 			mul 	r0, size
 			str 	r0, [sp, #4]				// y
-			
-			
 			str 	size, [sp, #8]				// width
 			str 	size, [sp, #12]				// height
 			
 			
-			
-			
-			
-			
-			// calculate color array offset
-			mul		r1, rows, curCol
+			mul		r1, rows, curCol			// calculate tetris grid offset
 			add		r1, curRow
 			lsl		r1, #2
-			
-			ldr		r0, [color, r1]
-			str 	r0, [sp, #16]			// color
-			
+			ldr		r0, [color, r1]				
+			str 	r0, [sp, #16]				// color
 			bl		drawRect
 			
-			add		sp, #20
+			add		sp, #20						// pop 5 args
 			
-			
-			
-			
-			
-			
-			
-			
-			pop { rows, cols, size, curRow, curCol, color }
+			pop 	{ rows, cols, size, curRow, curCol, color }
 			
 			add 	curCol, #1
 			cmp 	curCol, cols
@@ -289,6 +404,42 @@ drawTetrisGrid:
 	mov 	pc, lr            // return
 	
 	
+	
+	
+	
+	
+	
+	
+	
+// INPUT
+// 		r0 = row
+// 		r1 = col
+// 		r2 = rows
+// OUTPUT
+// 		r0 = tetrisGridOffset
+//
+/*
+getTetrisGridOffset:
+
+	row		.req r0
+	col		.req r1
+	rows	.req r2
+	
+	push	{ lr, r3 }
+	
+	mul		r3, rows, col
+	add		r3, row
+	lsl		r3, #2
+	mov		r0, r3
+	
+	.unreq		row
+	.unreq 		col
+	.unreq 		rows
+	
+	pop		{ lr, r3 }
+	mov 	pc, lr            			// return
+	
+*/
 	
 	
 	
@@ -335,6 +486,28 @@ drawPixel:
 	
 	
 	
+	
+// INPUT
+// 		r0 = delay
+// OUTPUT
+//
+startTimer:
+
+	mov r3, r0            	// r3 holds the delay length
+	ldr r0, =0x3F003004  	// address of CLO og: 0x3F003004
+	ldr r1, [r0]          	// read CLO
+	add r1, r3            	// add delay (should just be 12 micros)
+
+	waitLoop:
+		ldr r2, [r0]
+		cmp r1, r2          	// stop when CLO = r1
+		bhi waitLoop
+
+	mov pc, lr            	// return
+	
+	
+	
+	
 		
 //##############################################################//
 .section .data
@@ -346,6 +519,19 @@ TetrisGrid:
 	.int	30				// nxn block size (pixels)
 	.space 	30 * 20 * 4		// grid data (rows x cols)
 TetrisGridEnd:
+
+.align 4
+CurrentTetrisBlock:
+	.int		0			// x
+	.int		0			// y
+	.word		0xFFABCC	// color
+	.space 		2			// blockGridData (16 bits, max block size is 4 x 4)
+	// 	EX BLOCK (check if block exists by comparing blockGridData to 0
+	//	1100
+	//	0100
+	//	0100
+	//	0000
+CurrentTetrisBlockEnd:
 
 .end
 
