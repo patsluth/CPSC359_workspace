@@ -342,7 +342,7 @@ tetrisUpdateGridWithCurrentBlock:
 	
 		mov		blockX, 			#0
 		mov		blockY, 			#0
-		ldr		blockAddress, 		=TetrisBlockC
+		ldr		blockAddress, 		=TetrisBlockD
 		str		blockAddress, 		[r0, #20]
 		mov		blockAddressOffset,	#0
 		str		blockAddressOffset,	[r0, #24]
@@ -867,6 +867,20 @@ TetrisBlockC:
 	//	----
 	
 TetrisBlockCEnd:
+
+
+.align 4
+TetrisBlockD:
+	.hword		0xCC00			// 0
+	//	11--
+	//	11--
+	//	----
+	//	----
+	.hword		0xCC00			// pi/2
+	.hword		0xCC00			// pi
+	.hword		0xCC00			// 3pi/4
+	
+TetrisBlockDEnd:
 
 .end
 
