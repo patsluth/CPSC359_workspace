@@ -23,7 +23,7 @@ main:
 	bl		EnableJTAG
 	bl		InitFrameBuffer
 	
-	
+	bl		clearScreen
 	
 	
 	
@@ -48,50 +48,12 @@ main:
 		
 		
 		
-		
-		
-	// temp set blocks
-	ldr 		r0, =TetrisGrid
-	add r0, #12
-	
-	ldr		r2, =0xFFABCC
-	str		r2, [r0, #60]	// color
-	str		r2, [r0, #64]	// color
-	str		r2, [r0, #68]	// color
-	str		r2, [r0, #180]	// color
 	
 	
 	
 	
 	
 	
-	
-	
-	
-	
-	
-		
-	
-	// Get width/height
-	ldr	 	r0, =FrameBufferInit
-	ldr		r9, [r0, #20]
-	ldr		r10, [r0, #24]
-	
-	// Example to clear screen
-	mov		r0, sp
-	sub		sp, #20						// 5 args
-	mov		r1, #0						// x
-	str 	r1, [sp, #0]				// x
-	mov		r1, #0						// y
-	str 	r1, [sp, #4]				// y
-	str 	r9, [sp, #8]				// width
-	str 	r10, [sp, #12]				// height
-	ldr		r2,	=0x000000				// color
-	str 	r2, [sp, #16]				// color
-	//stmfd 	sp!, { r3, r4, r5, r6, r7 }
-	bl		drawRect
-	
-	add sp, #20
 	
 	
 	
@@ -199,7 +161,6 @@ tetrisSetGridBlockColor:
 	ldr 	tetrisGridSize, [tetrisGrid, #8]
 	add 	tetrisGrid, #12
 	
-	
 	// calculate tetris grid offset for block position
 	mul		tetrisGridOffset, tetrisGridSize, y			
 	add		tetrisGridOffset, x
@@ -277,8 +238,6 @@ drawTetrisGrid:
 			str 	r0, [sp, #16]				// color
 			bl		drawRect
 			
-			add		sp, #20						// pop 5 args
-			
 			pop 	{ rows, cols, size, curRow, curCol, color }
 			
 			add 	curCol, #1
@@ -342,7 +301,7 @@ tetrisUpdateGridWithCurrentBlock:
 	
 		mov		blockX, 			#0
 		mov		blockY, 			#0
-		ldr		blockAddress, 		=TetrisBlockD
+		ldr		blockAddress, 		=TetrisBlockB
 		str		blockAddress, 		[r0, #20]
 		mov		blockAddressOffset,	#0
 		str		blockAddressOffset,	[r0, #24]
@@ -437,7 +396,7 @@ tetrisUpdateGridWithCurrentBlock:
 	.unreq 			blockGridData
 	
 	pop 	{ lr }
-	mov		pc, lr
+	mov 	pc, lr            // return
 	
 	
 	
@@ -514,7 +473,7 @@ tetrisRotateBlockTest:
 	.unreq 				row4
 	
 	pop 	{ lr }
-	mov		pc, lr	
+	mov 	pc, lr            // return	
 	
 	
 	
@@ -570,7 +529,7 @@ tetrisRotateBlockTest2:
 	.unreq				blockAddressOffset
 	
 	pop 	{ lr }
-	mov		pc, lr	
+	mov 	pc, lr            // return	
 	
 	
 	
@@ -588,43 +547,53 @@ tetrisRotateBlockTest2:
 	
 	
 	
-	
-// INPUT
-// 		r0 = row
-// 		r1 = col
-// 		r2 = rows
-// OUTPUT
-// 		r0 = tetrisGridOffset
-//
-/*
-getTetrisGridOffset:
 
-	row		.req r0
-	col		.req r1
-	rows	.req r2
+// INPUT
+//
+// OUTPUT
+//
+clearScreen:
+
+	push 	{ lr }
 	
-	push	{ lr, r3 }
+	x				.req r4
+	y				.req r5
+	screenWidth		.req r6
+	screenHeight	.req r7
+	color			.req r8
 	
-	mul		r3, rows, col
-	add		r3, row
-	lsl		r3, #2
-	mov		r0, r3
+	push 	{ x - color }
+
+		// drawRect(int x, int y, int width, int height, int color)
+		// initialize paramaters
+		mov		x, #0
+		mov		y, #0
+		ldr	 	r0, =FrameBufferInit
+		ldr		screenWidth, [r0, #20]
+		ldr		screenHeight, [r0, #24]
+		ldr		color,	=0x000000			// black
+		
+		// push paramaters to stack
+		sub		sp, #20
+		str 	x, 				[sp, #0]		
+		str 	y,	 			[sp, #4]			
+		str 	screenWidth, 	[sp, #8]		
+		str 	screenHeight, 	[sp, #12]		
+		str 	color, 			[sp, #16]		
+				
+		bl		drawRect
+		
+	pop 	{ x - color }
 	
-	.unreq		row
-	.unreq 		col
-	.unreq 		rows
+	.unreq	x
+	.unreq	y
+	.unreq	screenWidth
+	.unreq	screenHeight
+	.unreq	color
 	
-	pop		{ lr, r3 }
-	mov 	pc, lr            			// return
-	g
-*/
-	
-	
-	
-	
-	
-	
-	
+	pop 	{ lr }
+	mov 	pc, lr            // return
+
 	
 	
 	
@@ -642,6 +611,7 @@ drawPixel:
 	push 	{ lr }
 
 	offset		.req r4
+	
 	push	{ offset }
 
 	// offset = (y * 1024) + x = x + (y << 10)
@@ -656,10 +626,11 @@ drawPixel:
 	strh	r2, [r0, offset]
 	
 	pop 	{ offset }
+	
 	.unreq		offset
 	
 	pop 	{ lr }
-	mov		pc, lr
+	mov 	pc, lr            // return
 	
 	
 	
@@ -682,11 +653,13 @@ drawRect:
 	height	.req r6
 	color	.req r7
 	
+	// load variables from stack
 	ldr 	x, [sp, #0]
 	ldr 	y, [sp, #4]
 	ldr 	width, [sp, #8]
 	ldr 	height, [sp, #12]
 	ldr 	color, [sp, #16]
+	add		sp, #20
 	
 	push 	{ lr }
 	
@@ -721,6 +694,8 @@ drawRect:
 	
 	pop 	{ lr }
 	mov 	pc, lr            // return
+	
+	
 	
 	
 	
@@ -877,8 +852,20 @@ TetrisBlockD:
 	//	----
 	//	----
 	.hword		0xCC00			// pi/2
+	//	11--
+	//	11--
+	//	----
+	//	----
 	.hword		0xCC00			// pi
+	//	11--
+	//	11--
+	//	----
+	//	----
 	.hword		0xCC00			// 3pi/4
+	//	11--
+	//	11--
+	//	----
+	//	----
 	
 TetrisBlockDEnd:
 
