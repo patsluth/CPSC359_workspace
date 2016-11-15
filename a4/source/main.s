@@ -373,6 +373,7 @@ tetrisUpdateGridWithCurrentBlock:
 		//add		blockAddressOffset, #2
 		//cmp		blockAddressOffset, #6
 		//movgt	blockAddressOffset, #0
+		//str		blockAddressOffset, 	[r0, #24]
 		
 		
 		// clear previous position
@@ -571,41 +572,15 @@ tetrisRotateBlockTest2:
 
 	// Load current block
 	ldr		r0, 				=TetrisCurrentBlockTest
+	ldr		blockAddressOffset, 				[r0, #24]
 	
-	//generateBlock:
-	
-		ldr		blockAddress, 		=TetrisBlockA
-		str		blockAddress, 		[r0, #20]
-		mov		blockAddressOffset,	#0
-		str		blockAddressOffset,	[r0, #24]
-	
-	
-	
-	ldrh		r7, [blockAddress, blockAddressOffset]
 	
 	add		blockAddressOffset, #2
 	cmp		blockAddressOffset, #6
 	movgt	blockAddressOffset, #0
 	
-	ldrh		r7, [blockAddress, blockAddressOffset]
+	str		blockAddressOffset,	[r0, #24]
 	
-	add		blockAddressOffset, #2
-	cmp		blockAddressOffset, #6
-	movgt	blockAddressOffset, #0
-	
-	ldrh		r7, [blockAddress, blockAddressOffset]
-	
-	add		blockAddressOffset, #2
-	cmp		blockAddressOffset, #6
-	movgt	blockAddressOffset, #0
-	
-	ldrh		r7, [blockAddress, blockAddressOffset]
-	
-	add		blockAddressOffset, #2
-	cmp		blockAddressOffset, #6
-	movgt	blockAddressOffset, #0
-	
-	ldrh		r7, [blockAddress, blockAddressOffset]
 	
 	
 	
@@ -790,7 +765,7 @@ TetrisCurrentBlockTest:
 	.int		0			// x
 	.int		0			// y
 	.word		0xFFABCC	// color
-	.word 		2			// blockAddress
+	.word 		0			// blockAddress
 	.int 		0			// blockAddressOffset (0 - 3)
 	
 TetrisCurrentBlockTestEnd:
