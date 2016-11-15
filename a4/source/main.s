@@ -28,9 +28,6 @@ main:
 	
 	
 	
-	
-	
-	
 	ldr 		r0, =TetrisGrid
 	add r0, #12
 	ldr 		r1, =TetrisGridEnd
@@ -181,57 +178,44 @@ mainEnd:
 //
 tetrisSetGridBlockColor:
 
-	tetrisGrid			.req r0
-	x					.req r1
-	y					.req r2
-	blockColor			.req r3
-	tetrisGridOffset	.req r4
+	x					.req r0
+	y					.req r1
+	blockColor			.req r2
+	tetrisGrid			.req r4
+	tetrisGridSize		.req r5
+	tetrisGridOffset	.req r6
 	
-	ldr 	tetrisGrid, =TetrisGrid
-	add 	tetrisGrid, #12
+	// load variables from stack
 	ldr 	x, [sp, #0]
 	ldr 	y, [sp, #4]
 	ldr 	blockColor, [sp, #8]
 	add		sp, #12
 	
 	push 	{ lr }
-	push	{ r4 }
+	push	{ r4 - r6 }
+	
+	// load tetrisGrid data
+	ldr 	tetrisGrid, =TetrisGrid
+	ldr 	tetrisGridSize, [tetrisGrid, #8]
+	add 	tetrisGrid, #12
 	
 	
 	// calculate tetris grid offset for block position
-	mov		tetrisGridOffset, #30	// TEMP HARDCODED ROWS
-	mul		tetrisGridOffset, tetrisGridOffset, y			
+	mul		tetrisGridOffset, tetrisGridSize, y			
 	add		tetrisGridOffset, x
 	lsl		tetrisGridOffset, #2
 
 	// write block
 	str		blockColor, [tetrisGrid, tetrisGridOffset]
 	
-	
-	
-	
-	
-	//int	30				// rows
-	//.int	20				// cols
-	//.int	30				// nxn block size (pixels)
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	.unreq		tetrisGrid
 	.unreq		x
 	.unreq		y
 	.unreq 		blockColor
+	.unreq		tetrisGrid
+	.unreq		tetrisGridSize
 	.unreq		tetrisGridOffset
 	
-	
-	pop	{ r4 }
+	pop		{ r4 - r6 }
 	pop 	{ lr }
 	mov 	pc, lr            // return
 	
@@ -350,10 +334,6 @@ tetrisUpdateGridWithCurrentBlock:
 	ldr		blockAddress, 			[r0, #20]
 	ldr		blockAddressOffset, 	[r0, #24]
 	
-	
-	
-	
-	
 	teq		blockAddress,			#0
 	beq		initializeBlock
 	bne 	initializeBlockEnd
@@ -362,7 +342,7 @@ tetrisUpdateGridWithCurrentBlock:
 	
 		mov		blockX, 			#0
 		mov		blockY, 			#0
-		ldr		blockAddress, 		=TetrisBlockA
+		ldr		blockAddress, 		=TetrisBlockC
 		str		blockAddress, 		[r0, #20]
 		mov		blockAddressOffset,	#0
 		str		blockAddressOffset,	[r0, #24]
@@ -482,9 +462,6 @@ tetrisRotateBlockTest:
 	row4				.req r5
 	
 	push { blockGridData, rowBitMask, row1, row2, row3, row4 }
-	
-	
-	
 	
 	
 	ldr		r0, 				=TetrisCurrentBlock
@@ -780,6 +757,7 @@ startTimer:
 //##############################################################//
 .section .data
 
+
 .align 4
 TetrisGrid:
 	.int	30				// rows
@@ -787,6 +765,7 @@ TetrisGrid:
 	.int	30				// nxn block size (pixels)
 	.space 	30 * 20 * 4		// grid data (rows x cols)
 TetrisGridEnd:
+
 
 .align 4
 TetrisCurrentBlock:
@@ -799,8 +778,6 @@ TetrisCurrentBlock:
 	// 	EX BLOCK (check if block exists by comparing blockGridData to 0
 	
 TetrisCurrentBlockEnd:
-
-
 
 
 .align 4
@@ -816,10 +793,33 @@ TetrisCurrentBlockTest:
 TetrisCurrentBlockTestEnd:
 
 
+.align 4
+TetrisBlockA:
+	.hword		0x8888			// 0
+	//	1---
+	//	1---
+	//	1---
+	//	1---
+	.hword		0xF000			// pi/2
+	//	1111
+	//	----
+	//	----
+	//	----
+	.hword		0x8888			// pi
+	//	1---
+	//	1---
+	//	1---
+	//	1---
+	.hword		0xF000			// 3pi/4
+	//	1111
+	//	----
+	//	----
+	//	----
+TetrisBlockAEnd:
 
 
 .align 4
-TetrisBlockA:
+TetrisBlockB:
 	.hword		0x8E00			// 0
 	//	1---
 	//	111-
@@ -840,12 +840,33 @@ TetrisBlockA:
 	//	1---
 	//	1---
 	//	----
-TetrisBlockEnd:
+TetrisBlockBEnd:
 
 
-
-
-
+.align 4
+TetrisBlockC:
+	.hword		0x2E00			// 0
+	//	--1-
+	//	111-
+	//	----
+	//	----
+	.hword		0xC440			// pi/2
+	//	11--
+	//	-1--
+	//	-1--
+	//	----
+	.hword		0xE800			// pi
+	//	111-
+	//	1---
+	//	----
+	//	----
+	.hword		0x88C0			// 3pi/4
+	//	1---
+	//	1---
+	//	11--
+	//	----
+	
+TetrisBlockCEnd:
 
 .end
 
