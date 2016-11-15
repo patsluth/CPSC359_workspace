@@ -188,20 +188,22 @@ drawTetrisGrid:
 
 	push 	{ lr }
 	
-	rows		.req r1
-	cols		.req r2
-	size		.req r3
-	curRow		.req r4
-	curCol		.req r5
-	color		.req r6
+	rows				.req r4
+	cols				.req r5
+	size				.req r6
+	curRow				.req r7
+	curCol				.req r8
+	color				.req r9
+	tetrisGrid			.req r10
+	tetrisGridOffset	.req r11
 	
-	push 	{ r0 - r6 }
+	push 	{ rows - tetrisGridOffset }
 	
 	ldr 	r0, =TetrisGrid
 	ldr		rows, [r0, #0]
 	ldr		cols, [r0, #4]
 	ldr		size, [r0, #8]
-	add		color, r0, #12
+	add		tetrisGrid, r0, #12
 	
 	mov		curRow, #0
 	mov		curCol, #0
@@ -211,34 +213,39 @@ drawTetrisGrid:
 		push 	{ curCol } 
 	
 		for_curCol_lessThan_cols_loop:
-		
-		
-		
-		
-			// TODO: clean up
 			
-			push 	{ rows, cols, size, curRow, curCol, color }
-			
-			sub		sp, #20						// push 5 args
-			
-			mov		r0, curRow					// x
-			mul 	r0, size
-			str 	r0, [sp, #0]				// x
-			mov		r0, curCol					// y
-			mul 	r0, size
-			str 	r0, [sp, #4]				// y
-			str 	size, [sp, #8]				// width
-			str 	size, [sp, #12]				// height
+			push 	{ rows - color }
 			
 			
-			mul		r1, rows, curCol			// calculate tetris grid offset
-			add		r1, curRow
-			lsl		r1, #2
-			ldr		r0, [color, r1]				
-			str 	r0, [sp, #16]				// color
-			bl		drawRect
+				// drawRect(int x, int y, int width, int height, int color)
+				// initialize paramaters
+				
+				// calculate tetris grid offset
+				mul		tetrisGridOffset, rows, curCol			
+				add		tetrisGridOffset, curRow
+				lsl		tetrisGridOffset, #2
+				ldr		color, [tetrisGrid, tetrisGridOffset]				
+				
+				x		.req r0
+				y		.req r1
+				
+				mul		x, curRow, size
+				mul		y, curCol, size
+				
+				// push paramaters to stack
+				sub		sp, #20
+				str 	x, 				[sp, #0]		
+				str 	y,	 			[sp, #4]			
+				str 	size, 			[sp, #8]		
+				str 	size, 			[sp, #12]		
+				str 	color, 			[sp, #16]	
+				
+				.unreq	x
+				.unreq	y	
+						
+				bl		drawRect
 			
-			pop 	{ rows, cols, size, curRow, curCol, color }
+			pop 	{ rows - color }
 			
 			add 	curCol, #1
 			cmp 	curCol, cols
@@ -249,7 +256,7 @@ drawTetrisGrid:
 		cmp 	curRow, rows
 		blt 	for_curRow_lessThan_rows_loop
 	
-	pop 	{ r0 - r6 }
+	pop 	{ rows - tetrisGridOffset }
 	
 	.unreq			rows
 	.unreq			cols
@@ -257,9 +264,12 @@ drawTetrisGrid:
 	.unreq 			curRow
 	.unreq 			curCol
 	.unreq 			color
+	.unreq 			tetrisGrid
+	.unreq 			tetrisGridOffset
 	
 	pop 	{ lr }
 	mov 	pc, lr            // return
+	
 	
 	
 	
@@ -278,10 +288,6 @@ tetrisUpdateGridWithCurrentBlock:
 	blockGridData		.req r8
 	
 	push { r0 - r12 }
-	
-	
-	
-	
 	
 	// Load current block
 	ldr		r0, 					=TetrisCurrentBlockTest
@@ -377,12 +383,6 @@ tetrisUpdateGridWithCurrentBlock:
 	// MOVE BLOCK POSITION
 	//add		blockY, 			#1
 	//str		blockY, 			[r0, #12]
-			
-		
-			
-	
-	
-	
 	
 	pop { r0 - r12 }
 	
@@ -535,19 +535,6 @@ tetrisRotateBlockTest2:
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 // INPUT
 //
 // OUTPUT
@@ -593,8 +580,6 @@ clearScreen:
 	
 	pop 	{ lr }
 	mov 	pc, lr            // return
-
-	
 	
 	
 	
