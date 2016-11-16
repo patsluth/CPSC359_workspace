@@ -353,14 +353,12 @@ tetrisDrawGrid:
 	
 	push 	{ rows - tetrisGridOffset }
 	
-	ldr 	r0, =TetrisGrid
-	ldr		rows, [r0, #0]
-	ldr		cols, [r0, #4]
-	ldr		size, [r0, #8]
-	add		tetrisGridData, r0, #12
+	ldr 	r0, 			=TetrisGrid
+	ldmfd	r0!,			{ rows - size }
+	mov		tetrisGridData, r0
 	
-	mov		curRow, #0
-	mov		curCol, #0
+	mov		curRow, 		#0
+	mov		curCol, 		#0
 	
 	for_curRow_lessThan_rows_loop:
 		
@@ -370,33 +368,33 @@ tetrisDrawGrid:
 			
 			push 	{ rows - color }
 			
-				// drawRect(int x, int y, int width, int height, int color)
-				// initialize paramaters
+			// drawRect(int x, int y, int width, int height, int color)
 				
-				// calculate tetris grid offset
-				mul		tetrisGridOffset, rows, curCol			
-				add		tetrisGridOffset, curRow
-				lsl		tetrisGridOffset, #2
-				ldr		color, [tetrisGridData, tetrisGridOffset]				
+			// calculate tetris grid offset
+			mul		tetrisGridOffset, 	rows, curCol			
+			add		tetrisGridOffset, 	curRow
+			lsl		tetrisGridOffset, 	#2
+			ldr		color, 				[tetrisGridData, tetrisGridOffset]				
 				
-				x		.req r0
-				y		.req r1
+			x		.req r0
+			y		.req r1
 				
-				mul		x, curRow, size
-				mul		y, curCol, size
+			mul		x, curRow, size
+			mul		y, curCol, size
 				
-				// push paramaters to stack
-				sub		sp, #20
-				str 	x, 				[sp, #0]		
-				str 	y,	 			[sp, #4]			
-				str 	size, 			[sp, #8]		
-				str 	size, 			[sp, #12]		
-				str 	color, 			[sp, #16]	
-				
-				.unreq	x
-				.unreq	y	
-						
-				bl		drawRect
+			// push paramaters to stack
+			//stmfd	sp!,		{ r1 - r7 }
+			sub		sp, #20
+			str 	x, 				[sp, #0]		
+			str 	y,	 			[sp, #4]			
+			str 	size, 			[sp, #8]		
+			str 	size, 			[sp, #12]		
+			str 	color, 			[sp, #16]	
+			
+			.unreq	x
+			.unreq	y	
+					
+			bl		drawRect
 			
 			pop 	{ rows - color }
 			
@@ -411,14 +409,14 @@ tetrisDrawGrid:
 	
 	pop 	{ rows - tetrisGridOffset }
 	
-	.unreq			rows
-	.unreq			cols
-	.unreq			size
-	.unreq 			curRow
-	.unreq 			curCol
-	.unreq 			color
-	.unreq 			tetrisGridData
-	.unreq 			tetrisGridOffset
+	.unreq	rows
+	.unreq	cols
+	.unreq	size
+	.unreq 	curRow
+	.unreq 	curCol
+	.unreq 	color
+	.unreq 	tetrisGridData
+	.unreq 	tetrisGridOffset
 	
 	pop 	{ lr }
 	mov 	pc, lr            // return
@@ -658,13 +656,7 @@ tetrisRotateBlockTest2:
 	push	{ prevX - blockAddressOffset }
 	
 	// load variables from stack
-	ldr 	prevX, 				[r0, #0]
-	ldr 	prevY, 				[r0, #4]
-	ldr 	x, 					[r0, #8]
-	ldr 	y, 					[r0, #12]
-	ldr 	blockColor, 		[r0, #16]
-	ldr 	blockAddress, 		[r0, #20]
-	ldr 	blockAddressOffset, [r0, #24]
+	ldmfd	r0, { prevX - blockAddressOffset }
 	
 	// ROTATION (+ pi/2)
 		//add
@@ -679,58 +671,19 @@ tetrisRotateBlockTest2:
 	
 	pop		{ prevX - blockAddressOffset }
 	
-	.unreq		prevX
-	.unreq		prevY
-	.unreq		x
-	.unreq		y
-	.unreq 		blockColor
-	.unreq		blockAddress
-	.unreq		blockAddressOffset
+	.unreq	prevX
+	.unreq	prevY
+	.unreq	x
+	.unreq	y
+	.unreq 	blockColor
+	.unreq	blockAddress
+	.unreq	blockAddressOffset
 	
 	pop 	{ lr }
 	mov 	pc, lr            // return
 
 
 
-
-
-
-
-
-
-
-
-
-/*
-
-
-	push 	{ lr }
-	
-	blockGridData		.req r0
-	blockAddress		.req r1
-	blockAddressOffset	.req r2
-
-
-	// Load current block
-	ldr		r0, 				=TetrisCurrentBlockTest
-	ldr		blockAddressOffset, 				[r0, #24]
-	
-	
-	add		blockAddressOffset, #2
-	cmp		blockAddressOffset, #6
-	movgt	blockAddressOffset, #0
-	
-	str		blockAddressOffset,	[r0, #24]
-	
-	
-	.unreq 				blockGridData
-	.unreq 				blockAddress
-	.unreq				blockAddressOffset
-	
-	pop 	{ lr }
-	mov 	pc, lr            // return	
-	
-	*/
 	
 	
 	
@@ -776,15 +729,15 @@ tetrisTranslateBlockTest:
 	
 	pop		{ blockPrevX - blockAddressOffset }
 	
-	.unreq		dx
-	.unreq		dy
-	.unreq		blockPrevX
-	.unreq		blockPrevY
-	.unreq		blockX
-	.unreq		blockY
-	.unreq 		blockColor
-	.unreq		blockAddress
-	.unreq		blockAddressOffset
+	.unreq	dx
+	.unreq	dy
+	.unreq	blockPrevX
+	.unreq	blockPrevY
+	.unreq	blockX
+	.unreq	blockY
+	.unreq 	blockColor
+	.unreq	blockAddress
+	.unreq	blockAddressOffset
 	
 	pop 	{ lr }
 	mov 	pc, lr            // return	
@@ -816,24 +769,16 @@ clearScreen:
 	
 	push 	{ x - color }
 
-		// drawRect(int x, int y, int width, int height, int color)
-		// initialize paramaters
-		mov		x, #0
-		mov		y, #0
-		ldr	 	r0, =FrameBufferInit
-		ldr		screenWidth, [r0, #20]
-		ldr		screenHeight, [r0, #24]
-		ldr		color,	=0x000000			// black
+	// drawRect(int x, int y, int width, int height, int color)
+	mov		x, #0
+	mov		y, #0
+	ldr	 	r0, =FrameBufferInit
+	ldr		screenWidth, [r0, #20]
+	ldr		screenHeight, [r0, #24]
+	ldr		color,	=0x000000			// black
 		
-		// push paramaters to stack
-		sub		sp, #20
-		str 	x, 				[sp, #0]		
-		str 	y,	 			[sp, #4]			
-		str 	screenWidth, 	[sp, #8]		
-		str 	screenHeight, 	[sp, #12]		
-		str 	color, 			[sp, #16]		
-				
-		bl		drawRect
+	stmfd	sp!,		{ x - color }
+	bl		drawRect
 		
 	pop 	{ x - color }
 	
