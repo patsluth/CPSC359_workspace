@@ -94,9 +94,9 @@ Disassembly of section .text:
     9bec:	e3a0d902 	mov	sp, #32768	; 0x8000
     9bf0:	ebffffba 	bl	9ae0 <EnableJTAG>
     9bf4:	ebffffdc 	bl	9b6c <InitFrameBuffer>
-    9bf8:	e59f047c 	ldr	r0, [pc, #1148]	; a07c <waitLoop+0x10>
+    9bf8:	e59f0438 	ldr	r0, [pc, #1080]	; a038 <waitLoop+0x10>
     9bfc:	e280000c 	add	r0, r0, #12
-    9c00:	e59f1478 	ldr	r1, [pc, #1144]	; a080 <waitLoop+0x14>
+    9c00:	e59f1434 	ldr	r1, [pc, #1076]	; a03c <waitLoop+0x14>
 
 00009c04 <looop>:
     9c04:	e3a02000 	mov	r2, #0
@@ -110,330 +110,313 @@ Disassembly of section .text:
     9c1c:	e3a00000 	mov	r0, #0
     9c20:	e3a01000 	mov	r1, #0
     9c24:	e92d0003 	push	{r0, r1}
-    9c28:	eb000070 	bl	9df0 <tetrisClearGridBlock>
+    9c28:	eb00005f 	bl	9dac <tetrisClearGridBlock>
     9c2c:	e3a00000 	mov	r0, #0
     9c30:	e3a01001 	mov	r1, #1
-    9c34:	e3a02000 	mov	r2, #0
-    9c38:	e92d0003 	push	{r0, r1}
-    9c3c:	eb00006b 	bl	9df0 <tetrisClearGridBlock>
-    9c40:	e3a00000 	mov	r0, #0
-    9c44:	e3a01002 	mov	r1, #2
-    9c48:	e3a02000 	mov	r2, #0
-    9c4c:	e92d0003 	push	{r0, r1}
-    9c50:	eb000066 	bl	9df0 <tetrisClearGridBlock>
-    9c54:	e3a00000 	mov	r0, #0
-    9c58:	e3a01003 	mov	r1, #3
-    9c5c:	e3a02000 	mov	r2, #0
-    9c60:	e92d0003 	push	{r0, r1}
-    9c64:	eb000061 	bl	9df0 <tetrisClearGridBlock>
-    9c68:	e3a00001 	mov	r0, #1
-    9c6c:	e3a01000 	mov	r1, #0
-    9c70:	e3a02000 	mov	r2, #0
+    9c34:	e92d0003 	push	{r0, r1}
+    9c38:	eb00005b 	bl	9dac <tetrisClearGridBlock>
+    9c3c:	e3a00000 	mov	r0, #0
+    9c40:	e3a01002 	mov	r1, #2
+    9c44:	e92d0003 	push	{r0, r1}
+    9c48:	eb000057 	bl	9dac <tetrisClearGridBlock>
+    9c4c:	e3a00000 	mov	r0, #0
+    9c50:	e3a01003 	mov	r1, #3
+    9c54:	e92d0003 	push	{r0, r1}
+    9c58:	eb000053 	bl	9dac <tetrisClearGridBlock>
+    9c5c:	e3a00001 	mov	r0, #1
+    9c60:	e3a01000 	mov	r1, #0
+    9c64:	e92d0003 	push	{r0, r1}
+    9c68:	eb00004f 	bl	9dac <tetrisClearGridBlock>
+    9c6c:	e3a00001 	mov	r0, #1
+    9c70:	e3a01001 	mov	r1, #1
     9c74:	e92d0003 	push	{r0, r1}
-    9c78:	eb00005c 	bl	9df0 <tetrisClearGridBlock>
+    9c78:	eb00004b 	bl	9dac <tetrisClearGridBlock>
     9c7c:	e3a00001 	mov	r0, #1
-    9c80:	e3a01001 	mov	r1, #1
-    9c84:	e3a02000 	mov	r2, #0
-    9c88:	e92d0003 	push	{r0, r1}
-    9c8c:	eb000057 	bl	9df0 <tetrisClearGridBlock>
-    9c90:	e3a00001 	mov	r0, #1
-    9c94:	e3a01002 	mov	r1, #2
-    9c98:	e3a02000 	mov	r2, #0
-    9c9c:	e92d0003 	push	{r0, r1}
-    9ca0:	eb000052 	bl	9df0 <tetrisClearGridBlock>
-    9ca4:	e3a00001 	mov	r0, #1
-    9ca8:	e3a01003 	mov	r1, #3
-    9cac:	e3a02000 	mov	r2, #0
-    9cb0:	e92d0003 	push	{r0, r1}
-    9cb4:	eb00004d 	bl	9df0 <tetrisClearGridBlock>
-    9cb8:	e3a00002 	mov	r0, #2
-    9cbc:	e3a01000 	mov	r1, #0
-    9cc0:	e3a02000 	mov	r2, #0
+    9c80:	e3a01002 	mov	r1, #2
+    9c84:	e92d0003 	push	{r0, r1}
+    9c88:	eb000047 	bl	9dac <tetrisClearGridBlock>
+    9c8c:	e3a00001 	mov	r0, #1
+    9c90:	e3a01003 	mov	r1, #3
+    9c94:	e92d0003 	push	{r0, r1}
+    9c98:	eb000043 	bl	9dac <tetrisClearGridBlock>
+    9c9c:	e3a00002 	mov	r0, #2
+    9ca0:	e3a01000 	mov	r1, #0
+    9ca4:	e92d0003 	push	{r0, r1}
+    9ca8:	eb00003f 	bl	9dac <tetrisClearGridBlock>
+    9cac:	e3a00002 	mov	r0, #2
+    9cb0:	e3a01001 	mov	r1, #1
+    9cb4:	e92d0003 	push	{r0, r1}
+    9cb8:	eb00003b 	bl	9dac <tetrisClearGridBlock>
+    9cbc:	e3a00002 	mov	r0, #2
+    9cc0:	e3a01002 	mov	r1, #2
     9cc4:	e92d0003 	push	{r0, r1}
-    9cc8:	eb000048 	bl	9df0 <tetrisClearGridBlock>
+    9cc8:	eb000037 	bl	9dac <tetrisClearGridBlock>
     9ccc:	e3a00002 	mov	r0, #2
-    9cd0:	e3a01001 	mov	r1, #1
-    9cd4:	e3a02000 	mov	r2, #0
-    9cd8:	e92d0003 	push	{r0, r1}
-    9cdc:	eb000043 	bl	9df0 <tetrisClearGridBlock>
-    9ce0:	e3a00002 	mov	r0, #2
-    9ce4:	e3a01002 	mov	r1, #2
-    9ce8:	e3a02000 	mov	r2, #0
-    9cec:	e92d0003 	push	{r0, r1}
-    9cf0:	eb00003e 	bl	9df0 <tetrisClearGridBlock>
-    9cf4:	e3a00002 	mov	r0, #2
-    9cf8:	e3a01003 	mov	r1, #3
-    9cfc:	e3a02000 	mov	r2, #0
-    9d00:	e92d0003 	push	{r0, r1}
-    9d04:	eb000039 	bl	9df0 <tetrisClearGridBlock>
-    9d08:	e3a00003 	mov	r0, #3
-    9d0c:	e3a01000 	mov	r1, #0
-    9d10:	e3a02000 	mov	r2, #0
+    9cd0:	e3a01003 	mov	r1, #3
+    9cd4:	e92d0003 	push	{r0, r1}
+    9cd8:	eb000033 	bl	9dac <tetrisClearGridBlock>
+    9cdc:	e3a00003 	mov	r0, #3
+    9ce0:	e3a01000 	mov	r1, #0
+    9ce4:	e92d0003 	push	{r0, r1}
+    9ce8:	eb00002f 	bl	9dac <tetrisClearGridBlock>
+    9cec:	e3a00003 	mov	r0, #3
+    9cf0:	e3a01001 	mov	r1, #1
+    9cf4:	e92d0003 	push	{r0, r1}
+    9cf8:	eb00002b 	bl	9dac <tetrisClearGridBlock>
+    9cfc:	e3a00003 	mov	r0, #3
+    9d00:	e3a01002 	mov	r1, #2
+    9d04:	e92d0003 	push	{r0, r1}
+    9d08:	eb000027 	bl	9dac <tetrisClearGridBlock>
+    9d0c:	e3a00003 	mov	r0, #3
+    9d10:	e3a01003 	mov	r1, #3
     9d14:	e92d0003 	push	{r0, r1}
-    9d18:	eb000034 	bl	9df0 <tetrisClearGridBlock>
-    9d1c:	e3a00003 	mov	r0, #3
-    9d20:	e3a01001 	mov	r1, #1
-    9d24:	e3a02000 	mov	r2, #0
-    9d28:	e92d0003 	push	{r0, r1}
-    9d2c:	eb00002f 	bl	9df0 <tetrisClearGridBlock>
-    9d30:	e3a00003 	mov	r0, #3
-    9d34:	e3a01002 	mov	r1, #2
-    9d38:	e3a02000 	mov	r2, #0
-    9d3c:	e92d0003 	push	{r0, r1}
-    9d40:	eb00002a 	bl	9df0 <tetrisClearGridBlock>
-    9d44:	e3a00003 	mov	r0, #3
-    9d48:	e3a01003 	mov	r1, #3
-    9d4c:	e3a02000 	mov	r2, #0
-    9d50:	e92d0003 	push	{r0, r1}
-    9d54:	eb000025 	bl	9df0 <tetrisClearGridBlock>
-    9d58:	e59f0324 	ldr	r0, [pc, #804]	; a084 <waitLoop+0x18>
-    9d5c:	e89000fe 	ldm	r0, {r1, r2, r3, r4, r5, r6, r7}
-    9d60:	e3360000 	teq	r6, #0
-    9d64:	0a000000 	beq	9d6c <initializeBlock_>
-    9d68:	1a000005 	bne	9d84 <initializeBlockEnd_>
+    9d18:	eb000023 	bl	9dac <tetrisClearGridBlock>
+    9d1c:	e59f031c 	ldr	r0, [pc, #796]	; a040 <waitLoop+0x18>
+    9d20:	e89007f0 	ldm	r0, {r4, r5, r6, r7, r8, r9, sl}
+    9d24:	e3390000 	teq	r9, #0
+    9d28:	0a000000 	beq	9d30 <initializeBlock_>
+    9d2c:	1a000003 	bne	9d40 <initializeBlockEnd_>
 
-00009d6c <initializeBlock_>:
-    9d6c:	e3a03000 	mov	r3, #0
-    9d70:	e3a04000 	mov	r4, #0
-    9d74:	e59f630c 	ldr	r6, [pc, #780]	; a088 <waitLoop+0x1c>
-    9d78:	e5806014 	str	r6, [r0, #20]
-    9d7c:	e3a07000 	mov	r7, #0
-    9d80:	e5807018 	str	r7, [r0, #24]
+00009d30 <initializeBlock_>:
+    9d30:	e59f930c 	ldr	r9, [pc, #780]	; a044 <waitLoop+0x1c>
+    9d34:	e5809014 	str	r9, [r0, #20]
+    9d38:	e3a0a000 	mov	sl, #0
+    9d3c:	e580a018 	str	sl, [r0, #24]
 
-00009d84 <initializeBlockEnd_>:
-    9d84:	e92d00fe 	push	{r1, r2, r3, r4, r5, r6, r7}
-    9d88:	eb00003f 	bl	9e8c <tetrisUpdateGridWithBlock>
-    9d8c:	eb000072 	bl	9f5c <tetrisRotateBlockTest2>
-    9d90:	e59f02ec 	ldr	r0, [pc, #748]	; a084 <waitLoop+0x18>
-    9d94:	e59d1018 	ldr	r1, [sp, #24]
-    9d98:	e5801018 	str	r1, [r0, #24]
-    9d9c:	eb000079 	bl	9f88 <tetrisTranslateBlockTest>
-    9da0:	eb000018 	bl	9e08 <tetrisDrawGrid>
-    9da4:	e3a000ff 	mov	r0, #255	; 0xff
-    9da8:	eb0000ab 	bl	a05c <startTimer>
-    9dac:	eaffff9a 	b	9c1c <mainLoop>
+00009d40 <initializeBlockEnd_>:
+    9d40:	e92d07f0 	push	{r4, r5, r6, r7, r8, r9, sl}
+    9d44:	eb00003f 	bl	9e48 <tetrisUpdateGridWithBlock>
+    9d48:	eb000072 	bl	9f18 <tetrisRotateBlockTest2>
+    9d4c:	e59f02ec 	ldr	r0, [pc, #748]	; a040 <waitLoop+0x18>
+    9d50:	e59d1018 	ldr	r1, [sp, #24]
+    9d54:	e5801018 	str	r1, [r0, #24]
+    9d58:	eb000079 	bl	9f44 <tetrisTranslateBlockTest>
+    9d5c:	eb000018 	bl	9dc4 <tetrisDrawGrid>
+    9d60:	e3a000ff 	mov	r0, #255	; 0xff
+    9d64:	eb0000ab 	bl	a018 <startTimer>
+    9d68:	eaffffab 	b	9c1c <mainLoop>
 
-00009db0 <mainEnd>:
-    9db0:	eafffffe 	b	9db0 <mainEnd>
+00009d6c <mainEnd>:
+    9d6c:	eafffffe 	b	9d6c <mainEnd>
 
-00009db4 <tetrisSetGridBlockColor>:
-    9db4:	e1a0000d 	mov	r0, sp
-    9db8:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    9dbc:	e92d03f0 	push	{r4, r5, r6, r7, r8, r9}
-    9dc0:	e8900070 	ldm	r0, {r4, r5, r6}
-    9dc4:	e59f72b0 	ldr	r7, [pc, #688]	; a07c <waitLoop+0x10>
-    9dc8:	e5978008 	ldr	r8, [r7, #8]
-    9dcc:	e287700c 	add	r7, r7, #12
-    9dd0:	e0090598 	mul	r9, r8, r5
-    9dd4:	e0899004 	add	r9, r9, r4
-    9dd8:	e1a09109 	lsl	r9, r9, #2
-    9ddc:	e7876009 	str	r6, [r7, r9]
-    9de0:	e8bd03f0 	pop	{r4, r5, r6, r7, r8, r9}
-    9de4:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    9de8:	e28dd00c 	add	sp, sp, #12
-    9dec:	e1a0f00e 	mov	pc, lr
+00009d70 <tetrisSetGridBlockColor>:
+    9d70:	e1a0000d 	mov	r0, sp
+    9d74:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    9d78:	e92d03f0 	push	{r4, r5, r6, r7, r8, r9}
+    9d7c:	e8900070 	ldm	r0, {r4, r5, r6}
+    9d80:	e59f72b0 	ldr	r7, [pc, #688]	; a038 <waitLoop+0x10>
+    9d84:	e5978008 	ldr	r8, [r7, #8]
+    9d88:	e287700c 	add	r7, r7, #12
+    9d8c:	e0090598 	mul	r9, r8, r5
+    9d90:	e0899004 	add	r9, r9, r4
+    9d94:	e1a09109 	lsl	r9, r9, #2
+    9d98:	e7876009 	str	r6, [r7, r9]
+    9d9c:	e8bd03f0 	pop	{r4, r5, r6, r7, r8, r9}
+    9da0:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    9da4:	e28dd00c 	add	sp, sp, #12
+    9da8:	e1a0f00e 	mov	pc, lr
 
-00009df0 <tetrisClearGridBlock>:
-    9df0:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    9df4:	e3a02000 	mov	r2, #0
-    9df8:	e92d0007 	push	{r0, r1, r2}
-    9dfc:	ebffffec 	bl	9db4 <tetrisSetGridBlockColor>
-    9e00:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    9e04:	e1a0f00e 	mov	pc, lr
+00009dac <tetrisClearGridBlock>:
+    9dac:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    9db0:	e3a02000 	mov	r2, #0
+    9db4:	e92d0007 	push	{r0, r1, r2}
+    9db8:	ebffffec 	bl	9d70 <tetrisSetGridBlockColor>
+    9dbc:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    9dc0:	e1a0f00e 	mov	pc, lr
 
-00009e08 <tetrisDrawGrid>:
-    9e08:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    9e0c:	e92d0ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp}
-    9e10:	e59f0264 	ldr	r0, [pc, #612]	; a07c <waitLoop+0x10>
-    9e14:	e8b00070 	ldm	r0!, {r4, r5, r6}
-    9e18:	e1a0a000 	mov	sl, r0
-    9e1c:	e3a07000 	mov	r7, #0
-    9e20:	e3a08000 	mov	r8, #0
+00009dc4 <tetrisDrawGrid>:
+    9dc4:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    9dc8:	e92d0ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp}
+    9dcc:	e59f0264 	ldr	r0, [pc, #612]	; a038 <waitLoop+0x10>
+    9dd0:	e8b00070 	ldm	r0!, {r4, r5, r6}
+    9dd4:	e1a0a000 	mov	sl, r0
+    9dd8:	e3a07000 	mov	r7, #0
+    9ddc:	e3a08000 	mov	r8, #0
 
-00009e24 <for_curRow_lessThan_rows_loop>:
-    9e24:	e52d8004 	push	{r8}		; (str r8, [sp, #-4]!)
+00009de0 <for_curRow_lessThan_rows_loop>:
+    9de0:	e52d8004 	push	{r8}		; (str r8, [sp, #-4]!)
 
-00009e28 <for_curCol_lessThan_cols_loop>:
-    9e28:	e92d03f0 	push	{r4, r5, r6, r7, r8, r9}
-    9e2c:	e00b0894 	mul	fp, r4, r8
-    9e30:	e08bb007 	add	fp, fp, r7
-    9e34:	e1a0b10b 	lsl	fp, fp, #2
-    9e38:	e79a900b 	ldr	r9, [sl, fp]
-    9e3c:	e0000697 	mul	r0, r7, r6
-    9e40:	e0010698 	mul	r1, r8, r6
-    9e44:	e24dd014 	sub	sp, sp, #20
-    9e48:	e58d0000 	str	r0, [sp]
-    9e4c:	e58d1004 	str	r1, [sp, #4]
-    9e50:	e58d6008 	str	r6, [sp, #8]
-    9e54:	e58d600c 	str	r6, [sp, #12]
-    9e58:	e58d9010 	str	r9, [sp, #16]
-    9e5c:	eb000067 	bl	a000 <drawRect>
-    9e60:	e8bd03f0 	pop	{r4, r5, r6, r7, r8, r9}
-    9e64:	e2888001 	add	r8, r8, #1
-    9e68:	e1580005 	cmp	r8, r5
-    9e6c:	baffffed 	blt	9e28 <for_curCol_lessThan_cols_loop>
-    9e70:	e49d8004 	pop	{r8}		; (ldr r8, [sp], #4)
-    9e74:	e2877001 	add	r7, r7, #1
-    9e78:	e1570004 	cmp	r7, r4
-    9e7c:	baffffe8 	blt	9e24 <for_curRow_lessThan_rows_loop>
-    9e80:	e8bd0ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp}
-    9e84:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    9e88:	e1a0f00e 	mov	pc, lr
+00009de4 <for_curCol_lessThan_cols_loop>:
+    9de4:	e92d03f0 	push	{r4, r5, r6, r7, r8, r9}
+    9de8:	e00b0894 	mul	fp, r4, r8
+    9dec:	e08bb007 	add	fp, fp, r7
+    9df0:	e1a0b10b 	lsl	fp, fp, #2
+    9df4:	e79a900b 	ldr	r9, [sl, fp]
+    9df8:	e0000697 	mul	r0, r7, r6
+    9dfc:	e0010698 	mul	r1, r8, r6
+    9e00:	e24dd014 	sub	sp, sp, #20
+    9e04:	e58d0000 	str	r0, [sp]
+    9e08:	e58d1004 	str	r1, [sp, #4]
+    9e0c:	e58d6008 	str	r6, [sp, #8]
+    9e10:	e58d600c 	str	r6, [sp, #12]
+    9e14:	e58d9010 	str	r9, [sp, #16]
+    9e18:	eb000067 	bl	9fbc <drawRect>
+    9e1c:	e8bd03f0 	pop	{r4, r5, r6, r7, r8, r9}
+    9e20:	e2888001 	add	r8, r8, #1
+    9e24:	e1580005 	cmp	r8, r5
+    9e28:	baffffed 	blt	9de4 <for_curCol_lessThan_cols_loop>
+    9e2c:	e49d8004 	pop	{r8}		; (ldr r8, [sp], #4)
+    9e30:	e2877001 	add	r7, r7, #1
+    9e34:	e1570004 	cmp	r7, r4
+    9e38:	baffffe8 	blt	9de0 <for_curRow_lessThan_rows_loop>
+    9e3c:	e8bd0ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp}
+    9e40:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    9e44:	e1a0f00e 	mov	pc, lr
 
-00009e8c <tetrisUpdateGridWithBlock>:
-    9e8c:	e1a0000d 	mov	r0, sp
-    9e90:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    9e94:	e92d07f0 	push	{r4, r5, r6, r7, r8, r9, sl}
-    9e98:	e89007f0 	ldm	r0, {r4, r5, r6, r7, r8, r9, sl}
-    9e9c:	e1a04006 	mov	r4, r6
-    9ea0:	e1a05007 	mov	r5, r7
-    9ea4:	e5804000 	str	r4, [r0]
-    9ea8:	e5805004 	str	r5, [r0, #4]
-    9eac:	e3a0b000 	mov	fp, #0
-    9eb0:	e3a0c000 	mov	ip, #0
+00009e48 <tetrisUpdateGridWithBlock>:
+    9e48:	e1a0000d 	mov	r0, sp
+    9e4c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    9e50:	e92d07f0 	push	{r4, r5, r6, r7, r8, r9, sl}
+    9e54:	e89007f0 	ldm	r0, {r4, r5, r6, r7, r8, r9, sl}
+    9e58:	e1a04006 	mov	r4, r6
+    9e5c:	e1a05007 	mov	r5, r7
+    9e60:	e5804000 	str	r4, [r0]
+    9e64:	e5805004 	str	r5, [r0, #4]
+    9e68:	e3a0b000 	mov	fp, #0
+    9e6c:	e3a0c000 	mov	ip, #0
 
-00009eb4 <for_i_lessThan_4_loop_>:
-    9eb4:	e52dc004 	push	{ip}		; (str ip, [sp, #-4]!)
+00009e70 <for_i_lessThan_4_loop_>:
+    9e70:	e52dc004 	push	{ip}		; (str ip, [sp, #-4]!)
 
-00009eb8 <for_j_lessThan_4_loop_>:
-    9eb8:	e92d01c0 	push	{r6, r7, r8}
-    9ebc:	e19920ba 	ldrh	r2, [r9, sl]
-    9ec0:	e086600b 	add	r6, r6, fp
-    9ec4:	e087700c 	add	r7, r7, ip
-    9ec8:	e3a01004 	mov	r1, #4
-    9ecc:	e0010c91 	mul	r1, r1, ip
-    9ed0:	e081100b 	add	r1, r1, fp
-    9ed4:	e1a02112 	lsl	r2, r2, r1
-    9ed8:	e3a01902 	mov	r1, #32768	; 0x8000
-    9edc:	e0011002 	and	r1, r1, r2
-    9ee0:	e3310000 	teq	r1, #0
-    9ee4:	13a01001 	movne	r1, #1
-    9ee8:	03a08000 	moveq	r8, #0
-    9eec:	e92d01c0 	push	{r6, r7, r8}
-    9ef0:	ebffffaf 	bl	9db4 <tetrisSetGridBlockColor>
-    9ef4:	e8bd01c0 	pop	{r6, r7, r8}
-    9ef8:	e28cc001 	add	ip, ip, #1
-    9efc:	e35c0004 	cmp	ip, #4
-    9f00:	baffffec 	blt	9eb8 <for_j_lessThan_4_loop_>
-    9f04:	e49dc004 	pop	{ip}		; (ldr ip, [sp], #4)
-    9f08:	e28bb001 	add	fp, fp, #1
-    9f0c:	e35b0004 	cmp	fp, #4
-    9f10:	baffffe7 	blt	9eb4 <for_i_lessThan_4_loop_>
-    9f14:	e8bd07f0 	pop	{r4, r5, r6, r7, r8, r9, sl}
-    9f18:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    9f1c:	e1a0f00e 	mov	pc, lr
+00009e74 <for_j_lessThan_4_loop_>:
+    9e74:	e92d01c0 	push	{r6, r7, r8}
+    9e78:	e19920ba 	ldrh	r2, [r9, sl]
+    9e7c:	e086600b 	add	r6, r6, fp
+    9e80:	e087700c 	add	r7, r7, ip
+    9e84:	e3a01004 	mov	r1, #4
+    9e88:	e0010c91 	mul	r1, r1, ip
+    9e8c:	e081100b 	add	r1, r1, fp
+    9e90:	e1a02112 	lsl	r2, r2, r1
+    9e94:	e3a01902 	mov	r1, #32768	; 0x8000
+    9e98:	e0011002 	and	r1, r1, r2
+    9e9c:	e3310000 	teq	r1, #0
+    9ea0:	13a01001 	movne	r1, #1
+    9ea4:	03a08000 	moveq	r8, #0
+    9ea8:	e92d01c0 	push	{r6, r7, r8}
+    9eac:	ebffffaf 	bl	9d70 <tetrisSetGridBlockColor>
+    9eb0:	e8bd01c0 	pop	{r6, r7, r8}
+    9eb4:	e28cc001 	add	ip, ip, #1
+    9eb8:	e35c0004 	cmp	ip, #4
+    9ebc:	baffffec 	blt	9e74 <for_j_lessThan_4_loop_>
+    9ec0:	e49dc004 	pop	{ip}		; (ldr ip, [sp], #4)
+    9ec4:	e28bb001 	add	fp, fp, #1
+    9ec8:	e35b0004 	cmp	fp, #4
+    9ecc:	baffffe7 	blt	9e70 <for_i_lessThan_4_loop_>
+    9ed0:	e8bd07f0 	pop	{r4, r5, r6, r7, r8, r9, sl}
+    9ed4:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    9ed8:	e1a0f00e 	mov	pc, lr
 
-00009f20 <tetrisRotateBlockTest>:
-    9f20:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    9f24:	e92d003f 	push	{r0, r1, r2, r3, r4, r5}
-    9f28:	e59f015c 	ldr	r0, [pc, #348]	; a08c <waitLoop+0x20>
-    9f2c:	e1d001b4 	ldrh	r0, [r0, #20]
-    9f30:	e3a0100f 	mov	r1, #15
-    9f34:	e0015000 	and	r5, r1, r0
-    9f38:	e1a00220 	lsr	r0, r0, #4
-    9f3c:	e0014000 	and	r4, r1, r0
-    9f40:	e1a00220 	lsr	r0, r0, #4
-    9f44:	e0013000 	and	r3, r1, r0
-    9f48:	e1a00220 	lsr	r0, r0, #4
-    9f4c:	e0012000 	and	r2, r1, r0
-    9f50:	e8bd003f 	pop	{r0, r1, r2, r3, r4, r5}
-    9f54:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    9f58:	e1a0f00e 	mov	pc, lr
+00009edc <tetrisRotateBlockTest>:
+    9edc:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    9ee0:	e92d003f 	push	{r0, r1, r2, r3, r4, r5}
+    9ee4:	e59f015c 	ldr	r0, [pc, #348]	; a048 <waitLoop+0x20>
+    9ee8:	e1d001b4 	ldrh	r0, [r0, #20]
+    9eec:	e3a0100f 	mov	r1, #15
+    9ef0:	e0015000 	and	r5, r1, r0
+    9ef4:	e1a00220 	lsr	r0, r0, #4
+    9ef8:	e0014000 	and	r4, r1, r0
+    9efc:	e1a00220 	lsr	r0, r0, #4
+    9f00:	e0013000 	and	r3, r1, r0
+    9f04:	e1a00220 	lsr	r0, r0, #4
+    9f08:	e0012000 	and	r2, r1, r0
+    9f0c:	e8bd003f 	pop	{r0, r1, r2, r3, r4, r5}
+    9f10:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    9f14:	e1a0f00e 	mov	pc, lr
 
-00009f5c <tetrisRotateBlockTest2>:
-    9f5c:	e1a0000d 	mov	r0, sp
+00009f18 <tetrisRotateBlockTest2>:
+    9f18:	e1a0000d 	mov	r0, sp
+    9f1c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    9f20:	e92d07f0 	push	{r4, r5, r6, r7, r8, r9, sl}
+    9f24:	e89007f0 	ldm	r0, {r4, r5, r6, r7, r8, r9, sl}
+    9f28:	e28aa002 	add	sl, sl, #2
+    9f2c:	e35a0006 	cmp	sl, #6
+    9f30:	c3a0a000 	movgt	sl, #0
+    9f34:	e580a018 	str	sl, [r0, #24]
+    9f38:	e8bd07f0 	pop	{r4, r5, r6, r7, r8, r9, sl}
+    9f3c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    9f40:	e1a0f00e 	mov	pc, lr
+
+00009f44 <tetrisTranslateBlockTest>:
+    9f44:	e1a0000d 	mov	r0, sp
+    9f48:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    9f4c:	e92d07f0 	push	{r4, r5, r6, r7, r8, r9, sl}
+    9f50:	e89007f0 	ldm	r0, {r4, r5, r6, r7, r8, r9, sl}
+    9f54:	e8bd07f0 	pop	{r4, r5, r6, r7, r8, r9, sl}
+    9f58:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    9f5c:	e1a0f00e 	mov	pc, lr
+
+00009f60 <clearScreen>:
     9f60:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    9f64:	e92d07f0 	push	{r4, r5, r6, r7, r8, r9, sl}
-    9f68:	e89007f0 	ldm	r0, {r4, r5, r6, r7, r8, r9, sl}
-    9f6c:	e28aa002 	add	sl, sl, #2
-    9f70:	e35a0006 	cmp	sl, #6
-    9f74:	c3a0a000 	movgt	sl, #0
-    9f78:	e580a018 	str	sl, [r0, #24]
-    9f7c:	e8bd07f0 	pop	{r4, r5, r6, r7, r8, r9, sl}
-    9f80:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    9f84:	e1a0f00e 	mov	pc, lr
+    9f64:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    9f68:	e3a04000 	mov	r4, #0
+    9f6c:	e3a05000 	mov	r5, #0
+    9f70:	e59f00d4 	ldr	r0, [pc, #212]	; a04c <waitLoop+0x24>
+    9f74:	e5906014 	ldr	r6, [r0, #20]
+    9f78:	e5907018 	ldr	r7, [r0, #24]
+    9f7c:	e3a08000 	mov	r8, #0
+    9f80:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    9f84:	eb00000c 	bl	9fbc <drawRect>
+    9f88:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    9f8c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    9f90:	e1a0f00e 	mov	pc, lr
 
-00009f88 <tetrisTranslateBlockTest>:
-    9f88:	e1a0000d 	mov	r0, sp
-    9f8c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    9f90:	e92d07f0 	push	{r4, r5, r6, r7, r8, r9, sl}
-    9f94:	e89007f0 	ldm	r0, {r4, r5, r6, r7, r8, r9, sl}
-    9f98:	e8bd07f0 	pop	{r4, r5, r6, r7, r8, r9, sl}
-    9f9c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    9fa0:	e1a0f00e 	mov	pc, lr
+00009f94 <drawPixel>:
+    9f94:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    9f98:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
+    9f9c:	e0804501 	add	r4, r0, r1, lsl #10
+    9fa0:	e1a04084 	lsl	r4, r4, #1
+    9fa4:	e59f00a4 	ldr	r0, [pc, #164]	; a050 <waitLoop+0x28>
+    9fa8:	e5900000 	ldr	r0, [r0]
+    9fac:	e18020b4 	strh	r2, [r0, r4]
+    9fb0:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+    9fb4:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    9fb8:	e1a0f00e 	mov	pc, lr
 
-00009fa4 <clearScreen>:
-    9fa4:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    9fa8:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    9fac:	e3a04000 	mov	r4, #0
-    9fb0:	e3a05000 	mov	r5, #0
-    9fb4:	e59f00d4 	ldr	r0, [pc, #212]	; a090 <waitLoop+0x24>
-    9fb8:	e5906014 	ldr	r6, [r0, #20]
-    9fbc:	e5907018 	ldr	r7, [r0, #24]
-    9fc0:	e3a08000 	mov	r8, #0
-    9fc4:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    9fc8:	eb00000c 	bl	a000 <drawRect>
-    9fcc:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    9fd0:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    9fd4:	e1a0f00e 	mov	pc, lr
+00009fbc <drawRect>:
+    9fbc:	e59d3000 	ldr	r3, [sp]
+    9fc0:	e59d4004 	ldr	r4, [sp, #4]
+    9fc4:	e59d5008 	ldr	r5, [sp, #8]
+    9fc8:	e59d600c 	ldr	r6, [sp, #12]
+    9fcc:	e59d7010 	ldr	r7, [sp, #16]
+    9fd0:	e28dd014 	add	sp, sp, #20
+    9fd4:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    9fd8:	e0855003 	add	r5, r5, r3
+    9fdc:	e0866004 	add	r6, r6, r4
 
-00009fd8 <drawPixel>:
-    9fd8:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    9fdc:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
-    9fe0:	e0804501 	add	r4, r0, r1, lsl #10
-    9fe4:	e1a04084 	lsl	r4, r4, #1
-    9fe8:	e59f00a4 	ldr	r0, [pc, #164]	; a094 <waitLoop+0x28>
-    9fec:	e5900000 	ldr	r0, [r0]
-    9ff0:	e18020b4 	strh	r2, [r0, r4]
-    9ff4:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
-    9ff8:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    9ffc:	e1a0f00e 	mov	pc, lr
+00009fe0 <drawRectForLoopX>:
+    9fe0:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
 
-0000a000 <drawRect>:
-    a000:	e59d3000 	ldr	r3, [sp]
-    a004:	e59d4004 	ldr	r4, [sp, #4]
-    a008:	e59d5008 	ldr	r5, [sp, #8]
-    a00c:	e59d600c 	ldr	r6, [sp, #12]
-    a010:	e59d7010 	ldr	r7, [sp, #16]
-    a014:	e28dd014 	add	sp, sp, #20
-    a018:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    a01c:	e0855003 	add	r5, r5, r3
-    a020:	e0866004 	add	r6, r6, r4
+00009fe4 <drawRectForLoopY>:
+    9fe4:	e1a00003 	mov	r0, r3
+    9fe8:	e1a01004 	mov	r1, r4
+    9fec:	e1a02007 	mov	r2, r7
+    9ff0:	ebffffe7 	bl	9f94 <drawPixel>
+    9ff4:	e2844001 	add	r4, r4, #1
+    9ff8:	e1540006 	cmp	r4, r6
+    9ffc:	bafffff8 	blt	9fe4 <drawRectForLoopY>
+    a000:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+    a004:	e2833001 	add	r3, r3, #1
+    a008:	e1530005 	cmp	r3, r5
+    a00c:	bafffff3 	blt	9fe0 <drawRectForLoopX>
+    a010:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    a014:	e1a0f00e 	mov	pc, lr
 
-0000a024 <drawRectForLoopX>:
-    a024:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
+0000a018 <startTimer>:
+    a018:	e1a03000 	mov	r3, r0
+    a01c:	e59f0030 	ldr	r0, [pc, #48]	; a054 <waitLoop+0x2c>
+    a020:	e5901000 	ldr	r1, [r0]
+    a024:	e0811003 	add	r1, r1, r3
 
-0000a028 <drawRectForLoopY>:
-    a028:	e1a00003 	mov	r0, r3
-    a02c:	e1a01004 	mov	r1, r4
-    a030:	e1a02007 	mov	r2, r7
-    a034:	ebffffe7 	bl	9fd8 <drawPixel>
-    a038:	e2844001 	add	r4, r4, #1
-    a03c:	e1540006 	cmp	r4, r6
-    a040:	bafffff8 	blt	a028 <drawRectForLoopY>
-    a044:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
-    a048:	e2833001 	add	r3, r3, #1
-    a04c:	e1530005 	cmp	r3, r5
-    a050:	bafffff3 	blt	a024 <drawRectForLoopX>
-    a054:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    a058:	e1a0f00e 	mov	pc, lr
-
-0000a05c <startTimer>:
-    a05c:	e1a03000 	mov	r3, r0
-    a060:	e59f0030 	ldr	r0, [pc, #48]	; a098 <waitLoop+0x2c>
-    a064:	e5901000 	ldr	r1, [r0]
-    a068:	e0811003 	add	r1, r1, r3
-
-0000a06c <waitLoop>:
-    a06c:	e5902000 	ldr	r2, [r0]
-    a070:	e1510002 	cmp	r1, r2
-    a074:	8afffffc 	bhi	a06c <waitLoop>
-    a078:	e1a0f00e 	mov	pc, lr
-    a07c:	000090f0 	.word	0x000090f0
-    a080:	00009a5c 	.word	0x00009a5c
-    a084:	00009a80 	.word	0x00009a80
-    a088:	00009ab0 	.word	0x00009ab0
-    a08c:	00009a60 	.word	0x00009a60
-    a090:	00009080 	.word	0x00009080
-    a094:	000090e0 	.word	0x000090e0
-    a098:	3f003004 	.word	0x3f003004
+0000a028 <waitLoop>:
+    a028:	e5902000 	ldr	r2, [r0]
+    a02c:	e1510002 	cmp	r1, r2
+    a030:	8afffffc 	bhi	a028 <waitLoop>
+    a034:	e1a0f00e 	mov	pc, lr
+    a038:	000090f0 	.word	0x000090f0
+    a03c:	00009a5c 	.word	0x00009a5c
+    a040:	00009a80 	.word	0x00009a80
+    a044:	00009ab0 	.word	0x00009ab0
+    a048:	00009a60 	.word	0x00009a60
+    a04c:	00009080 	.word	0x00009080
+    a050:	000090e0 	.word	0x000090e0
+    a054:	3f003004 	.word	0x3f003004

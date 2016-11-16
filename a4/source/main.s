@@ -78,105 +78,90 @@ main:
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #0
 		mov		r1, #1
-		mov		r2, #0
 		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #0
 		mov		r1, #2
-		mov		r2, #0
 		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #0
 		mov		r1, #3
-		mov		r2, #0
 		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #1
 		mov		r1, #0
-		mov		r2, #0
 		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #1
 		mov		r1, #1
-		mov		r2, #0
 		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #1
 		mov		r1, #2
-		mov		r2, #0
 		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #1
 		mov		r1, #3
-		mov		r2, #0
 		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #2
 		mov		r1, #0
-		mov		r2, #0
 		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #2
 		mov		r1, #1
-		mov		r2, #0
 		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #2
 		mov		r1, #2
-		mov		r2, #0
 		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #2
 		mov		r1, #3
-		mov		r2, #0
 		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #3
 		mov		r1, #0
-		mov		r2, #0
 		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #3
 		mov		r1, #1
-		mov		r2, #0
 		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #3
 		mov		r1, #2
-		mov		r2, #0
 		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #3
 		mov		r1, #3
-		mov		r2, #0
 		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
@@ -186,32 +171,31 @@ main:
 		
 		
 		
-		// Load current block
+		
+		
+		// Load new block
 		ldr		r0, 		=TetrisCurrentBlockTest
-		ldmfd	r0,			{ r1 - r7 }
+		ldmfd	r0,			{ r4 - r10 }
 		
-		teq		r6,			#0
+		teq		r9,			#0
 		beq		initializeBlock_
 		bne 	initializeBlockEnd_
 		
 		initializeBlock_:
 		
-			mov		r3, 			#0
-			mov		r4, 			#0
-			ldr		r6, 		=TetrisBlockB
-			str		r6, 		[r0, #20]
-			mov		r7,	#0
-			str		r7,	[r0, #24]
+			//mov		r3, 	#0
+			//mov		r4, 	#0
+			ldr		r9, 	=TetrisBlockB	// grid data
+			str		r9, 	[r0, #20]
+			mov		r10,	#0				// grid data offset
+			str		r10,	[r0, #24]
 			
 		initializeBlockEnd_:
 		
-	
+
+		stmfd	sp!,		{ r4 - r10 }
 		
 		
-			
-		
-		// tetrisRotateBlockTest2(BLOCK)
-		stmfd	sp!,		{ r1 - r7 }
 		bl 		tetrisUpdateGridWithBlock
 		bl 		tetrisRotateBlockTest2
 		
@@ -458,8 +442,6 @@ tetrisUpdateGridWithBlock:
 	
 	mov		blockPrevX,	blockX
 	mov		blockPrevY,	blockY
-	// TODO: why isnt this working?
-	//stmfd	r0, 		{ blockPrevX - blockPrevY }
 	str		blockPrevX,	[r0, #0]
 	str		blockPrevY,	[r0, #4]
 	
