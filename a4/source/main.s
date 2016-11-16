@@ -64,9 +64,177 @@ main:
 	
 	
 	
-		// TODO: pass block into tetrisUpdateGridWithCurrentBlock
-		//		 and create an empty block on stack to clear
-	
+		
+		
+		
+		
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #0
+		mov		r1, #0
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #0
+		mov		r1, #1
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #0
+		mov		r1, #2
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #0
+		mov		r1, #3
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #1
+		mov		r1, #0
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #1
+		mov		r1, #1
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #1
+		mov		r1, #2
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #1
+		mov		r1, #3
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #2
+		mov		r1, #0
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #2
+		mov		r1, #1
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #2
+		mov		r1, #2
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #2
+		mov		r1, #3
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #3
+		mov		r1, #0
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #3
+		mov		r1, #1
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #3
+		mov		r1, #2
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		// tetrisSetGridBlockColor(int x, int y, int color)
+		sub		sp, #12	
+		mov		r0, #3
+		mov		r1, #3
+		mov		r2, #0
+		str 	r1, 	[sp, #0]			
+		str 	r2, 	[sp, #4]				
+		str 	r3,	[sp, #8]	
+		bl tetrisSetGridBlockColor
+		
+		
+		
+		
+		
+		
+		
 		// Load current block
 		ldr		r0, 		=TetrisCurrentBlockTest
 		ldr		r1, 		[r0, #0]
@@ -77,43 +245,25 @@ main:
 		ldr		r6, 		[r0, #20]
 		ldr		r7, 		[r0, #24]
 		
+		teq		r6,			#0
+		beq		initializeBlock_
+		bne 	initializeBlockEnd_
 		
+		initializeBlock_:
 		
-		push { r0 - r7 }
-	
-		str		r1, 		[r0, #8]
-		str		r2, 		[r0, #12]
-		mov		r5,			#0 // black
-		str		r5,			[r0, #16]
-	
-		pop 	{ r0 - r7 }
+			mov		r3, 			#0
+			mov		r4, 			#0
+			ldr		r6, 		=TetrisBlockB
+			str		r6, 		[r0, #20]
+			mov		r7,	#0
+			str		r7,	[r0, #24]
+			
+		initializeBlockEnd_:
 		
-		
-		bl 		tetrisUpdateGridWithCurrentBlock
-		
-		str		r3, 		[r0, #8]
-		str		r4, 		[r0, #12]
-		str		r5,			[r0, #16]
 	
 		
-		bl 		tetrisUpdateGridWithCurrentBlock
 		
-		
-		
-		
-		
-		
-		
-		// Load current block
-		ldr		r0, 		=TetrisCurrentBlockTest
-		ldr		r1, 		[r0, #0]
-		ldr		r2, 		[r0, #4]
-		ldr		r3, 		[r0, #8]
-		ldr		r4, 		[r0, #12]
-		ldr		r5,			[r0, #16]
-		ldr		r6, 		[r0, #20]
-		ldr		r7, 		[r0, #24]
-		
+			
 		
 		// tetrisRotateBlockTest2(BLOCK)
 		sub		sp, 		#24
@@ -124,6 +274,7 @@ main:
 		str 	r5, 		[sp, #16]
 		str 	r6, 		[sp, #20]
 		str 	r7,			[sp, #24]	
+		bl 		tetrisUpdateGridWithBlock
 		bl 		tetrisRotateBlockTest2
 		
 		ldr		r0, 		=TetrisCurrentBlockTest
@@ -450,6 +601,277 @@ tetrisUpdateGridWithCurrentBlock:
 	
 	
 	
+	
+	
+// INPUT
+//		ON STACK
+//
+//		(Block)
+// 		0 = prevX
+// 		1 = prevY
+// 		2 = x
+// 		3 = y
+// 		4 = blockColor
+// 		5 = blockAddress
+// 		6 = blockAddressOffset
+// OUTPUT
+//		
+tetrisUpdateGridWithBlock:
+
+	blockPrevX			.req r4
+	blockPrevY			.req r5
+	blockX				.req r6
+	blockY				.req r7
+	blockColor			.req r8
+	blockAddress		.req r9
+	blockAddressOffset	.req r10
+	
+	mov		r0, sp
+	
+	push 	{ lr }
+	push	{ blockPrevX - blockAddressOffset }
+	
+	// load variables from stack
+	ldr 	blockPrevX, 		[r0, #0]
+	ldr 	blockPrevY, 		[r0, #4]
+	ldr 	blockX, 			[r0, #8]
+	ldr 	blockY, 			[r0, #12]
+	ldr 	blockColor, 		[r0, #16]
+	ldr 	blockAddress, 		[r0, #20]
+	ldr 	blockAddressOffset, [r0, #24]
+	
+	mov		blockPrevX,			blockX
+	mov		blockPrevY,			blockY
+	str		blockPrevX,			[r0, #0]
+	str		blockPrevY,			[r0, #4]
+	
+	// TODO: clear previous position
+	
+
+	i	.req r11
+	j	.req r12
+
+	mov	i, #0
+	mov j, #0
+	
+	for_i_lessThan_4_loop_:
+
+		push 	{ j } 
+	
+		for_j_lessThan_4_loop_:
+		
+			push 	{ blockX - blockColor }
+			
+				blockBitForXY		.req r1
+				blockGridData		.req r2
+	
+				ldrh	blockGridData, [blockAddress, blockAddressOffset]
+			
+				add 	blockX, i
+				add 	blockY, j
+				
+				// calculate bit corresponding to block position
+				mov		blockBitForXY, #4
+				mul		blockBitForXY, blockBitForXY, j
+				add		blockBitForXY, i
+				lsl		blockGridData, blockBitForXY
+				mov		blockBitForXY, #0b1000000000000000
+				and		blockBitForXY, blockGridData
+				teq		blockBitForXY, #0
+				movne	blockBitForXY, #1
+				ldreq	blockColor, =0x000000		// clear grid block if block bit isn't set
+				
+				// tetrisSetGridBlockColor(int x, int y, int color)
+				sub		sp, #12	
+				str 	blockX, 	[sp, #0]			
+				str 	blockY, 	[sp, #4]				
+				str 	blockColor,	[sp, #8]	
+				bl tetrisSetGridBlockColor
+			
+				.unreq	blockBitForXY
+				.unreq 	blockGridData
+			
+			pop 	{ blockX - blockColor }
+
+			add 	j, #1
+			cmp 	j, #4
+			blt 	for_j_lessThan_4_loop_
+		
+		pop 	{ j } 
+		add 	i, #1
+		cmp 	i, #4
+		blt 	for_i_lessThan_4_loop_
+		
+		.unreq		i
+		.unreq 		j
+		
+	pop		{ blockPrevX - blockAddressOffset }
+	
+	.unreq		blockPrevX
+	.unreq		blockPrevY
+	.unreq		blockX
+	.unreq		blockY
+	.unreq 		blockColor
+	.unreq		blockAddress
+	.unreq		blockAddressOffset
+	
+	pop 	{ lr }
+	mov 	pc, lr            // return
+
+
+
+
+
+
+
+
+
+	/*
+
+	push 	{ lr }
+	
+	blockPrevX			.req r1
+	blockPrevY			.req r2
+	blockX				.req r3
+	blockY				.req r4
+	blockColor			.req r5
+	blockAddress		.req r6
+	blockAddressOffset	.req r7
+	blockGridData		.req r8
+	
+	push { r0 - r12 }
+	
+	// Load current block
+	ldr		r0, 					=TetrisCurrentBlockTest
+	ldr		blockPrevX, 			[r0, #0]
+	ldr		blockPrevY, 			[r0, #4]
+	ldr		blockX, 				[r0, #8]
+	ldr		blockY, 				[r0, #12]
+	ldr		blockColor,				[r0, #16]
+	ldr		blockAddress, 			[r0, #20]
+	ldr		blockAddressOffset, 	[r0, #24]
+	
+	teq		blockAddress,			#0
+	beq		initializeBlock
+	bne 	initializeBlockEnd
+	
+	initializeBlock:
+	
+		mov		blockX, 			#0
+		mov		blockY, 			#0
+		ldr		blockAddress, 		=TetrisBlockB
+		str		blockAddress, 		[r0, #20]
+		mov		blockAddressOffset,	#0
+		str		blockAddressOffset,	[r0, #24]
+	
+	initializeBlockEnd:
+	
+		mov		blockPrevX,			blockX
+		mov		blockPrevY,			blockY
+		str		blockPrevX,			[r0, #0]
+		str		blockPrevY,			[r0, #4]
+		
+		ldrh	blockGridData, 		[blockAddress, blockAddressOffset]
+		
+		
+		// TODO: clear previous position
+		
+	
+		i	.req r9
+		j	.req r10
+	
+		mov	i, #0
+		mov j, #0
+		
+		for_i_lessThan_4_loop:
+	
+			push 	{ j } 
+		
+			for_j_lessThan_4_loop:
+			
+				push 	{ blockX, blockY, blockGridData, blockColor }
+				
+					tetrisGridOffset	.req r11
+					blockBitForXY		.req r12
+				
+					add blockX, i
+					add blockY, j
+					
+					// calculate bit corresponding to block position
+					mov		blockBitForXY, #4
+					mul		blockBitForXY, blockBitForXY, j
+					add		blockBitForXY, i
+					lsl		blockGridData, blockBitForXY
+					mov		blockBitForXY, #0b1000000000000000
+					and		blockBitForXY, blockGridData
+					teq		blockBitForXY, #0
+					movne	blockBitForXY, #1
+					ldreq	blockColor, =0x000000		// clear grid block if block bit isn't set
+					
+					// tetrisSetGridBlockColor(int x, int y, int color)
+					sub		sp, #12	
+					str 	blockX, 	[sp, #0]			
+					str 	blockY, 	[sp, #4]				
+					str 	blockColor,	[sp, #8]	
+					bl tetrisSetGridBlockColor
+				
+					.unreq	tetrisGridOffset
+					.unreq	blockBitForXY
+				
+				pop 	{ blockX, blockY, blockGridData, blockColor }
+
+				add 	j, #1
+				cmp 	j, #4
+				blt 	for_j_lessThan_4_loop
+			
+			pop 	{ j } 
+			add 	i, #1
+			cmp 	i, #4
+			blt 	for_i_lessThan_4_loop
+			
+			.unreq		i
+			.unreq 		j
+			
+	// MOVE BLOCK POSITION
+	//add		blockY, 			#1
+	//str		blockY, 			[r0, #12]
+	
+	pop { r0 - r12 }
+	
+	.unreq			blockPrevX
+	.unreq			blockPrevY
+	.unreq			blockX
+	.unreq 			blockY
+	.unreq 			blockColor
+	.unreq 			blockAddress
+	.unreq 			blockAddressOffset
+	.unreq 			blockGridData
+	
+	pop 	{ lr }
+	mov 	pc, lr            // return
+	
+	
+	*/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 tetrisRotateBlockTest:
 
 	push 	{ lr }
@@ -531,7 +953,6 @@ tetrisRotateBlockTest:
 // 		2 = x
 // 		3 = y
 // 		4 = blockColor
-// 		5 = blockGridData (16 bits)
 // 		6 = blockAddressOffset
 // OUTPUT
 //		
@@ -542,7 +963,7 @@ tetrisRotateBlockTest2:
 	x					.req r6
 	y					.req r7
 	blockColor			.req r8
-	blockGridData		.req r9
+	blockAddress		.req r9
 	blockAddressOffset	.req r10
 	
 	mov		r0, sp
@@ -556,7 +977,7 @@ tetrisRotateBlockTest2:
 	ldr 	x, 					[r0, #8]
 	ldr 	y, 					[r0, #12]
 	ldr 	blockColor, 		[r0, #16]
-	ldr 	blockGridData, 		[r0, #20]
+	ldr 	blockAddress, 		[r0, #20]
 	ldr 	blockAddressOffset, [r0, #24]
 	
 	// ROTATION (+ pi/2)
@@ -577,7 +998,7 @@ tetrisRotateBlockTest2:
 	.unreq		x
 	.unreq		y
 	.unreq 		blockColor
-	.unreq		blockGridData
+	.unreq		blockAddress
 	.unreq		blockAddressOffset
 	
 	pop 	{ lr }
