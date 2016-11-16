@@ -86,21 +86,64 @@ main:
 		mov		r5,			#0 // black
 		str		r5,			[r0, #16]
 	
-		pop { r0 - r7 }
+		pop 	{ r0 - r7 }
 		
 		
-		bl tetrisUpdateGridWithCurrentBlock
+		bl 		tetrisUpdateGridWithCurrentBlock
 		
 		str		r3, 		[r0, #8]
 		str		r4, 		[r0, #12]
 		str		r5,			[r0, #16]
 	
 		
-		bl tetrisUpdateGridWithCurrentBlock
+		bl 		tetrisUpdateGridWithCurrentBlock
 		
-		bl tetrisRotateBlockTest2
+		
+		
+		
+		
+		
+		
+		// Load current block
+		ldr		r0, 		=TetrisCurrentBlockTest
+		ldr		r1, 		[r0, #0]
+		ldr		r2, 		[r0, #4]
+		ldr		r3, 		[r0, #8]
+		ldr		r4, 		[r0, #12]
+		ldr		r5,			[r0, #16]
+		ldr		r6, 		[r0, #20]
+		ldr		r7, 		[r0, #24]
+		
+		
+		// tetrisRotateBlockTest2(BLOCK)
+		sub		sp, 		#24
+		str 	r1, 		[sp, #0]
+		str 	r2, 		[sp, #4]
+		str 	r3, 		[sp, #8]
+		str 	r4, 		[sp, #12]
+		str 	r5, 		[sp, #16]
+		str 	r6, 		[sp, #20]
+		str 	r7,			[sp, #24]	
+		bl 		tetrisRotateBlockTest2
+		
+		ldr		r0, 		=TetrisCurrentBlockTest
+		ldr		r1, 		[sp, #24]
+		str		r1, 		[r0, #24]
+		
+		add		sp, #24
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+		// dx
+		// dy
+		bl tetrisTranslateBlockTest
 	
 	
 	
@@ -472,20 +515,93 @@ tetrisRotateBlockTest:
 	
 	pop 	{ lr }
 	mov 	pc, lr            // return	
-	
-	
-	
-	
-	
+
+
+
+
+
+// INPUT
+//		r0 = CC/CCW
+//
+//		ON STACK
+//
+//		(Block)
+// 		0 = prevX
+// 		1 = prevY
+// 		2 = x
+// 		3 = y
+// 		4 = blockColor
+// 		5 = blockGridData (16 bits)
+// 		6 = blockAddressOffset
+// OUTPUT
+//		
 tetrisRotateBlockTest2:
+
+	prevX				.req r4
+	prevY				.req r5
+	x					.req r6
+	y					.req r7
+	blockColor			.req r8
+	blockGridData		.req r9
+	blockAddressOffset	.req r10
+	
+	mov		r0, sp
+	
+	push 	{ lr }
+	push	{ prevX - blockAddressOffset }
+	
+	// load variables from stack
+	ldr 	prevX, 				[r0, #0]
+	ldr 	prevY, 				[r0, #4]
+	ldr 	x, 					[r0, #8]
+	ldr 	y, 					[r0, #12]
+	ldr 	blockColor, 		[r0, #16]
+	ldr 	blockGridData, 		[r0, #20]
+	ldr 	blockAddressOffset, [r0, #24]
+	
+	// ROTATION (+ pi/2)
+		//add
+	// ROTATION (- pi/2)
+		//sub
+	
+	add		blockAddressOffset, #2
+	cmp		blockAddressOffset, #6
+	movgt	blockAddressOffset, #0				// wrap around
+	
+	str		blockAddressOffset, [r0, #24]		// write back
+	
+	pop		{ prevX - blockAddressOffset }
+	
+	.unreq		prevX
+	.unreq		prevY
+	.unreq		x
+	.unreq		y
+	.unreq 		blockColor
+	.unreq		blockGridData
+	.unreq		blockAddressOffset
+	
+	pop 	{ lr }
+	mov 	pc, lr            // return
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
 
 	push 	{ lr }
 	
 	blockGridData		.req r0
 	blockAddress		.req r1
 	blockAddressOffset	.req r2
-	
-	push { blockGridData, blockAddress, blockAddressOffset }
 
 
 	// Load current block
@@ -500,34 +616,55 @@ tetrisRotateBlockTest2:
 	str		blockAddressOffset,	[r0, #24]
 	
 	
-	
-	
-	
-	// ROTATION (+ pi/2)
-	
-	
-	
-	
-	
-	
-	
-	// ROTATION (- pi/2)
-	
-	
-	
-	
-	
-	
-	
-	
-	pop { blockGridData, blockAddress, blockAddressOffset }
-	
 	.unreq 				blockGridData
 	.unreq 				blockAddress
 	.unreq				blockAddressOffset
 	
 	pop 	{ lr }
 	mov 	pc, lr            // return	
+	
+	*/
+	
+	
+	
+
+// INPUT
+//		ON STACK
+// 		0 = dx
+// 		1 = dy
+// OUTPUT
+//
+tetrisTranslateBlockTest:
+
+	dx		.req r0
+	dy		.req r1
+	
+	// load variables from stack
+	ldr 	dx, [sp, #0]
+	ldr 	dy, [sp, #4]
+	add		sp, #8
+	
+	push 	{ lr }
+	
+	
+	
+	// COLLISION DETECTION
+	
+	
+	
+	
+	.unreq		dx
+	.unreq		dy
+	
+	pop 	{ lr }
+	mov 	pc, lr            // return	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
