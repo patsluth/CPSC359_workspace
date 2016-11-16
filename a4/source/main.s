@@ -174,24 +174,25 @@ main:
 		
 		
 		
-		bl 		tetrisUpdateGridWithBlock
-		bl 		tetrisRotateBlockTest
+		bl	tetrisUpdateGridWithBlock
+		bl	tetrisRotateBlockTest
 		
 	
 	
-		// dx
-		// dy
-		bl tetrisTranslateBlockTest
+		// tetrisClearGridBlock(int dx, int dy)
+		mov	r0, #0
+		mov	r1, #1
+		bl	tetrisTranslateBlockTest
 	
 	
 	
 		
-		bl tetrisDrawGrid
+		bl	tetrisDrawGrid
 		
-		ldr r0, =0xFF
-		bl startTimer
+		ldr	r0, =0xFF
+		bl 	startTimer
 		
-		b mainLoop
+		b	mainLoop
 		
 		
 		
@@ -236,7 +237,6 @@ tetrisSetGridBlockColor:
 	push 	{ lr }
 	push	{ x - tetrisGridOffset }
 	
-	// load variables from stack
 	ldmfd	r0,					{ x - blockColor }
 	
 	ldr 	tetrisGridData, 	=TetrisGrid
@@ -415,16 +415,12 @@ tetrisUpdateGridWithBlock:
 	push 	{ lr }
 	push	{ blockPrevX - blockTypeOffset }
 	
-	// load variables from stack
 	ldmfd	r0, 		{ blockPrevX - blockTypeOffset }
 	
 	mov		blockPrevX,	blockX
 	mov		blockPrevY,	blockY
 	str		blockPrevX,	[r0, #0]
 	str		blockPrevY,	[r0, #4]
-	
-	// TODO: clear previous position
-	
 
 	i	.req r11
 	j	.req r12
@@ -603,7 +599,6 @@ tetrisRotateBlockTest:
 	blockTypeAddress	.req r9
 	blockTypeOffset		.req r10
 	
-	// load variables from stack
 	ldmfd	sp, { blockPrevX - blockTypeOffset }
 	
 	// ROTATION (+ pi/2)
@@ -682,10 +677,15 @@ tetrisTranslateBlockTest:
 	blockTypeAddress	.req r9
 	blockTypeOffset		.req r10
 	
-	// load variables from stack
-	ldmfd	sp, { blockPrevX - blockTypeOffset }
+	ldmfd	sp, 	{ blockPrevX - blockTypeOffset }
 	
 	// COLLISION DETECTION
+	
+	add		blockX, dx
+	add		blockY, dy
+	
+	str		blockX, [sp, #8]
+	str		blockY, 	[sp, #12]
 	
 	.unreq	dx
 	.unreq	dy
@@ -806,12 +806,7 @@ drawRect:
 	color	.req r7
 	
 	// load variables from stack
-	ldr 	x, [sp, #0]
-	ldr 	y, [sp, #4]
-	ldr 	width, [sp, #8]
-	ldr 	height, [sp, #12]
-	ldr 	color, [sp, #16]
-	add		sp, #20
+	ldmfd	sp!, 	{ x - color }
 	
 	push 	{ lr }
 	
