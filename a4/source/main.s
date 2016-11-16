@@ -23,7 +23,7 @@ main:
 	bl		EnableJTAG
 	bl		InitFrameBuffer
 	
-	bl		clearScreen
+	//bl		clearScreen
 	
 	
 	
@@ -70,163 +70,115 @@ main:
 		
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #0
 		mov		r1, #0
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #0
 		mov		r1, #1
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #0
 		mov		r1, #2
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #0
 		mov		r1, #3
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #1
 		mov		r1, #0
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #1
 		mov		r1, #1
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #1
 		mov		r1, #2
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #1
 		mov		r1, #3
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #2
 		mov		r1, #0
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #2
 		mov		r1, #1
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #2
 		mov		r1, #2
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #2
 		mov		r1, #3
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #3
 		mov		r1, #0
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #3
 		mov		r1, #1
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #3
 		mov		r1, #2
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		// tetrisSetGridBlockColor(int x, int y, int color)
-		sub		sp, #12	
 		mov		r0, #3
 		mov		r1, #3
 		mov		r2, #0
-		str 	r1, 	[sp, #0]			
-		str 	r2, 	[sp, #4]				
-		str 	r3,	[sp, #8]	
+		stmfd	sp!,		{ r2 - r3 }
 		bl tetrisSetGridBlockColor
 		
 		
@@ -237,13 +189,7 @@ main:
 		
 		// Load current block
 		ldr		r0, 		=TetrisCurrentBlockTest
-		ldr		r1, 		[r0, #0]
-		ldr		r2, 		[r0, #4]
-		ldr		r3, 		[r0, #8]
-		ldr		r4, 		[r0, #12]
-		ldr		r5,			[r0, #16]
-		ldr		r6, 		[r0, #20]
-		ldr		r7, 		[r0, #24]
+		ldmfd	r0,			{ r1 - r7 }
 		
 		teq		r6,			#0
 		beq		initializeBlock_
@@ -266,14 +212,7 @@ main:
 			
 		
 		// tetrisRotateBlockTest2(BLOCK)
-		sub		sp, 		#24
-		str 	r1, 		[sp, #0]
-		str 	r2, 		[sp, #4]
-		str 	r3, 		[sp, #8]
-		str 	r4, 		[sp, #12]
-		str 	r5, 		[sp, #16]
-		str 	r6, 		[sp, #20]
-		str 	r7,			[sp, #24]	
+		stmfd	sp!,		{ r1 - r7 }
 		bl 		tetrisUpdateGridWithBlock
 		bl 		tetrisRotateBlockTest2
 		
@@ -281,15 +220,6 @@ main:
 		ldr		r1, 		[sp, #24]
 		str		r1, 		[r0, #24]
 		
-		add		sp, #24
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 		// dx
@@ -347,9 +277,7 @@ tetrisSetGridBlockColor:
 	push	{ x - tetrisGridOffset }
 	
 	// load variables from stack
-	ldr 	x, 			[r0, #0]
-	ldr 	y, 			[r0, #4]
-	ldr 	blockColor, [r0, #8]
+	ldmfd	r0,			{ x - blockColor }
 	
 	ldr 	tetrisGridData, =TetrisGrid
 	ldr 	tetrisGridSize, [tetrisGridData, #8]
@@ -636,13 +564,7 @@ tetrisUpdateGridWithBlock:
 	push	{ blockPrevX - blockAddressOffset }
 	
 	// load variables from stack
-	ldr 	blockPrevX, 		[r0, #0]
-	ldr 	blockPrevY, 		[r0, #4]
-	ldr 	blockX, 			[r0, #8]
-	ldr 	blockY, 			[r0, #12]
-	ldr 	blockColor, 		[r0, #16]
-	ldr 	blockAddress, 		[r0, #20]
-	ldr 	blockAddressOffset, [r0, #24]
+	ldmfd	r0, { blockPrevX - blockAddressOffset }
 	
 	mov		blockPrevX,			blockX
 	mov		blockPrevY,			blockY
@@ -1054,35 +976,58 @@ tetrisRotateBlockTest2:
 	
 
 // INPUT
-//		ON STACK
-// 		0 = dx
-// 		1 = dy
-// OUTPUT
+//		r0 = dx
+//		r1 = dy
 //
+//		ON STACK
+//
+//		(Block)
+// 		0 = prevX
+// 		1 = prevY
+// 		2 = x
+// 		3 = y
+// 		4 = blockColor
+// 		5 = blockAddress
+// 		6 = blockAddressOffset
+// OUTPUT
+//	
 tetrisTranslateBlockTest:
 
-	dx		.req r0
-	dy		.req r1
+	dx					.req r0
+	dy					.req r1
+	blockPrevX			.req r4
+	blockPrevY			.req r5
+	blockX				.req r6
+	blockY				.req r7
+	blockColor			.req r8
+	blockAddress		.req r9
+	blockAddressOffset	.req r10
+	
+	mov			r0, sp
+	
+	push 		{ lr }
+	push		{ blockPrevX - blockAddressOffset }
 	
 	// load variables from stack
-	ldr 	dx, [sp, #0]
-	ldr 	dy, [sp, #4]
-	add		sp, #8
-	
-	push 	{ lr }
-	
-	
+	ldmfd		r0, { blockPrevX - blockAddressOffset }
 	
 	// COLLISION DETECTION
 	
 	
-	
+	pop			{ blockPrevX - blockAddressOffset }
 	
 	.unreq		dx
 	.unreq		dy
+	.unreq		blockPrevX
+	.unreq		blockPrevY
+	.unreq		blockX
+	.unreq		blockY
+	.unreq 		blockColor
+	.unreq		blockAddress
+	.unreq		blockAddressOffset
 	
-	pop 	{ lr }
-	mov 	pc, lr            // return	
+	pop 		{ lr }
+	mov 		pc, lr            // return	
 	
 	
 	
