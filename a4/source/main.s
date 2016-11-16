@@ -334,21 +334,22 @@ mainEnd:
 //
 tetrisSetGridBlockColor:
 
-	x					.req r0
-	y					.req r1
-	blockColor			.req r2
-	tetrisGridData		.req r4
-	tetrisGridSize		.req r5
-	tetrisGridOffset	.req r6
+	x					.req r4
+	y					.req r5
+	blockColor			.req r6
+	tetrisGridData		.req r7
+	tetrisGridSize		.req r8
+	tetrisGridOffset	.req r9
 	
-	// load variables from stack
-	ldr 	x, [sp, #0]
-	ldr 	y, [sp, #4]
-	ldr 	blockColor, [sp, #8]
-	add		sp, #12
+	mov		r0, sp
 	
 	push 	{ lr }
-	push	{ r4 - r6 }
+	push	{ x - tetrisGridOffset }
+	
+	// load variables from stack
+	ldr 	x, 			[r0, #0]
+	ldr 	y, 			[r0, #4]
+	ldr 	blockColor, [r0, #8]
 	
 	ldr 	tetrisGridData, =TetrisGrid
 	ldr 	tetrisGridSize, [tetrisGridData, #8]
@@ -362,6 +363,8 @@ tetrisSetGridBlockColor:
 	// write color to tetrisGridData
 	str		blockColor, [tetrisGridData, tetrisGridOffset]
 	
+	pop		{ x - tetrisGridOffset }
+	
 	.unreq		x
 	.unreq		y
 	.unreq 		blockColor
@@ -369,8 +372,9 @@ tetrisSetGridBlockColor:
 	.unreq		tetrisGridSize
 	.unreq		tetrisGridOffset
 	
-	pop		{ r4 - r6 }
 	pop 	{ lr }
+	add		sp, #12
+	
 	mov 	pc, lr            // return
 	
 	
