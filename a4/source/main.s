@@ -455,15 +455,23 @@ tetrisUpdateGridWithBlock:
 			lsl		blockGridData, 	blockBitForXY
 			mov		blockBitForXY, 	#0b1000000000000000
 			and		blockBitForXY, 	blockGridData
-			teq		blockBitForXY, 	#0
-			movne	blockBitForXY, 	#1
-			// clear grid block if block bit isn't set
-			ldreq	blockColor, 	=0x000000		
+			teq		blockBitForXY,	#0
 			
-			// tetrisSetGridBlockColor(int x, int y, int color)
-			stmfd	sp!,			{ blockX, blockY, blockColor }		
-			bl 		tetrisSetGridBlockColor
-		
+			// if (blockBitForXY == 0)
+			
+				// tetrisClearGridBlock(int x, int y)
+				moveq	r0, 	blockX
+				moveq	r1,		blockY
+				bleq 	tetrisClearGridBlock
+				
+			// else 
+			
+				// tetrisSetGridBlockColor(int x, int y, int color)
+				stmnefd	sp!, 	{ blockX, blockY, blockColor }		
+				blne 	tetrisSetGridBlockColor
+				
+			// endif
+			
 			.unreq	blockBitForXY
 			.unreq 	blockGridData
 			
