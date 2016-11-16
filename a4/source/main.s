@@ -59,110 +59,141 @@ main:
 	
 	
 	
+	// LOAD NEW BLOCK ONTO STACK
+	
+	blockPrevX			.req r4
+	blockPrevY			.req r5
+	blockX				.req r6
+	blockY				.req r7
+	blockColor			.req r8
+	blockTypeAddress	.req r9
+	blockTypeOffset		.req r10
+	
+	//push	{ blockPrevX - blockTypeOffset }
+	
+	ldr		r0, 		=TetrisBlock
+	ldmfd	r0,			{ blockPrevX - blockTypeOffset }
+	
+	initializeTetrisBlock:
+	
+		mov 	blockPrevX, 		#0
+		mov 	blockPrevY, 		#0
+		mov 	blockX, 			#0				// randomize?
+		mov 	blockY,				#0
+		ldr 	blockColor,	 		=0x1133FF		// randomize?
+		ldr		blockTypeAddress, 	=TetrisBlockB	// randomize?
+		mov		blockTypeOffset,	#0				// randomize?
+		
+	initializeTetrisBlockEnd:
+	
+	stmfd	sp!,		{ blockPrevX - blockTypeOffset }
+	
+	//pop		{ blockPrevX - blockTypeOffset }
+	
+	.unreq	blockPrevX
+	.unreq	blockPrevY
+	.unreq	blockX
+	.unreq	blockY
+	.unreq 	blockColor
+	.unreq	blockTypeAddress
+	.unreq	blockTypeOffset
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	mainLoop:
 	
-	
-	
-		
-		
-		
-		
-		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #0
 		mov		r1, #0
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #0
 		mov		r1, #1
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #0
 		mov		r1, #2
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #0
 		mov		r1, #3
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #1
 		mov		r1, #0
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #1
 		mov		r1, #1
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #1
 		mov		r1, #2
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #1
 		mov		r1, #3
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #2
 		mov		r1, #0
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #2
 		mov		r1, #1
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #2
 		mov		r1, #2
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #2
 		mov		r1, #3
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #3
 		mov		r1, #0
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #3
 		mov		r1, #1
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #3
 		mov		r1, #2
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		// tetrisClearGridBlock(int x, int y)
 		mov		r0, #3
 		mov		r1, #3
-		stmfd	sp!,		{ r0 - r1 }
 		bl tetrisClearGridBlock
 		
 		
@@ -173,35 +204,11 @@ main:
 		
 		
 		
-		// Load new block
-		ldr		r0, 		=TetrisCurrentBlockTest
-		ldmfd	r0,			{ r4 - r10 }
 		
-		teq		r9,			#0
-		beq		initializeBlock_
-		bne 	initializeBlockEnd_
-		
-		initializeBlock_:
-		
-			//mov		r3, 	#0
-			//mov		r4, 	#0
-			ldr		r9, 	=TetrisBlockB	// grid data
-			str		r9, 	[r0, #20]
-			mov		r10,	#0				// grid data offset
-			str		r10,	[r0, #24]
-			
-		initializeBlockEnd_:
-		
-
-		stmfd	sp!,		{ r4 - r10 }
 		
 		
 		bl 		tetrisUpdateGridWithBlock
-		bl 		tetrisRotateBlockTest2
-		
-		ldr		r0, 		=TetrisCurrentBlockTest
-		ldr		r1, 		[sp, #24]
-		str		r1, 		[r0, #24]
+		bl 		tetrisRotateBlockTest
 		
 	
 	
@@ -418,8 +425,8 @@ tetrisDrawGrid:
 // 		2 = x
 // 		3 = y
 // 		4 = blockColor
-// 		5 = blockAddress
-// 		6 = blockAddressOffset
+// 		5 = blockTypeAddress
+// 		6 = blockTypeOffset
 // OUTPUT
 //		
 tetrisUpdateGridWithBlock:
@@ -429,16 +436,16 @@ tetrisUpdateGridWithBlock:
 	blockX				.req r6
 	blockY				.req r7
 	blockColor			.req r8
-	blockAddress		.req r9
-	blockAddressOffset	.req r10
+	blockTypeAddress		.req r9
+	blockTypeOffset	.req r10
 	
 	mov		r0, sp
 	
 	push 	{ lr }
-	push	{ blockPrevX - blockAddressOffset }
+	push	{ blockPrevX - blockTypeOffset }
 	
 	// load variables from stack
-	ldmfd	r0, 		{ blockPrevX - blockAddressOffset }
+	ldmfd	r0, 		{ blockPrevX - blockTypeOffset }
 	
 	mov		blockPrevX,	blockX
 	mov		blockPrevY,	blockY
@@ -465,7 +472,7 @@ tetrisUpdateGridWithBlock:
 			blockBitForXY	.req r1
 			blockGridData	.req r2
 
-			ldrh	blockGridData, [blockAddress, blockAddressOffset]
+			ldrh	blockGridData, [blockTypeAddress, blockTypeOffset]
 		
 			add 	blockX, i
 			add 	blockY, j
@@ -503,15 +510,15 @@ tetrisUpdateGridWithBlock:
 		.unreq	i
 		.unreq 	j
 		
-	pop		{ blockPrevX - blockAddressOffset }
+	pop		{ blockPrevX - blockTypeOffset }
 	
 	.unreq	blockPrevX
 	.unreq	blockPrevY
 	.unreq	blockX
 	.unreq	blockY
 	.unreq 	blockColor
-	.unreq	blockAddress
-	.unreq	blockAddressOffset
+	.unreq	blockTypeAddress
+	.unreq	blockTypeOffset
 	
 	pop 	{ lr }
 	mov 	pc, lr            // return
@@ -533,78 +540,6 @@ tetrisUpdateGridWithBlock:
 	
 	
 	
-	
-	
-	
-	
-	
-tetrisRotateBlockTest:
-
-	push 	{ lr }
-	
-	blockGridData		.req r0
-	rowBitMask			.req r1
-	row1				.req r2
-	row2				.req r3
-	row3				.req r4
-	row4				.req r5
-	
-	push { blockGridData, rowBitMask, row1, row2, row3, row4 }
-	
-	
-	ldr		r0, 				=TetrisCurrentBlock
-	ldrh	blockGridData, 		[r0, #20]
-	
-	mov		rowBitMask, #0b1111
-	
-	and		row4, rowBitMask, blockGridData
-	lsr		blockGridData, #4
-	
-	and		row3, rowBitMask, blockGridData
-	lsr		blockGridData, #4
-	
-	and		row2, rowBitMask, blockGridData
-	lsr		blockGridData, #4
-	
-	and		row1, rowBitMask, blockGridData
-	
-	
-	
-	
-	
-	
-	
-	
-	// ROTATION (+ pi/2)
-	
-	
-	
-	
-	
-	
-	
-	// ROTATION (- pi/2)
-	
-	
-	
-	
-	
-	
-	
-	
-	pop { blockGridData, rowBitMask, row1, row2, row3, row4 }
-	
-	.unreq 				blockGridData
-	.unreq 				rowBitMask
-	.unreq				row1
-	.unreq				row2
-	.unreq				row3
-	.unreq 				row4
-	
-	pop 	{ lr }
-	mov 	pc, lr            // return	
-
-
 
 
 
@@ -619,47 +554,67 @@ tetrisRotateBlockTest:
 // 		2 = x
 // 		3 = y
 // 		4 = blockColor
-// 		6 = blockAddressOffset
+// 		6 = blockTypeOffset
 // OUTPUT
 //		
-tetrisRotateBlockTest2:
+tetrisRotateBlockTest:
 
 	prevX				.req r4
 	prevY				.req r5
 	x					.req r6
 	y					.req r7
 	blockColor			.req r8
-	blockAddress		.req r9
-	blockAddressOffset	.req r10
+	blockTypeAddress		.req r9
+	blockTypeOffset	.req r10
 	
 	mov		r0, sp
 	
 	push 	{ lr }
-	push	{ prevX - blockAddressOffset }
+	push	{ prevX - blockTypeOffset }
 	
 	// load variables from stack
-	ldmfd	r0, { prevX - blockAddressOffset }
+	ldmfd	r0, { prevX - blockTypeOffset }
 	
 	// ROTATION (+ pi/2)
 		//add
 	// ROTATION (- pi/2)
 		//sub
+		
+		
+	/* HOW TO ACCESS ROW DATA
+	mov		rowBitMask, #0b1111
 	
-	add		blockAddressOffset, #2
-	cmp		blockAddressOffset, #6
-	movgt	blockAddressOffset, #0				// wrap around
+	and		row4, rowBitMask, blockGridData
+	lsr		blockGridData, #4
 	
-	str		blockAddressOffset, [r0, #24]		// write back
+	and		row3, rowBitMask, blockGridData
+	lsr		blockGridData, #4
 	
-	pop		{ prevX - blockAddressOffset }
+	and		row2, rowBitMask, blockGridData
+	lsr		blockGridData, #4
+	
+	and		row1, rowBitMask, blockGridData	
+		
+	*/
+		
+		
+		
+	
+	add		blockTypeOffset, #2
+	cmp		blockTypeOffset, #6
+	movgt	blockTypeOffset, #0				// wrap around
+	
+	str		blockTypeOffset, [r0, #24]		// write back
+	
+	pop		{ prevX - blockTypeOffset }
 	
 	.unreq	prevX
 	.unreq	prevY
 	.unreq	x
 	.unreq	y
 	.unreq 	blockColor
-	.unreq	blockAddress
-	.unreq	blockAddressOffset
+	.unreq	blockTypeAddress
+	.unreq	blockTypeOffset
 	
 	pop 	{ lr }
 	mov 	pc, lr            // return
@@ -682,8 +637,8 @@ tetrisRotateBlockTest2:
 // 		2 = x
 // 		3 = y
 // 		4 = blockColor
-// 		5 = blockAddress
-// 		6 = blockAddressOffset
+// 		5 = blockTypeAddress
+// 		6 = blockTypeOffset
 // OUTPUT
 //	
 tetrisTranslateBlockTest:
@@ -695,21 +650,21 @@ tetrisTranslateBlockTest:
 	blockX				.req r6
 	blockY				.req r7
 	blockColor			.req r8
-	blockAddress		.req r9
-	blockAddressOffset	.req r10
+	blockTypeAddress		.req r9
+	blockTypeOffset	.req r10
 	
 	mov		r0, sp
 	
 	push 	{ lr }
-	push	{ blockPrevX - blockAddressOffset }
+	push	{ blockPrevX - blockTypeOffset }
 	
 	// load variables from stack
-	ldmfd	r0, { blockPrevX - blockAddressOffset }
+	ldmfd	r0, { blockPrevX - blockTypeOffset }
 	
 	// COLLISION DETECTION
 	
 	
-	pop		{ blockPrevX - blockAddressOffset }
+	pop		{ blockPrevX - blockTypeOffset }
 	
 	.unreq	dx
 	.unreq	dy
@@ -718,8 +673,8 @@ tetrisTranslateBlockTest:
 	.unreq	blockX
 	.unreq	blockY
 	.unreq 	blockColor
-	.unreq	blockAddress
-	.unreq	blockAddressOffset
+	.unreq	blockTypeAddress
+	.unreq	blockTypeOffset
 	
 	pop 	{ lr }
 	mov 	pc, lr            // return	
@@ -919,30 +874,15 @@ TetrisGrid:
 TetrisGridEnd:
 
 
-.align 4
-TetrisCurrentBlock:
-	.int		0			// prevX
-	.int		0			// prevY
-	.int		0			// x
-	.int		0			// y
-	.word		0xFFABCC	// color
-	.space 		2			// blockGridData (16 bits, max block size is 4 x 4)
-	// 	EX BLOCK (check if block exists by comparing blockGridData to 0
-	
-TetrisCurrentBlockEnd:
-
-
-.align 4
-TetrisCurrentBlockTest:
-	.int		0			// prevX
-	.int		0			// prevY
-	.int		0			// x
-	.int		0			// y
-	.word		0x00AABB	// color
-	.word 		0			// blockAddress
-	.int 		0			// blockAddressOffset (0 - 3)
-	
-TetrisCurrentBlockTestEnd:
+TetrisBlock:
+	.int		0			// blockPrevX
+	.int		0			// blockPrevY
+	.int		0			// blockX
+	.int		0			// blockY
+	.word		0x00AABB	// blockColor
+	.word 		0			// blockTypeAddress
+	.int 		0			// blockTypeOffset (0 - 3)
+TetrisBlockEnd:
 
 
 .align 4
