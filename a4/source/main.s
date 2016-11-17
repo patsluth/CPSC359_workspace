@@ -23,6 +23,7 @@ main:
 	bl		EnableJTAG
 	bl		InitFrameBuffer
 
+
 	// bl		clearScreen
 
 
@@ -110,12 +111,9 @@ main:
 
   bl    sampleSNES
 
-	ldr 		r0, =TetrisGrid
-	add r0, #12
-	ldr 		r1, =TetrisGridEnd
-	//ldr		r1, [r0, #0]
-	//ldr		cols, [r0, #4]
-	//ldr		r2, [r0, #8]
+	ldr 	r0, =TetrisGrid
+	add 	r0, #12
+	ldr 	r1, =TetrisGridEnd
 
 	looop:
 
@@ -125,8 +123,8 @@ main:
 		add 	r0, #4
 
 		sub 	r2, r1, r0
-		cmp 	r2, #0
-		bgt 	looop
+		teq 	r2, #0
+		bne 	looop
 
 
 
@@ -1233,10 +1231,10 @@ startTimer:
 
 .align 4
 TetrisGrid:
-	.int	40				// tetrisGridRows
-	.int	40				// tetrisGridCols
+	.int	30				// tetrisGridRows
+	.int	30				// tetrisGridCols
 	.int	15				// tetrisGridBlockSize (nxn pixels)
-	.space 	40 * 40 * 4		// tetrisGridData (rows x cols)
+	.space 	30 * 30 * 4		// tetrisGridData (rows x cols)
 TetrisGridEnd:
 
 
@@ -1272,7 +1270,7 @@ TetrisBlockA:
 	//	1111
 	//	----
 	//	----
-	//	----
+	//	----u
 TetrisBlockAEnd:
 
 
