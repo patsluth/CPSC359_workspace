@@ -76,17 +76,17 @@ OUTPUT(build/output.elf elf32-littlearm)
  .ARM.attributes
                 0x0000007b       0x29 build/main.o
 
-.debug_line     0x00000000      0x2ed
+.debug_line     0x00000000      0x2e7
  .debug_line    0x00000000       0x61 build/jtag.o
  .debug_line    0x00000061       0x67 build/framebuffer.o
- .debug_line    0x000000c8       0xcf build/sampleSNES.o
- .debug_line    0x00000197      0x156 build/main.o
+ .debug_line    0x000000c8       0xc9 build/sampleSNES.o
+ .debug_line    0x00000191      0x156 build/main.o
 
-.debug_info     0x00000000      0x195
- .debug_info    0x00000000       0x63 build/jtag.o
- .debug_info    0x00000063       0x6a build/framebuffer.o
- .debug_info    0x000000cd       0x69 build/sampleSNES.o
- .debug_info    0x00000136       0x5f build/main.o
+.debug_info     0x00000000      0x18b
+ .debug_info    0x00000000       0x5e build/jtag.o
+ .debug_info    0x0000005e       0x65 build/framebuffer.o
+ .debug_info    0x000000c3       0x69 build/sampleSNES.o
+ .debug_info    0x0000012c       0x5f build/main.o
 
 .debug_abbrev   0x00000000       0x4e
  .debug_abbrev  0x00000000       0x14 build/jtag.o
