@@ -87,11 +87,11 @@ OUTPUT(build/output.elf elf32-littlearm)
  .debug_line    0x0000021c       0xb7 uart.o
  .debug_line    0x000002d3       0x79 gpio.o
 
-.debug_info     0x00000000      0x19c
- .debug_info    0x00000000       0x5f build/main.o
- .debug_info    0x0000005f       0x63 build/jtag.o
- .debug_info    0x000000c2       0x6d uart.o
- .debug_info    0x0000012f       0x6d gpio.o
+.debug_info     0x00000000      0x192
+ .debug_info    0x00000000       0x5a build/main.o
+ .debug_info    0x0000005a       0x5e build/jtag.o
+ .debug_info    0x000000b8       0x6d uart.o
+ .debug_info    0x00000125       0x6d gpio.o
 
 .debug_abbrev   0x00000000       0x4e
  .debug_abbrev  0x00000000       0x12 build/main.o
