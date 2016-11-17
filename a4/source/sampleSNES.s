@@ -1,12 +1,9 @@
-// CPSC 359, Assignment 3
+// CPSC 359, SNES driver for use with A4 (Tetris)
 // By: Nathan Escandor and Patrick Sluth
 // Tutorial 3
 // Submitted: November 7, 2016
 
-
-
-
-
+//Calling bl sampleSNES from main.s returns buttons pressed bitmask to r0
 //##############################################################//
 
 //##############################################################//
@@ -14,7 +11,10 @@
 
 .globl sampleSNES
 sampleSNES:
-  STMFD sp!, {lr}
+  STMDB sp!, {r4-r9, lr}
+
+  //old one that worked for sure
+  //STMFD sp!, {lr}
 
 	initSNES:
 		mov r0, #0b001			// Output
@@ -92,15 +92,11 @@ sampleSNES:
 mainEnd:
 	b killProgram
 
-
-
-
-
 killProgram:
-  LDMFD sp!, {pc}
+  //old one that worked for sure
+  //LDMFD sp!, {pc}
 
-
-
+  LDMIA sp!, {r4-r9, pc}
 
 
 
@@ -119,32 +115,6 @@ startTimer:
     bhi waitLoop
 
   mov pc, lr            // return
-
-
-
-
-//OLD startTimer function
-// input r0 = delay in microseconds
-//startTimer:
-
-//	ldr r2, =0x3F003004		//address of CLO
-//	ldr r2, [r2]					// CLO - Timer Counter (Low 32 bits)
-//	add r2, r0						// r2 = currentTime + delay
-                        // TODO note: in final version, should be adding 12 micros
-
-//	timerTick_:
-
-//		ldr r1, =0x3F003004
-//		ldr r1, [r1]					// CLO - Timer Counter (Low 32 bits)
-
-//		cmp r1, r2						// if (currentTime >= (currentTime + delay))
-//		bge timerComplete_				// then Invoke
-
-//		b timerTick_
-
-//		timerComplete_:
-
-//		mov pc, lr						// return
 
 
 
@@ -176,12 +146,6 @@ setGPIOFunction:
 	str r4, [r3, r0]					// write back to GPFSEL{n}
 
 	mov pc, lr							// return
-
-
-
-
-
-
 
 
 // DATA = PIN 10 = GPFSEL1
@@ -247,22 +211,6 @@ setCLOCKFunction:
 	mov pc, lr							// return
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // input r0 = GPIO PIN n
 // output r0 = output of GPIO PIN n
 readGPIO:
@@ -311,8 +259,6 @@ writeGPIO:
 //					SNES FUNCTIONS
 //****************************************************
 
-
-
 // input r0 = button bitmask (1 == up, 0 == down)
 // output r0 = original button bitmask
 // output r1 = boolean (1 = true, 0 = false)
@@ -346,243 +292,6 @@ areAnySNESButtonsPressed:
   mov r9, r0
 
 	mov pc, lr							// return
-
-
-/*
-// Available buttons
-// 0 = B
-// 1 = Y
-// 2 = Select
-// 3 = Start
-// 4 = Up
-// 5 = Down
-// 6 = Left
-// 7 = Right
-// 8 = A
-// 9 = X
-// 10 = L
-// 11 = R
-//
-// input r0 = button bitmask (1 == up, 0 == down)
-// input r1 = buttonIndex
-// output r0 = original button bitmask
-// output r1 = boolean (1 = true, 0 = false)
-isSNESButtonPressedForIndex:
-
-	push { r0 }
-
-	lsr r0, r1
-	and r0, #1
-
-	teq r0, #0
-	moveq r1, #1
-	movne r1, #0
-
-	pop { r0 }
-
-	mov pc, lr							// return
-
-
-
-// input r0 = button bitmask (1 == up, 0 == down)
-printSNESButtonPressedMessage:
-
-
-
-	push { lr }							// save return address
-	push { r0 }
-
-
-	ldr r0, =SNESYouHavePressedText
-	ldr r1, =SNESYouHavePressedTextEnd
-	sub r1, r0
-	bl WriteStringUART
-
-
-		pop { r0 }
-		push { r0 }
-
-
-	// lsr r0, #0
-	and r0, #1
-
-	teq r0, #0
-	ldreq r0, =SNES_B_ButtonText
-	ldreq r1, =SNES_B_ButtonTextEnd
-	subeq r1, r0
-	bleq WriteStringUART
-
-
-		pop { r0 }
-		push { r0 }
-
-
-	lsr r0, #1
-	and r0, #1
-
-	teq r0, #0
-	ldreq r0, =SNES_Y_ButtonText
-	ldreq r1, =SNES_Y_ButtonTextEnd
-	subeq r1, r0
-	bleq WriteStringUART
-
-
-		pop { r0 }
-		push { r0 }
-
-
-	lsr r0, #2
-	and r0, #1
-
-	teq r0, #0
-	ldreq r0, =SNES_Select_ButtonText
-	ldreq r1, =SNES_Select_ButtonTextEnd
-	subeq r1, r0
-	bleq WriteStringUART
-
-
-		pop { r0 }
-		push { r0 }
-
-
-	lsr r0, #3
-	and r0, #1
-
-	teq r0, #0
-	ldreq r0, =SNES_Start_ButtonText
-	ldreq r1, =SNES_Start_ButtonTextEnd
-	subeq r1, r0
-	bleq WriteStringUART
-
-
-		pop { r0 }
-		push { r0 }
-
-
-	lsr r0, #4
-	and r0, #1
-
-	teq r0, #0
-	ldreq r0, =SNES_Up_ButtonText
-	ldreq r1, =SNES_Up_ButtonTextEnd
-	subeq r1, r0
-	bleq WriteStringUART
-
-
-		pop { r0 }
-		push { r0 }
-
-
-	lsr r0, #5
-	and r0, #1
-
-	teq r0, #0
-	ldreq r0, =SNES_Down_ButtonText
-	ldreq r1, =SNES_Down_ButtonTextEnd
-	subeq r1, r0
-	bleq WriteStringUART
-
-
-		pop { r0 }
-		push { r0 }
-
-
-	lsr r0, #6
-	and r0, #1
-
-	teq r0, #0
-	ldreq r0, =SNES_Left_ButtonText
-	ldreq r1, =SNES_Left_ButtonTextEnd
-	subeq r1, r0
-	bleq WriteStringUART
-
-
-		pop { r0 }
-		push { r0 }
-
-
-	lsr r0, #7
-	and r0, #1
-
-	teq r0, #0
-	ldreq r0, =SNES_Right_ButtonText
-	ldreq r1, =SNES_Right_ButtonTextEnd
-	subeq r1, r0
-	bleq WriteStringUART
-
-
-		pop { r0 }
-		push { r0 }
-
-
-	lsr r0, #8
-	and r0, #1
-
-	teq r0, #0
-	ldreq r0, =SNES_A_ButtonText
-	ldreq r1, =SNES_A_ButtonTextEnd
-	subeq r1, r0
-	bleq WriteStringUART
-
-
-		pop { r0 }
-		push { r0 }
-
-
-	lsr r0, #9
-	and r0, #1
-
-	teq r0, #0
-	ldreq r0, =SNES_X_ButtonText
-	ldreq r1, =SNES_X_ButtonTextEnd
-	subeq r1, r0
-	bleq WriteStringUART
-
-
-		pop { r0 }
-		push { r0 }
-
-
-	lsr r0, #10
-	and r0, #1
-
-	teq r0, #0
-	ldreq r0, =SNES_L_ButtonText
-	ldreq r1, =SNES_L_ButtonTextEnd
-	subeq r1, r0
-	bleq WriteStringUART
-
-
-		pop { r0 }
-		push { r0 }
-
-
-	lsr r0, #11
-	and r0, #1
-
-	teq r0, #0
-	ldreq r0, =SNES_R_ButtonText
-	ldreq r1, =SNES_R_ButtonTextEnd
-	subeq r1, r0
-	bleq WriteStringUART
-
-
-	bl printNewline
-
-
-  //Print "Please press a button...\n\r"
-  ldr r0, =SNESPleasePressButtonText
-  mov r1, #26
-  bl WriteStringUART
-
-
-
-	pop { r0 }
-	pop { lr }							// restore return address
-	mov pc, lr							// return
-
-*/
-
 
 
 .section .data
