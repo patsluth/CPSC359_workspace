@@ -80,20 +80,14 @@ main:
 		// TODO: check for current block on stack?
 	
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		bl	tetrisRotateBlockTest
-		// tetrisTranslateBlockTest(int dx, int dy)
+		// tetrisRotateBlockTest(right)
 		mov	r0, #1
+		bl	tetrisRotateBlockTest
+		
+		// tetrisTranslateBlock(int dx, int dy)
+		mov	r0, #0
 		mov	r1, #1
-		bl	tetrisTranslateBlockTest
+		//bl	tetrisTranslateBlock
 		bl	tetrisUpdateGridWithBlock
 		
 		bl	tetrisDrawGrid
@@ -104,12 +98,6 @@ main:
 		
 
 		b	mainLoop
-
-
-
-
-
-
 
 
 mainEnd:
@@ -480,7 +468,7 @@ tetrisCreateNewBlock:
 
 
 // INPUT
-//		r0 = CC/CCW
+//		r0 = CC/CCW	(0 == CC, otherwise CCW)
 //
 //		--------
 //		On Stack
@@ -497,6 +485,7 @@ tetrisCreateNewBlock:
 //
 tetrisRotateBlockTest:
 
+	rotationDirection	.req r0
 	blockPrevX			.req r4
 	blockPrevY			.req r5
 	blockX				.req r6
@@ -532,12 +521,31 @@ tetrisRotateBlockTest:
 
 
 
-	add		blockTypeOffset, #2
-	cmp		blockTypeOffset, #6
-	movgt	blockTypeOffset, #0				// wrap around
+	teq		rotationDirection, 	#0
+	beq		rotateLeft
+	bne		rotateRight
+	
+	rotateLeft:
+	
+		add		blockTypeOffset, 	#2
+		cmp		blockTypeOffset, 	#6
+		movgt	blockTypeOffset, 	#0		// wrap around
+		str		blockTypeOffset, 	[sp, #24]
+	
+		b 	tetrisRotateBlockTestEnd
+	
+	rotateRight:
+	
+		sub		blockTypeOffset, 	#2
+		cmp		blockTypeOffset, 	#0
+		movlt	blockTypeOffset, 	#6		// wrap around
+		str		blockTypeOffset, 	[sp, #24]
+	
+		b 	tetrisRotateBlockTestEnd
 
-	str		blockTypeOffset, [sp, #24]
+tetrisRotateBlockTestEnd:
 
+	.unreq 	rotationDirection
 	.unreq	blockPrevX
 	.unreq	blockPrevY
 	.unreq	blockX
@@ -547,6 +555,30 @@ tetrisRotateBlockTest:
 	.unreq	blockTypeOffset
 
 	mov 	pc, lr            // return
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 
@@ -569,7 +601,7 @@ tetrisRotateBlockTest:
 //		--------
 // OUTPUT
 //
-tetrisTranslateBlockTest:
+tetrisTranslateBlock:
 
 	dx					.req r0
 	dy					.req r1
