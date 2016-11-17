@@ -166,31 +166,35 @@ main:
 		
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
 		bl	tetrisUpdateGridWithBlock
-		bl	tetrisRotateBlockTest
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 	
 	
+	
+		
+		
+		
+		ldr	r0, =0xFF
+		bl 	startTimer
+		
+		
+		bl	tetrisRotateBlockTest
 		// tetrisClearGridBlock(int dx, int dy)
 		mov	r0, #0
 		mov	r1, #1
 		bl	tetrisTranslateBlockTest
-	
-	
-	
 		
 		bl	tetrisDrawGrid
 		
-		ldr	r0, =0xFF
-		bl 	startTimer
 		
 		b	mainLoop
 		
@@ -644,9 +648,7 @@ tetrisRotateBlockTest:
 
 
 
-	
-	
-	
+
 
 // INPUT
 //		r0 = dx
@@ -677,15 +679,87 @@ tetrisTranslateBlockTest:
 	blockTypeAddress	.req r9
 	blockTypeOffset		.req r10
 	
-	ldmfd	sp, 	{ blockPrevX - blockTypeOffset }
+	ldmfd	sp!, 	{ blockPrevX - blockTypeOffset }
+	push { lr }
 	
 	// COLLISION DETECTION
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	push { blockPrevX - blockTypeOffset }
+	
+	// CLEAR PREVIOUS BLOCKS
+	// tetrisClearGridBlock(int x, int y)
+	mov		r0, 	#0
+	mov		r1, 	blockY
+	bl 	tetrisClearGridBlock
+	
+	pop { blockPrevX - blockTypeOffset }
+	push { blockPrevX - blockTypeOffset }
+	
+	
+	mov		r0, 	#1
+	mov		r1, 	blockY
+	bl 	tetrisClearGridBlock
+	
+	pop { blockPrevX - blockTypeOffset }
+	push { blockPrevX - blockTypeOffset }
+	
+	
+	mov		r0, 	#2
+	mov		r1, 	blockY
+	bl 	tetrisClearGridBlock
+	
+	pop { blockPrevX - blockTypeOffset }
+	push { blockPrevX - blockTypeOffset }
+	
+	
+	mov		r0, 	#3
+	mov		r1, 	blockY
+	bl 	tetrisClearGridBlock
+	
+	pop { blockPrevX - blockTypeOffset }
+	
+
+	
+	
+	
+	
+	
+	
+	pop { lr }
+	
+	// INCREMENT AND SAVE
 	add		blockX, dx
 	add		blockY, dy
 	
-	str		blockX, [sp, #8]
-	str		blockY, 	[sp, #12]
+	//str		blockX, [sp, #8]
+	//str		blockY, [sp, #12]
+	
+	stmfd	sp!, 	{ blockPrevX - blockTypeOffset }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	.unreq	dx
 	.unreq	dy
@@ -799,13 +873,12 @@ drawPixel:
 //
 drawRect:
 
-	x		.req r3
-	y		.req r4
-	width	.req r5
-	height	.req r6
-	color	.req r7
+	x		.req r4
+	y		.req r5
+	width	.req r6
+	height	.req r7
+	color	.req r8
 	
-	// load variables from stack
 	ldmfd	sp!, 	{ x - color }
 	
 	push 	{ lr }
