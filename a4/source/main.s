@@ -79,90 +79,6 @@ main:
 	
 		// TODO: check for current block on stack?
 	
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #0
-		mov		r1, #0
-		bl tetrisClearGridBlock
-		
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #0
-		mov		r1, #1
-		bl tetrisClearGridBlock
-		
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #0
-		mov		r1, #2
-		bl tetrisClearGridBlock
-		
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #0
-		mov		r1, #3
-		bl tetrisClearGridBlock
-		
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #1
-		mov		r1, #0
-		bl tetrisClearGridBlock
-		
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #1
-		mov		r1, #1
-		bl tetrisClearGridBlock
-		
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #1
-		mov		r1, #2
-		bl tetrisClearGridBlock
-		
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #1
-		mov		r1, #3
-		bl tetrisClearGridBlock
-		
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #2
-		mov		r1, #0
-		bl tetrisClearGridBlock
-		
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #2
-		mov		r1, #1
-		bl tetrisClearGridBlock
-		
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #2
-		mov		r1, #2
-		bl tetrisClearGridBlock
-		
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #2
-		mov		r1, #3
-		bl tetrisClearGridBlock
-		
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #3
-		mov		r1, #0
-		bl tetrisClearGridBlock
-		
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #3
-		mov		r1, #1
-		bl tetrisClearGridBlock
-		
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #3
-		mov		r1, #2
-		bl tetrisClearGridBlock
-		
-		// tetrisClearGridBlock(int x, int y)
-		mov		r0, #3
-		mov		r1, #3
-		bl tetrisClearGridBlock
-		
-		
-		
-		
-		bl	tetrisUpdateGridWithBlock
 		
 		
 		
@@ -171,25 +87,19 @@ main:
 		
 		
 		
-		
-		
-	
-	
-	
-		
-		
-		
-		ldr	r0, =0xFF
-		bl 	startTimer
 		
 		
 		bl	tetrisRotateBlockTest
-		// tetrisClearGridBlock(int dx, int dy)
-		mov	r0, #0
+		// tetrisTranslateBlockTest(int dx, int dy)
+		mov	r0, #1
 		mov	r1, #1
-		//bl	tetrisTranslateBlockTest
+		bl	tetrisTranslateBlockTest
+		bl	tetrisUpdateGridWithBlock
 		
 		bl	tetrisDrawGrid
+		
+		ldr	r0, =0xFF
+		bl 	startTimer
 		
 		
 		b	mainLoop
@@ -227,19 +137,16 @@ mainEnd:
 //
 tetrisSetGridBlockColor:
 
-	x					.req r4
-	y					.req r5
-	blockColor			.req r6
+	x					.req r0
+	y					.req r1
+	blockColor			.req r2
 	tetrisGridData		.req r7
 	tetrisGridSize		.req r8
 	tetrisGridOffset	.req r9
-
-	mov		r0, sp
-
-	push 	{ lr }
-	push	{ x - tetrisGridOffset }
 	
-	ldmfd	r0,					{ x - blockColor }
+	ldmfd	sp!,				{ x - blockColor }
+	
+	push	{ tetrisGridData - tetrisGridOffset }
 	
 	ldr 	tetrisGridData, 	=TetrisGrid
 	ldr 	tetrisGridSize, 	[tetrisGridData, #8]
@@ -253,7 +160,7 @@ tetrisSetGridBlockColor:
 	// write color to tetrisGridData
 	str		blockColor, 		[tetrisGridData, tetrisGridOffset]
 	
-	pop		{ x - tetrisGridOffset }
+	pop		{ tetrisGridData - tetrisGridOffset }
 	
 	.unreq	x
 	.unreq	y
@@ -261,9 +168,6 @@ tetrisSetGridBlockColor:
 	.unreq	tetrisGridData
 	.unreq	tetrisGridSize
 	.unreq	tetrisGridOffset
-	
-	pop 	{ lr }
-	add		sp, #12
 
 	mov 	pc, lr            // return
 	
@@ -422,6 +326,8 @@ tetrisUpdateGridWithBlock:
 
 	i	.req r11
 	j	.req r12
+	
+	push	{ i - j }
 
 	mov	i, #0
 	mov j, #0
@@ -479,6 +385,8 @@ tetrisUpdateGridWithBlock:
 		add 	i, #1
 		cmp 	i, #4
 		blt 	for_i_lessThan_4_loop_
+		
+		pop		{ i - j }
 		
 		.unreq	i
 		.unreq 	j
@@ -672,84 +580,46 @@ tetrisTranslateBlockTest:
 	blockTypeAddress	.req r9
 	blockTypeOffset		.req r10
 	
+	mov	r11, lr
+	
+	// pop block
 	ldmfd	sp!, 	{ blockPrevX - blockTypeOffset }
-	push { lr }
 	
-	// COLLISION DETECTION
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	push { blockPrevX - blockTypeOffset }
-	
-	// CLEAR PREVIOUS BLOCKS
-	// tetrisClearGridBlock(int x, int y)
-	mov		r0, 	#0
-	mov		r1, 	blockY
-	bl 	tetrisClearGridBlock
-	
-	pop { blockPrevX - blockTypeOffset }
-	push { blockPrevX - blockTypeOffset }
-	
-	
-	mov		r0, 	#1
-	mov		r1, 	blockY
-	bl 	tetrisClearGridBlock
-	
-	pop { blockPrevX - blockTypeOffset }
-	push { blockPrevX - blockTypeOffset }
-	
-	
-	mov		r0, 	#2
-	mov		r1, 	blockY
-	bl 	tetrisClearGridBlock
-	
-	pop { blockPrevX - blockTypeOffset }
-	push { blockPrevX - blockTypeOffset }
-	
-	
-	mov		r0, 	#3
-	mov		r1, 	blockY
-	bl 	tetrisClearGridBlock
-	
-	pop { blockPrevX - blockTypeOffset }
-	
-
-	
-	
-	
-	
-	
-	
-	pop { lr }
-	
-	// INCREMENT AND SAVE
+	// update block values
+	mov		blockPrevX, blockX
+	mov		blockPrevY, blockY
 	add		blockX, dx
 	add		blockY, dy
 	
-	//str		blockX, [sp, #8]
-	//str		blockY, [sp, #12]
+	str		blockPrevX, [sp, #0]
+	str		blockPrevY, [sp, #4]
+	str		blockX, [sp, #8]
+	str		blockY, [sp, #12]
 	
+	// push block
 	stmfd	sp!, 	{ blockPrevX - blockTypeOffset }
 	
+	// make blank copy of block
+	// in previous position and with black color
+	mov	blockX, blockPrevX
+	mov	blockY, blockPrevY
+	ldr	blockColor, =0x0
+	
+	// tetrisUpdateGridWithBlock(blankBlock) 
+	stmfd	sp!, 	{ blockPrevX - blockTypeOffset }
+	bl	tetrisUpdateGridWithBlock
+	
+	// tetrisUpdateGridWithBlock(currentBlock) 
+	ldmfd	sp!, 	{ blockPrevX - blockTypeOffset }
+	bl	tetrisUpdateGridWithBlock
+	
+	//ldmfd	sp!, 	{ blockPrevX - blockTypeOffset }
+	//stmfd	sp!, 	{ blockPrevX - blockTypeOffset }
 	
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
+	// COLLISION DETECTION
 	
 	
 	
@@ -764,7 +634,7 @@ tetrisTranslateBlockTest:
 	.unreq	blockTypeAddress
 	.unreq	blockTypeOffset
 	
-	mov 	pc, lr            // return	
+	mov 	pc, r11            // return	
 	
 	
 	
