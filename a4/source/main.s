@@ -150,6 +150,7 @@ main:
 
 		// TODO: check for current block on stack?
 	
+		bl 	tetrisGetMaxBlockPosition
 		
 		// tetrisRotateBlock(right)
 		mov	r0, #1
@@ -163,7 +164,7 @@ main:
 		
 		bl	tetrisDrawGrid
 		
-		ldr	r0, =0xFF
+		ldr	r0, =0x0
 		bl 	startTimer
 		
 		
@@ -754,11 +755,11 @@ tetrisUpdateGridWithBlock:
 	mov	i, #0
 	mov j, #0
 
-	for_i_lessThan_4_loop_:
+	for_i_lessThan_4_loop:
 
 		push 	{ j }
 
-		for_j_lessThan_4_loop_:
+		for_j_lessThan_4_loop:
 
 			push 	{ blockX - blockColor }
 
@@ -801,13 +802,13 @@ tetrisUpdateGridWithBlock:
 
 			add 	j, #1
 			cmp 	j, #4
-			blt 	for_j_lessThan_4_loop_
+			blt 	for_j_lessThan_4_loop
 
 		pop 	{ j }
 		add 	i, #1
 		cmp 	i, #4
-		blt 	for_i_lessThan_4_loop_
-		
+		blt 	for_i_lessThan_4_loop
+	
 		pop		{ i - j }
 		
 		.unreq	i
@@ -914,7 +915,8 @@ tetrisRotateBlock:
 
 	ldmfd	sp, { blockPrevX - blockTypeOffset }
 
-
+	
+	
 
 
 
@@ -973,7 +975,7 @@ tetrisRotateBlockEnd:
 	.unreq 	blockColor
 	.unreq	blockTypeAddress
 	.unreq	blockTypeOffset
-
+	
 	mov 	pc, lr            // return
 	
 	
@@ -1020,6 +1022,9 @@ tetrisTranslateBlock:
 	add		blockX, dx
 	add		blockY, dy
 	
+	cmp		blockY, #11 //(cols - 4)
+	movge	blockY, #0	//	wrap to top
+	
 	str		blockPrevX, [sp, #0]
 	str		blockPrevY, [sp, #4]
 	str		blockX, [sp, #8]
@@ -1027,6 +1032,17 @@ tetrisTranslateBlock:
 	
 	// push block
 	stmfd	sp!, 	{ blockPrevX - blockTypeOffset }
+	
+	
+	
+	
+	
+	// tetrisCheckBlockCollision()
+	//bl 		tetrisCheckBlockCollision
+	//teq		r0, #0
+	//bne		tetrisTranslateBlockEnd
+	
+	
 	
 	// make blank copy of block
 	// in previous position and with black color
@@ -1042,16 +1058,7 @@ tetrisTranslateBlock:
 	ldmfd	sp!, 	{ blockPrevX - blockTypeOffset }
 	bl	tetrisUpdateGridWithBlock
 	
-	//ldmfd	sp!, 	{ blockPrevX - blockTypeOffset }
-	//stmfd	sp!, 	{ blockPrevX - blockTypeOffset }
-	
-	
-	
-	
-	// COLLISION DETECTION
-	
-	
-	
+tetrisTranslateBlockEnd:
 
 	.unreq	dx
 	.unreq	dy
@@ -1064,6 +1071,277 @@ tetrisTranslateBlock:
 	.unreq	blockTypeOffset
 	
 	mov 	pc, r11            // return	
+	
+	
+	
+	
+	
+// INPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = blockPrevX
+// 		1 = blockPrevY
+// 		2 = blockX
+// 		3 = blockY
+// 		4 = blockColor
+// 		5 = blockTypeAddress
+// 		6 = blockTypeOffset
+//		--------
+// OUTPUT
+//		r0 = maxX
+//		r1 = maxY
+tetrisGetMaxBlockPosition:
+
+/*
+	currentRowData		.req r0
+	rowBitMask			.req r1
+	blockGridData		.req r2
+	blockPrevX			.req r4
+	blockPrevY			.req r5
+	blockX				.req r6
+	blockY				.req r7
+	blockColor			.req r8
+	blockTypeAddress	.req r9
+	blockTypeOffset		.req r10
+	*/
+	
+	blockPrevX			.req r4
+	blockPrevY			.req r5
+	blockX				.req r6
+	blockY				.req r7
+	blockColor			.req r8
+	blockTypeAddress	.req r9
+	blockTypeOffset		.req r10
+	
+	ldmfd	sp, 	{ blockPrevX - blockTypeOffset }
+	
+	// start at current position
+	//mov		r11, #0
+	//mov		r12, blockY
+	
+	// increment for each row that has block data (not 0)
+	
+	
+	
+	
+	i	.req r11
+	j	.req r12
+	
+	push	{ i - j }
+
+	mov	i, #1
+	mov j, #1
+	
+
+	mov	r0, blockX
+	mov	r1, blockY
+	
+	
+	for_i_lessThanEqual_4_loop:
+
+		push 	{ j }
+
+		for_j_lessThanEqual_4_loop:
+
+			push 	{ blockX - blockColor }
+
+			blockBitForXY	.req r2
+			blockGridData	.req r3
+
+			ldrh	blockGridData, [blockTypeAddress, blockTypeOffset]
+
+
+			push 	{ i, j }
+			add 	blockX, i
+			add 	blockY, j
+			sub		i, #1
+			sub		j, #1
+
+			// calculate bit corresponding to block position
+			mov		blockBitForXY, 	#4
+			mul		blockBitForXY, 	blockBitForXY, j
+			add		blockBitForXY, 	i
+			lsl		blockGridData, 	blockBitForXY
+			mov		blockBitForXY, 	#0b1000000000000000
+			and		blockBitForXY, 	blockGridData
+			teq		blockBitForXY,	#0
+			beq 	skip
+			
+			
+			// if (blockBitForXY == 0)
+
+				cmp		r0, blockX
+				movlt	r0, blockX
+				cmp		r1, blockY
+				movlt	r1, blockY
+			
+				nop
+			
+			
+			
+			
+			skip:
+
+			pop 	{ i, j }
+			
+
+			.unreq	blockBitForXY
+			.unreq 	blockGridData
+
+			pop 	{ blockX - blockColor }
+
+			add 	j, #1
+			cmp 	j, #4
+			ble 	for_j_lessThanEqual_4_loop
+
+		pop 	{ j }
+		add 	i, #1
+		cmp 	i, #4
+		ble 	for_i_lessThanEqual_4_loop
+		
+		pop		{ i - j }
+		
+		.unreq	i
+		.unreq 	j
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	mov		rowBitMask, #0b1111
+	ldrh	blockGridData, [blockTypeAddress, blockTypeOffset]
+	and		currentRowData, rowBitMask, blockGridData
+	orr		r11, currentRowData
+	
+	// row 4
+	teq		currentRowData, #0
+	addne	r12, #4
+	bne		tetrisGetMaxBlockPositionEnd
+	
+	lsr		blockGridData, #4
+	and		currentRowData, rowBitMask, blockGridData
+	orr		r11, currentRowData
+	
+	// row 3
+	teq		currentRowData, #0
+	addne	r12, #3
+	bne		tetrisGetMaxBlockPositionEnd
+
+	lsr		blockGridData, #4
+	and		currentRowData, rowBitMask, blockGridData
+	orr		r11, currentRowData
+	
+	// row 2
+	teq		currentRowData, #0
+	addne	r12, #2
+	bne		tetrisGetMaxBlockPositionEnd
+
+	lsr		blockGridData, #4
+	and		currentRowData, rowBitMask, blockGridData
+	orr		r11, currentRowData
+	
+	// row 1
+	teq		currentRowData, #0
+	addne	r12, #1
+	bne		tetrisGetMaxBlockPositionEnd
+	
+	
+	
+	
+	*/
+	
+	
+	
+	
+	
+	
+	
+tetrisGetMaxBlockPositionEnd:
+	
+	//.unreq 	currentRowData
+	//.unreq	rowBitMask
+	//.unreq	blockGridData
+	.unreq	blockPrevX
+	.unreq	blockPrevY
+	.unreq	blockX
+	.unreq	blockY
+	.unreq 	blockColor
+	.unreq	blockTypeAddress
+	.unreq	blockTypeOffset
+
+	mov 	pc, lr            // return
+	
+	
+	
+	
+
+// INPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = blockPrevX
+// 		1 = blockPrevY
+// 		2 = blockX
+// 		3 = blockY
+// 		4 = blockColor
+// 		5 = blockTypeAddress
+// 		6 = blockTypeOffset
+//		--------
+// OUTPUT
+//		r0 = boolean (0 == no collision)
+tetrisCheckBlockCollision:
+
+	blockPrevX			.req r4
+	blockPrevY			.req r5
+	blockX				.req r6
+	blockY				.req r7
+	blockColor			.req r8
+	blockTypeAddress	.req r9
+	blockTypeOffset		.req r10
+	
+	ldmfd	sp, 	{ blockPrevX - blockTypeOffset }
+	
+	push 	{ lr }
+
+	cmp		blockY, #11 //(cols - 4)
+	movge	blockY, #0	//	wrap to top
+	//blge	tetrisCreateNewBlock
+	//mov		r0, #1
+	//movge	r0, #0
+	
+	pop	 	{ lr }
+
+	.unreq	blockPrevX
+	.unreq	blockPrevY
+	.unreq	blockX
+	.unreq	blockY
+	.unreq 	blockColor
+	.unreq	blockTypeAddress
+	.unreq	blockTypeOffset
+
+	mov 	pc, lr            // return
 	
 	
 	
