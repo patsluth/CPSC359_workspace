@@ -202,13 +202,13 @@ bl tetrisInitGrid
 		//bl	tetrisRotateBlock
 		
 		// tetrisTranslateBlock(int dx, int dy)
-		mov	r0, #0
-		mov	r1, #1
+		mov		r0, #0
+		mov		r1, #1
 		nop
-		bl	tetrisTranslateBlock
-		nop
-		//bl	tetrisGetMaxBlockPosition2
-		
+		bl		tetrisTranslateBlock
+		bl		tetrisCheckBlockGridCollisions
+		teq		r0, #0
+		blne	tetrisOnBlockCollision
 		
 		
 		
@@ -1474,6 +1474,126 @@ tetrisBlockContainsPointEnd:
 	
 	
 // INPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = blockPrevX
+// 		1 = blockPrevY
+// 		2 = blockX
+// 		3 = blockY
+// 		4 = blockColor
+// 		5 = blockTypeAddress
+// 		6 = blockTypeOffset
+//		--------
+// OUTPUT
+//		r0 = boolean (0 == false)
+//
+tetrisCheckBlockGridCollisions:
+
+	returnVal			.req r0
+	rowBitMask			.req r1
+	currentRowData		.req r2
+	blockGridData		.req r3
+	blockPrevX			.req r4
+	blockPrevY			.req r5
+	blockX				.req r6
+	blockY				.req r7
+	blockColor			.req r8
+	blockTypeAddress	.req r9
+	blockTypeOffset		.req r10
+	
+	mov		r0, 			sp
+	
+	push 	{ lr }
+	push	{ blockPrevX - blockTypeOffset }
+	
+	ldmfd	r0, 			{ blockPrevX - blockTypeOffset }
+	
+	stmfd	sp!, 			{ blockPrevX - blockTypeOffset }
+	bl 		tetrisGetGridBitmaskForBlock
+	ldmfd	sp!, 			{ blockPrevX - blockTypeOffset }
+	
+	ldrh	blockGridData, 	[blockTypeAddress, blockTypeOffset]
+	and		returnVal, 		rowBitMask, blockGridData
+	cmp		returnVal, 		#0
+	movne	returnVal, 		#1
+
+	pop		{ blockPrevX - blockTypeOffset }
+	
+	.unreq 	returnVal
+	.unreq 	rowBitMask
+	.unreq	currentRowData
+	.unreq 	blockGridData		
+	.unreq	blockPrevX
+	.unreq	blockPrevY
+	.unreq	blockX
+	.unreq	blockY
+	.unreq 	blockColor
+	.unreq	blockTypeAddress
+	.unreq	blockTypeOffset
+	
+	pop		{ lr }
+	mov 	pc, lr            // return
+	
+	
+	
+	
+	
+// INPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = blockPrevX
+// 		1 = blockPrevY
+// 		2 = blockX
+// 		3 = blockY
+// 		4 = blockColor
+// 		5 = blockTypeAddress
+// 		6 = blockTypeOffset
+//		--------
+// OUTPUT
+//
+tetrisOnBlockCollision:
+
+	blockGridData		.req r3
+	blockPrevX			.req r4
+	blockPrevY			.req r5
+	blockX				.req r6
+	blockY				.req r7
+	blockColor			.req r8
+	blockTypeAddress	.req r9
+	blockTypeOffset		.req r10
+	
+	push 	{ lr }
+	
+	ldmfd	sp!, 			{ blockPrevX - blockTypeOffset }
+	
+	
+	// TODO
+	
+	//1. write block to grid
+	//2. generate new block
+	
+	
+	bl	tetrisCreateNewBlock
+	
+	.unreq 	blockGridData		
+	.unreq	blockPrevX
+	.unreq	blockPrevY
+	.unreq	blockX
+	.unreq	blockY
+	.unreq 	blockColor
+	.unreq	blockTypeAddress
+	.unreq	blockTypeOffset
+	
+	pop		{ lr }
+	mov 	pc, lr            // return
+	
+	
+	
+	
+	
+// INPUT
 //		r0 = CC/CCW	(0 == CC, otherwise CCW)
 //
 //		--------
@@ -1840,77 +1960,7 @@ tetrisGetMaxBlockPositionEnd:
 	
 	
 	
-// INPUT
-//		--------
-//		On Stack
-//		--------
-// 		0 = blockPrevX
-// 		1 = blockPrevY
-// 		2 = blockX
-// 		3 = blockY
-// 		4 = blockColor
-// 		5 = blockTypeAddress
-// 		6 = blockTypeOffset
-//		--------
-// OUTPUT
-//		r0 = maxX
-//		r1 = maxY
-//
-tetrisGetMaxBlockPosition2:
 
-	rowBitMask			.req r0
-	currentRowData		.req r1
-	blockGridData				.req r2
-	blockPrevX			.req r4
-	blockPrevY			.req r5
-	blockX				.req r6
-	blockY				.req r7
-	blockColor			.req r8
-	blockTypeAddress	.req r9
-	blockTypeOffset		.req r10
-	
-	mov		r12, lr
-	
-	bl 	tetrisGetGridBitmaskForBlock
-	
-	ldmfd	sp, 	{ blockPrevX - blockTypeOffset }
-	ldrh	blockGridData, [blockTypeAddress, blockTypeOffset]
-	//bic		r0, blockGridData
-	nop
-	
-	and		r1, r0, blockGridData
-	bic		r1, blockGridData
-	and		r1, blockGridData
-	cmp		r1, #0
-	moveq	r3, #0
-	movne	r3, #1
-	
-	nop
-	
-	
-	//ldrh	r1, [blockTypeAddress, blockTypeOffset]
-	//add		r1, r1, r0
-	nop
-	nop
-	nop
-	
-	
-tetrisGetMaxBlockPositionEnd2:
-	
-	.unreq 	rowBitMask
-	.unreq	currentRowData
-	.unreq blockGridData				
-	
-	//.unreq	blockGridData
-	.unreq	blockPrevX
-	.unreq	blockPrevY
-	.unreq	blockX
-	.unreq	blockY
-	.unreq 	blockColor
-	.unreq	blockTypeAddress
-	.unreq	blockTypeOffset
-
-	mov 	pc, r12            // return
 	
 	
 	
