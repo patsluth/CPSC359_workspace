@@ -110,21 +110,8 @@ main:
   //  r0 = 0xfffe = 1111 1111 1111 1110
 
   bl    sampleSNES
-
-	ldr 	r0, =TetrisGrid
-	add 	r0, #12
-	ldr 	r1, =TetrisGridEnd
-
-	looop:
-
-		// init to black
-		ldr		r2, =0x000000
-		str		r2, [r0, #0]	// color
-		add 	r0, #4
-
-		sub 	r2, r1, r0
-		teq 	r2, #0
-		bne 	looop
+	
+bl tetrisInitGrid
 
 
 
@@ -142,29 +129,90 @@ main:
 
 
 
+	
+	
+	// tetrisSetGridBlockColor(int x, int y, int color)
+	mov		r0, #0
+	mov		r1, #6
+	ldr		r2, =0x654321
+	stmfd	sp!, 	{ r0- r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	mov		r0, #1
+	mov		r1, #6
+	ldr		r2, =0x654321
+	stmfd	sp!, 	{ r0- r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	mov		r0, #2
+	mov		r1, #6
+	ldr		r2, =0x654321
+	stmfd	sp!, 	{ r0- r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	mov		r0, #3
+	mov		r1, #6
+	ldr		r2, =0x654321
+	stmfd	sp!, 	{ r0- r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	mov		r0, #0
+	mov		r1, #5
+	ldr		r2, =0x777721
+	stmfd	sp!, 	{ r0- r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	mov		r0, #1
+	mov		r1, #5
+	ldr		r2, =0x777721
+	stmfd	sp!, 	{ r0- r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	mov		r0, #2
+	mov		r1, #5
+	ldr		r2, =0xFFF721
+	stmfd	sp!, 	{ r0- r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	mov		r0, #3
+	mov		r1, #5
+	ldr		r2, =0xFFF721
+	stmfd	sp!, 	{ r0- r2 }
+	bl	 	tetrisSetGridBlockColor
+	
 	bl	tetrisCreateNewBlock
-
-
 
 	mainLoop:
 
 		// TODO: check for current block on stack?
-	
-		bl 	tetrisGetMaxBlockPosition
 		
+		
+		
+		bl	tetrisUpdateGridWithBlock
+		nop
+		bl	tetrisDrawGrid
+		nop
+		nop
+		
+		
+		
+	
 		// tetrisRotateBlock(right)
-		mov	r0, #1
-		bl	tetrisRotateBlock
+		//mov	r0, #1
+		//bl	tetrisRotateBlock
 		
 		// tetrisTranslateBlock(int dx, int dy)
 		mov	r0, #0
 		mov	r1, #1
+		nop
 		bl	tetrisTranslateBlock
-		bl	tetrisUpdateGridWithBlock
+		nop
+		//bl	tetrisGetMaxBlockPosition2
 		
-		bl	tetrisDrawGrid
 		
-		ldr	r0, =0x0
+		
+		
+		ldr	r0, =0xFFFF
 		bl 	startTimer
 		
 		
@@ -189,7 +237,8 @@ DrawTitle:
     mov     r0, #100
     str     r0, [sp, #-4]!              //push width
     mov     r0, #94
-    str     r0, [sp, #-4]!              //push y
+    str     r0, [sp, #-4]!   
+	//	-1--           //push y
     mov     r0, #222
     str     r0, [sp, #-4]!              //push x
     bl      drawRect
@@ -257,7 +306,8 @@ SetMainMenuIndicatorQuit:
     ldr     r0, =579
     str     r0, [sp, #-4]!              //push y
     ldr     r0, =452
-    str     r0, [sp, #-4]!              //push x
+    str     r0, [sp, #-4]!   
+	//	-1--           //push x
     bl      drawRect
 
     //Set the box for the Quit indicator
@@ -335,6 +385,7 @@ DrawMainMenu:
     ldr     r0, =0x297E                 //color
     str     r0, [sp, #-4]!              //push color
     mov     r0, #200
+	//	-1--
     str     r0, [sp, #-4]!              //push height
     mov     r0, #200
     str     r0, [sp, #-4]!              //push width
@@ -415,7 +466,8 @@ drawStartMenuButton:
     mov     r0, y
     str     r0, [sp, #-4]!              //push y
     mov     r0, x
-    str     r0, [sp, #-4]!              //push x
+    str     r0, [sp, #-4]!     
+	//	-1--         //push x
     bl      drawRect
 
     add     x, #5                       //Increment x and y for next rectangle
@@ -495,6 +547,7 @@ DrawChar:
 	add		chAdr,	r0, lsl #4	// char address = font base + (char * 16)
 	mov		py,		r2			// init the Y coordinate (pixel coordinate)
 
+	//	-1--
 charLoop$:
 	mov		px,		r3   		// init the X coordinate
 	mov		mask,	#0x01		// set the bitmask to 1 in the LSB
@@ -505,6 +558,7 @@ rowLoop$:
 	beq		noPixel$
 	mov		r0,		px
 	mov		r1,		py
+	//	-1--
 	mov		r2,		color		// red
 	bl		drawPixel			// draw pixel at (px, py)
 
@@ -530,6 +584,45 @@ noPixel$:
 	
 	
 	
+// INPUT
+//
+// OUTPUT
+//
+tetrisInitGrid:
+
+	tetrisGrid			.req r0
+	tetrisGridData		.req r1
+	tetrisGridEnd		.req r2
+	emptyBlockColor		.req r3
+	
+	ldr 	tetrisGrid, 			=TetrisGrid
+	add 	tetrisGridData, 		tetrisGrid, #12
+	ldr 	tetrisGridEnd, 			=TetrisGridEnd
+	
+	ldr		emptyBlockColor,		=0x000000	// black
+
+	forEach_block_in_tetrisGrid_loop:
+	
+		str		emptyBlockColor, [tetrisGridData, #0]
+		add 	tetrisGridData, #4
+		
+		cmp		tetrisGridData, tetrisGridEnd
+		bge		forEach_block_in_tetrisGrid_loopEnd
+		blt		forEach_block_in_tetrisGrid_loop
+		
+	forEach_block_in_tetrisGrid_loopEnd:
+	
+	.unreq 	tetrisGrid
+	.unreq 	tetrisGridData
+	.unreq 	tetrisGridEnd
+	.unreq	emptyBlockColor
+
+	mov 	pc, lr            // return
+		
+		
+		
+		
+		
 // INPUT
 //		--------
 //		On Stack
@@ -583,6 +676,64 @@ tetrisSetGridBlockColor:
 	.unreq	tetrisGridOffset
 
 	mov 	pc, lr            // return
+	
+	
+	
+	
+	
+// INPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = x
+// 		1 = y
+//		--------
+// OUTPUT
+//		r0 = blockColor
+//
+tetrisGetGridBlockColor:
+
+	blockColor			.req r0
+	x					.req r1
+	y					.req r2
+	tetrisGrid			.req r3
+	tetrisGridRows		.req r4
+	tetrisGridCols		.req r5
+	tetrisGridBlockSize	.req r6
+	tetrisGridData		.req r7
+	tetrisGridOffset	.req r8
+	
+	ldmfd	sp!,				{ x - y }
+	
+	push	{ tetrisGridRows - tetrisGridOffset }
+	
+	ldr 	tetrisGrid, 			=TetrisGrid
+	ldr		tetrisGridRows,			[tetrisGrid, #0]
+	ldr		tetrisGridCols,			[tetrisGrid, #4]
+	ldr		tetrisGridBlockSize,	[tetrisGrid, #8]
+	add 	tetrisGridData, 		tetrisGrid, #12
+
+	// calculate tetris grid offset for block position
+	mul		tetrisGridOffset, 	tetrisGridCols, y
+	add		tetrisGridOffset, 	x
+	lsl		tetrisGridOffset, 	#2
+
+	// read color
+	ldr		blockColor, 		[tetrisGridData, tetrisGridOffset]
+	
+	pop		{ tetrisGridRows - tetrisGridOffset }
+	
+	.unreq 	blockColor
+	.unreq	x
+	.unreq	y
+	.unreq	tetrisGrid
+	.unreq	tetrisGridRows
+	.unreq	tetrisGridCols
+	.unreq	tetrisGridBlockSize
+	.unreq	tetrisGridData
+	.unreq	tetrisGridOffset
+
+	mov 	pc, lr            // return
 
 
 
@@ -618,10 +769,175 @@ tetrisClearGridBlock:
 
 
 
-tetrisDrawGrid:
+// INPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = blockPrevX
+// 		1 = blockPrevY
+// 		2 = blockX
+// 		3 = blockY
+// 		4 = blockColor
+// 		5 = blockTypeAddress
+// 		6 = blockTypeOffset
+//		--------
+// OUTPUT
+//		r0 = bitmask
+//
+tetrisGetGridBitmaskForBlock:
+
+	bitmask				.req r1
+	blockGridData		.req r3
+	blockPrevX			.req r4
+	blockPrevY			.req r5
+	blockX				.req r6
+	blockY				.req r7
+	blockColor			.req r8
+	blockTypeAddress	.req r9
+	blockTypeOffset		.req r10
+	
+	mov		r0, sp
 
 	push 	{ lr }
+	push	{ blockPrevX - blockTypeOffset }
+
+	ldmfd	r0, 		{ blockPrevX - blockTypeOffset }
+
+	i	.req r11
+	j	.req r12
 	
+	push	{ i - j }
+
+	mov		bitmask, #0
+	mov		i, #0
+	mov 	j, #0
+
+	for_i_lessThan_4_loop_:
+
+		push 	{ j }
+
+		for_j_lessThan_4_loop_:
+
+			push 	{ blockX - blockY }
+
+			add 	blockX, j
+			add 	blockY, i
+			
+			push	{ bitmask }
+			
+			// tetrisGetGridBlockColor(int x, int y)
+			stmfd	sp!,	{ blockX, blockY }
+			bl 		tetrisGetGridBlockColor
+			
+			pop		{ bitmask }
+			
+			teq		r0, #0
+			lsl		bitmask, #1
+			addne	bitmask, #1
+
+			pop 	{ blockX - blockY }
+
+			add 	j, #1
+			cmp 	j, #4
+			blt 	for_j_lessThan_4_loop_
+
+		pop 	{ j }
+		add 	i, #1
+		cmp 	i, #4
+		blt 	for_i_lessThan_4_loop_
+	
+		pop		{ i - j }
+		
+		.unreq	i
+		.unreq 	j
+
+	pop		{ blockPrevX - blockTypeOffset }
+	
+	mov		r0, bitmask		// returnVal
+
+	.unreq	bitmask
+	.unreq	blockGridData
+	.unreq	blockPrevX
+	.unreq	blockPrevY
+	.unreq	blockX
+	.unreq	blockY
+	.unreq 	blockColor
+	.unreq	blockTypeAddress
+	.unreq	blockTypeOffset
+
+	pop 	{ lr }
+	mov 	pc, lr            // return
+	
+	
+	
+	
+	
+// INPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = x
+// 		1 = y
+//		--------
+// OUTPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = tetrisGridOffset
+//
+tetrisGetGridOffsetForGridPosition:
+
+	x					.req r0
+	y					.req r1
+	tetrisGridOffset	.req r2
+	tetrisGrid			.req r4
+	tetrisGridRows		.req r5
+	tetrisGridCols		.req r6
+
+	push	{ tetrisGrid - tetrisGridCols }
+	
+	ldmfd	sp!, 		{ x, y }
+	
+	ldr 	tetrisGrid, 	=TetrisGrid
+	ldmfd	tetrisGrid, 	{ tetrisGridRows - tetrisGridCols }
+	
+	// calculate tetris grid offset for grid position
+	mul		tetrisGridOffset, 		tetrisGridCols, y
+	add		tetrisGridOffset, 		x
+	lsl		tetrisGridOffset, 		#2
+	
+	pop		{ tetrisGrid - tetrisGridCols }
+	
+	stmfd	sp!, 		{ tetrisGridOffset }
+	
+	.unreq 	x
+	.unreq 	y
+	.unreq	tetrisGridOffset
+	.unreq	tetrisGrid
+	.unreq	tetrisGridRows
+	.unreq	tetrisGridCols
+	
+	mov 	pc, lr            // return
+
+
+
+
+// INPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = blockPrevX
+// 		1 = blockPrevY
+// 		2 = blockX
+// 		3 = blockY
+// 		4 = blockColor
+// 		5 = blockTypeAddress
+// 		6 = blockTypeOffset
+//		--------
+// OUTPUT
+//	
+tetrisDrawGrid:
+
 	curRow				.req r4
 	curCol				.req r5
 	curColor			.req r6
@@ -631,15 +947,18 @@ tetrisDrawGrid:
 	tetrisGridBlockSize	.req r10
 	tetrisGridData		.req r11
 	tetrisGridOffset	.req r12
+	
+	mov		r0, sp
 
+	push	{ lr }  
 	push	{ curRow - tetrisGridOffset }
 	
-	ldr 	tetrisGrid, 			=TetrisGrid
-	ldr		tetrisGridRows,			[tetrisGrid, #0]
-	ldr		tetrisGridCols,			[tetrisGrid, #4]
-	ldr		tetrisGridBlockSize,	[tetrisGrid, #8]
-	add 	tetrisGridData, 		tetrisGrid, #12
-
+	ldr 	tetrisGrid, 	=TetrisGrid
+	ldmfd	tetrisGrid, 	{ tetrisGridRows - tetrisGridBlockSize }
+	add 	tetrisGridData, tetrisGrid, #12
+	
+	mov		r7, r0
+	
 	mov		curRow, 		#0
 	mov		curCol, 		#0
 	mov		curColor, 		#0
@@ -651,8 +970,36 @@ tetrisDrawGrid:
 		for_curCol_lessThan_cols_loop:
 
 			push 	{ curRow - tetrisGridOffset }
+			
+			
+			
+			
+			
+			
+			nop
+			nop
+			ldmfd	r7, 	{ r6 - r12 }
+			stmfd	sp!,	{ r6 - r12 }
+			mov		r0, curRow
+			mov		r1, curCol
+			bl	tetrisBlockContainsPoint
+			ldmfd	sp!, 	{ r6 - r12 }
+			
+			pop 	{ curRow - tetrisGridOffset }
+			push 	{ curRow - tetrisGridOffset }
+			
+			
+			// IF r0 != 0, then this point is in the current block
+			teq		r0, #0
+			bne		skippy
+			
 
 			// drawRect(int x, int y, int width, int height, int color)
+			
+			// TODO!!
+			//stmfd	sp!,	{ curRow - curCol }
+			//bl tetrisGetGridOffsetForGridPosition
+			//ldmfd	sp!,	{ tetrisGridOffset }
 
 			// calculate tetris grid offset for block position
 			mul		tetrisGridOffset, 		tetrisGridCols, curCol
@@ -661,25 +1008,55 @@ tetrisDrawGrid:
 			
 			ldr		curColor, 				[tetrisGridData, tetrisGridOffset]
 
+
+
+
+
+
+
+
+
+
+
+
+
 			x		.req r0
 			y		.req r1
-
-			mul		x, curRow, tetrisGridBlockSize
-			mul		y, curCol, tetrisGridBlockSize
+			width	.req r2
+			height	.req r3
+		
+			push	{ x - height }
+			
+			mov		x, curRow
+			mov		y, curCol
+		
+			// tetrisGetRectForGridPosition(int x, int y)
+			stmfd	sp!, 	{ x, y  }
+			bl 		tetrisGetRectForGridPosition
+			ldmfd	sp!, 	{ x - height  }
+			
+			// drawRect(int x, int y, int width, int height, int color)
 
 			// push paramaters to stack
-			//stmfd	sp!,	{ r1 - r7 }
-			sub		sp, 					#20
-			str 	x, 						[sp, #0]
-			str 	y,	 					[sp, #4]
-			str 	tetrisGridBlockSize, 	[sp, #8]
-			str 	tetrisGridBlockSize, 	[sp, #12]
-			str 	curColor, 				[sp, #16]
-
-			.unreq	x
-			.unreq	y
+			stmfd	sp!,	{ x - height, curColor }
 
 			bl		drawRect
+			
+			pop		{ x - height }
+			
+			.unreq	x
+			.unreq	y
+			.unreq	width
+			.unreq	height
+			
+			
+			
+			
+			
+			
+			
+
+			skippy:
 
 			pop 	{ curRow - tetrisGridOffset }
 
@@ -706,12 +1083,91 @@ tetrisDrawGrid:
 
 	pop 	{ lr }
 	mov 	pc, lr            // return
+	
+	
+	
+	
+	
+// INPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = blockPrevX
+// 		1 = blockPrevY
+// 		2 = blockX
+// 		3 = blockY
+// 		4 = blockColor
+// 		5 = blockTypeAddress
+// 		6 = blockTypeOffset
+//		--------
+// OUTPUT
+//	
+tetrisDrawBlock:
+
+	
+
+	mov 	pc, lr            // return
 
 
 
 
+// INPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = x
+// 		1 = y
+//		--------
+// OUTPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = x
+// 		1 = y
+// 		2 = width
+// 		3 = height
+tetrisGetRectForGridPosition:
 
+	x					.req r0
+	y					.req r1
+	width				.req r2
+	height				.req r3
+	tetrisGrid			.req r4
+	tetrisGridRows		.req r5
+	tetrisGridCols		.req r6
+	tetrisGridBlockSize	.req r7
 
+	ldmfd	sp!, 		{ x, y }
+	push	{ tetrisGrid - tetrisGridBlockSize }
+	
+	ldr 	tetrisGrid, 	=TetrisGrid
+	ldmfd	tetrisGrid, 	{ tetrisGridRows - tetrisGridBlockSize }
+	
+	// calulate return values
+	mov		width,	tetrisGridBlockSize
+	mov		height,	tetrisGridBlockSize
+	mul		x, width
+	mul		y, height
+	
+	pop		{ tetrisGrid - tetrisGridBlockSize }
+	
+	stmfd	sp!, 		{ x, y, width, height }
+	
+	.unreq 	x
+	.unreq 	y
+	.unreq	width
+	.unreq	height
+	.unreq	tetrisGrid
+	.unreq	tetrisGridRows
+	.unreq	tetrisGridCols
+	.unreq	tetrisGridBlockSize
+	
+	mov 	pc, lr            // return
+	
+	
+	
+	
+	
 // INPUT
 //		--------
 //		On Stack
@@ -735,6 +1191,7 @@ tetrisUpdateGridWithBlock:
 	blockColor			.req r8
 	blockTypeAddress	.req r9
 	blockTypeOffset		.req r10
+	
 	mov		r0, sp
 
 	push 	{ lr }
@@ -752,8 +1209,8 @@ tetrisUpdateGridWithBlock:
 	
 	push	{ i - j }
 
-	mov	i, #0
-	mov j, #0
+	mov		i, #0
+	mov 	j, #0
 
 	for_i_lessThan_4_loop:
 
@@ -779,19 +1236,66 @@ tetrisUpdateGridWithBlock:
 			mov		blockBitForXY, 	#0b1000000000000000
 			and		blockBitForXY, 	blockGridData
 			teq		blockBitForXY,	#0
+			
+			push	{ blockColor }
+			moveq	blockColor, #0//black
+			//beq		blockHasNoData
+			
+			// if (blockBitForXY != 0)
+			blockHasData:
+			
+				x		.req r0
+				y		.req r1
+				width	.req r2
+				height	.req r3
+			
+				push	{ x - height }
+			
+				// tetrisGetRectForGridPosition(int x, int y)
+				stmfd	sp!, 	{ blockX, blockY  }
+				bl 		tetrisGetRectForGridPosition
+				ldmfd	sp!, 	{ x - height  }
+				
+				// drawRect(int x, int y, int width, int height, int color)
 
+				// push paramaters to stack
+				stmfd	sp!,	{ x - height, blockColor }
+
+				bl		drawRect
+				
+				pop		{ x - height }
+				
+				.unreq	x
+				.unreq	y
+				.unreq	width
+				.unreq	height
+			
+			blockHasNoData:
+			
+			
+			
+			pop	{ blockColor }
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			// if (blockBitForXY == 0)
 
 				// tetrisClearGridBlock(int x, int y)
-				moveq	r0, 	blockX
-				moveq	r1,		blockY
-				bleq 	tetrisClearGridBlock
+				//moveq	r0, 	blockX
+				//moveq	r1,		blockY
+				//bleq 	tetrisClearGridBlock
 
 			// else
 
 				// tetrisSetGridBlockColor(int x, int y, int color)
-				stmnefd	sp!, 	{ blockX, blockY, blockColor }
-				blne 	tetrisSetGridBlockColor
+				//stmnefd	sp!, 	{ blockX, blockY, blockColor }
+				//blne 	tetrisSetGridBlockColor
 
 			// endif
 
@@ -845,6 +1349,7 @@ tetrisUpdateGridWithBlock:
 // 		5 = blockTypeAddress
 // 		6 = blockTypeOffset
 //		--------
+//
 tetrisCreateNewBlock:
 
 	blockPrevX			.req r4
@@ -872,6 +1377,88 @@ tetrisCreateNewBlock:
 
 	stmfd	sp!,		{ blockPrevX - blockTypeOffset }
 
+	.unreq	blockPrevX
+	.unreq	blockPrevY
+	.unreq	blockX
+	.unreq	blockY
+	.unreq 	blockColor
+	.unreq	blockTypeAddress
+	.unreq	blockTypeOffset
+
+	mov 	pc, lr            // return
+	
+	
+	
+	
+	
+// INPUT
+//		r0 = x
+//		r1 = y
+//		--------
+//		On Stack
+//		--------
+// 		0 = blockPrevX
+// 		1 = blockPrevY
+// 		2 = blockX
+// 		3 = blockY
+// 		4 = blockColor
+// 		5 = blockTypeAddress
+// 		6 = blockTypeOffset
+//		--------
+// OUTPUT
+//		r0 = boolean (0 == false)
+//
+tetrisBlockContainsPoint:
+
+	x					.req r0
+	y					.req r1
+	returnVal			.req r2
+	blockPrevX			.req r4
+	blockPrevY			.req r5
+	blockX				.req r6
+	blockY				.req r7
+	blockColor			.req r8
+	blockTypeAddress	.req r9
+	blockTypeOffset		.req r10
+	
+	mov		r3, 		sp
+	mov		returnVal, 	#1
+	
+	ldmfd	r3,			{ blockPrevX - blockTypeOffset }
+	push	{ blockPrevX - blockTypeOffset }
+
+	ldmfd	r3,			{ blockPrevX - blockTypeOffset }
+	
+	// if (x > blockX && x < blockX + blockWidth)
+		cmp		x, 			blockX
+		movlt	returnVal,	#0
+		blt		tetrisBlockContainsPointEnd
+	
+		add		blockX, #4
+		cmp		x, 			blockX
+		movge	returnVal,	#0
+		bge		tetrisBlockContainsPointEnd
+	// endif
+	
+	// if (y > blockY && y < blockY + blockHeight)
+		cmp		y, 			blockY
+		movlt	returnVal,	#0
+		blt		tetrisBlockContainsPointEnd
+		
+		add		blockY, #4
+		cmp		y, 			blockY
+		movge	returnVal,	#0
+		bge		tetrisBlockContainsPointEnd
+	// endif
+	
+tetrisBlockContainsPointEnd:
+
+	pop		{ blockPrevX - blockTypeOffset }
+	mov		r0, returnVal
+
+	.unreq	x
+	.unreq	y
+	.unreq	returnVal
 	.unreq	blockPrevX
 	.unreq	blockPrevY
 	.unreq	blockX
@@ -1052,11 +1639,11 @@ tetrisTranslateBlock:
 	
 	// tetrisUpdateGridWithBlock(blankBlock) 
 	stmfd	sp!, 	{ blockPrevX - blockTypeOffset }
-	bl	tetrisUpdateGridWithBlock
+	//bl	tetrisUpdateGridWithBlock
 	
 	// tetrisUpdateGridWithBlock(currentBlock) 
 	ldmfd	sp!, 	{ blockPrevX - blockTypeOffset }
-	bl	tetrisUpdateGridWithBlock
+	//bl	tetrisUpdateGridWithBlock
 	
 tetrisTranslateBlockEnd:
 
@@ -1091,21 +1678,9 @@ tetrisTranslateBlockEnd:
 // OUTPUT
 //		r0 = maxX
 //		r1 = maxY
+//
 tetrisGetMaxBlockPosition:
 
-/*
-	currentRowData		.req r0
-	rowBitMask			.req r1
-	blockGridData		.req r2
-	blockPrevX			.req r4
-	blockPrevY			.req r5
-	blockX				.req r6
-	blockY				.req r7
-	blockColor			.req r8
-	blockTypeAddress	.req r9
-	blockTypeOffset		.req r10
-	*/
-	
 	blockPrevX			.req r4
 	blockPrevY			.req r5
 	blockX				.req r6
@@ -1116,26 +1691,17 @@ tetrisGetMaxBlockPosition:
 	
 	ldmfd	sp, 	{ blockPrevX - blockTypeOffset }
 	
-	// start at current position
-	//mov		r11, #0
-	//mov		r12, blockY
-	
-	// increment for each row that has block data (not 0)
-	
-	
-	
-	
-	i	.req r11
-	j	.req r12
+	i		.req r11
+	j		.req r12
 	
 	push	{ i - j }
 
-	mov	i, #1
-	mov j, #1
+	mov		i, #1
+	mov 	j, #1
 	
 
-	mov	r0, blockX
-	mov	r1, blockY
+	mov		r0, blockX
+	mov		r1, blockY
 	
 	
 	for_i_lessThanEqual_4_loop:
@@ -1151,7 +1717,6 @@ tetrisGetMaxBlockPosition:
 
 			ldrh	blockGridData, [blockTypeAddress, blockTypeOffset]
 
-
 			push 	{ i, j }
 			add 	blockX, i
 			add 	blockY, j
@@ -1166,22 +1731,17 @@ tetrisGetMaxBlockPosition:
 			mov		blockBitForXY, 	#0b1000000000000000
 			and		blockBitForXY, 	blockGridData
 			teq		blockBitForXY,	#0
-			beq 	skip
 			
-			
-			// if (blockBitForXY == 0)
-
+			// if (blockBitForXY == 1)
+				beq 	for_j_lessThanEqual_4_loopEnd
+			// else
 				cmp		r0, blockX
 				movlt	r0, blockX
 				cmp		r1, blockY
-				movlt	r1, blockY
+				movlt	r1, blockY	
+			// endif
 			
-				nop
-			
-			
-			
-			
-			skip:
+			for_j_lessThanEqual_4_loopEnd:
 
 			pop 	{ i, j }
 			
@@ -1204,30 +1764,6 @@ tetrisGetMaxBlockPosition:
 		
 		.unreq	i
 		.unreq 	j
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/*
 	mov		rowBitMask, #0b1111
@@ -1272,12 +1808,6 @@ tetrisGetMaxBlockPosition:
 	
 	*/
 	
-	
-	
-	
-	
-	
-	
 tetrisGetMaxBlockPositionEnd:
 	
 	//.unreq 	currentRowData
@@ -1292,6 +1822,109 @@ tetrisGetMaxBlockPositionEnd:
 	.unreq	blockTypeOffset
 
 	mov 	pc, lr            // return
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+// INPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = blockPrevX
+// 		1 = blockPrevY
+// 		2 = blockX
+// 		3 = blockY
+// 		4 = blockColor
+// 		5 = blockTypeAddress
+// 		6 = blockTypeOffset
+//		--------
+// OUTPUT
+//		r0 = maxX
+//		r1 = maxY
+//
+tetrisGetMaxBlockPosition2:
+
+	rowBitMask			.req r0
+	currentRowData		.req r1
+	blockGridData				.req r2
+	blockPrevX			.req r4
+	blockPrevY			.req r5
+	blockX				.req r6
+	blockY				.req r7
+	blockColor			.req r8
+	blockTypeAddress	.req r9
+	blockTypeOffset		.req r10
+	
+	mov		r12, lr
+	
+	bl 	tetrisGetGridBitmaskForBlock
+	
+	ldmfd	sp, 	{ blockPrevX - blockTypeOffset }
+	ldrh	blockGridData, [blockTypeAddress, blockTypeOffset]
+	//bic		r0, blockGridData
+	nop
+	
+	and		r1, r0, blockGridData
+	bic		r1, blockGridData
+	and		r1, blockGridData
+	cmp		r1, #0
+	moveq	r3, #0
+	movne	r3, #1
+	
+	nop
+	
+	
+	//ldrh	r1, [blockTypeAddress, blockTypeOffset]
+	//add		r1, r1, r0
+	nop
+	nop
+	nop
+	
+	
+tetrisGetMaxBlockPositionEnd2:
+	
+	.unreq 	rowBitMask
+	.unreq	currentRowData
+	.unreq blockGridData				
+	
+	//.unreq	blockGridData
+	.unreq	blockPrevX
+	.unreq	blockPrevY
+	.unreq	blockX
+	.unreq	blockY
+	.unreq 	blockColor
+	.unreq	blockTypeAddress
+	.unreq	blockTypeOffset
+
+	mov 	pc, r12            // return
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -1311,6 +1944,7 @@ tetrisGetMaxBlockPositionEnd:
 //		--------
 // OUTPUT
 //		r0 = boolean (0 == no collision)
+//
 tetrisCheckBlockCollision:
 
 	blockPrevX			.req r4
@@ -1507,12 +2141,13 @@ startTimer:
 //##############################################################//
 .section .data
 
+	//	-1--
 .align 4
 TetrisGrid:
-	.int	30				// tetrisGridRows
-	.int	30				// tetrisGridCols
-	.int	15				// tetrisGridBlockSize (nxn pixels)
-	.space 	30 * 30 * 4		// tetrisGridData (rows x cols)
+	.int	10				// tetrisGridRows
+	.int	15				// tetrisGridCols
+	.int	32				// tetrisGridBlockSize (nxn pixels)
+	.space 	10 * 15 * 4		// tetrisGridData (rows x cols)
 TetrisGridEnd:
 
 
@@ -1557,6 +2192,7 @@ TetrisBlockB:
 	.hword		0x8E00			// 0
 	//	1---
 	//	111-
+	//	----
 	//	----
 	//	----
 	.hword		0x44C0			// pi/2
