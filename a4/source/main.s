@@ -201,7 +201,7 @@ bl tetrisInitGrid
 		
 		bl	tetrisDrawGrid
 		nop
-		bl	tetrisUpdateGridWithBlock
+		bl	tetrisDrawBlock
 		nop
 		nop
 		nop
@@ -218,8 +218,16 @@ bl tetrisInitGrid
 		mov		r1, #1
 		nop
 		bl		tetrisTranslateBlock
+		nop
 		bl		tetrisCheckBlockGridCollisions
+		pop		{ r0 }
+		nop
 		teq		r0, #0
+		
+		
+		
+		
+		
 		blne	tetrisOnBlockCollision
 		
 		
@@ -658,8 +666,7 @@ tetrisSetGridBlockColor:
 	tetrisGridOffset	.req r8
 	
 	ldmfd	sp!,				{ x - blockColor }
-	
-	//push	{ tetrisGridRows - tetrisGridOffset }
+	push	{ tetrisGridRows - tetrisGridOffset }
 	
 	ldr 	tetrisGrid, 			=TetrisGrid
 	ldr		tetrisGridRows,			[tetrisGrid, #0]
@@ -675,7 +682,7 @@ tetrisSetGridBlockColor:
 	// write color to tetrisGridData
 	str		blockColor, 		[tetrisGridData, tetrisGridOffset]
 	
-	//pop		{ tetrisGridRows - tetrisGridOffset }
+	pop		{ tetrisGridRows - tetrisGridOffset }
 	
 	.unreq	x
 	.unreq	y
@@ -687,7 +694,7 @@ tetrisSetGridBlockColor:
 	.unreq	tetrisGridData
 	.unreq	tetrisGridOffset
 
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 	
 	
 	
@@ -745,7 +752,7 @@ tetrisGetGridBlockColor:
 	.unreq	tetrisGridData
 	.unreq	tetrisGridOffset
 
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 
 
 
@@ -775,7 +782,7 @@ tetrisClearGridBlock:
 
 	pop 	{ lr }
 
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 
 
 
@@ -818,11 +825,11 @@ tetrisGetGridBitmaskForBlock:
 	mov		i, #0
 	mov 	j, #0
 
-	for_i_lessThan_4_loop_:
+	tetrisGetGridBitmaskForBlock_for_i_lessThan_4_loop:
 
 		push 	{ j }
 
-		for_j_lessThan_4_loop_:
+		tetrisGetGridBitmaskForBlock_for_j_lessThan_4_loop:
 
 			push 	{ blockX - blockY }
 
@@ -845,17 +852,17 @@ tetrisGetGridBitmaskForBlock:
 
 			add 	j, #1
 			cmp 	j, #4
-			blt 	for_j_lessThan_4_loop_
+			blt 	tetrisGetGridBitmaskForBlock_for_j_lessThan_4_loop
 
 		pop 	{ j }
 		add 	i, #1
 		cmp 	i, #4
-		blt 	for_i_lessThan_4_loop_
+		blt 	tetrisGetGridBitmaskForBlock_for_i_lessThan_4_loop
 	
-		pop		{ i - j }
+	pop		{ i - j }
 		
-		.unreq	i
-		.unreq 	j
+	.unreq	i
+	.unreq 	j
 
 	pop		{ blockX - blockTypeOffset }
 	
@@ -870,7 +877,7 @@ tetrisGetGridBitmaskForBlock:
 	.unreq	blockTypeOffset
 
 	pop 	{ lr }
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 	
 	
 	
@@ -921,7 +928,7 @@ tetrisGetGridOffsetForGridPosition:
 	.unreq	tetrisGridRows
 	.unreq	tetrisGridCols
 	
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 
 
 
@@ -1084,7 +1091,7 @@ tetrisDrawGrid:
 	.unreq	tetrisGridOffset
 
 	pop 	{ lr }
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 	
 	
 	
@@ -1143,15 +1150,13 @@ tetrisGetRectForGridPosition:
 	.unreq	tetrisGridCols
 	.unreq	tetrisGridBlockSize
 	
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 	
 	
 	
 	
 	
 // INPUT
-// 		r0 = writeToGrid boolean (0 == false)
-//
 //		--------
 //		On Stack
 //		--------
@@ -1289,10 +1294,10 @@ tetrisDrawBlock:
 		cmp 	i, #4
 		blt 	for_i_lessThan_4_loop
 	
-		pop		{ i - j }
+	pop		{ i - j }
 		
-		.unreq	i
-		.unreq 	j
+	.unreq	i
+	.unreq 	j
 
 	pop		{ blockX - blockTypeOffset }
 
@@ -1303,7 +1308,7 @@ tetrisDrawBlock:
 	.unreq	blockTypeOffset
 
 	pop 	{ lr }
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 
 
 
@@ -1351,7 +1356,7 @@ tetrisCreateNewBlock:
 	.unreq	blockTypeAddress
 	.unreq	blockTypeOffset
 
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 	
 	
 	
@@ -1492,7 +1497,7 @@ tetrisBlockContainsPointEnd:
 	.unreq	blockTypeOffset
 
 	pop		{ lr }
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 	
 	
 	
@@ -1521,7 +1526,7 @@ tetrisBlockContainsPointEnd:
 tetrisBlockBitForGridPoint:
 
 	
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 	
 	
 	
@@ -1544,14 +1549,16 @@ tetrisBlockBitForGridPoint:
 // 		4 = blockTypeOffset
 //		--------
 // OUTPUT
-//		r0 = boolean (0 == false)
+//		--------
+//		On Stack
+//		--------
+// 		0 = boolean (0 == false)
+//		--------
 //
 tetrisCheckBlockGridCollisions:
 
-	returnVal			.req r0
-	rowBitMask			.req r1
-	currentRowData		.req r2
-	blockGridData		.req r3
+	gridBitMask			.req r0
+	blockGridData		.req r1
 	blockX				.req r4
 	blockY				.req r5
 	blockColor			.req r6
@@ -1570,15 +1577,15 @@ tetrisCheckBlockGridCollisions:
 	nop
 	
 	ldrh	blockGridData, 	[blockTypeAddress, blockTypeOffset]
-	and		returnVal, 		rowBitMask, blockGridData
-	cmp		returnVal, 		#0
-	movne	returnVal, 		#1
-
+	and		gridBitMask, 	gridBitMask, blockGridData
+	cmp		gridBitMask, 	#0
+	movne	gridBitMask, 	#1
+	nop
 	pop		{ blockX - blockTypeOffset }
+	pop		{ lr }
+	push	{ gridBitMask }
 	
-	.unreq 	returnVal
-	.unreq 	rowBitMask
-	.unreq	currentRowData
+	.unreq 	gridBitMask
 	.unreq 	blockGridData		
 	.unreq	blockX
 	.unreq	blockY
@@ -1586,8 +1593,7 @@ tetrisCheckBlockGridCollisions:
 	.unreq	blockTypeAddress
 	.unreq	blockTypeOffset
 	
-	pop		{ lr }
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 	
 	
 	
@@ -1614,14 +1620,16 @@ tetrisOnBlockCollision:
 	blockTypeAddress	.req r7
 	blockTypeOffset		.req r8
 	
-	//ldmfd	sp!, 		{ blockX - blockTypeOffset }
-	
-	// TODO
-	//1. write block to grid
-	
+	mov		r12, 	lr
+	//
+	nop
+	bl writeBlockToGridTest
+	nop
 	// delete current block and generate new one
 	add		sp, 	#20			
-	mov		r12, 	lr
+	
+	
+	
 	bl		tetrisCreateNewBlock
 	mov		lr, 	r12
 	
@@ -1632,7 +1640,112 @@ tetrisOnBlockCollision:
 	.unreq	blockTypeAddress
 	.unreq	blockTypeOffset
 	
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
+	
+	
+	
+	
+	
+// INPUT
+//		--------
+//		On Stack
+//		--------
+// 		1 = blockX
+// 		2 = blockY
+// 		3 = blockColor
+// 		4 = blockTypeAddress
+// 		5 = blockTypeOffset
+//		--------
+// OUTPUT
+//	
+writeBlockToGridTest:
+
+	blockX				.req r4
+	blockY				.req r5
+	blockColor			.req r6
+	blockTypeAddress	.req r7
+	blockTypeOffset		.req r8
+	
+	mov		r0, sp
+	push 	{ lr }
+	push	{ blockX - blockTypeOffset }
+	ldmfd	r0, 		{ blockX - blockTypeOffset }
+
+	i	.req r11
+	j	.req r12
+	
+	push	{ i - j }
+
+	mov		i, #0
+	mov 	j, #0
+
+	writeBlockToGridTest_for_i_lessThan_4_loop:
+
+		push 	{ j }
+
+		writeBlockToGridTest_for_j_lessThan_4_loop:
+
+			push 	{ blockX - blockColor }
+
+			blockBitForXY	.req r1
+			blockGridData	.req r2
+	
+			ldrh	blockGridData, [blockTypeAddress, blockTypeOffset]
+
+			add 	blockX, i
+			add 	blockY, j
+
+			// calculate bit corresponding to block position
+			mov		blockBitForXY, 	#4
+			mul		blockBitForXY, 	blockBitForXY, j
+			add		blockBitForXY, 	i
+			lsl		blockGridData, 	blockBitForXY
+			mov		blockBitForXY, 	#0b1000000000000000
+			and		blockBitForXY, 	blockGridData
+			teq		blockBitForXY,	#0
+			beq		writeBlockToGridTest_blockHasNoData
+			
+			// if (blockBitForXY != 0)
+			writeBlockToGridTest_blockHasData:
+			
+				// tetrisSetGridBlockColor(int x, int y, int color)
+				nop
+				stmfd	sp!, 	{ blockX - blockColor }
+				bl	 	tetrisSetGridBlockColor
+				nop
+			
+			writeBlockToGridTest_blockHasNoData:
+
+			.unreq	blockBitForXY
+			.unreq 	blockGridData
+
+			pop 	{ blockX - blockColor }
+
+			add 	j, #1
+			cmp 	j, #4
+			blt 	writeBlockToGridTest_for_j_lessThan_4_loop
+
+		pop 	{ j }
+		add 	i, #1
+		cmp 	i, #4
+		blt 	writeBlockToGridTest_for_i_lessThan_4_loop
+	
+	pop		{ i - j }
+		
+	.unreq	i
+	.unreq 	j
+
+	pop		{ blockX - blockTypeOffset }
+
+	.unreq	blockX
+	.unreq	blockY
+	.unreq 	blockColor
+	.unreq	blockTypeAddress
+	.unreq	blockTypeOffset
+
+	pop 	{ lr }
+	mov 	pc, lr				// return
+	
 	
 	
 	
@@ -1750,7 +1863,7 @@ tetrisRotateBlockEnd:
 	.unreq	blockTypeAddress
 	.unreq	blockTypeOffset
 	
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 	
 	
 	
@@ -1934,10 +2047,10 @@ tetrisGetMaxBlockPosition:
 		cmp 	i, #4
 		ble 	for_i_lessThanEqual_4_loop
 		
-		pop		{ i - j }
+	pop		{ i - j }
 		
-		.unreq	i
-		.unreq 	j
+	.unreq	i
+	.unreq 	j
 	
 	/*
 	mov		rowBitMask, #0b1111
@@ -1993,7 +2106,7 @@ tetrisGetMaxBlockPositionEnd:
 	.unreq	blockTypeAddress
 	.unreq	blockTypeOffset
 
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 	
 	
 	
@@ -2071,7 +2184,7 @@ tetrisCheckBlockCollision:
 	.unreq	blockTypeAddress
 	.unreq	blockTypeOffset
 
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 	
 	
 	
@@ -2113,7 +2226,7 @@ clearScreen:
 	.unreq	color
 
 	pop 	{ lr }
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 
 
 
@@ -2149,7 +2262,7 @@ drawPixel:
 	.unreq		offset
 
 	pop 	{ lr }
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 	
 	
 	
@@ -2168,6 +2281,7 @@ drawPixel:
 // OUTPUT
 //		r0 = boolean (0 == no collision)
 //
+.globl drawRect
 drawRect:
 
 	x		.req r4
@@ -2256,7 +2370,7 @@ arrayOffsetWithPosition:
 	.unreq	cols
 	.unreq	itemSize
 	
-	mov 	pc, lr            // return
+	mov 	pc, lr				// return
 	
 	
 	
@@ -2300,7 +2414,7 @@ TetrisGridEnd:
 TetrisBlock:
 	.int		0			// blockX
 	.int		0			// blockY
-	.word		0x00AABB	// blockColor
+	.word		0xFFFFFF	// blockColor
 	.word 		0			// blockTypeAddress
 	.int 		0			// blockTypeOffset (0 - 3)
 TetrisBlockEnd:
