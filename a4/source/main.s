@@ -1846,6 +1846,9 @@ tetrisTranslateBlock:
 	pop		{ blockX - blockTypeOffset }
 	push	{ lr }
 	
+	// copy block in current state
+	push 	{ blockX - blockTypeOffset }
+	
 	// update block values
 	add		blockX, dx
 	add		blockY, dy
@@ -1855,6 +1858,9 @@ tetrisTranslateBlock:
 	bl		tetrisCheckBlockGridCollisions
 	pop		{ r0 }
 	teq		r0, #0
+	pop		{ blockX - blockTypeOffset  }
+	addeq	sp, #20
+	pusheq	{ blockX - blockTypeOffset }
 	blne	tetrisOnBlockCollision
 	
 	pop		{ blockX - blockTypeOffset }
