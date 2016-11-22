@@ -218,17 +218,7 @@ bl tetrisInitGrid
 		mov		r1, #1
 		nop
 		bl		tetrisTranslateBlock
-		nop
-		bl		tetrisCheckBlockGridCollisions
-		pop		{ r0 }
-		nop
-		teq		r0, #0
 		
-		
-		
-		
-		
-		blne	tetrisOnBlockCollision
 		
 		
 		
@@ -772,8 +762,8 @@ tetrisClearGridBlock:
 	push 	{ lr }
 
 	// TODO: set background color of grid and load here
-	ldr 	color, 			=0x000000
-	stmfd	sp!,			{ x - color }
+	ldr 	color, 	=0x000000
+	stmfd	sp!,	{ x - color }
 	bl 		tetrisSetGridBlockColor
 
 	.unreq	x
@@ -814,7 +804,7 @@ tetrisGetGridBitmaskForBlock:
 	mov		r0, sp
 	push 	{ lr }
 	push	{ blockX - blockTypeOffset }
-	ldmfd	r0, 		{ blockX - blockTypeOffset }
+	ldmfd	r0, { blockX - blockTypeOffset }
 
 	i	.req r11
 	j	.req r12
@@ -866,7 +856,7 @@ tetrisGetGridBitmaskForBlock:
 
 	pop		{ blockX - blockTypeOffset }
 	
-	mov		r0, bitmask		// returnVal
+	mov		r0, bitmask			// returnVal
 
 	.unreq	bitmask
 	.unreq	blockGridData
@@ -878,57 +868,7 @@ tetrisGetGridBitmaskForBlock:
 
 	pop 	{ lr }
 	mov 	pc, lr				// return
-	
-	
-	
-	
-	
-// INPUT
-//		--------
-//		On Stack
-//		--------
-// 		0 = x
-// 		1 = y
-//		--------
-// OUTPUT
-//		--------
-//		On Stack
-//		--------
-// 		0 = tetrisGridOffset
-//		--------
-//
-tetrisGetGridOffsetForGridPosition:
 
-	x					.req r0
-	y					.req r1
-	tetrisGridOffset	.req r2
-	tetrisGrid			.req r7
-	tetrisGridRows		.req r8
-	tetrisGridCols		.req r9
-
-	ldmfd	sp!, 			{ x, y }
-	push	{ tetrisGrid - tetrisGridCols }
-	
-	ldr 	tetrisGrid, 	=TetrisGrid
-	ldmfd	tetrisGrid, 	{ tetrisGridRows - tetrisGridCols }
-	
-	// calculate tetris grid offset for grid position
-	mul		tetrisGridOffset, 		tetrisGridCols, y
-	add		tetrisGridOffset, 		x
-	lsl		tetrisGridOffset, 		#2
-	
-	pop		{ tetrisGrid - tetrisGridCols }
-	
-	stmfd	sp!, 		{ tetrisGridOffset }
-	
-	.unreq 	x
-	.unreq 	y
-	.unreq	tetrisGridOffset
-	.unreq	tetrisGrid
-	.unreq	tetrisGridRows
-	.unreq	tetrisGridCols
-	
-	mov 	pc, lr				// return
 
 
 
@@ -1010,10 +950,19 @@ tetrisDrawGrid:
 
 			// drawRect(int x, int y, int width, int height, int color)
 			
-			// TODO!!
-			stmfd	sp!,	{ curRow - curCol }
-			bl tetrisGetGridOffsetForGridPosition
-			ldmfd	sp!,	{ tetrisGridOffset }
+			
+			
+			// int offset = positionToArrayOffset(int x, int y, int cols)
+			stmfd	sp!, 	{ curRow, curCol, tetrisGridCols}
+			bl 		positionToArrayOffset
+			pop 	{ tetrisGridOffset }
+			lsl		tetrisGridOffset, #2
+			
+			
+			
+			//mul		tetrisGridOffset, 		tetrisGridCols, curCol
+			//add		tetrisGridOffset, 		curRow
+			//lsl		tetrisGridOffset, 		#2
 		
 			ldr		curColor, 				[tetrisGridData, tetrisGridOffset]
 
@@ -1434,22 +1383,22 @@ tetrisBlockContainsPoint:
 		
 		nop
 		
-		// int offset = arrayOffsetWithPosition(int x, int y, int cols, int itemSize)
+		// int offset = positionToArrayOffset(int x, int y, int cols)
 		stmfd	sp!, 	{ x, y, r11, r12 }
-		bl arrayOffsetWithPosition
+		bl positionToArrayOffset
 		ldmfd	sp!, 	{ returnVal }
 		nop
 		
 		
 		
 		ldrh	r0, 	[blockTypeAddress, blockTypeOffset]
-		mov		r1, #0b1000000000000000
-		lsr		r1, returnVal
+		mov		r1, 	#0b1000000000000000
+		lsr		r1, 	returnVal
 		
 		and		r1, 	r0
-		cmp		r1, 		#0
-		movne	r1, 		#1
-		mov		r0, r1
+		cmp		r1, 	#0
+		movne	r1, 	#1
+		mov		r0, 	r1
 		
 		nop
 		
@@ -1620,18 +1569,18 @@ tetrisOnBlockCollision:
 	blockTypeAddress	.req r7
 	blockTypeOffset		.req r8
 	
-	mov		r12, 	lr
-	//
-	nop
+	ldmfd	sp!, 		{ blockX - blockTypeOffset }
+	push 	{ lr }
+	stmfd	sp!, 		{ blockX - blockTypeOffset }
+	
 	bl writeBlockToGridTest
-	nop
+	
 	// delete current block and generate new one
-	add		sp, 	#20			
-	
-	
-	
+	pop		{ blockX - blockTypeOffset }
 	bl		tetrisCreateNewBlock
-	mov		lr, 	r12
+	pop		{ blockX - blockTypeOffset }
+	pop 	{ lr }
+	push	{ blockX - blockTypeOffset }
 	
 	.unreq 	blockGridData		
 	.unreq	blockX
@@ -1639,7 +1588,7 @@ tetrisOnBlockCollision:
 	.unreq 	blockColor
 	.unreq	blockTypeAddress
 	.unreq	blockTypeOffset
-	
+
 	mov 	pc, lr				// return
 	
 	
@@ -1894,35 +1843,25 @@ tetrisTranslateBlock:
 	blockTypeAddress	.req r7
 	blockTypeOffset		.req r8
 	
-	mov	r11, lr
-	
-	// pop block
-	ldmfd	sp!, 	{ blockX - blockTypeOffset }
+	pop		{ blockX - blockTypeOffset }
+	push	{ lr }
 	
 	// update block values
 	add		blockX, dx
 	add		blockY, dy
+	push 	{ blockX - blockTypeOffset }
 	
-	//TODO: check grid size
-	cmp		blockY, #19 //(cols - 4)
-	movge	blockY, #0	//	wrap to top
+	// didCollide = tetrisCheckBlockGridCollisions(block)
+	bl		tetrisCheckBlockGridCollisions
+	pop		{ r0 }
+	teq		r0, #0
+	blne	tetrisOnBlockCollision
 	
-	//str		blockX, [sp, #8]
-	//str		blockY, [sp, #12]
+	pop		{ blockX - blockTypeOffset }
+	pop		{ lr }
+	push 	{ blockX - blockTypeOffset }
 	
-	// push block
-	stmfd	sp!, 	{ blockX - blockTypeOffset }
-	
-	
-	
-	
-	
-	// tetrisCheckBlockCollision()
-	//bl 		tetrisCheckBlockCollision
-	//teq		r0, #0
-	//bne		tetrisTranslateBlockEnd
-	
-	
+	nop
 	
 	// make blank copy of block
 	// in previous position and with black color
@@ -1948,7 +1887,7 @@ tetrisTranslateBlockEnd:
 	.unreq	blockTypeAddress
 	.unreq	blockTypeOffset
 	
-	mov 	pc, r11            // return	
+	mov 	pc, lr            // return	
 	
 	
 	
@@ -2111,84 +2050,6 @@ tetrisGetMaxBlockPositionEnd:
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-// INPUT
-//		--------
-//		On Stack
-//		--------
-// 		0 = blockX
-// 		1 = blockY
-// 		2 = blockColor
-// 		3 = blockTypeAddress
-// 		4 = blockTypeOffset
-//		--------
-// OUTPUT
-//		r0 = boolean (0 == no collision)
-//
-tetrisCheckBlockCollision:
-
-	blockX				.req r4
-	blockY				.req r5
-	blockColor			.req r6
-	blockTypeAddress	.req r7
-	blockTypeOffset		.req r8
-	
-	ldmfd	sp, 	{ blockX - blockTypeOffset }
-	
-	push 	{ lr }
-
-	cmp		blockY, #11 //(cols - 4)
-	movge	blockY, #0	//	wrap to top
-	//blge	tetrisCreateNewBlock
-	//mov		r0, #1
-	//movge	r0, #0
-	
-	pop	 	{ lr }
-
-	.unreq	blockX
-	.unreq	blockY
-	.unreq 	blockColor
-	.unreq	blockTypeAddress
-	.unreq	blockTypeOffset
-
-	mov 	pc, lr				// return
-	
-	
-	
-	
 
 // INPUT
 //
@@ -2334,6 +2195,7 @@ drawRect:
 	
 	
 	
+
 // INPUT
 //		--------
 //		On Stack
@@ -2341,34 +2203,33 @@ drawRect:
 // 		0 = x
 // 		1 = y
 // 		2 = cols
-// 		3 = itemSize
 //		--------
 // OUTPUT
 //		--------
 //		On Stack
 //		--------
 // 		0 = offset
+//		--------
 //
-arrayOffsetWithPosition:
+positionToArrayOffset:
 
 	x			.req r0
 	y			.req r1
 	cols		.req r2
-	itemSize	.req r3
+	offset		.req r3
 	
-	ldmfd	sp!, 	{ x - itemSize }
+	ldmfd	sp!, 	{ x - cols }
 	
 	// calculate 1D offset for 2D array
-	mul		cols,	cols, y
-	add		cols,	x
-	mul		cols,	itemSize
+	mul		offset,	cols, y
+	add		offset,	x
 	
-	stmfd	sp!, 	{ cols }
+	stmfd	sp!, 	{ offset }
 	
 	.unreq 	x
 	.unreq 	y
 	.unreq	cols
-	.unreq	itemSize
+	.unreq	offset
 	
 	mov 	pc, lr				// return
 	
