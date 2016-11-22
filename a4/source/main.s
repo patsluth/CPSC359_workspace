@@ -129,7 +129,7 @@ bl tetrisInitGrid
 
 
 
-	
+	/*
 	
 	// tetrisSetGridBlockColor(int x, int y, int color)
 	mov		r0, #0
@@ -180,6 +180,8 @@ bl tetrisInitGrid
 	stmfd	sp!, 	{ r0- r2 }
 	bl	 	tetrisSetGridBlockColor
 	
+	*/
+	
 	bl	tetrisCreateNewBlock
 	
 	// tetrisRotateBlock(right)
@@ -214,8 +216,8 @@ bl tetrisInitGrid
 		//bl	tetrisRotateBlock
 		
 		// tetrisTranslateBlock(int dx, int dy)
-		mov		r0, #0
-		mov		r1, #1
+		mov		r0, #1
+		mov		r1, #0
 		nop
 		bl		tetrisTranslateBlock
 		
@@ -713,6 +715,7 @@ tetrisGetGridBlockColor:
 	tetrisGridOffset	.req r8
 	
 	ldmfd	sp!,				{ x - y }
+	push	{ lr }
 	
 	//push	{ tetrisGridRows - tetrisGridOffset }
 	
@@ -721,14 +724,35 @@ tetrisGetGridBlockColor:
 	ldr		tetrisGridCols,			[tetrisGrid, #4]
 	ldr		tetrisGridBlockSize,	[tetrisGrid, #8]
 	add 	tetrisGridData, 		tetrisGrid, #12
+	
+	// default value, so we can use the grid bitmask to check for grid bounds
+	ldr		blockColor, 		=0xFFFFFF
+		
+	//********************************
+	//*****check for valid input******
+	//********************************
+	cmp		x, #0
+	blt		tetrisGetGridBlockColorEnd
+	cmp		x, tetrisGridCols
+	bge		tetrisGetGridBlockColorEnd
+	//********************************
+	cmp		y, #0
+	blt		tetrisGetGridBlockColorEnd
+	cmp		y, tetrisGridRows
+	bge		tetrisGetGridBlockColorEnd
+	//********************************
+	
+	tetrisGetGridBlockColor_validInput:
 
-	// calculate tetris grid offset for block position
-	mul		tetrisGridOffset, 	tetrisGridCols, y
-	add		tetrisGridOffset, 	x
-	lsl		tetrisGridOffset, 	#2
-
-	// read color
-	ldr		blockColor, 		[tetrisGridData, tetrisGridOffset]
+		// int tetrisGridOffset = positionToArrayOffset(int x, int y, int cols)
+		stmfd	sp!, 	{ x, y, tetrisGridCols }
+		bl 		positionToArrayOffset
+		pop 	{ tetrisGridOffset }
+		lsl		tetrisGridOffset, #2
+			
+		ldr		blockColor, 		[tetrisGridData, tetrisGridOffset]
+	
+tetrisGetGridBlockColorEnd:
 	
 	//pop		{ tetrisGridRows - tetrisGridOffset }
 	
@@ -742,6 +766,7 @@ tetrisGetGridBlockColor:
 	.unreq	tetrisGridData
 	.unreq	tetrisGridOffset
 
+	pop		{ lr }
 	mov 	pc, lr				// return
 
 
@@ -950,19 +975,11 @@ tetrisDrawGrid:
 
 			// drawRect(int x, int y, int width, int height, int color)
 			
-			
-			
 			// int offset = positionToArrayOffset(int x, int y, int cols)
-			stmfd	sp!, 	{ curRow, curCol, tetrisGridCols}
+			stmfd	sp!, 	{ curRow, curCol, tetrisGridCols }
 			bl 		positionToArrayOffset
 			pop 	{ tetrisGridOffset }
 			lsl		tetrisGridOffset, #2
-			
-			
-			
-			//mul		tetrisGridOffset, 		tetrisGridCols, curCol
-			//add		tetrisGridOffset, 		curRow
-			//lsl		tetrisGridOffset, 		#2
 		
 			ldr		curColor, 				[tetrisGridData, tetrisGridOffset]
 
@@ -1529,7 +1546,7 @@ tetrisCheckBlockGridCollisions:
 	and		gridBitMask, 	gridBitMask, blockGridData
 	cmp		gridBitMask, 	#0
 	movne	gridBitMask, 	#1
-	nop
+	
 	pop		{ blockX - blockTypeOffset }
 	pop		{ lr }
 	push	{ gridBitMask }
@@ -1859,6 +1876,7 @@ tetrisTranslateBlock:
 	pop		{ r0 }
 	teq		r0, #0
 	pop		{ blockX - blockTypeOffset  }
+	// if no collision, delete previous block from stack
 	addeq	sp, #20
 	pusheq	{ blockX - blockTypeOffset }
 	blne	tetrisOnBlockCollision
@@ -1866,22 +1884,6 @@ tetrisTranslateBlock:
 	pop		{ blockX - blockTypeOffset }
 	pop		{ lr }
 	push 	{ blockX - blockTypeOffset }
-	
-	nop
-	
-	// make blank copy of block
-	// in previous position and with black color
-	//mov	blockX, blockPrevX
-	//mov	blockY, blockPrevY
-	//ldr	blockColor, =0x0
-	
-	// tetrisUpdateGridWithBlock(blankBlock) 
-	//stmfd	sp!, 	{ blockX - blockTypeOffset }
-	//bl	tetrisUpdateGridWithBlock
-	
-	// tetrisUpdateGridWithBlock(currentBlock) 
-	//ldmfd	sp!, 	{ blockX - blockTypeOffset }
-	//bl	tetrisUpdateGridWithBlock
 	
 tetrisTranslateBlockEnd:
 
@@ -2271,10 +2273,10 @@ startTimer:
 	//	-1--
 .align 4
 TetrisGrid:
-	.int	20				// tetrisGridRows
-	.int	20				// tetrisGridCols
+	.int	15				// tetrisGridRows
+	.int	15				// tetrisGridCols
 	.int	15				// tetrisGridBlockSize (nxn pixels)
-	.space 	20 * 20 * 4		// tetrisGridData (rows x cols)
+	.space 	15 * 15 * 4		// tetrisGridData (rows x cols)
 TetrisGridEnd:
 
 
