@@ -70,7 +70,7 @@ MainMenuPrompt:
     beq     MainMenuDownPressed                         //if equal, then Down was pressed, so branch
                                                 //else fall through
                                                 //might need to include some delay here
-    ldr     r0, =10000
+    ldr     r0, =0x10000
     bl      startTimer    
     b       MainMenuPrompt
     
@@ -134,6 +134,60 @@ StartGame:
     
     
 	bl	tetrisCreateNewBlock
+	
+	// tetrisRotateBlock(right)
+	moveq	r0, #0
+	bleq	tetrisRotateBlock
+	
+	
+	
+	
+	
+	
+	
+	mov	r0, #5
+	mov	r1, #8
+	push	{ r0 - r1 }
+	bl 		tetrisGetGridBlockColor
+	pop		{ r3 }
+	nop
+	
+	mov	r0, #6
+	mov	r1, #8
+	push	{ r0 - r1 }
+	bl 		tetrisGetGridBlockColor
+	pop		{ r3 }
+	nop
+	
+	mov	r0, #7
+	mov	r1, #8
+	push	{ r0 - r1 }
+	bl 		tetrisGetGridBlockColor
+	pop		{ r3 }
+	nop
+	
+	mov	r0, #8
+	mov	r1, #8
+	push	{ r0 - r1 }
+	bl 		tetrisGetGridBlockColor
+	pop		{ r3 }
+	nop
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	mainLoop:
 	
@@ -155,8 +209,17 @@ StartGame:
 
 		// TODO: check for current block on stack?
 		
+		
+		
 		bl	tetrisDrawGrid
 		bl	tetrisDrawBlock
+		
+		
+		ldr	r0, =0x0//FFFF
+		bl 	startTimer
+		
+		
+		
 		
 		
 		
@@ -166,14 +229,16 @@ StartGame:
 		nop
 		bl		tetrisTranslateBlock
 		
-	
+		pop		{ r0 }	// collision flag
+		teq		r0, #0
+			
 		// tetrisRotateBlock(right)
-		mov	r0, #1
-		bl	tetrisRotateBlock
+		moveq	r0, #0
+		bleq	tetrisRotateBlock
+		
+	
 		
 		
-		ldr	r0, =0xFFFF
-		bl 	startTimer
 		
 		
 		
@@ -1116,9 +1181,9 @@ tetrisGetGridBlockColor:
 	tetrisGridOffset	.req r8
 	blockColor			.req r9
 	
-	ldmfd	sp!,				{ x - y }
-	push	{ lr }
-	//push	{ tetrisGridCols - blockColor }
+	pop		{ x - y }
+	push 	{ lr }
+	push	{ tetrisGridCols - blockColor }
 	
 	ldr 	tetrisGrid, 			=TetrisGrid
 	ldmfd	tetrisGrid,				{ tetrisGridCols - tetrisGridBlockSize }
@@ -1133,12 +1198,12 @@ tetrisGetGridBlockColor:
 	cmp		x, #0
 	blt		tetrisGetGridBlockColorEnd
 	cmp		x, tetrisGridCols
-	bgt		tetrisGetGridBlockColorEnd
+	bge		tetrisGetGridBlockColorEnd
 	//********************************
 	cmp		y, #0
 	blt		tetrisGetGridBlockColorEnd
 	cmp		y, tetrisGridRows
-	bgt		tetrisGetGridBlockColorEnd
+	bge		tetrisGetGridBlockColorEnd
 	//********************************
 	
 	tetrisGetGridBlockColor_validInput:
@@ -1153,9 +1218,10 @@ tetrisGetGridBlockColor:
 	
 tetrisGetGridBlockColorEnd:
 	
-	//pop		{ tetrisGridCols - blockColor }
-	pop		{ lr }
-	push	{ blockColor }
+	mov		r0, blockColor
+	pop		{ tetrisGridCols - blockColor }
+	pop 	{ lr }
+	push	{ r0 }
 	
 	.unreq	x
 	.unreq	y
@@ -1222,7 +1288,7 @@ tetrisClearGridBlock:
 //
 tetrisGetGridBitmaskForBlock:
 
-	bitmask				.req r1
+	bitmask				.req r0
 	blockGridData		.req r3
 	blockX				.req r4
 	blockY				.req r5
@@ -1252,21 +1318,28 @@ tetrisGetGridBitmaskForBlock:
 
 			push 	{ blockX - blockY }
 
-			add 	blockX, j
-			add 	blockY, i
+			add 	blockX, i
+			add 	blockY, j
 			
-			push	{ bitmask }
+			push	{ bitmask, i - j }
 			
 			// tetrisGetGridBlockColor(int x, int y)
-			stmfd	sp!,	{ blockX, blockY }
+			push	{ blockX - blockY }
 			bl 		tetrisGetGridBlockColor
-			pop		{ r0 }
+			pop		{ r3 }
+			pop		{ bitmask, i - j }
+			teq		r3, #0
 			
-			pop		{ bitmask }
+			beq		poop
 			
-			teq		r0, #0
-			lsl		bitmask, #1
-			addne	bitmask, #1
+				mov	r1, #4
+				mul	r1, j, r1
+				add	r1, i
+				ldr	r2, =0b1000000000000000
+				lsr	r2, r1
+				orr	bitmask, bitmask, r2
+			
+			poop:
 
 			pop 	{ blockX - blockY }
 
@@ -1944,10 +2017,10 @@ tetrisCheckBlockGridCollisions:
 	push	{ blockX - blockTypeOffset }
 	ldmfd	r0, 			{ blockX - blockTypeOffset }
 	
-	stmfd	sp!, 			{ blockX - blockTypeOffset }
+	push	{ blockX - blockTypeOffset }
 	bl 		tetrisGetGridBitmaskForBlock
 	pop		{ gridBitMask }
-	ldmfd	sp!, 			{ blockX - blockTypeOffset }
+	pop		{ blockX - blockTypeOffset }
 	
 	nop
 	
@@ -1995,11 +2068,14 @@ tetrisOnBlockCollision:
 	blockTypeAddress	.req r7
 	blockTypeOffset		.req r8
 	
-	ldmfd	sp!, 		{ blockX - blockTypeOffset }
+	pop		{ blockX - blockTypeOffset }
 	push 	{ lr }
-	stmfd	sp!, 		{ blockX - blockTypeOffset }
+	push	{ blockX - blockTypeOffset }
 	
-	bl writeBlockToGrid
+	ldrh		r3, [blockTypeAddress, blockTypeOffset]
+	nop
+	
+	bl 		writeBlockToGrid
 	
 	// delete current block and generate new one
 	pop		{ blockX - blockTypeOffset }
@@ -2041,7 +2117,7 @@ writeBlockToGrid:
 	blockTypeAddress	.req r7
 	blockTypeOffset		.req r8
 	
-	mov		r0, sp
+	mov		r0, 		sp
 	push 	{ lr }
 	push	{ blockX - blockTypeOffset }
 	ldmfd	r0, 		{ blockX - blockTypeOffset }
@@ -2084,10 +2160,8 @@ writeBlockToGrid:
 			writeBlockToGrid_blockHasData:
 			
 				// tetrisSetGridBlockColor(int x, int y, int color)
-				nop
 				stmfd	sp!, 	{ blockX - blockColor }
 				bl	 	tetrisSetGridBlockColor
-				nop
 			
 			writeBlockToGrid_blockHasNoData:
 
@@ -2176,9 +2250,16 @@ tetrisRotateBlock:
 	blockColor			.req r6
 	blockTypeAddress	.req r7
 	blockTypeOffset		.req r8
-	
+	nop
 	pop		{ blockX - blockTypeOffset }
 	push	{ lr }
+	
+	
+	
+	ldrh		r3, [blockTypeAddress, blockTypeOffset]
+	nop
+	
+	
 	
 	// copy block in current state
 	push 	{ blockX - blockTypeOffset }
@@ -2212,17 +2293,48 @@ tetrisRotateBlock:
 	bl		tetrisCheckBlockGridCollisions
 	pop		{ r0 }
 	teq		r0, #0
-	pop		{ blockX - blockTypeOffset  }
-	// if no collision, delete previous block from stack
-	addeq	sp, #20
-	pusheq	{ blockX - blockTypeOffset }
-	blne	tetrisOnBlockCollision
+	bne		onRotationCollision
+	beq		onNoRotationCollision
 	
-	pop		{ blockX - blockTypeOffset }
-	pop		{ lr }
-	push 	{ blockX - blockTypeOffset }
+	onRotationCollision:
+		
+		pop		{ blockX - blockTypeOffset }	// delete updated block
+		pop		{ blockX - blockTypeOffset }	// pop previous block copy
+		pop		{ lr }
+		push	{ blockX - blockTypeOffset }	// push previous block copy
+		b 		tetrisRotateBlockEnd
+		
+	onNoRotationCollision:
+	
+		pop		{ blockX - blockTypeOffset }	// pop updated block
+		addeq	sp, #20							// delete previous block copy
+		pop		{ lr }
+		push	{ blockX - blockTypeOffset }	// push updated bloc
+		b 		tetrisRotateBlockEnd
+		
+		
+	// if no collision, delete previous block from stack
+	//addeq	sp, #20
+	//pop		{ lr }
+	//push	{ blockX - blockTypeOffset }
+	//blne	tetrisOnBlockCollision
+	
+	//pop		{ blockX - blockTypeOffset }
+	//push 	{ blockX - blockTypeOffset }
+	
+	
+	
+	
+	
+	
+	
+	
 	
 tetrisRotateBlockEnd:
+	
+	ldrh		r3, [blockTypeAddress, blockTypeOffset]
+	nop
+
 
 	.unreq 	rotationDirection
 	.unreq	blockX
@@ -2251,6 +2363,11 @@ tetrisRotateBlockEnd:
 // 		4 = blockTypeOffset
 //		--------
 // OUTPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = didCollide
+//		--------
 //
 tetrisTranslateBlock:
 
@@ -2265,6 +2382,16 @@ tetrisTranslateBlock:
 	pop		{ blockX - blockTypeOffset }
 	push	{ lr }
 	
+	
+	
+	
+	ldrh		r3, [blockTypeAddress, blockTypeOffset]
+	nop
+	
+	
+	
+	
+	
 	// copy block in current state
 	push 	{ blockX - blockTypeOffset }
 	
@@ -2277,15 +2404,42 @@ tetrisTranslateBlock:
 	bl		tetrisCheckBlockGridCollisions
 	pop		{ r0 }
 	teq		r0, #0
-	pop		{ blockX - blockTypeOffset  }
-	// if no collision, delete previous block from stack
-	addeq	sp, #20
-	pusheq	{ blockX - blockTypeOffset }
-	blne	tetrisOnBlockCollision
+	bne		onTranslationCollision
+	beq		onNoTranslationCollision
 	
-	pop		{ blockX - blockTypeOffset }
-	pop		{ lr }
-	push 	{ blockX - blockTypeOffset }
+	onTranslationCollision:
+		
+		pop		{ blockX - blockTypeOffset }	// delete updated block
+		pop		{ blockX - blockTypeOffset }	// pop previous block copy
+		push	{ blockX - blockTypeOffset }	// push previous block copy
+		bl		tetrisOnBlockCollision
+		pop		{ blockX - blockTypeOffset }	// pop new block
+		pop		{ lr }
+		push	{ blockX - blockTypeOffset }	// push new block
+		mov		r0, #1
+		push	{ r0 }							// push collision flag
+		
+		b 		tetrisTranslateBlockEnd
+		
+	onNoTranslationCollision:
+	
+		pop		{ blockX - blockTypeOffset }	// pop updated block
+		addeq	sp, #20							// delete previous block copy
+		pop		{ lr }
+		push	{ blockX - blockTypeOffset }	// push updated block
+		mov		r0, #0
+		push	{ r0 }							// push collision flag
+		b 		tetrisTranslateBlockEnd
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 tetrisTranslateBlockEnd:
 
