@@ -156,9 +156,9 @@ StartGame:
 		// TODO: check for current block on stack?
 		
 		bl	tetrisDrawGrid
+		bl	tetrisDrawBlock
 		
-		ldr	r0, =0xFFFF
-		bl 	startTimer
+		
 		
 		// tetrisTranslateBlock(int dx, int dy)
 		mov		r0, #0
@@ -172,10 +172,9 @@ StartGame:
 		bl	tetrisRotateBlock
 		
 		
+		ldr	r0, =0xFFFF
+		bl 	startTimer
 		
-		
-		
-		bl	tetrisDrawBlock
 		
 		
 		
