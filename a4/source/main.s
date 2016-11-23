@@ -25,7 +25,7 @@ main:
 
 
 	 bl		clearScreen
-		b	StartGame
+	b	StartGame
 
 
 
@@ -124,75 +124,15 @@ StartGame:
   //  r0 = 0xfffe = 1111 1111 1111 1110
 
   bl    sampleSNES
-	
-bl tetrisInitGrid
+		
+	bl tetrisInitGrid
 
 
     bl      DrawBoard
     
     //bl      PauseMenuStart
-
-
-
-
-
-
-
-
-
-	/*
-	
-	// tetrisSetGridBlockColor(int x, int y, int color)
-	mov		r0, #0
-	mov		r1, #12
-	ldr		r2, =0x654321
-	stmfd	sp!, 	{ r0- r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #1
-	mov		r1, #12
-	ldr		r2, =0x654321
-	stmfd	sp!, 	{ r0- r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #2
-	mov		r1, #12
-	ldr		r2, =0x654321
-	//stmfd	sp!, 	{ r0- r2 }
-	//bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #3
-	mov		r1, #12
-	ldr		r2, =0x654321
-	//stmfd	sp!, 	{ r0- r2 }
-	//bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #0
-	mov		r1, #13
-	ldr		r2, =0x777721
-	stmfd	sp!, 	{ r0- r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #1
-	mov		r1, #13
-	ldr		r2, =0x777721
-	stmfd	sp!, 	{ r0- r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #2
-	mov		r1, #13
-	ldr		r2, =0xFFF721
-	stmfd	sp!, 	{ r0- r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #3
-	mov		r1, #13
-	ldr		r2, =0xFFF721
-	stmfd	sp!, 	{ r0- r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	*/
-	
+    
+    
 	bl	tetrisCreateNewBlock
 
 	mainLoop:
@@ -215,16 +155,8 @@ bl tetrisInitGrid
 
 		// TODO: check for current block on stack?
 		
-		
 		bl	tetrisDrawGrid
-		bl	tetrisDrawBlock
 		
-		
-		
-	
-		// tetrisRotateBlock(right)
-		mov	r0, #1
-		bl	tetrisRotateBlock
 		
 		// tetrisTranslateBlock(int dx, int dy)
 		mov		r0, #0
@@ -232,12 +164,20 @@ bl tetrisInitGrid
 		nop
 		bl		tetrisTranslateBlock
 		
+	
+		// tetrisRotateBlock(right)
+		mov	r0, #1
+		bl	tetrisRotateBlock
 		
+		
+		
+		
+		
+		bl	tetrisDrawBlock
 		
 		
 		ldr	r0, =0xFFFF
 		bl 	startTimer
-		
 		
 
 		b	mainLoop
@@ -1775,10 +1715,10 @@ tetrisCreateNewBlock:
 
 	initializeTetrisBlock:
 
-		mov 	blockX, 			#0				// randomize?
+		mov 	blockX, 			#5				// randomize?
 		mov 	blockY,				#0
-		ldr 	blockColor,	 		=0x1133FF		// randomize?
-		ldr		blockTypeAddress, 	=TetrisBlockB	// randomize?
+		ldr 	blockColor,	 		=0x9999FF		// randomize?
+		ldr		blockTypeAddress, 	=TetrisBlockC	// randomize?
 		mov		blockTypeOffset,	#0				// randomize?
 
 	initializeTetrisBlockEnd:
@@ -2544,7 +2484,7 @@ clearScreen:
 	ldr	 	r0, =FrameBufferInit
 	ldr		screenWidth, [r0, #20]
 	ldr		screenHeight, [r0, #24]
-	ldr		color,	=0xFFFFFF			// black
+	ldr		color,	=0x000000	// black
 
 	stmfd	sp!,		{ x - color }
 	bl		drawRect
@@ -2733,13 +2673,13 @@ startTimer:
 //##############################################################//
 .section .data
 
-	//	-1--
+
 .align 4
 TetrisGrid:
 	.int	10				// tetrisGridCols
-	.int	20				// tetrisGridRows
-	.int	15				// tetrisGridBlockSize (n x n pixels)
-	.space 	10 * 20 * 4		// tetrisGridData (cols x rows)
+	.int	19				// tetrisGridRows
+	.int	32				// tetrisGridBlockSize (n x n pixels)
+	.space 	10 * 19 * 4		// tetrisGridData (cols x rows)
 TetrisGridEnd:
 
 
