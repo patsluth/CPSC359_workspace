@@ -134,43 +134,17 @@ StartGame:
     
     
 	bl	tetrisCreateNewBlock
-	
-	// tetrisTranslateBlock(int dx, int dy)
-	mov		r0, #5
-	mov		r1, #0
-	bl		tetrisTranslateBlock
-	
-	
-	
-	
 
 	mainLoop:
-	
-	
-	
-	
-	
 	
 		//        ldr     r0, =scoreNumber
 		//        ldr     r10, [r0]
 		//        add     r10, #1
 		//        str     r10, [r0]
 		//        bl      UpdateScore
-			
-	
-	
-	
-	
-
-		// TODO: check for current block on stack?
-		
-		
 		
 		bl	tetrisDrawGrid
 		bl	tetrisDrawBlock
-		
-		
-		
 		
 		applyUserTranslation:
 		
@@ -179,45 +153,23 @@ StartGame:
 			mov		r1, #0
 			bl		tetrisTranslateBlock
 			
-			bl	tetrisDrawGrid
-			bl	tetrisDrawBlock
-		
-			ldr	r0, =0xFFFF
-			bl 	startTimer
-			
-			
-			
-			
 		applyGravityTranslation:
 		
 			// tetrisTranslateBlock(int dx, int dy)
 			mov		r0, #0
 			mov		r1, #1
 			bl		tetrisTranslateBlock
-			
-			bl	tetrisDrawGrid
-			bl	tetrisDrawBlock
-		
-			ldr	r0, =0xFFFF
-			bl 	startTimer
-		
-		
 		
 		applyUserRotation:
 		
 			// tetrisRotateBlock(right)
-			//mov	r0, #0
-			//bl	tetrisRotateBlock
+			mov	r0, #0
+			bl	tetrisRotateBlock
 		
-	
-		ldr	r0, =0xFFFF
+		
+		ldr	r0, =0xFFFFF
 		bl 	startTimer
 		
-		
-		
-		
-		
-
 		b	mainLoop
 
 
@@ -1089,8 +1041,8 @@ tetrisSetGridBlockColor:
 	tetrisGridData		.req r7
 	tetrisGridOffset	.req r8
 	
-	ldmfd	sp!,				{ x - blockColor }
-	push	{ lr }
+	pop		{ x - blockColor }
+	push 	{ lr }
 	push	{ tetrisGridCols - tetrisGridOffset }
 	
 	ldr 	tetrisGrid, 			=TetrisGrid
@@ -1111,6 +1063,7 @@ tetrisSetGridBlockColor:
 	str		blockColor, 		[tetrisGridData, tetrisGridOffset]
 	
 	pop		{ tetrisGridCols - tetrisGridOffset }
+	pop 	{ lr }
 	
 	.unreq	x
 	.unreq	y
@@ -1122,7 +1075,6 @@ tetrisSetGridBlockColor:
 	.unreq	tetrisGridData
 	.unreq	tetrisGridOffset
 
-	pop		{ lr }
 	mov 	pc, lr				// return
 	
 	
@@ -2616,9 +2568,9 @@ startTimer:
 .align 4
 TetrisGrid:
 	.int	10				// tetrisGridCols
-	.int	9				// tetrisGridRows
+	.int	19				// tetrisGridRows
 	.int	32				// tetrisGridBlockSize (n x n pixels)
-	.space 	10 * 9 * 4		// tetrisGridData (cols x rows)
+	.space 	10 * 19 * 4		// tetrisGridData (cols x rows)
 TetrisGridEnd:
 
 
