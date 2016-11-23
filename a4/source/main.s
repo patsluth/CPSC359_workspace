@@ -135,59 +135,6 @@ StartGame:
     
 	bl	tetrisCreateNewBlock
 	
-	// tetrisRotateBlock(right)
-	moveq	r0, #0
-	bleq	tetrisRotateBlock
-	
-	
-	
-	
-	
-	
-	
-	mov	r0, #5
-	mov	r1, #8
-	push	{ r0 - r1 }
-	bl 		tetrisGetGridBlockColor
-	pop		{ r3 }
-	nop
-	
-	mov	r0, #6
-	mov	r1, #8
-	push	{ r0 - r1 }
-	bl 		tetrisGetGridBlockColor
-	pop		{ r3 }
-	nop
-	
-	mov	r0, #7
-	mov	r1, #8
-	push	{ r0 - r1 }
-	bl 		tetrisGetGridBlockColor
-	pop		{ r3 }
-	nop
-	
-	mov	r0, #8
-	mov	r1, #8
-	push	{ r0 - r1 }
-	bl 		tetrisGetGridBlockColor
-	pop		{ r3 }
-	nop
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	mainLoop:
 	
@@ -226,15 +173,11 @@ StartGame:
 		// tetrisTranslateBlock(int dx, int dy)
 		mov		r0, #0
 		mov		r1, #1
-		nop
 		bl		tetrisTranslateBlock
-		
-		pop		{ r0 }	// collision flag
-		teq		r0, #0
 			
 		// tetrisRotateBlock(right)
-		moveq	r0, #0
-		bleq	tetrisRotateBlock
+		mov	r0, #0
+		bl	tetrisRotateBlock
 		
 	
 		
@@ -2250,16 +2193,9 @@ tetrisRotateBlock:
 	blockColor			.req r6
 	blockTypeAddress	.req r7
 	blockTypeOffset		.req r8
-	nop
+	
 	pop		{ blockX - blockTypeOffset }
 	push	{ lr }
-	
-	
-	
-	ldrh		r3, [blockTypeAddress, blockTypeOffset]
-	nop
-	
-	
 	
 	// copy block in current state
 	push 	{ blockX - blockTypeOffset }
@@ -2311,30 +2247,8 @@ tetrisRotateBlock:
 		pop		{ lr }
 		push	{ blockX - blockTypeOffset }	// push updated bloc
 		b 		tetrisRotateBlockEnd
-		
-		
-	// if no collision, delete previous block from stack
-	//addeq	sp, #20
-	//pop		{ lr }
-	//push	{ blockX - blockTypeOffset }
-	//blne	tetrisOnBlockCollision
-	
-	//pop		{ blockX - blockTypeOffset }
-	//push 	{ blockX - blockTypeOffset }
-	
-	
-	
-	
-	
-	
-	
-	
 	
 tetrisRotateBlockEnd:
-	
-	ldrh		r3, [blockTypeAddress, blockTypeOffset]
-	nop
-
 
 	.unreq 	rotationDirection
 	.unreq	blockX
@@ -2382,16 +2296,6 @@ tetrisTranslateBlock:
 	pop		{ blockX - blockTypeOffset }
 	push	{ lr }
 	
-	
-	
-	
-	ldrh		r3, [blockTypeAddress, blockTypeOffset]
-	nop
-	
-	
-	
-	
-	
 	// copy block in current state
 	push 	{ blockX - blockTypeOffset }
 	
@@ -2416,8 +2320,6 @@ tetrisTranslateBlock:
 		pop		{ blockX - blockTypeOffset }	// pop new block
 		pop		{ lr }
 		push	{ blockX - blockTypeOffset }	// push new block
-		mov		r0, #1
-		push	{ r0 }							// push collision flag
 		
 		b 		tetrisTranslateBlockEnd
 		
@@ -2427,20 +2329,8 @@ tetrisTranslateBlock:
 		addeq	sp, #20							// delete previous block copy
 		pop		{ lr }
 		push	{ blockX - blockTypeOffset }	// push updated block
-		mov		r0, #0
-		push	{ r0 }							// push collision flag
 		b 		tetrisTranslateBlockEnd
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
 tetrisTranslateBlockEnd:
 
 	.unreq	dx

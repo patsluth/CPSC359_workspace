@@ -31,7 +31,7 @@ LOAD build/main.o
 .igot.plt       0x00009cf0        0x0
  .igot.plt      0x00000000        0x0 build/jtag.o
 
-.text           0x00009cf0     0x18bc
+.text           0x00009cf0     0x181c
  *.c.o(.text)
  *(.text)
  .text          0x00009cf0       0x8c build/jtag.o
@@ -42,34 +42,34 @@ LOAD build/main.o
                 0x00009dfc                drawPaused
  .text          0x0000a1e0      0x1e4 build/sampleSNES.o
                 0x0000a1e0                sampleSNES
- .text          0x0000a3c4     0x11e8 build/main.o
-                0x0000b46c                drawRect
+ .text          0x0000a3c4     0x1148 build/main.o
+                0x0000b3cc                drawRect
 OUTPUT(build/output.elf elf32-littlearm)
 
-.glue_7         0x0000b5ac        0x0
+.glue_7         0x0000b50c        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x0000b5ac        0x0
+.glue_7t        0x0000b50c        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x0000b5ac        0x0
+.vfp11_veneer   0x0000b50c        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x0000b5ac        0x0
+.v4_bx          0x0000b50c        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x0000b5ac        0x0
+.iplt           0x0000b50c        0x0
  .iplt          0x00000000        0x0 build/jtag.o
 
-.rel.dyn        0x0000b5ac        0x0
+.rel.dyn        0x0000b50c        0x0
  .rel.iplt      0x00000000        0x0 build/jtag.o
 
-.bss            0x0000b5ac        0x0
- .bss           0x0000b5ac        0x0 build/jtag.o
- .bss           0x0000b5ac        0x0 build/framebuffer.o
- .bss           0x0000b5ac        0x0 build/drawPaused.o
- .bss           0x0000b5ac        0x0 build/sampleSNES.o
- .bss           0x0000b5ac        0x0 build/main.o
+.bss            0x0000b50c        0x0
+ .bss           0x0000b50c        0x0 build/jtag.o
+ .bss           0x0000b50c        0x0 build/framebuffer.o
+ .bss           0x0000b50c        0x0 build/drawPaused.o
+ .bss           0x0000b50c        0x0 build/sampleSNES.o
+ .bss           0x0000b50c        0x0 build/main.o
 
 .ARM.attributes
                 0x00000000       0x29
@@ -84,12 +84,12 @@ OUTPUT(build/output.elf elf32-littlearm)
  .ARM.attributes
                 0x000000a4       0x29 build/main.o
 
-.debug_line     0x00000000      0x843
+.debug_line     0x00000000      0x819
  .debug_line    0x00000000       0x61 build/jtag.o
  .debug_line    0x00000061       0x67 build/framebuffer.o
  .debug_line    0x000000c8      0x158 build/drawPaused.o
  .debug_line    0x00000220       0xc9 build/sampleSNES.o
- .debug_line    0x000002e9      0x55a build/main.o
+ .debug_line    0x000002e9      0x530 build/main.o
 
 .debug_info     0x00000000      0x1fe
  .debug_info    0x00000000       0x63 build/jtag.o
