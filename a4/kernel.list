@@ -557,15 +557,15 @@ Disassembly of section .text:
 
 0000a478 <mainLoop>:
     a478:	eb000287 	bl	ae9c <tetrisDrawGrid>
-    a47c:	e3a00000 	mov	r0, #0
-    a480:	e3a01001 	mov	r1, #1
-    a484:	e320f000 	nop	{0}
-    a488:	eb00036e 	bl	b248 <tetrisTranslateBlock>
-    a48c:	e3a00001 	mov	r0, #1
-    a490:	eb000352 	bl	b1e0 <tetrisRotateBlock>
-    a494:	eb0002c0 	bl	af9c <tetrisDrawBlock>
-    a498:	e59f0f6c 	ldr	r0, [pc, #3948]	; b40c <waitLoop+0x14>
-    a49c:	eb0003d1 	bl	b3e8 <startTimer>
+    a47c:	e59f0f88 	ldr	r0, [pc, #3976]	; b40c <waitLoop+0x14>
+    a480:	eb0003d8 	bl	b3e8 <startTimer>
+    a484:	e3a00000 	mov	r0, #0
+    a488:	e3a01001 	mov	r1, #1
+    a48c:	e320f000 	nop	{0}
+    a490:	eb00036c 	bl	b248 <tetrisTranslateBlock>
+    a494:	e3a00001 	mov	r0, #1
+    a498:	eb000350 	bl	b1e0 <tetrisRotateBlock>
+    a49c:	eb0002be 	bl	af9c <tetrisDrawBlock>
     a4a0:	eafffff4 	b	a478 <mainLoop>
 
 0000a4a4 <mainEnd>:
@@ -1423,7 +1423,7 @@ Disassembly of section .text:
     b058:	e89001f0 	ldm	r0, {r4, r5, r6, r7, r8}
 
 0000b05c <initializeTetrisBlock>:
-    b05c:	e3a04004 	mov	r4, #4
+    b05c:	e3a04005 	mov	r4, #5
     b060:	e3a05000 	mov	r5, #0
     b064:	e59f6440 	ldr	r6, [pc, #1088]	; b4ac <waitLoop+0xb4>
     b068:	e59f7440 	ldr	r7, [pc, #1088]	; b4b0 <waitLoop+0xb8>

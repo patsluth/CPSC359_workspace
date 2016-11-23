@@ -157,6 +157,8 @@ StartGame:
 		
 		bl	tetrisDrawGrid
 		
+		ldr	r0, =0xFFFF
+		bl 	startTimer
 		
 		// tetrisTranslateBlock(int dx, int dy)
 		mov		r0, #0
@@ -176,8 +178,6 @@ StartGame:
 		bl	tetrisDrawBlock
 		
 		
-		ldr	r0, =0xFFFF
-		bl 	startTimer
 		
 
 		b	mainLoop
