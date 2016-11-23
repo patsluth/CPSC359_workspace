@@ -8,6 +8,7 @@ Linker script and memory map
 
 LOAD build/jtag.o
 LOAD build/framebuffer.o
+LOAD build/drawPaused.o
 LOAD build/sampleSNES.o
 LOAD build/main.o
 
@@ -16,55 +17,59 @@ LOAD build/main.o
  .init          0x00008000        0x4 build/main.o
                 0x00008000                _start
 
-.data           0x00009080      0xc60
+.data           0x00009080      0xc90
  *(.data)
  .data          0x00009080        0x0 build/jtag.o
  .data          0x00009080       0x70 build/framebuffer.o
                 0x00009080                FrameBufferInit
                 0x000090e0                FrameBufferPointer
+ .data          0x000090f0        0x0 build/drawPaused.o
  .data          0x000090f0        0x0 build/sampleSNES.o
- .data          0x000090f0      0xbf0 build/main.o
+ .data          0x000090f0      0xc20 build/main.o
  *.c.o(*)
 
-.igot.plt       0x00009ce0        0x0
+.igot.plt       0x00009d10        0x0
  .igot.plt      0x00000000        0x0 build/jtag.o
 
-.text           0x00009ce0      0xdd0
+.text           0x00009d10     0x17cc
  *.c.o(.text)
  *(.text)
- .text          0x00009ce0       0x8c build/jtag.o
-                0x00009ce0                EnableJTAG
- .text          0x00009d6c       0x80 build/framebuffer.o
-                0x00009d6c                InitFrameBuffer
- .text          0x00009dec      0x1e4 build/sampleSNES.o
-                0x00009dec                sampleSNES
- .text          0x00009fd0      0xae0 build/main.o
-                0x0000a9c4                drawRect
+ .text          0x00009d10       0x8c build/jtag.o
+                0x00009d10                EnableJTAG
+ .text          0x00009d9c       0x80 build/framebuffer.o
+                0x00009d9c                InitFrameBuffer
+ .text          0x00009e1c      0x3e4 build/drawPaused.o
+                0x00009e1c                drawPaused
+ .text          0x0000a200      0x1e4 build/sampleSNES.o
+                0x0000a200                sampleSNES
+ .text          0x0000a3e4     0x10f8 build/main.o
+                0x0000b39c                drawRect
 OUTPUT(build/output.elf elf32-littlearm)
 
-.glue_7         0x0000aab0        0x0
+.glue_7         0x0000b4dc        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x0000aab0        0x0
+.glue_7t        0x0000b4dc        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x0000aab0        0x0
+.vfp11_veneer   0x0000b4dc        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x0000aab0        0x0
+.v4_bx          0x0000b4dc        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x0000aab0        0x0
+.iplt           0x0000b4dc        0x0
  .iplt          0x00000000        0x0 build/jtag.o
 
-.rel.dyn        0x0000aab0        0x0
+.rel.dyn        0x0000b4dc        0x0
  .rel.iplt      0x00000000        0x0 build/jtag.o
 
-.bss            0x0000aab0        0x0
- .bss           0x0000aab0        0x0 build/jtag.o
- .bss           0x0000aab0        0x0 build/framebuffer.o
- .bss           0x0000aab0        0x0 build/sampleSNES.o
- .bss           0x0000aab0        0x0 build/main.o
+.bss            0x0000b4dc        0x0
+ .bss           0x0000b4dc        0x0 build/jtag.o
+ .bss           0x0000b4dc        0x0 build/framebuffer.o
+ .bss           0x0000b4dc        0x0 build/drawPaused.o
+ .bss           0x0000b4dc        0x0 build/sampleSNES.o
+ .bss           0x0000b4dc        0x0 build/main.o
 
 .ARM.attributes
                 0x00000000       0x29
@@ -73,37 +78,44 @@ OUTPUT(build/output.elf elf32-littlearm)
  .ARM.attributes
                 0x00000029       0x29 build/framebuffer.o
  .ARM.attributes
-                0x00000052       0x29 build/sampleSNES.o
+                0x00000052       0x29 build/drawPaused.o
  .ARM.attributes
-                0x0000007b       0x29 build/main.o
+                0x0000007b       0x29 build/sampleSNES.o
+ .ARM.attributes
+                0x000000a4       0x29 build/main.o
 
-.debug_line     0x00000000      0x510
+.debug_line     0x00000000      0x808
  .debug_line    0x00000000       0x61 build/jtag.o
  .debug_line    0x00000061       0x67 build/framebuffer.o
- .debug_line    0x000000c8       0xc9 build/sampleSNES.o
- .debug_line    0x00000191      0x37f build/main.o
+ .debug_line    0x000000c8      0x158 build/drawPaused.o
+ .debug_line    0x00000220       0xc9 build/sampleSNES.o
+ .debug_line    0x000002e9      0x51f build/main.o
 
-.debug_info     0x00000000      0x195
+.debug_info     0x00000000      0x1fe
  .debug_info    0x00000000       0x63 build/jtag.o
  .debug_info    0x00000063       0x6a build/framebuffer.o
- .debug_info    0x000000cd       0x69 build/sampleSNES.o
- .debug_info    0x00000136       0x5f build/main.o
+ .debug_info    0x000000cd       0x69 build/drawPaused.o
+ .debug_info    0x00000136       0x69 build/sampleSNES.o
+ .debug_info    0x0000019f       0x5f build/main.o
 
-.debug_abbrev   0x00000000       0x4e
+.debug_abbrev   0x00000000       0x62
  .debug_abbrev  0x00000000       0x14 build/jtag.o
  .debug_abbrev  0x00000014       0x14 build/framebuffer.o
- .debug_abbrev  0x00000028       0x14 build/sampleSNES.o
- .debug_abbrev  0x0000003c       0x12 build/main.o
+ .debug_abbrev  0x00000028       0x14 build/drawPaused.o
+ .debug_abbrev  0x0000003c       0x14 build/sampleSNES.o
+ .debug_abbrev  0x00000050       0x12 build/main.o
 
-.debug_aranges  0x00000000       0x88
+.debug_aranges  0x00000000       0xa8
  .debug_aranges
                 0x00000000       0x20 build/jtag.o
  .debug_aranges
                 0x00000020       0x20 build/framebuffer.o
  .debug_aranges
-                0x00000040       0x20 build/sampleSNES.o
+                0x00000040       0x20 build/drawPaused.o
  .debug_aranges
-                0x00000060       0x28 build/main.o
+                0x00000060       0x20 build/sampleSNES.o
+ .debug_aranges
+                0x00000080       0x28 build/main.o
 
 .debug_ranges   0x00000000       0x20
  .debug_ranges  0x00000000       0x20 build/main.o
