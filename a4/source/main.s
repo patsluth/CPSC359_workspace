@@ -189,16 +189,8 @@ bl tetrisInitGrid
 		// TODO: check for current block on stack?
 		
 		
-		
-		nop
-		
-		
 		bl	tetrisDrawGrid
-		nop
 		bl	tetrisDrawBlock
-		nop
-		nop
-		nop
 		
 		
 		
@@ -1769,60 +1761,53 @@ tetrisRotateBlock:
 	blockColor			.req r6
 	blockTypeAddress	.req r7
 	blockTypeOffset		.req r8
-
-	ldmfd	sp!, { blockX - blockTypeOffset }
-
 	
+	pop		{ blockX - blockTypeOffset }
+	push	{ lr }
 	
-
-
-
-
-
-	/* HOW TO ACCESS ROW DATA
-	mov		rowBitMask, #0b1111
-
-	and		row4, rowBitMask, blockGridData
-	lsr		blockGridData, #4
-
-	and		row3, rowBitMask, blockGridData
-	lsr		blockGridData, #4
-
-	and		row2, rowBitMask, blockGridData
-	lsr		blockGridData, #4
-
-	and		row1, rowBitMask, blockGridData
-
-	*/
-
-
-
-
-
-
+	// copy block in current state
+	push 	{ blockX - blockTypeOffset }
+	
+	// update block values
+	//
 	teq		rotationDirection, 	#0
-	beq		rotateLeft
-	bne		rotateRight
+	beq		handleRotateLeft
+	bne		handleRotateRight
 	
-	rotateLeft:
+	handleRotateLeft:
 	
 		add		blockTypeOffset, 	#2
 		cmp		blockTypeOffset, 	#6
 		movgt	blockTypeOffset, 	#0		// wrap around
 	
-		b 	tetrisRotateBlockEnd
+		b 	handleRotateEnd
 	
-	rotateRight:
+	handleRotateRight:
 	
 		sub		blockTypeOffset, 	#2
 		cmp		blockTypeOffset, 	#0
 		movlt	blockTypeOffset, 	#6		// wrap around
 	
-		b 	tetrisRotateBlockEnd
-
+		b 	handleRotateEnd
+		
+	handleRotateEnd:
+		push 	{ blockX - blockTypeOffset }
+	
+	// didCollide = tetrisCheckBlockGridCollisions(block)
+	bl		tetrisCheckBlockGridCollisions
+	pop		{ r0 }
+	teq		r0, #0
+	pop		{ blockX - blockTypeOffset  }
+	// if no collision, delete previous block from stack
+	addeq	sp, #20
+	pusheq	{ blockX - blockTypeOffset }
+	blne	tetrisOnBlockCollision
+	
+	pop		{ blockX - blockTypeOffset }
+	pop		{ lr }
+	push 	{ blockX - blockTypeOffset }
+	
 tetrisRotateBlockEnd:
-
-	stmfd	sp!, { blockX - blockTypeOffset }
 
 	.unreq 	rotationDirection
 	.unreq	blockX
