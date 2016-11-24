@@ -152,6 +152,12 @@ StartGame:
 			mov		r0, #1
 			mov		r1, #0
 			bl		tetrisTranslateBlock
+		
+		applyUserRotation:
+		
+			// tetrisRotateBlock(right)
+			mov	r0, #0
+			bl	tetrisRotateBlock
 			
 		applyGravityTranslation:
 		
@@ -159,12 +165,6 @@ StartGame:
 			mov		r0, #0
 			mov		r1, #1
 			bl		tetrisTranslateBlock
-		
-		applyUserRotation:
-		
-			// tetrisRotateBlock(right)
-			mov	r0, #0
-			bl	tetrisRotateBlock
 		
 		
 		ldr	r0, =0xFFFFF
@@ -175,6 +175,153 @@ StartGame:
 
 mainEnd:
 	b	mainEnd
+	
+	
+	
+	
+// INPUT
+//		r0 = dx
+//		r1 = dy
+//
+//		--------
+//		On Stack
+//		--------
+// 		0 = blockX
+// 		1 = blockY
+// 		2 = blockColor
+// 		3 = blockTypeAddress
+// 		4 = blockTypeOffset
+//		--------
+// OUTPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = didCollide
+//		--------
+//
+tetrisGetGridLocationsForBlock:
+
+	blockX				.req r4
+	blockY				.req r5
+	blockColor			.req r6
+	blockTypeAddress	.req r7
+	blockTypeOffset		.req r8
+	
+	mov		r0, sp
+	push 	{ lr }
+	push	{ blockX - blockTypeOffset }
+	ldmfd	r0, 		{ blockX - blockTypeOffset }
+
+	i	.req r11
+	j	.req r12
+	
+	push	{ i - j }
+
+	mov		i, #0
+	mov 	j, #0
+
+	for_i_lessThan_4_loop__:
+
+		push 	{ j }
+
+		for_j_lessThan_4_loop__:
+
+			push 	{ blockX - blockColor }
+
+			blockBitForXY	.req r1
+			blockGridData	.req r2
+	
+			ldrh	blockGridData, [blockTypeAddress, blockTypeOffset]
+
+			add 	blockX, i
+			add 	blockY, j
+
+			// calculate bit corresponding to block position
+			mov		blockBitForXY, 	#4
+			mul		blockBitForXY, 	blockBitForXY, j
+			add		blockBitForXY, 	i
+			lsl		blockGridData, 	blockBitForXY
+			mov		blockBitForXY, 	#0b1000000000000000
+			and		blockBitForXY, 	blockGridData
+			teq		blockBitForXY,	#0
+			
+			push	{ blockColor }
+			moveq	blockColor, #0//black
+			beq		blockHasNoData
+			
+			// if (blockBitForXY != 0)
+			blockHasData__:
+			
+			blockHasNoData__:
+			
+			
+			
+			pop	{ blockColor }
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			// if (blockBitForXY == 0)
+
+				// tetrisClearGridBlock(int x, int y)
+				//moveq	r0, 	blockX
+				//moveq	r1,		blockY
+				//bleq 	tetrisClearGridBlock
+
+			// else
+
+				// tetrisSetGridBlockColor(int x, int y, int color)
+				//stmnefd	sp!, 	{ blockX, blockY, blockColor }
+				//blne 	tetrisSetGridBlockColor
+
+			// endif
+
+			.unreq	blockBitForXY
+			.unreq 	blockGridData
+
+			pop 	{ blockX - blockColor }
+
+			add 	j, #1
+			cmp 	j, #4
+			blt 	for_j_lessThan_4_loop
+
+		pop 	{ j }
+		add 	i, #1
+		cmp 	i, #4
+		blt 	for_i_lessThan_4_loop
+	
+	pop		{ i - j }
+		
+	.unreq	i
+	.unreq 	j
+
+	pop		{ blockX - blockTypeOffset }
+
+	.unreq	blockX
+	.unreq	blockY
+	.unreq 	blockColor
+	.unreq	blockTypeAddress
+	.unreq	blockTypeOffset
+
+	pop 	{ lr }
+	mov 	pc, lr				// return
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 /*
@@ -1242,7 +1389,7 @@ tetrisGetGridBitmaskForBlock:
 
 		tetrisGetGridBitmaskForBlock_for_j_lessThan_4_loop:
 
-			push 	{ blockX - blockY }
+			push 	{ blockX - blockColor }
 
 			add 	blockX, i
 			add 	blockY, j
@@ -1252,22 +1399,18 @@ tetrisGetGridBitmaskForBlock:
 			// tetrisGetGridBlockColor(int x, int y)
 			push	{ blockX - blockY }
 			bl 		tetrisGetGridBlockColor
-			pop		{ r3 }
+			pop		{ blockColor }
 			pop		{ bitmask, i - j }
-			teq		r3, #0
+			teq		blockColor, #0
 			
-			beq		poop
-			
-				mov	r1, #4
-				mul	r1, j, r1
-				add	r1, i
-				ldr	r2, =0b1000000000000000
-				lsr	r2, r1
-				orr	bitmask, bitmask, r2
-			
-			poop:
+			movne	r1, #4
+			mulne	r1, j, r1
+			addne	r1, i
+			ldrne	r2, =0b1000000000000000
+			lsrne	r2, r1
+			orrne	bitmask, bitmask, r2
 
-			pop 	{ blockX - blockY }
+			pop 	{ blockX - blockColor }
 
 			add 	j, #1
 			cmp 	j, #4
@@ -1357,10 +1500,6 @@ tetrisDrawGrid:
 			nop
 			ldmfd	r7, 	{ r6 - r12 }
 			stmfd	sp!,	{ r6 - r12 }
-			
-			mov		r0, curCol
-			mov		r1, curRow
-			bl tetrisBlockBitForGridPoint
 			
 			mov		r0, curCol
 			mov		r1, curRow
@@ -1796,57 +1935,6 @@ tetrisBlockContainsPoint:
 		nop
 		//pop		{ blockX - blockTypeOffset }
 		
-		/*
-		
-		sub	x, 		blockX
-		sub	y, 		blockY
-		push	{ r11 - r12 }
-		
-		mov	r11, #4
-		mov	r12, #1
-		
-		nop
-		
-		// int offset = positionToArrayOffset(int x, int y, int cols)
-		stmfd	sp!, 	{ x, y, r11, r12 }
-		bl positionToArrayOffset
-		ldmfd	sp!, 	{ returnVal }
-		nop
-		
-		
-		
-		ldrh	r0, 	[blockTypeAddress, blockTypeOffset]
-		mov		r1, 	#0b1000000000000000
-		lsr		r1, 	returnVal
-		
-		and		r1, 	r0
-		cmp		r1, 	#0
-		movne	r1, 	#1
-		mov		r0, 	r1
-		
-		nop
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		pop		{ r11 - r12 }
-		
-		
-		*/
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		mov		r0, #1
@@ -1871,41 +1959,6 @@ tetrisBlockContainsPointEnd:
 
 	pop		{ lr }
 	mov 	pc, lr				// return
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-// INPUT
-//		r0 = x
-//		r1 = y
-//		--------
-//		On Stack
-//		--------
-// 		0 = blockX
-// 		1 = blockY
-// 		2 = blockColor
-// 		3 = blockTypeAddress
-// 		4 = blockTypeOffset
-//		--------
-// OUTPUT
-//		r0 = bit value at position relative to the blocks local space
-//
-tetrisBlockBitForGridPoint:
-
-	
-	mov 	pc, lr				// return
-	
-	
-	
-	
-	
-
 	
 	
 	
@@ -2120,35 +2173,6 @@ writeBlockToGrid:
 
 	pop 	{ lr }
 	mov 	pc, lr				// return
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
@@ -2566,11 +2590,11 @@ startTimer:
 
 
 .align 4
-TetrisGrid:
-	.int	10				// tetrisGridCols
-	.int	19				// tetrisGridRows
-	.int	32				// tetrisGridBlockSize (n x n pixels)
-	.space 	10 * 19 * 4		// tetrisGridData (cols x rows)
+TetrisGrid:	
+	.int		10			// tetrisGridCols
+	.int		19			// tetrisGridRows
+	.int		32			// tetrisGridBlockSize (n x n pixels)
+	.space		10 * 19 * 4	// tetrisGridData (cols x rows)
 TetrisGridEnd:
 
 
