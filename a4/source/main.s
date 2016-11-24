@@ -101,98 +101,24 @@ MainMenuDownPressed:
 
 StartGame:
 
-    mov     r1, #0                              //resets the score to 0
-    ldr     r0, =scoreNumber
+    mov     r1, #0                              
+    ldr     r0, =scoreNumber                    //resets the score to 0
     str     r1, [r0]
-
-
-  //TODO: Nathan - figure out the warning
-  //      "register range not in ascending order"
-
-  //Use this branch to sample from SNES controller.
-  //Button bitmask will be returned to r0 in form:
-  //  B button pressed (button 1)
-  //  r0 = 0xfffe = 1111 1111 1111 1110
-
-	bl	sampleSNES
-		
-	bl tetrisInitGrid
-
-    bl  ClearScreenBlack
-    bl	DrawBoard
     
-    //bl	PauseMenuStart
+    ldr     r0, =winFlag                        //resets the win flag to 0
+    str     r1, [r0]
     
-	bl	tetrisCreateNewBlock
-	
-	
-	
-/*	
-	
-	
-	mainLoop:
-	
-	        
-		
-		// TIMER
-		ldr		r0, =0x3F003004
-		ldr		r9, [r0]
-			bl 	tetrisUpdateGrid
-			bl	tetrisDrawBlock
-			bl	tetrisDrawGrid
-		ldr		r0, =0x3F003004
-		ldr		r10, [r0]
-		sub		r10, r9
-		timerComplete:
-		
-		applyUserTranslation:
-		
-			// tetrisTranslateBlock(int dx, int dy)
-			mov		r0, #0
-			mov		r1, #0
-			bl		tetrisTranslateBlock
-		
-		applyUserRotation:
-		
-			// tetrisRotateBlock(right)
-			mov	r0, #1
-			bl	tetrisRotateBlock
-			
-		applyGravityTranslation:
-		
-			// tetrisTranslateBlock(int dx, int dy)
-			mov		r0, #0
-			mov		r1, #1
-			bl		tetrisTranslateBlock
-			
-			
-			
-		bl 	tetrisGridClearCompleteRows
-		pop	{ r0 }
-		teq	r0, #0
-		beq	noClearedRows
-		bne	clearedRows
-		
-		clearedRows:
-			ldr     r1, =scoreNumber
-			ldr     r10, [r1]
-			add     r10, r0
-			str     r10, [r1]
-			bl      UpdateScore
-		noClearedRows:
-			
-		
-		
-		
-		//ldr	r0, =0xFF//FFF
-		//bl 	startTimer
-		
-		
-		
-		b	mainLoop
-*/
+    ldr     r0, =loseFlag                       //resets the lose flag to 0
+    str     r1, [r0]
+    
+	bl tetrisInitGrid                           //resets the grid to black
 
-
+    bl  ClearScreenBlack                        //clears the screen
+    bl	DrawBoard                               //draws the board
+    
+    
+    
+	bl	tetrisCreateNewBlock                    //Create the first block
 newBlock:
         //Increment Score by 1
 		ldr     r0, =scoreNumber
@@ -200,15 +126,15 @@ newBlock:
 		add     r1, #1
 		str     r1, [r0]
 		bl      UpdateScore
-        
-		
+
         
         nextDropTime    .req    r10
         sample          .req    r5
         dropLoop:
             ldr     r0, =0x3F003004                         //loads the address for the timer into r0
             ldr     nextDropTime, [r0]                      //loads the current time into nextDropTime
-            ldr     r0, =100000                            //loads 1mil into r0
+
+            ldr     r0, =300000                            //loads 1mil into r0
             add     nextDropTime, r0                        //increments nextDropTime by 1mil microseconds. (1 second)
             
                 rotateLoop:
@@ -277,7 +203,6 @@ newBlock:
                     
                 userTranslationsDone:
                 
-					bl 	tetrisUpdateGrid
 					bl  tetrisDrawBlock
 					bl	tetrisDrawGrid
 
@@ -292,24 +217,14 @@ newBlock:
             mov		r1, #1
             bl		tetrisTranslateBlock
             
+            bl 		tetrisGridClearCompleteRows
             
-            
-            bl 	tetrisGridClearCompleteRows
-			pop	{ r0 }
-			teq	r0, #0
-			beq	noClearedRows
-			bne	clearedRows
-			
-			clearedRows:
-				ldr     r1, =scoreNumber
-				ldr     r10, [r1]
-				add     r10, r0
-				str     r10, [r1]
-				bl      UpdateScore
-			noClearedRows:
-            
-            
-            
+            ldr     r0, =loseFlag                               //loads the lose flag address
+            ldr     r0, [r0]                                    //loads the lose flag
+            teq     r0, #0                                      //tests if it is a 0
+            beq     dropLoop                                    //if so, continue
+            bl      drawLossScreen                              //else write you lose
+            b       gameOver                                    //and wait to go to menu
         
             b       dropLoop
             
@@ -431,6 +346,7 @@ tetrisGridClearRow:
 
 	pop		{ y }
 	push	{ lr }
+	push	{ y }
 	push	{ tetrisGrid - tetrisGridRows }
 	
 		ldr 	tetrisGrid, 	=TetrisGrid
@@ -455,7 +371,7 @@ tetrisGridClearRow:
 	tetrisGridClearRowEnd:
 		
 	pop		{ tetrisGrid - tetrisGridRows }
-	
+	bl 		tetrisUpdateGrid
 	
 	.unreq 	x
 	.unreq 	y
@@ -469,16 +385,8 @@ tetrisGridClearRow:
 	
 	
 // INPUT
-//		--------
-//		On Stack
-//		--------
-//		--------
+//
 // OUTPUT
-//		--------
-//		On Stack
-//		--------
-// 		0 = int rowsCleared
-//		--------
 //	
 tetrisGridClearCompleteRows:
 
@@ -515,6 +423,7 @@ tetrisGridClearCompleteRows:
 		
 			add		rowsCleared, #1
 			push	{ y }
+            add     y, #1
 			bl		tetrisGridClearRow
 		
 		tetrisGridClearCompleteRowsRowIsNotComplete:
@@ -524,9 +433,28 @@ tetrisGridClearCompleteRows:
 		bge 	tetrisGridClearCompleteRows_for_curRow_ge_0_loop
 	
 	mov		r0, rowsCleared
+	
+	teq	rowsCleared, #0
+	beq	tetrisGridClearCompleteRowsEnd
+    teq rowsCleared, #1
+    moveq r2, #10
+    teq rowsCleared, #2
+    moveq r2, #25
+    teq rowsCleared, #3
+    moveq r2, #45
+    teq rowsCleared, #4
+    moveq r2, #70
+			
+	ldr     r0, =scoreNumber
+	ldr     r1, [r0]
+	add     r1, r2
+	str     r1, [r0]
+	bl      UpdateScore
+	
+tetrisGridClearCompleteRowsEnd:
+	
 	pop		{ y - rowsCleared }
 	pop		{ lr }
-	push	{ r0 }
 	
 	.unreq 	y
 	.unreq	tetrisGrid
@@ -534,6 +462,7 @@ tetrisGridClearCompleteRows:
 	.unreq	tetrisGridRows
 	.unreq	tetrisGridBlockSize
 	.unreq	tetrisGridData
+    .unreq  rowsCleared
 
 	mov 	pc, lr				// return
 	
@@ -1082,11 +1011,6 @@ tetrisClearGridBlock:
 //		--------
 //		On Stack
 //		--------
-// 		0 = blockX
-// 		1 = blockY
-// 		2 = blockColor
-// 		3 = blockTypeAddress
-// 		4 = blockTypeOffset
 //		--------
 // OUTPUT
 //	
@@ -1218,8 +1142,7 @@ tetrisDrawGrid:
 	.unreq	tetrisGridData
 	.unreq	tetrisGridOffset
 
-	pop 	{ lr }
-	mov 	pc, lr				// return
+	pop 	{ pc }
 	
 	
 	
@@ -1228,11 +1151,7 @@ tetrisDrawGrid:
 //		--------
 //		On Stack
 //		--------
-// 		0 = blockX
-// 		1 = blockY
-// 		2 = blockColor
-// 		3 = blockTypeAddress
-// 		4 = blockTypeOffset
+// 		0 = maxRow
 //		--------
 // OUTPUT
 //	
@@ -1247,6 +1166,11 @@ tetrisUpdateGrid:
 	tetrisGridBlockSize	.req r10
 	tetrisGridData		.req r11
 	tetrisGridOffset	.req r12
+	
+	pop		{ r0 }
+	sub		r0, 			#1
+	cmp		r0, 			#0
+	movlt	r0, 			#0
 
 	push	{ lr }  
 	push	{ curCol - tetrisGridOffset }
@@ -1256,7 +1180,7 @@ tetrisUpdateGrid:
 	add 	tetrisGridData, tetrisGrid, #12
 	
 	mov		curCol, 		#0
-	mov		curRow, 		tetrisGridRows
+	mov		curRow, 		r0
 	mov		curColor, 		#0
 
 	tetrisUpdateGrid_for_curCol_lt_cols_loop:
@@ -1274,8 +1198,8 @@ tetrisUpdateGrid:
 			pop		{ curColor }
 			teq		curColor, #0
 			pop		{ curCol, curRow }
-			beq tetrisUpdateGridCurrentBlockHasNoData
-			bne tetrisUpdateGridCurrentBlockHasData
+			beq 	tetrisUpdateGridCurrentBlockHasNoData
+			bne 	tetrisUpdateGridCurrentBlockHasData
 			
 				tetrisUpdateGridCurrentBlockHasData:
 				
@@ -1333,8 +1257,7 @@ tetrisUpdateGrid:
 	.unreq	tetrisGridData
 	.unreq	tetrisGridOffset
 
-	pop 	{ lr }
-	mov 	pc, lr				// return
+	pop 	{ pc }
 	
 	
 	
@@ -2291,7 +2214,7 @@ GameState:
 TetrisGrid:	
 	.int		10			// tetrisGridCols
 	.int		19			// tetrisGridRows
-	.int		32			// tetrisGridBlockSize (n x n pixels)
+	.int		15			// tetrisGridBlockSize (n x n pixels)
 	.space		10 * 19 * 4	// tetrisGridData (cols x rows)
 TetrisGridEnd:
 
