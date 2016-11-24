@@ -24,8 +24,8 @@ main:
 	bl		InitFrameBuffer
 
 
-	bl		clearScreen
-	//b		StartGame
+//	bl		clearScreen
+//	b		StartGame
 
 
 
@@ -101,7 +101,9 @@ MainMenuDownPressed:
 
 StartGame:
 
-
+    mov     r1, #0                              //resets the score to 0
+    ldr     r0, =scoreNumber
+    str     r1, [r0]
 
 
   //TODO: Nathan - figure out the warning
@@ -119,16 +121,14 @@ StartGame:
     bl  ClearScreenBlack
     bl	DrawBoard
     
-    bl	PauseMenuStart
+    //bl	PauseMenuStart
     
 	bl	tetrisCreateNewBlock
 	
 	
 	
 	
-	
 	// tetrisSetGridBlockColor(int x, int y, int color)
-	
 /*
 	mov		r0, #3
 	mov		r1, #18
@@ -182,8 +182,6 @@ StartGame:
 		
 		bl	tetrisDrawBlock
 		bl	tetrisDrawGrid
-		bl	tetrisDrawBlock
-		
 		
 		
 		applyUserTranslation:
@@ -206,6 +204,10 @@ StartGame:
 			mov		r1, #1
 			bl		tetrisTranslateBlock
 			
+			
+			
+			
+			
 		mov		r0, #18
 		push	{ r0 }
 		bl 		tetrisGridIsRowComplete
@@ -221,8 +223,9 @@ StartGame:
 		rowNotClear:
 		
 		
-		ldr	r0, =0xFFFFF
+		ldr	r0, =0xFF//FFF
 		bl 	startTimer
+		
 		
 		
 		b	mainLoop
@@ -236,20 +239,18 @@ newBlock:
 		str     r1, [r0]
 		bl      UpdateScore
         
+        bl  tetrisDrawBlock
         bl	tetrisDrawGrid
         
-        nextDropTime    .req    r4
+        nextDropTime    .req    r10
         sample          .req    r5
         dropLoop:
             ldr     r0, =0x3F003004                         //loads the address for the timer into r0
             ldr     nextDropTime, [r0]                      //loads the current time into nextDropTime
-            ldr     r0, =1000000                            //loads 1mil into r0
+            ldr     r0, =100000                            //loads 1mil into r0
             add     nextDropTime, r0                        //increments nextDropTime by 1mil microseconds. (1 second)
             
-            debug:
                 rotateLoop:
-                ldr     r0, =10000                          //delay
-                bl      startTimer
                 bl      sampleSNES                          //query the SNES
                 
                 mov     sample, r0                          //backs up the sample
@@ -261,16 +262,16 @@ newBlock:
                 beq     mainLoopStartPressed                //if equal, then A was pressed, so branch
                                                             //else fall through
                 mov     r0, sample                          //move sample to r0
-                mvn     r1, #0x10                           //moves 1 to every bit except bit 4
+                mvn     r1, #0x400                           //moves 1 to every bit except bit 4
                 bic     r0, r1                              //clears every bit except bit 4
                 cmp     r0, #0                              //compares masked sample (r0) to 0
-                beq     mainLoopUpPressed                   //if equal, then Up was pressed, so branch
+                beq     mainLoopLTPressed                   //if equal, then left trigger was pressed, so branch
                                                             //else fall through
                 mov     r0, sample                          //move sample to r0
-                mvn     r1, #0x20                           //moves 1 to every bit except bit 5
+                mvn     r1, #0x800                           //moves 1 to every bit except bit 5
                 bic     r0, r1                              //clears every bit except bit 5
                 cmp     r0, #0                              //compares masked sample (r0) to 0
-                beq     mainLoopDownPressed                 //if equal, then Down was pressed, so branch
+                beq     mainLoopRTPressed                   //if equal, then right trigger was pressed, so branch
                                                             //else fall through
                 mov     r0, sample                          //move sample to r0
                 mvn     r1, #0x40                           //moves 1 to every bit except bit 6
@@ -289,12 +290,12 @@ newBlock:
                 mainLoopStartPressed:
                     bl      PauseMenuStart
                     b       userTranslationsDone
-                mainLoopUpPressed:
+                mainLoopLTPressed:
                                                             // tetrisRotateBlock(left)
                     mov	    r0, #0
                     bl	    tetrisRotateBlock
                     b       userTranslationsDone
-                mainLoopDownPressed:
+                mainLoopRTPressed:
                                                             // tetrisRotateBlock(right)
                     mov	    r0, #1
                     bl	    tetrisRotateBlock                    
@@ -315,17 +316,34 @@ newBlock:
                     
                 userTranslationsDone:
                 
-                ldr     r0, =200000
-                bl      startTimer
+//                ldr     r0, =200000
+//                bl      startTimer
+
+//                push {r8-r10}
+//                ldr     r0, =0x3F003004                         //loads the address for the timer into r0
+//                ldr     r8, [r0] 
                 
-                bl	tetrisDrawGrid                
-                bl	tetrisDrawBlock
+//                push {r8}
+                bl	tetrisDrawBlock               
+//                pop  {r8}
+//                ldr     r0, =0x3F003004                         //loads the address for the timer into r0
+//                ldr     r9, [r0]
+//                push {r8, r9}    
+                bl	tetrisDrawGrid
+//                pop  {r8, r9}
+
+//                ldr     r0, =0x3F003004                         //loads the address for the timer into r0
+//                ldr     r10, [r0]                                //loads the current time into r1
+                
+//                debug:
+//                nop
+                
+//                pop {r8-r10}
 
                 ldr     r0, =0x3F003004                         //loads the address for the timer into r0
                 ldr     r1, [r0]                                //loads the current time into r1
-                
-                debug2:                
-                cmp     nextDropTime, r1                        //checks if it is time to drop down
+              
+                cmp     r1, nextDropTime                        //checks if it is time to drop down
                 blt     rotateLoop                              //if not, check for more transitions
                 
             // tetrisTranslateBlock(int dx, int dy)             //apply gravity transition
@@ -363,7 +381,7 @@ mainEnd:
 //		--------
 //		On Stack
 //		--------
-//		0 = boolean
+// 		0 = boolean gridRowComplete (0 == false)
 //		--------
 //
 tetrisGridIsRowComplete:
@@ -553,9 +571,6 @@ PauseMenuStartPressed:
 //if A == pressed
 PauseMenuAPressed:
     cmp     PointerAt, #0                       //Checks if r9 points to restart
-    mov     r1, #0                              //resets the score to 0
-    ldr     r0, =scoreNumber
-    str     r1, [r0]
     beq     StartGame                           //if it does, start game
     b       MainMenu                            //else quit was hovered so go to main menu
 
@@ -669,13 +684,24 @@ DrawBoard:
     ldr     r0, =644                    //x
     stmfd   sp!,{r0-r4}                 //push all
     bl      drawRect
-    ldr     r4, =0xADB5                 //color
-    mov     r3, #132                    //height
-    mov     r2, #132                    //width
-    ldr     r1, =530                    //y
-    ldr     r0, =646                    //x
-    stmfd   sp!,{r0-r4}                 //push all
-    bl      drawRect
+    
+    bl      randomNumber
+    ldr     r1, =nextBlock
+    str     r0, [r1]    
+    
+    bl      drawQueue
+
+
+
+
+
+//    ldr     r4, =0xADB5                 //color
+//    mov     r3, #132                    //height
+//    mov     r2, #132                    //width
+//    ldr     r1, =530                    //y
+//    ldr     r0, =646                    //x
+//    stmfd   sp!,{r0-r4}                 //push all
+//    bl      drawRect
     
     bl      UpdateScore
     
@@ -1051,7 +1077,15 @@ tetrisDrawGrid:
 			
 			// skip drawing current grid block if current 
 			// tetris block is in same position
-			bne		tetrisDrawGridBlockEnd
+			
+			
+			
+			beq		tetrisDrawGridBlock
+			
+			tetrisDrawGridBlockSkip:
+			
+				nop
+				b		tetrisDrawGridBlockEnd
 			
 			tetrisDrawGridBlock:
 				
@@ -1211,38 +1245,45 @@ blockTypeOffset		.req r8
 tetrisCreateNewBlock:
 	
 	push	{ lr }
-	
+    
 	ldr		r0, 	=TetrisBlock
 	ldmfd	r0,		{ blockX - blockTypeOffset }
 
 	initializeTetrisBlock:
 	
-		bl		randomNumber
+        ldr     r0, =nextBlock
+        ldr     r0, [r0]   
 
-		mov 	blockX, 			#0				// randomize?
+		mov 	blockX, 			#0//#4					// load from data section?
 		mov 	blockY,				#0
 		
 		ldr 	blockColor,	 		=TetrisBlockColors
 		lsl		r1, 				r0, #2
 		ldr		blockColor,			[blockColor, r1]
 		
-		ldr		blockTypeAddress, 	=TetrisBlockA	// randomize?
+		ldr		blockTypeAddress, 	=TetrisBlockA
 		teq		r0, 				#1
-		ldreq	blockTypeAddress, 	=TetrisBlockB	// randomize
+		ldreq	blockTypeAddress, 	=TetrisBlockB	
 		teq		r0, 				#2
-		ldreq	blockTypeAddress, 	=TetrisBlockC	// randomize?
+		ldreq	blockTypeAddress, 	=TetrisBlockC	
 		teq		r0, 				#3
-		ldreq	blockTypeAddress, 	=TetrisBlockD	// randomize?
+		ldreq	blockTypeAddress, 	=TetrisBlockD	
 		teq		r0, 				#4
-		ldreq	blockTypeAddress, 	=TetrisBlockE	// randomize?
+		ldreq	blockTypeAddress, 	=TetrisBlockE	
 		teq		r0, 				#5
-		ldreq	blockTypeAddress, 	=TetrisBlockF	// randomize?
+		ldreq	blockTypeAddress, 	=TetrisBlockF	
 		teq		r0, 				#6
-		ldreq	blockTypeAddress, 	=TetrisBlockG	// randomize?
+		ldreq	blockTypeAddress, 	=TetrisBlockG	
 		
-		mov		blockTypeOffset,	#0				// randomize?
+		mov		blockTypeOffset,	#0				
 
 	initializeTetrisBlockEnd:
+   
+    bl      randomNumber    
+    ldr     r1, =nextBlock
+    str     r0, [r1]
+    
+    bl      drawQueue
 	
 	pop		{ lr }
 
@@ -1250,8 +1291,140 @@ tetrisCreateNewBlock:
 
 	mov 	pc, lr				// return
 
+/*
+ *
+ *Draws the queue
+ */
+drawQueue:
+    push    {r4, lr}
+    ldr     r4, =0xADB5                 //color
+    mov     r3, #132                    //height
+    mov     r2, #132                    //width
+    ldr     r1, =530                    //y
+    ldr     r0, =646                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    
+    ldr     r1, =nextBlock
+    ldr     r4, [r1]
+    
+    teq     r4, #0
+    beq     QueueA
+    teq     r4, #1
+    beq     QueueB
+    teq     r4, #2
+    beq     QueueC
+    teq     r4, #3
+    beq     QueueD
+    teq     r4, #4
+    beq     QueueE
+    teq     r4, #5
+    beq     QueueF
+    teq     r4, #6
+    beq     QueueG
 
-
+QueueA:
+    ldr     r4, =0xFFFF                 //color
+    mov     r3, #128                    //height
+    mov     r2, #32                     //width
+    ldr     r1, =532                    //y
+    ldr     r0, =696                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    b       QueueDone
+QueueB:
+    ldr     r4, =0xAAAA                 //color
+    mov     r3, #64                     //height
+    mov     r2, #32                     //width
+    ldr     r1, =564                    //y
+    ldr     r0, =664                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    ldr     r4, =0xAAAA                 //color
+    mov     r3, #32                     //height
+    mov     r2, #64                     //width
+    ldr     r1, =596                    //y
+    ldr     r0, =696                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    b       QueueDone
+QueueC:
+    ldr     r4, =0xBBBB                 //color
+    mov     r3, #32                     //height
+    mov     r2, #96                     //width
+    ldr     r1, =596                    //y
+    ldr     r0, =664                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    ldr     r4, =0xBBBB                 //color
+    mov     r3, #32                     //height
+    mov     r2, #32                     //width
+    ldr     r1, =564                    //y
+    ldr     r0, =728                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    b       QueueDone
+QueueD:
+    ldr     r4, =0xCCCC                 //color
+    mov     r3, #64                     //height
+    mov     r2, #64                     //width
+    ldr     r1, =564                    //y
+    ldr     r0, =682                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    b   QueueDone
+QueueE:
+    ldr     r4, =0xDDDD                 //color
+    mov     r3, #32                     //height
+    mov     r2, #64                     //width
+    ldr     r1, =564                    //y
+    ldr     r0, =696                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    ldr     r4, =0xDDDD                 //color
+    mov     r3, #32                     //height
+    mov     r2, #64                     //width
+    ldr     r1, =596                    //y
+    ldr     r0, =664                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    b   QueueDone
+QueueF:
+    ldr     r4, =0x112233               //color
+    mov     r3, #32                     //height
+    mov     r2, #32                     //width
+    ldr     r1, =564                    //y
+    ldr     r0, =696                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    ldr     r4, =0x112233               //color
+    mov     r3, #32                     //height
+    mov     r2, #96                     //width
+    ldr     r1, =596                    //y
+    ldr     r0, =664                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    b   QueueDone
+QueueG:
+    ldr     r4, =0x445566               //color
+    mov     r3, #32                     //height
+    mov     r2, #64                     //width
+    ldr     r1, =564                    //y
+    ldr     r0, =664                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    ldr     r4, =0x445566               //color
+    mov     r3, #32                     //height
+    mov     r2, #64                     //width
+    ldr     r1, =596                    //y
+    ldr     r0, =696                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    b   QueueDone
+    
+QueueDone:    
+    
+    pop     {r4, pc}
 
 
 // INPUT
@@ -1390,7 +1563,7 @@ tetrisDrawBlock:
 //		--------
 //		On Stack
 //		--------
-// 		0 = boolean (0 == false)
+// 		0 = boolean didCollide (0 == false)
 //		--------
 //
 tetrisCheckBlockGridCollisions:
@@ -1754,36 +1927,51 @@ tetrisTranslateBlockEnd:
 //		--------
 //		On Stack
 //		--------
-// 		0 = hadData
+// 		0 = boolean hasData (0 == false)
 //		--------
 //
 tetrisBlockHasDataForGridPoint:
 
 	x					.req r0
 	y					.req r1
-	
+	hasData				.req r2
 	
 	pop 	{ x, y }
-	ldm		sp, { blockX - blockTypeOffset }
-	push	{ lr }
-	push 	{ x, y }
-	push 	{ blockX - blockTypeOffset }
-	push 	{ x, y }
+	ldm		sp, 		{ blockX - blockTypeOffset }
+	
+	// if (x > blockX && x < blockX + blockWidth)
+		cmp		x, 			blockX
+		movlt	hasData,	#0
+		blt		tetrisBlockHasDataForGridPointEnd
 
-	bl 		tetrisBlockContainsGridPoint
-	pop		{ r2 }
-	teq		r2, #0
-	pop 	{ blockX - blockTypeOffset }
-	pop 	{ x, y }
-	pop		{ lr }
-	pusheq	{ r2 }
-	beq		tetrisBlockHasDataForGridLocationEnd
+		push	{ blockX }
+		add		blockX,		#4
+		cmp		x, 			blockX
+		pop		{ blockX }
+		movge	hasData,	#0
+		bge		tetrisBlockHasDataForGridPointEnd
+	// endif
 	
-	sub		x, blockX, x
-	sub		y, blockY, y
+	// if (y > blockY && y < blockY + blockHeight)
+		cmp		y, 			blockY
+		movlt	hasData,	#0
+		blt		tetrisBlockHasDataForGridPointEnd
+		
+		push	{ blockY }
+		add		blockY, #4
+		cmp		y, 			blockY
+		pop		{ blockY }
+		movge	hasData,	#0
+		bge		tetrisBlockHasDataForGridPointEnd
+	// endif
 	
-	blockBitForXY	.req r2
-	blockGridData	.req r3
+	sub		x, x, blockX
+	sub		y, y, blockY
+	
+	blockBitForXY	.req r8
+	blockGridData	.req r9
+	
+	push	{ blockBitForXY, blockBitForXY }
 
 		ldrh	blockGridData, [blockTypeAddress, blockTypeOffset]
 
@@ -1795,81 +1983,17 @@ tetrisBlockHasDataForGridPoint:
 		mov		blockBitForXY, 	#0b1000000000000000
 		and		blockBitForXY, 	blockGridData
 		teq		blockBitForXY,	#0
-		movne	blockBitForXY,	#1
+		moveq	hasData,		#0
+		movne	hasData,		#1
 		
-		push {blockBitForXY}
+	pop		{ blockBitForXY, blockBitForXY }
 		
 	.unreq	blockBitForXY
 	.unreq 	blockGridData
 		
-tetrisBlockHasDataForGridLocationEnd:
+tetrisBlockHasDataForGridPointEnd:
 
-	
-
-	mov 	pc, lr				// return
-	
-	
-	
-	
-	
-// INPUT
-//		--------
-//		On Stack
-//		--------
-// 		0 = x
-// 		1 = y
-// 		2 = blockX
-// 		3 = blockY
-// 		4 = blockColor
-// 		5 = blockTypeAddress
-// 		6 = blockTypeOffset
-//		--------
-// OUTPUT
-//		--------
-//		On Stack
-//		--------
-//		0 = boolean
-//		--------
-//
-tetrisBlockContainsGridPoint:
-
-	x					.req r0
-	y					.req r1
-	returnVal			.req r2
-	
-	pop		{ x, y }
-	ldmfd	sp,			{ blockX - blockTypeOffset }
-	mov		returnVal, 	#1
-	
-	// if (x > blockX && x < blockX + blockWidth)
-		cmp		x, 			blockX
-		movlt	returnVal,	#0
-		blt		tetrisBlockContainsGridPointEnd
-	
-		add		blockX,		#4
-		cmp		x, 			blockX
-		movge	returnVal,	#0
-		bge		tetrisBlockContainsGridPointEnd
-	// endif
-	
-	// if (y > blockY && y < blockY + blockHeight)
-		cmp		y, 			blockY
-		movlt	returnVal,	#0
-		blt		tetrisBlockContainsGridPointEnd
-		
-		add		blockY, #4
-		cmp		y, 			blockY
-		movge	returnVal,	#0
-		bge		tetrisBlockContainsGridPointEnd
-	// endif
-
-tetrisBlockContainsGridPointEnd:
-
-	push	{ returnVal }
-
-	.unreq	x
-	.unreq	y
-	.unreq	returnVal
+	push	{ hasData }
 
 	mov 	pc, lr				// return
 	
@@ -2081,6 +2205,10 @@ scoreNumber:
 QueueHeader:
     .int    8
     .ascii  "Upcoming" //Length 8
+
+.align 4
+nextBlock:
+    .int    0
 
 
 

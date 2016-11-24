@@ -19,80 +19,80 @@ LOAD build/utils.o
  .init          0x00008000        0x4 build/main.o
                 0x00008000                _start
 
-.data           0x00009080     0x14d0
+.data           0x00009080     0x14e0
  *(.data)
- .data          0x00009080      0xbf0 build/main.o
- .data          0x00009c70        0x0 build/randomNumber.o
- .data          0x00009c70        0x0 build/jtag.o
- .data          0x00009c70       0x70 build/framebuffer.o
-                0x00009c70                FrameBufferInit
-                0x00009cd0                FrameBufferPointer
- .data          0x00009ce0        0x0 build/sampleSNES.o
- .data          0x00009ce0      0x870 build/menuDrawFunctions.o
- .data          0x0000a550        0x0 build/utils.o
+ .data          0x00009080      0xc00 build/main.o
+ .data          0x00009c80        0x0 build/randomNumber.o
+ .data          0x00009c80        0x0 build/jtag.o
+ .data          0x00009c80       0x70 build/framebuffer.o
+                0x00009c80                FrameBufferInit
+                0x00009ce0                FrameBufferPointer
+ .data          0x00009cf0        0x0 build/sampleSNES.o
+ .data          0x00009cf0      0x870 build/menuDrawFunctions.o
+ .data          0x0000a560        0x0 build/utils.o
  *.c.o(*)
 
-.igot.plt       0x0000a550        0x0
+.igot.plt       0x0000a560        0x0
  .igot.plt      0x00000000        0x0 build/main.o
 
-.text           0x0000a550     0x1ee8
+.text           0x0000a560     0x20ac
  *.c.o(.text)
  *(.text)
- .text          0x0000a550      0xc30 build/main.o
- .text          0x0000b180       0x50 build/randomNumber.o
-                0x0000b180                randomNumber
- .text          0x0000b1d0       0x8c build/jtag.o
-                0x0000b1d0                EnableJTAG
- .text          0x0000b25c       0x80 build/framebuffer.o
-                0x0000b25c                InitFrameBuffer
- .text          0x0000b2dc      0x1e4 build/sampleSNES.o
-                0x0000b2dc                sampleSNES
- .text          0x0000b4c0      0xe84 build/menuDrawFunctions.o
-                0x0000b4c0                drawPauseMenu
-                0x0000b59c                drawMainMenu
-                0x0000b664                WriteSentence
-                0x0000b6a8                setPauseMenuIndicatorRestart
-                0x0000b6e8                setPauseMenuIndicatorQuit
-                0x0000b728                setMainMenuIndicatorStart
-                0x0000b768                setMainMenuIndicatorQuit
-                0x0000b7a8                drawVictoryScreen
-                0x0000ba6c                drawLossScreen
-                0x0000bda4                drawPaused
-                0x0000bff8                drawTitle
- .text          0x0000c344       0xf4 build/utils.o
-                0x0000c344                clearScreen
-                0x0000c378                drawPixel
-                0x0000c3a0                drawRect
-                0x0000c3f8                positionToArrayOffset
-                0x0000c40c                startTimer
+ .text          0x0000a560      0xdf4 build/main.o
+ .text          0x0000b354       0x50 build/randomNumber.o
+                0x0000b354                randomNumber
+ .text          0x0000b3a4       0x8c build/jtag.o
+                0x0000b3a4                EnableJTAG
+ .text          0x0000b430       0x80 build/framebuffer.o
+                0x0000b430                InitFrameBuffer
+ .text          0x0000b4b0      0x1e4 build/sampleSNES.o
+                0x0000b4b0                sampleSNES
+ .text          0x0000b694      0xe84 build/menuDrawFunctions.o
+                0x0000b694                drawPauseMenu
+                0x0000b770                drawMainMenu
+                0x0000b838                WriteSentence
+                0x0000b87c                setPauseMenuIndicatorRestart
+                0x0000b8bc                setPauseMenuIndicatorQuit
+                0x0000b8fc                setMainMenuIndicatorStart
+                0x0000b93c                setMainMenuIndicatorQuit
+                0x0000b97c                drawVictoryScreen
+                0x0000bc40                drawLossScreen
+                0x0000bf78                drawPaused
+                0x0000c1cc                drawTitle
+ .text          0x0000c518       0xf4 build/utils.o
+                0x0000c518                clearScreen
+                0x0000c54c                drawPixel
+                0x0000c574                drawRect
+                0x0000c5cc                positionToArrayOffset
+                0x0000c5e0                startTimer
 OUTPUT(build/output.elf elf32-littlearm)
 
-.glue_7         0x0000c438        0x0
+.glue_7         0x0000c60c        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x0000c438        0x0
+.glue_7t        0x0000c60c        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x0000c438        0x0
+.vfp11_veneer   0x0000c60c        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x0000c438        0x0
+.v4_bx          0x0000c60c        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x0000c438        0x0
+.iplt           0x0000c60c        0x0
  .iplt          0x00000000        0x0 build/main.o
 
-.rel.dyn        0x0000c438        0x0
+.rel.dyn        0x0000c60c        0x0
  .rel.iplt      0x00000000        0x0 build/main.o
 
-.bss            0x0000c438        0x0
- .bss           0x0000c438        0x0 build/main.o
- .bss           0x0000c438        0x0 build/randomNumber.o
- .bss           0x0000c438        0x0 build/jtag.o
- .bss           0x0000c438        0x0 build/framebuffer.o
- .bss           0x0000c438        0x0 build/sampleSNES.o
- .bss           0x0000c438        0x0 build/menuDrawFunctions.o
- .bss           0x0000c438        0x0 build/utils.o
+.bss            0x0000c60c        0x0
+ .bss           0x0000c60c        0x0 build/main.o
+ .bss           0x0000c60c        0x0 build/randomNumber.o
+ .bss           0x0000c60c        0x0 build/jtag.o
+ .bss           0x0000c60c        0x0 build/framebuffer.o
+ .bss           0x0000c60c        0x0 build/sampleSNES.o
+ .bss           0x0000c60c        0x0 build/menuDrawFunctions.o
+ .bss           0x0000c60c        0x0 build/utils.o
 
 .ARM.attributes
                 0x00000000       0x29
@@ -111,23 +111,23 @@ OUTPUT(build/output.elf elf32-littlearm)
  .ARM.attributes
                 0x000000f6       0x29 build/utils.o
 
-.debug_line     0x00000000      0xa6e
- .debug_line    0x00000000      0x3bc build/main.o
- .debug_line    0x000003bc       0x5a build/randomNumber.o
- .debug_line    0x00000416       0x61 build/jtag.o
- .debug_line    0x00000477       0x67 build/framebuffer.o
- .debug_line    0x000004de       0xc9 build/sampleSNES.o
- .debug_line    0x000005a7      0x43d build/menuDrawFunctions.o
- .debug_line    0x000009e4       0x8a build/utils.o
+.debug_line     0x00000000      0xaec
+ .debug_line    0x00000000      0x43a build/main.o
+ .debug_line    0x0000043a       0x5a build/randomNumber.o
+ .debug_line    0x00000494       0x61 build/jtag.o
+ .debug_line    0x000004f5       0x67 build/framebuffer.o
+ .debug_line    0x0000055c       0xc9 build/sampleSNES.o
+ .debug_line    0x00000625      0x43d build/menuDrawFunctions.o
+ .debug_line    0x00000a62       0x8a build/utils.o
 
-.debug_info     0x00000000      0x313
+.debug_info     0x00000000      0x301
  .debug_info    0x00000000       0x68 build/main.o
  .debug_info    0x00000068       0x74 build/randomNumber.o
- .debug_info    0x000000dc       0x6c build/jtag.o
- .debug_info    0x00000148       0x73 build/framebuffer.o
- .debug_info    0x000001bb       0x72 build/sampleSNES.o
- .debug_info    0x0000022d       0x79 build/menuDrawFunctions.o
- .debug_info    0x000002a6       0x6d build/utils.o
+ .debug_info    0x000000dc       0x63 build/jtag.o
+ .debug_info    0x0000013f       0x6a build/framebuffer.o
+ .debug_info    0x000001a9       0x72 build/sampleSNES.o
+ .debug_info    0x0000021b       0x79 build/menuDrawFunctions.o
+ .debug_info    0x00000294       0x6d build/utils.o
 
 .debug_abbrev   0x00000000       0x8a
  .debug_abbrev  0x00000000       0x12 build/main.o
