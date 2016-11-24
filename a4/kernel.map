@@ -35,7 +35,7 @@ LOAD build/utils.o
 .igot.plt       0x0000a560        0x0
  .igot.plt      0x00000000        0x0 build/randomNumber.o
 
-.text           0x0000a560     0x21dc
+.text           0x0000a560     0x2348
  *.c.o(.text)
  *(.text)
  .text          0x0000a560       0x50 build/randomNumber.o
@@ -46,53 +46,53 @@ LOAD build/utils.o
                 0x0000a63c                InitFrameBuffer
  .text          0x0000a6bc      0x1e4 build/sampleSNES.o
                 0x0000a6bc                sampleSNES
- .text          0x0000a8a0      0xf24 build/main.o
- .text          0x0000b7c4      0xe84 build/menuDrawFunctions.o
-                0x0000b7c4                drawPauseMenu
-                0x0000b8a0                drawMainMenu
-                0x0000b968                WriteSentence
-                0x0000b9ac                setPauseMenuIndicatorRestart
-                0x0000b9ec                setPauseMenuIndicatorQuit
-                0x0000ba2c                setMainMenuIndicatorStart
-                0x0000ba6c                setMainMenuIndicatorQuit
-                0x0000baac                drawVictoryScreen
-                0x0000bd70                drawLossScreen
-                0x0000c0a8                drawPaused
-                0x0000c2fc                drawTitle
- .text          0x0000c648       0xf4 build/utils.o
-                0x0000c648                clearScreen
-                0x0000c67c                drawPixel
-                0x0000c6a4                drawRect
-                0x0000c6fc                positionToArrayOffset
-                0x0000c710                startTimer
+ .text          0x0000a8a0     0x1090 build/main.o
+ .text          0x0000b930      0xe84 build/menuDrawFunctions.o
+                0x0000b930                drawPauseMenu
+                0x0000ba0c                drawMainMenu
+                0x0000bad4                WriteSentence
+                0x0000bb18                setPauseMenuIndicatorRestart
+                0x0000bb58                setPauseMenuIndicatorQuit
+                0x0000bb98                setMainMenuIndicatorStart
+                0x0000bbd8                setMainMenuIndicatorQuit
+                0x0000bc18                drawVictoryScreen
+                0x0000bedc                drawLossScreen
+                0x0000c214                drawPaused
+                0x0000c468                drawTitle
+ .text          0x0000c7b4       0xf4 build/utils.o
+                0x0000c7b4                clearScreen
+                0x0000c7e8                drawPixel
+                0x0000c810                drawRect
+                0x0000c868                positionToArrayOffset
+                0x0000c87c                startTimer
 OUTPUT(build/output.elf elf32-littlearm)
 
-.glue_7         0x0000c73c        0x0
+.glue_7         0x0000c8a8        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x0000c73c        0x0
+.glue_7t        0x0000c8a8        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x0000c73c        0x0
+.vfp11_veneer   0x0000c8a8        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x0000c73c        0x0
+.v4_bx          0x0000c8a8        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x0000c73c        0x0
+.iplt           0x0000c8a8        0x0
  .iplt          0x00000000        0x0 build/randomNumber.o
 
-.rel.dyn        0x0000c73c        0x0
+.rel.dyn        0x0000c8a8        0x0
  .rel.iplt      0x00000000        0x0 build/randomNumber.o
 
-.bss            0x0000c73c        0x0
- .bss           0x0000c73c        0x0 build/randomNumber.o
- .bss           0x0000c73c        0x0 build/jtag.o
- .bss           0x0000c73c        0x0 build/framebuffer.o
- .bss           0x0000c73c        0x0 build/sampleSNES.o
- .bss           0x0000c73c        0x0 build/main.o
- .bss           0x0000c73c        0x0 build/menuDrawFunctions.o
- .bss           0x0000c73c        0x0 build/utils.o
+.bss            0x0000c8a8        0x0
+ .bss           0x0000c8a8        0x0 build/randomNumber.o
+ .bss           0x0000c8a8        0x0 build/jtag.o
+ .bss           0x0000c8a8        0x0 build/framebuffer.o
+ .bss           0x0000c8a8        0x0 build/sampleSNES.o
+ .bss           0x0000c8a8        0x0 build/main.o
+ .bss           0x0000c8a8        0x0 build/menuDrawFunctions.o
+ .bss           0x0000c8a8        0x0 build/utils.o
 
 .ARM.attributes
                 0x00000000       0x29
@@ -111,14 +111,14 @@ OUTPUT(build/output.elf elf32-littlearm)
  .ARM.attributes
                 0x000000f6       0x29 build/utils.o
 
-.debug_line     0x00000000      0xb44
+.debug_line     0x00000000      0xb9c
  .debug_line    0x00000000       0x5a build/randomNumber.o
  .debug_line    0x0000005a       0x61 build/jtag.o
  .debug_line    0x000000bb       0x67 build/framebuffer.o
  .debug_line    0x00000122       0xc9 build/sampleSNES.o
- .debug_line    0x000001eb      0x492 build/main.o
- .debug_line    0x0000067d      0x43d build/menuDrawFunctions.o
- .debug_line    0x00000aba       0x8a build/utils.o
+ .debug_line    0x000001eb      0x4ea build/main.o
+ .debug_line    0x000006d5      0x43d build/menuDrawFunctions.o
+ .debug_line    0x00000b12       0x8a build/utils.o
 
 .debug_info     0x00000000      0x2d4
  .debug_info    0x00000000       0x6b build/randomNumber.o
