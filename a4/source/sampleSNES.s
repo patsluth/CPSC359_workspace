@@ -99,7 +99,6 @@ killProgram:
   LDMIA sp!, {r4-r9, pc}
 
 
-
 //r1 holds currentTime
 //NEW ONE BASED ON LEC SLIDES
 startTimer:

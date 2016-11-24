@@ -24,8 +24,8 @@ main:
 	bl		InitFrameBuffer
 
 
-	 bl		clearScreen
-	b	StartGame
+//	bl		clearScreen
+//	b	    StartGame
 
 
 
@@ -41,13 +41,16 @@ main:
  */
 MainMenu:                                       
     bl      ClearScreenBlack                    //Clears the screen
-    bl      DrawMainMenu                        //draws the base menu
+    bl      drawMainMenu                        //draws the base menu
     
     PointerAt   .req    r9                      //r8 holds which button is hovered
     Sample      .req    r10
     
     mov PointerAt, #0                           //initialize to 0, ie Start
 MainMenuPrompt:
+    ldr     r0, =10000                          //delay 1/100th of a second to avoid
+    bl      startTimer                          //querying too often without input  
+
     bl      sampleSNES                          //check what buttons are pressed
                                                 //returned in r0
     mov     sample, r0                          //stores the sample in secure register sample
@@ -55,38 +58,37 @@ MainMenuPrompt:
     mvn     r1, #0x100                          //moves 1 to every bit except bit 8
     bic     r0, r1                              //clears every bit of r0 except 8
     cmp     r0, #0                              //compares masked sample (r0) to 0
-    beq     MainMenuAPressed                            //if equal, then A was pressed, so branch
+    beq     MainMenuAPressed                    //if equal, then A was pressed, so branch
                                                 //else fall through
     mov     r0, sample                          //move sample to r0
     mvn     r1, #0x10                           //moves 1 to every bit except bit 4
     bic     r0, r1                              //clears every bit except bit 4
     cmp     r0, #0                              //compares masked sample (r0) to 0
-    beq     MainMenuUpPressed                           //if equal, then Up was pressed, so branch
+    beq     MainMenuUpPressed                   //if equal, then Up was pressed, so branch
                                                 //else fall through
     mov     r0, sample                          //move sample to r0
     mvn     r1, #0x20                           //moves 1 to every bit except bit 5
     bic     r0, r1                              //clears every bit except bit 5
     cmp     r0, #0                              //compares masked sample (r0) to 0
-    beq     MainMenuDownPressed                         //if equal, then Down was pressed, so branch
-                                                //else fall through
-                                                //might need to include some delay here
-    ldr     r0, =0x10000
-    bl      startTimer    
+    beq     MainMenuDownPressed                 //if equal, then Down was pressed, so branch
+                                                //else fall through 
     b       MainMenuPrompt
     
 //if A == pressed
 MainMenuAPressed:
-    cmp     PointerAt, #0                           //Checks if r9 points to start
-    beq     StartGame                               //if it does, start game
-    bl      ClearScreenBlack                         //if not, clear screen
-    b       mainEnd                                   //then hang
+    cmp     PointerAt, #0                       //Checks if r9 points to start
+    beq     StartGame                           //if it does, start game
+    bl      ClearScreenBlack                    //if not, clear screen
+    b       mainEnd                             //then hang
 
 //if up == pressed
 MainMenuUpPressed:
-    cmp PointerAt, #0                           //see if r9 already point to top element
+    cmp PointerAt, #0                           //see if r9 already point to top element 
     beq MainMenuPrompt                          //if so do nothing and re-prompt
     mov PointerAt, #0                           //else make r9 point to start
-    bl  SetMainMenuIndicatorStart               //and re draw indicator
+    bl  setMainMenuIndicatorStart               //and re draw indicator
+    ldr     r0, =0x10000                        //delay to stop fluttering
+    bl      startTimer
     b   MainMenuPrompt                          //And re prompt for input
 
 //if down == pressed
@@ -94,7 +96,9 @@ MainMenuDownPressed:
     cmp PointerAt, #1                           //see if r9 already points to the bottom element
     beq MainMenuPrompt                          //if so do nothing and re-prompt
     mov PointerAt, #1                           //else make r9 point to quit
-    bl  SetMainMenuIndicatorQuit                //and re draw indicator
+    bl  setMainMenuIndicatorQuit                //and re draw indicator
+    ldr     r0, =0x10000                        //delay to stop fluttering
+    bl      startTimer
     b   MainMenuPrompt                          //and re prompt for input
 
     .unreq  PointerAt
@@ -129,8 +133,11 @@ StartGame:
 
 
     bl      DrawBoard
-    
-    //bl      PauseMenuStart
+//    bl      drawLossScreen
+//    bl      drawVictoryScreen
+//hangLoop$:
+//b hangLoop$
+    bl      PauseMenuStart
     
     
 	bl	tetrisCreateNewBlock
@@ -184,13 +191,16 @@ mainEnd:
 PauseMenuStart:
     push    {lr}
     
-    bl      DrawPauseMenu                       //draws the pause menu
+    bl      drawPauseMenu                       //draws the pause menu
     
     PointerAt   .req    r9                      //r8 holds which button is hovered
     Sample      .req    r10
     
     mov PointerAt, #0                           //initialize to 0, ie restart
 PauseMenuPrompt:
+    ldr     r0, =10000                          //delay 1/100th of a second to avoid
+    bl      startTimer                          //querying too often without input
+    
     bl      sampleSNES                          //check what buttons are pressed
                                                 //returned in r0
     mov     sample, r0                          //stores the sample in secure register sample
@@ -218,9 +228,6 @@ PauseMenuPrompt:
     cmp     r0, #0                              //compares masked sample (r0) to 0
     beq     PauseMenuDownPressed                //if equal, then Down was pressed, so branch
                                                 //else fall through
-                                                //might need to include some delay here
-    ldr     r0, =10000
-    bl      startTimer
     b       PauseMenuPrompt
     
 //if Start == pressed
@@ -233,24 +240,28 @@ PauseMenuAPressed:
     mov     r1, #0                              //resets the score to 0
     ldr     r0, =scoreNumber
     str     r1, [r0]
-    beq     StartGame                               //if it does, start game
-    b       MainMenu                                  //else quit was hovered so go to main menu
+    beq     StartGame                           //if it does, start game
+    b       MainMenu                            //else quit was hovered so go to main menu
 
 //if up == pressed
 PauseMenuUpPressed:
-    cmp     PointerAt, #0                           //see if r9 already point to top element
-    beq     PauseMenuPrompt                          //if so do nothing and re-prompt
-    mov     PointerAt, #0                           //else make r9 point to restart
-    bl      SetPauseMenuIndicatorRestart               //and re draw indicator
-    b       PauseMenuPrompt                          //And re prompt for input
+    cmp     PointerAt, #0                       //see if r9 already point to top element
+    beq     PauseMenuPrompt                     //if so do nothing and re-prompt
+    mov     PointerAt, #0                       //else make r9 point to restart
+    bl      setPauseMenuIndicatorRestart        //and re draw indicator
+    ldr     r0, =0x10000                        //delay to stop fluttering
+    bl      startTimer
+    b       PauseMenuPrompt                     //And re prompt for input
 
 //if down == pressed
 PauseMenuDownPressed:
-    cmp     PointerAt, #1                           //see if r9 already points to the bottom element
-    beq     PauseMenuPrompt                          //if so do nothing and re-prompt
-    mov     PointerAt, #1                           //else make r9 point to quit
-    bl      SetPauseMenuIndicatorQuit                //and re draw indicator
-    b       PauseMenuPrompt                          //and re prompt for input
+    cmp     PointerAt, #1                       //see if r9 already points to the bottom element
+    beq     PauseMenuPrompt                     //if so do nothing and re-prompt
+    mov     PointerAt, #1                       //else make r9 point to quit
+    bl      setPauseMenuIndicatorQuit           //and re draw indicator
+    ldr     r0, =0x10000                        //delay to stop fluttering
+    bl      startTimer
+    b       PauseMenuPrompt                     //and re prompt for input
 
 
     .unreq  PointerAt
@@ -258,166 +269,7 @@ PauseMenuDownPressed:
     
     pop     {pc}
     
-/*
- *Draws the pause menu
- */    
-DrawPauseMenu:
-    push    {lr}
-    
-    ldr     r0, =0x967F                 //color
-    str     r0, [sp, #-4]!              //push color
-    ldr     r0, =500
-    str     r0, [sp, #-4]!              //push height
-    ldr     r0, =600
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, #134
-    str     r0, [sp, #-4]!              //push y
-    mov     r0, #208
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect    
 
-    ldr     r0, =0x8000                 //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #4
-    str     r0, [sp, #-4]!              //push height
-    ldr     r0, =608
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, #130
-    str     r0, [sp, #-4]!              //push y
-    mov     r0, #204
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect   
-    
-    ldr     r0, =0x8000                 //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #4
-    str     r0, [sp, #-4]!              //push height
-    ldr     r0, =608
-    str     r0, [sp, #-4]!              //push width
-    ldr     r0, =634
-    str     r0, [sp, #-4]!              //push y
-    mov     r0, #204
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect 
-    
-    ldr     r0, =0x8000                 //color
-    str     r0, [sp, #-4]!              //push color
-    ldr     r0, =500
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #4
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, #134
-    str     r0, [sp, #-4]!              //push y
-    mov     r0, #204
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect 
-    
-    ldr     r0, =0x8000                 //color
-    str     r0, [sp, #-4]!              //push color
-    ldr     r0, =500
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #4
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, #134
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =808
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect 
- 
-    bl      drawPaused
- 
-    ldr     r0, =437                    //pass in x
-    ldr     r1, =464                    //pass in y
-    bl      drawMenuButton              //Draw the Resart Game button
-
-    ldr     r0, =restartGameHeader      //load the StartGame button text
-    mov     r1, #0x0                    //set the color
-    ldr     r2, =483                    //load the x offset
-    ldr     r3, =483                    //load the y offset
-    bl      WriteSentence               //write the sentence
-
-    ldr     r0, =437                    //pass in x
-    ldr     r1, =545                    //pass in y
-    bl      drawMenuButton              //draws the QuitGame button
-
-    ldr     r0, =quitGameHeader         //load the QuitGame button text
-    mov     r1, #0x0                    //set the color
-    ldr     r2, =491                    //load the x offset
-    ldr     r3, =564                    //load the y offset
-    bl      WriteSentence               //write the sentence
-    
-    bl      SetPauseMenuIndicatorRestart
-    
-    pop     {pc}
-
-/*
- *Sets the pause menu indicator to restart
- */
-SetPauseMenuIndicatorRestart:
-    push {lr}
-
-    //Clear the box for the Quit indicator
-    ldr     r0, =0xFFFF                 //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push width
-    ldr     r0, =560
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =452
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect
-
-    //Set the box for the restart indicator
-    ldr     r0, =0x0                    //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push width
-    ldr     r0, =479
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =452
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect
-
-    pop {pc}
-
-/*
- *Sets the pause indicator to quit
- */
-SetPauseMenuIndicatorQuit:
-    push {lr}
-
-    //Clear the box for the restart indicator
-    ldr     r0, =0xFFFF                 //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push width
-    ldr     r0, =479
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =452
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect
-
-    //Set the box for the Quit indicator
-    ldr     r0, =0x0                    //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push width
-    ldr     r0, =560
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =452
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect
-
-    pop {pc}
-    
 /*
  *Draws the gameboard peripherals
  *
@@ -621,107 +473,6 @@ PrintScore:
     pop {pc}
 
 /*
- *Draws the Title
- */
-DrawTitle:
-    push {lr}
-    
-    ldr     r0, =0x0                    //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #30
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #100
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, #94
-    str     r0, [sp, #-4]!   
-	//	-1--           //push y
-    mov     r0, #222
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect
-
-    ldr     r0, =0x0                    //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #150
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #30
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, #124
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =257
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect
-    pop {pc}
-    
-/*
- *Sets the main menu indicator to Start
- */
-SetMainMenuIndicatorStart:
-    push {lr}
-
-    //Clear the box for the Quit indicator
-    ldr     r0, =0xFFFF                 //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push width
-    ldr     r0, =660
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =452
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect
-
-    //Set the box for the Start indicator
-    ldr     r0, =0x0                    //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push width
-    ldr     r0, =579
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =452
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect
-
-    pop {pc}
-
-/*
- *Sets the main menu indicator to Quit
- */
-SetMainMenuIndicatorQuit:
-    push {lr}
-
-    //Clear the box for the Start indicator
-    ldr     r0, =0xFFFF                 //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push width
-    ldr     r0, =579
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =452
-    str     r0, [sp, #-4]!   
-	//	-1--           //push x
-    bl      drawRect
-
-    //Set the box for the Quit indicator
-    ldr     r0, =0x0                    //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push width
-    ldr     r0, =660
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =452
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect
-
-    pop {pc}
-    
-/*
  *Sets the entire screen to black
  */
 ClearScreenBlack:
@@ -744,237 +495,7 @@ ClearScreenBlack:
 
     pop     {r9-r10, pc}
 
-/*
- *Draws the main menu in it's base state
- */
-DrawMainMenu:
-    push {r9-r10, lr}
 
-    // Get width/height
-    ldr	 	r0, =FrameBufferInit
-    ldr		r9, [r0, #20]
-    ldr		r10, [r0, #24]
-
-    //Screen Background
-    ldr     r0, =0x967F                 //color
-    str     r0, [sp, #-4]!              //push color
-    str     r10, [sp, #-4]!             //push height
-    str     r9, [sp, #-4]!              //push width
-    mov     r0, #0
-    str     r0, [sp, #-4]!              //push y
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect
-
-    //blue rectangle
-    ldr     r0, =0x297E                 //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #200
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #600
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, #84
-    str     r0, [sp, #-4]!              //push y
-    mov     r0, #212
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect
-    //blue rectangle 2
-    ldr     r0, =0x297E                 //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #200
-	//	-1--
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #200
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, #284
-    str     r0, [sp, #-4]!              //push y
-    mov     r0, #412
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect
-
-    //DrawTitle
-    bl      DrawTitle
-
-    ldr     r0, =createdHeader          //load the created by header
-    mov     r1, #0x0                    //set the color
-    ldr     r2, =370                    //load the x offset
-    mov     r3, #68                     //load the y offset
-    bl      WriteSentence               //write the sentence
-
-    ldr     r0, =437                    //pass in x
-    ldr     r1, =564                    //pass in y
-    bl      drawMenuButton              //Draw the StartGame button
-
-    ldr     r0, =startGameHeader        //load the StartGame button text
-    mov     r1, #0x0                    //set the color
-    ldr     r2, =487                    //load the x offset
-    ldr     r3, =583                    //load the y offset
-    bl      WriteSentence               //write the sentence
-    
-    ldr     r0, =437                    //pass in x
-    ldr     r1, =645                    //pass in y
-    bl      drawMenuButton              //draws the QuitGame button
-
-    ldr     r0, =quitGameHeader         //load the QuitGame button text
-    mov     r1, #0x0                    //set the color
-    ldr     r2, =491                    //load the x offset
-    ldr     r3, =664                    //load the y offset
-    bl      WriteSentence               //write the sentence
-
-    bl      SetMainMenuIndicatorStart   //draw the innitial location of the indicator    
-
-    pop     {r9-r10, pc}
-
-/* 
- * Draws a button on the start menu
- * r0 - x start
- * r1 - y start
- */
-drawMenuButton:
-    push    {r9-r10, lr}
-
-    x       .req    r9
-    y       .req    r10
-
-    mov     x, r0                       //moves x to secure register
-    mov     y, r1                       //moves y to secure register
-
-    ldr     r0, =0x0                    //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #50
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #150
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, y
-    str     r0, [sp, #-4]!              //push y
-    mov     r0, x
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect                    
-
-    add     x, #5                       //increment x and y for next rectangle
-    add     y, #5
-
-    ldr     r0, =0xD7F                  //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #40
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #140
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, y
-    str     r0, [sp, #-4]!              //push y
-    mov     r0, x
-    str     r0, [sp, #-4]!     
-	//	-1--         //push x
-    bl      drawRect
-
-    add     x, #5                       //Increment x and y for next rectangle
-    add     y, #5
-
-    ldr     r0, =0xFFFF                 //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #30
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #30
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, y
-    str     r0, [sp, #-4]!              //push y
-    mov     r0, x
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect
-
-    .unreq x
-    .unreq y
-
-    pop {r9-r10, pc}
-
-WriteSentence:
-    push    {r4-r9, lr}         //saves these registers
-
-    length  .req    r4
-    address .req    r5
-    color   .req    r6
-    yAxis   .req    r7
-    xAxis   .req    r8
-
-    mov     address, r0         //moves the address to address
-    ldr     length, [address]   //loads the length of the address
-    add     address, #4         //moves the address pointer to the beginning of the ascii
-    mov     color, r1           //stores the values in stable registers for safekeeping
-    mov     xAxis, r2           //moves the x start to xAxis
-    mov     yAxis, r3           //moves the y start to yAxis
-
-LoadChar:
-    ldrb    r0, [address], #1   //loads a byte from address and increments address 
-    mov     r1, color           //loads the color
-    mov     r2, yAxis           //loads y
-    mov     r3, xAxis           //loads x
-    bl      DrawChar            //Draws a char
-
-    add     xAxis, #8           //moves x to location for next character
-    sub     length, #1          //decreases length by 1
-    cmp     length, #0          //checks if length = 0
-    bgt     LoadChar            //if it isn't, load another character and repeat        
-
-    .unreq  length
-    .unreq  address
-    .unreq  color
-    .unreq  xAxis
-    .unreq  yAxis
-
-    pop     {r4-r9, pc}         //restores these registers
-
-/*Writes a single character to the screen
- *  r0  -   Ascii for character to be printed
- *  r1  -   The color to draw the character
- *  r2  -   The x axis starting point
- *  r3  -   The y axis starting point
- */
-DrawChar:
-	push	{r4-r9, lr}
-
-	chAdr	.req	r4
-	px		.req	r5
-	py		.req	r6
-	row		.req	r7
-	mask	.req	r8
-    color   .req    r9
-
-    mov     color,  r1
-	ldr		chAdr,	=font		// load the address of the font map
-	add		chAdr,	r0, lsl #4	// char address = font base + (char * 16)
-	mov		py,		r2			// init the Y coordinate (pixel coordinate)
-
-	//	-1--
-charLoop$:
-	mov		px,		r3   		// init the X coordinate
-	mov		mask,	#0x01		// set the bitmask to 1 in the LSB
-	ldrb	row,	[chAdr], #1	// load the row byte, post increment chAdr
-
-rowLoop$:
-	tst		row,	mask		// test row byte against the bitmask
-	beq		noPixel$
-	mov		r0,		px
-	mov		r1,		py
-	//	-1--
-	mov		r2,		color		// red
-	bl		drawPixel			// draw pixel at (px, py)
-
-noPixel$:
-	add		px,		#1			// increment x coordinate by 1
-	lsl		mask,	#1			// shift bitmask left by 1
-	tst		mask,	#0x100		// test if the bitmask has shifted 8 times (test 9th bit)
-	beq		rowLoop$
-	add		py,		#1			// increment y coordinate by 1
-	tst		chAdr,	#0xF
-	bne		charLoop$			// loop back to charLoop$, unless address evenly divisibly by 16 (ie: at the next char)
-
-	.unreq	chAdr
-	.unreq	px
-	.unreq	py
-	.unreq	row
-	.unreq	mask
-    .unreq  color
-
-	pop		{r4-r9, pc}
 	
 	
 	
@@ -2401,6 +1922,7 @@ clearScreen:
 // 		r2 = Color
 // OUTPUT
 //
+.globl  drawPixel
 drawPixel:
 
 	push 	{ lr }
@@ -2684,18 +2206,7 @@ TetrisBlockD:
 
 TetrisBlockDEnd:
 
-.align 4
-font:		.incbin	"font.bin"
 
-.align 4
-createdHeader:
-    .int    55
-    .ascii  "Created by: Nathan Escandor, Charlie Roy, and Pat Sluth" //Length 55
-
-.align 4
-scoreHeader:
-    .int    5
-    .ascii  "Score" //Length 5
     
 .align 4
 scoreText:
@@ -2707,24 +2218,15 @@ scoreText:
 scoreNumber:
     .int    0
     
+.align 4
 QueueHeader:
     .int    8
     .ascii  "Upcoming" //Length 8
 
 .align 4
-startGameHeader:
-    .int    10
-    .ascii  "Start Game"
-
-.align 4
-quitGameHeader:
-    .int    9
-    .ascii  "Quit Game"
-
-.align 4
-restartGameHeader:
-    .int    12
-    .ascii  "Restart Game" //Length 12
+scoreHeader:
+    .int    5
+    .ascii  "Score" //Length 5
 
 .end
 

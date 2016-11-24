@@ -1,6 +1,11 @@
 // CPSC 359, random number generator for use with A4 (Tetris)
 // By: Nathan Escandor, Charlie Roy, and Patrick Sluth
 // November 23, 2016
+// Sources:
+// https://en.wikipedia.org/wiki/Xorshift
+// Marsaglia, G. (2003). Xorshift RNGs. Journal of Statistical Software J. Stat. Soft., 8(14). doi:10.18637/jss.v008.i14 
+// http://sciencezero.4hv.org/science/lfsr.htm
+
 
 //Calling bl randomNumber from main.s returns a random value from 0-6 in r0
 //##############################################################//
