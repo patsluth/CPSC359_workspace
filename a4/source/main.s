@@ -24,8 +24,8 @@ main:
 	bl		InitFrameBuffer
 
 
-	bl		clearScreen
-	b		StartGame
+//	bl		clearScreen
+//	b		StartGame
 
 
 
@@ -101,7 +101,9 @@ MainMenuDownPressed:
 
 StartGame:
 
-
+    mov     r1, #0                              //resets the score to 0
+    ldr     r0, =scoreNumber
+    str     r1, [r0]
 
 
   //TODO: Nathan - figure out the warning
@@ -125,129 +127,7 @@ StartGame:
 	
 	
 	
-	
-	// tetrisSetGridBlockColor(int x, int y, int color)
-	
-	mov		r0, #3
-	mov		r1, #8
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #4
-	mov		r1, #8
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	
-	
-	
-	// BOTTOM ROW
-	
-	mov		r0, #2
-	mov		r1, #18
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #3
-	mov		r1, #18
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #4
-	mov		r1, #18
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #5
-	mov		r1, #18
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #6
-	mov		r1, #18
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #7
-	mov		r1, #18
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #8
-	mov		r1, #18
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #9
-	mov		r1, #18
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	
-	
-	// BOTTOM ROW
-	
-	mov		r0, #2
-	mov		r1, #17
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #3
-	mov		r1, #17
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #4
-	mov		r1, #17
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #5
-	mov		r1, #17
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #6
-	mov		r1, #17
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #7
-	mov		r1, #17
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #8
-	mov		r1, #17
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	mov		r0, #9
-	mov		r1, #17
-	ldr		r2, =0xABC777
-	stmfd	sp!, 	{ r0 - r2 }
-	bl	 	tetrisSetGridBlockColor
-	
-	
-	
-	
+/*	
 	
 	
 	mainLoop:
@@ -263,7 +143,7 @@ StartGame:
 		ldr		r0, =0x3F003004
 		ldr		r10, [r0]
 		sub		r10, r9
-		nop
+		timerComplete:
 		
 		applyUserTranslation:
 		
@@ -310,8 +190,9 @@ StartGame:
 		
 		
 		b	mainLoop
+*/
 
-/*
+
 newBlock:
         //Increment Score by 1
 		ldr     r0, =scoreNumber
@@ -320,28 +201,121 @@ newBlock:
 		str     r1, [r0]
 		bl      UpdateScore
         
-        nextDropTime    .req    r4
+		
+        
+        nextDropTime    .req    r10
         sample          .req    r5
         dropLoop:
             ldr     r0, =0x3F003004                         //loads the address for the timer into r0
             ldr     nextDropTime, [r0]                      //loads the current time into nextDropTime
             ldr     r0, =1000000                            //loads 1mil into r0
             add     nextDropTime, r0                        //increments nextDropTime by 1mil microseconds. (1 second)
+            
                 rotateLoop:
                 bl      sampleSNES                          //query the SNES
                 
                 mov     sample, r0                          //backs up the sample
+                
+                //Checks if start is pressed
+                mvn     r1, #0x8                            //moves 1 to every bit except bit 3
+                bic     r0, r1                              //clears every bit of r0 except 3
+                cmp     r0, #0                              //compares masked sample (r0) to 0
+                beq     mainLoopStartPressed                //if equal, then A was pressed, so branch
+                                                            //else fall through
+                mov     r0, sample                          //move sample to r0
+                mvn     r1, #0x400                           //moves 1 to every bit except bit 4
+                bic     r0, r1                              //clears every bit except bit 4
+                cmp     r0, #0                              //compares masked sample (r0) to 0
+                beq     mainLoopLTPressed                   //if equal, then left trigger was pressed, so branch
+                                                            //else fall through
+                mov     r0, sample                          //move sample to r0
+                mvn     r1, #0x800                           //moves 1 to every bit except bit 5
+                bic     r0, r1                              //clears every bit except bit 5
+                cmp     r0, #0                              //compares masked sample (r0) to 0
+                beq     mainLoopRTPressed                   //if equal, then right trigger was pressed, so branch
+                                                            //else fall through
+                mov     r0, sample                          //move sample to r0
+                mvn     r1, #0x40                           //moves 1 to every bit except bit 6
+                bic     r0, r1                              //clears every bit except bit 6
+                cmp     r0, #0                              //compares masked sample (r0) to 0
+                beq     mainLoopLeftPressed                 //if equal, then Left was pressed, so branch
+                                                            //else fall through 
+                mov     r0, sample                          //move sample to r0
+                mvn     r1, #0x80                           //moves 1 to every bit except bit 7
+                bic     r0, r1                              //clears every bit except bit 7
+                cmp     r0, #0                              //compares masked sample (r0) to 0
+                beq     mainLoopRightPressed                //if equal, then Right was pressed, so branch
+                                                            //else fall through
+                b       userTranslationsDone                                            
         
+                mainLoopStartPressed:
+                    bl      PauseMenuStart
+                    b       userTranslationsDone
+                mainLoopLTPressed:
+                                                            // tetrisRotateBlock(left)
+                    mov	    r0, #0
+                    bl	    tetrisRotateBlock
+                    b       userTranslationsDone
+                mainLoopRTPressed:
+                                                            // tetrisRotateBlock(right)
+                    mov	    r0, #1
+                    bl	    tetrisRotateBlock                    
+                    b       userTranslationsDone
+                mainLoopLeftPressed:
+                                                            // tetrisTranslateBlock(int dx, int dy)
+                    mov		r0, #-1
+                    mov		r1, #0
+                    bl		tetrisTranslateBlock                   
+                    b       userTranslationsDone
+                mainLoopRightPressed:        
+                                                            // tetrisTranslateBlock(int dx, int dy)
+                    mov		r0, #1
+                    mov		r1, #0
+                    bl		tetrisTranslateBlock                     
+                    b       userTranslationsDone
+                    
+                    
+                userTranslationsDone:
+                
+					bl 	tetrisUpdateGrid
+					bl  tetrisDrawBlock
+					bl	tetrisDrawGrid
+
+                ldr     r0, =0x3F003004                         //loads the address for the timer into r0
+                ldr     r1, [r0]                                //loads the current time into r1
+              
+                cmp     r1, nextDropTime                        //checks if it is time to drop down
+                blt     rotateLoop                              //if not, check for more transitions
+                
+            // tetrisTranslateBlock(int dx, int dy)             //apply gravity transition
+            mov		r0, #0
+            mov		r1, #1
+            bl		tetrisTranslateBlock
+            
+            
+            
+            bl 	tetrisGridClearCompleteRows
+			pop	{ r0 }
+			teq	r0, #0
+			beq	noClearedRows
+			bne	clearedRows
+			
+			clearedRows:
+				ldr     r1, =scoreNumber
+				ldr     r10, [r1]
+				add     r10, r0
+				str     r10, [r1]
+				bl      UpdateScore
+			noClearedRows:
+            
+            
+            
         
-        
-        
-        
-        
-        
-        
+            b       dropLoop
+            
         
         .unreq  nextDropTime
-*/
+        .unreq  sample
 
 
 
@@ -626,9 +600,6 @@ PauseMenuStartPressed:
 //if A == pressed
 PauseMenuAPressed:
     cmp     PointerAt, #0                       //Checks if r9 points to restart
-    mov     r1, #0                              //resets the score to 0
-    ldr     r0, =scoreNumber
-    str     r1, [r0]
     beq     StartGame                           //if it does, start game
     b       MainMenu                            //else quit was hovered so go to main menu
 
@@ -742,13 +713,24 @@ DrawBoard:
     ldr     r0, =644                    //x
     stmfd   sp!,{r0-r4}                 //push all
     bl      drawRect
-    ldr     r4, =0xADB5                 //color
-    mov     r3, #132                    //height
-    mov     r2, #132                    //width
-    ldr     r1, =530                    //y
-    ldr     r0, =646                    //x
-    stmfd   sp!,{r0-r4}                 //push all
-    bl      drawRect
+    
+    bl      randomNumber
+    ldr     r1, =nextBlock
+    str     r0, [r1]    
+    
+    bl      drawQueue
+
+
+
+
+
+//    ldr     r4, =0xADB5                 //color
+//    mov     r3, #132                    //height
+//    mov     r2, #132                    //width
+//    ldr     r1, =530                    //y
+//    ldr     r0, =646                    //x
+//    stmfd   sp!,{r0-r4}                 //push all
+//    bl      drawRect
     
     bl      UpdateScore
     
@@ -1410,13 +1392,14 @@ blockTypeOffset		.req r8
 tetrisCreateNewBlock:
 	
 	push	{ lr }
-	
+    
 	ldr		r0, 	=TetrisBlock
 	ldmfd	r0,		{ blockX - blockTypeOffset }
 
 	initializeTetrisBlock:
 	
-		bl		randomNumber
+        ldr     r0, =nextBlock
+        ldr     r0, [r0]   
 
 		mov 	blockX, 			#4					// load from data section?
 		mov 	blockY,				#0
@@ -1442,6 +1425,12 @@ tetrisCreateNewBlock:
 		mov		blockTypeOffset,	#0				
 
 	initializeTetrisBlockEnd:
+   
+    bl      randomNumber    
+    ldr     r1, =nextBlock
+    str     r0, [r1]
+    
+    bl      drawQueue
 	
 	pop		{ lr }
 
@@ -1449,8 +1438,140 @@ tetrisCreateNewBlock:
 
 	mov 	pc, lr				// return
 
+/*
+ *
+ *Draws the queue
+ */
+drawQueue:
+    push    {r4, lr}
+    ldr     r4, =0xADB5                 //color
+    mov     r3, #132                    //height
+    mov     r2, #132                    //width
+    ldr     r1, =530                    //y
+    ldr     r0, =646                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    
+    ldr     r1, =nextBlock
+    ldr     r4, [r1]
+    
+    teq     r4, #0
+    beq     QueueA
+    teq     r4, #1
+    beq     QueueB
+    teq     r4, #2
+    beq     QueueC
+    teq     r4, #3
+    beq     QueueD
+    teq     r4, #4
+    beq     QueueE
+    teq     r4, #5
+    beq     QueueF
+    teq     r4, #6
+    beq     QueueG
 
-
+QueueA:
+    ldr     r4, =0xFFFF                 //color
+    mov     r3, #128                    //height
+    mov     r2, #32                     //width
+    ldr     r1, =532                    //y
+    ldr     r0, =696                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    b       QueueDone
+QueueB:
+    ldr     r4, =0xAAAA                 //color
+    mov     r3, #64                     //height
+    mov     r2, #32                     //width
+    ldr     r1, =564                    //y
+    ldr     r0, =664                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    ldr     r4, =0xAAAA                 //color
+    mov     r3, #32                     //height
+    mov     r2, #64                     //width
+    ldr     r1, =596                    //y
+    ldr     r0, =696                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    b       QueueDone
+QueueC:
+    ldr     r4, =0xBBBB                 //color
+    mov     r3, #32                     //height
+    mov     r2, #96                     //width
+    ldr     r1, =596                    //y
+    ldr     r0, =664                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    ldr     r4, =0xBBBB                 //color
+    mov     r3, #32                     //height
+    mov     r2, #32                     //width
+    ldr     r1, =564                    //y
+    ldr     r0, =728                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    b       QueueDone
+QueueD:
+    ldr     r4, =0xCCCC                 //color
+    mov     r3, #64                     //height
+    mov     r2, #64                     //width
+    ldr     r1, =564                    //y
+    ldr     r0, =682                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    b   QueueDone
+QueueE:
+    ldr     r4, =0xDDDD                 //color
+    mov     r3, #32                     //height
+    mov     r2, #64                     //width
+    ldr     r1, =564                    //y
+    ldr     r0, =696                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    ldr     r4, =0xDDDD                 //color
+    mov     r3, #32                     //height
+    mov     r2, #64                     //width
+    ldr     r1, =596                    //y
+    ldr     r0, =664                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    b   QueueDone
+QueueF:
+    ldr     r4, =0x112233               //color
+    mov     r3, #32                     //height
+    mov     r2, #32                     //width
+    ldr     r1, =564                    //y
+    ldr     r0, =696                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    ldr     r4, =0x112233               //color
+    mov     r3, #32                     //height
+    mov     r2, #96                     //width
+    ldr     r1, =596                    //y
+    ldr     r0, =664                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    b   QueueDone
+QueueG:
+    ldr     r4, =0x445566               //color
+    mov     r3, #32                     //height
+    mov     r2, #64                     //width
+    ldr     r1, =564                    //y
+    ldr     r0, =664                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    ldr     r4, =0x445566               //color
+    mov     r3, #32                     //height
+    mov     r2, #64                     //width
+    ldr     r1, =596                    //y
+    ldr     r0, =696                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    b   QueueDone
+    
+QueueDone:    
+    
+    pop     {r4, pc}
 
 
 // INPUT
@@ -1915,7 +2036,8 @@ tetrisTranslateBlock:
 			pop		{ lr }
 			push	{ blockX - blockTypeOffset }	// push new block
 			
-			b 		tetrisTranslateBlockEnd
+//			b 		tetrisTranslateBlockEnd
+            b       newBlock
 		
 	onNoTranslationCollision:
 	
@@ -2230,6 +2352,10 @@ scoreNumber:
 QueueHeader:
     .int    8
     .ascii  "Upcoming" //Length 8
+
+.align 4
+nextBlock:
+    .int    0
 
 
 
