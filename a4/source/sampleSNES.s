@@ -1,5 +1,5 @@
 // CPSC 359, SNES driver for use with A4 (Tetris)
-// By: Nathan Escandor and Patrick Sluth
+// By: Nathan Escandor, Charlie Roy, and Patrick Sluth
 // Tutorial 3
 // Submitted: November 7, 2016
 
