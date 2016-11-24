@@ -39,7 +39,8 @@ top:
     mov     z, w
     eor     w, w, lsr #19
     eor     w, t
-    
+
+masking:    
     mvn    r1, #7
     bic    r0, r2, r1
     

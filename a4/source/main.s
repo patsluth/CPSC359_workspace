@@ -208,7 +208,7 @@ newBlock:
         dropLoop:
             ldr     r0, =0x3F003004                         //loads the address for the timer into r0
             ldr     nextDropTime, [r0]                      //loads the current time into nextDropTime
-            ldr     r0, =1000000                            //loads 1mil into r0
+            ldr     r0, =100000                            //loads 1mil into r0
             add     nextDropTime, r0                        //increments nextDropTime by 1mil microseconds. (1 second)
             
                 rotateLoop:
@@ -798,7 +798,40 @@ PrintScore:
     mov     r3, #230                     //load the y offset
     bl      WriteSentence               //write the sentence
     
+    ldr     r0, =scoreNumber
+    ldr     r0, [r0]
+    ldr     r1, =winFlag
+    mov     r2, #1
+    cmp     r0, #150
+    strge   r2, [r1]
+    
+    ldr     r0, =winFlag
+    ldr     r0, [r0]
+    cmp     r0, #1
+    blt     ScoreReturn
+    
+    bl      drawVictoryScreen
+    pop     {r4, r0}
+    b       gameOver
+    
+ScoreReturn:
     pop {r4, pc}
+
+/*
+ *waits for a button to be pressed to return to the main menu.
+ *
+ */
+gameOver:
+    ldr     r0, =10000                          //delay 1/100th of a second to avoid
+    bl      startTimer                          //querying too often without input 
+
+    bl      sampleSNES
+    ldr     r1, =0xFFFF
+    cmp     r0, r1
+    bne     MainMenu
+    
+    b       gameOver
+    
 
 /*
  *Sets the entire screen to black
@@ -2253,7 +2286,7 @@ tetrisGetGridBitmaskForBlock:
 
 //##############################################################//
 .section .data
-
+GameState:
 .align 4
 TetrisGrid:	
 	.int		10			// tetrisGridCols
@@ -2262,6 +2295,20 @@ TetrisGrid:
 	.space		10 * 19 * 4	// tetrisGridData (cols x rows)
 TetrisGridEnd:
 
+.align 4
+scoreNumber:
+    .int    0
+    
+.align 4
+winFlag:
+    .int    0
+    
+.align 4
+loseFlag:
+    .int    0
+EndGameState:
+
+.align 4
 TetrisBlock:
 	.int		0			// blockX
 	.int		0			// blockY
@@ -2332,8 +2379,6 @@ TetrisBlockG:
 .align 4
 font:		.incbin	"font.bin"
 
-
-
 .align 4
 scoreHeader:
     .int    5
@@ -2344,10 +2389,6 @@ scoreText:
     .int    3
     .ascii  "000"
     
-.align 4
-scoreNumber:
-    .int    0
-
 .align 4
 QueueHeader:
     .int    8
