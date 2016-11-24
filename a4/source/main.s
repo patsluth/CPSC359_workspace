@@ -116,7 +116,7 @@ StartGame:
 		
 	bl tetrisInitGrid
 
-
+    bl  ClearScreenBlack
     bl	DrawBoard
     
     bl	PauseMenuStart
@@ -129,6 +129,7 @@ StartGame:
 	
 	// tetrisSetGridBlockColor(int x, int y, int color)
 	
+
 	mov		r0, #3
 	mov		r1, #18
 	ldr		r2, =0xABC777
@@ -170,13 +171,6 @@ StartGame:
 	ldr		r2, =0xABC777
 	stmfd	sp!, 	{ r0 - r2 }
 	bl	 	tetrisSetGridBlockColor
-	
-	
-	
-	
-	
-	
-	
 	
 	mainLoop:
 	
@@ -232,6 +226,40 @@ StartGame:
 		
 		
 		b	mainLoop
+
+/*
+newBlock:
+        //Increment Score by 1
+		ldr     r0, =scoreNumber
+		ldr     r1, [r0]
+		add     r1, #1
+		str     r1, [r0]
+		bl      UpdateScore
+        
+        nextDropTime    .req    r4
+        sample          .req    r5
+        dropLoop:
+            ldr     r0, =0x3F003004                         //loads the address for the timer into r0
+            ldr     nextDropTime, [r0]                      //loads the current time into nextDropTime
+            ldr     r0, =1000000                            //loads 1mil into r0
+            add     nextDropTime, r0                        //increments nextDropTime by 1mil microseconds. (1 second)
+                rotateLoop:
+                bl      sampleSNES                          //query the SNES
+                
+                mov     sample, r0                          //backs up the sample
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        .unreq  nextDropTime
+*/
+
+
 
 mainEnd:
 	b	mainEnd
@@ -390,7 +418,7 @@ tetrisGridClearRow:
  *Creates the pause menu
  */
 PauseMenuStart:
-    push    {lr}
+    push    {r4, r9-r10, lr}
     
     bl      drawPauseMenu                       //draws the pause menu
     
@@ -433,8 +461,15 @@ PauseMenuPrompt:
     
 //if Start == pressed
 PauseMenuStartPressed:
+    ldr     r4, =0x0                            //color
+    ldr     r3, =616                            //height
+    ldr     r2, =648                            //width
+    mov     r1, #76                             //y
+    mov     r0, #188                            //x
+    stmfd   sp!,{r0-r4}                         //push all
+    bl      drawRect
     bl      DrawBoard                           //redraw the board
-    pop     {pc}
+    pop     {r4, r9-r10, pc}
 //if A == pressed
 PauseMenuAPressed:
     cmp     PointerAt, #0                       //Checks if r9 points to restart
@@ -468,7 +503,7 @@ PauseMenuDownPressed:
     .unreq  PointerAt
     .unreq  Sample
     
-    pop     {pc}
+    pop     {r4, r9-r10, pc}
     
 
 /*
@@ -477,134 +512,94 @@ PauseMenuDownPressed:
  */    
 DrawBoard:
 
-    push    {lr}
+    push    {r4, lr}
     
-    bl      ClearScreenBlack
-    
-    ldr     r0, =0xE000                 //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #4
-    str     r0, [sp, #-4]!              //push height
-    ldr     r0, =648
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, #76
-    str     r0, [sp, #-4]!              //push y
-    mov     r0, #188
-    str     r0, [sp, #-4]!              //push x
+    //Draws the border
+    ldr     r4, =0xE000                 //color
+    mov     r3, #4                      //height
+    ldr     r2, =648                    //width
+    mov     r1, #76                     //y
+    mov     r0, #188                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    ldr     r4, =0xE000                 //color
+    mov     r3, #4                      //height
+    ldr     r2, =648                    //width
+    ldr     r1, =688                    //y
+    mov     r0, #188                    //x
+    stmfd   sp!,{r0-r4}                 //push all
     bl      drawRect    
-    
-    ldr     r0, =0xE000                 //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #4
-    str     r0, [sp, #-4]!              //push height
-    ldr     r0, =648
-    str     r0, [sp, #-4]!              //push width
-    ldr     r0, =688
-    str     r0, [sp, #-4]!              //push y
-    mov     r0, #188
-    str     r0, [sp, #-4]!              //push x
+    ldr     r4, =0xE000                 //color
+    ldr     r3, =608                    //height
+    mov     r2, #4                      //width
+    mov     r1, #80                     //y
+    mov     r0, #188                    //x
+    stmfd   sp!,{r0-r4}                 //push all
     bl      drawRect
-
-    ldr     r0, =0xE000                 //color
-    str     r0, [sp, #-4]!              //push color
-    ldr     r0, =608
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #4
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, #80
-    str     r0, [sp, #-4]!              //push y
-    mov     r0, #188
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect  
-    
-    ldr     r0, =0xE000                 //color
-    str     r0, [sp, #-4]!              //push color
-    ldr     r0, =608
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #4
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, #80
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =512
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect  
-    
-    ldr     r0, =0xE000                 //color
-    str     r0, [sp, #-4]!              //push color
-    ldr     r0, =608
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #4
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, #80
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =832
-    str     r0, [sp, #-4]!              //push x
+    ldr     r4, =0xE000                 //color
+    ldr     r3, =608                    //height
+    mov     r2, #4                      //width
+    mov     r1, #80                     //y
+    ldr     r0, =512                    //x
+    stmfd   sp!,{r0-r4}                 //push all
     bl      drawRect
+    ldr     r4, =0xE000                 //color
+    ldr     r3, =608                    //height
+    mov     r2, #4                      //width
+    mov     r1, #80                     //y
+    ldr     r0, =832                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect 
     
+    //Prints "Score" label
     ldr     r0, =scoreHeader            //load the score header
     ldr     r1, =0x34A0                 //set the color
     ldr     r2, =617                    //load the x offset
     mov     r3, #230                    //load the y offset
     bl      WriteSentence               //write the sentence
     
-    ldr     r0, =0x34A0                 //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #54
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #54
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, #211
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =663
-    str     r0, [sp, #-4]!              //push x
+    //Draws a box for the score to print in
+    ldr     r4, =0x34A0                 //color
+    mov     r3, #54                     //height
+    mov     r2, #54                     //width
+    mov     r1, #211                    //y
+    ldr     r0, =663                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    ldr     r4, =0xADB5                 //color
+    mov     r3, #50                     //height
+    mov     r2, #50                     //width
+    mov     r1, #213                    //y
+    ldr     r0, =665                    //x
+    stmfd   sp!,{r0-r4}                 //push all
     bl      drawRect
     
-    ldr     r0, =0xADB5                 //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #50
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #50
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, #213
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =665
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect
-    
+    //Prints "Upcoming" label    
     ldr     r0, =QueueHeader            //load the queue header
     ldr     r1, =0x618                  //load the color
     ldr     r2, =574                    //load the x offset
     ldr     r3, =586                    //load the y offset
     bl      WriteSentence               //write the sentence
     
-    ldr     r0, =0x618                  //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #136
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #136
-    str     r0, [sp, #-4]!              //push width
-    ldr     r0, =528
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =644
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect    
-    
-    
-    ldr     r0, =0xADB5                 //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #132
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #132
-    str     r0, [sp, #-4]!              //push width
-    ldr     r0, =530
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =646
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect    
+    //Draws a box for the next block to appear in
+    ldr     r4, =0x618                  //color
+    mov     r3, #136                    //height
+    mov     r2, #136                    //width
+    ldr     r1, =528                    //y
+    ldr     r0, =644                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+    ldr     r4, =0xADB5                 //color
+    mov     r3, #132                    //height
+    mov     r2, #132                    //width
+    ldr     r1, =530                    //y
+    ldr     r0, =646                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
     
     bl      UpdateScore
     
-    pop {pc}
+    pop {r4, pc}
 
 
 /*
@@ -612,20 +607,17 @@ DrawBoard:
  *
  */
 UpdateScore:
-    push {lr}
+    push {r4, lr}
     //clears the score board
-    ldr     r0, =0xADB5                 //color
-    str     r0, [sp, #-4]!              //push color
-    mov     r0, #20
-    str     r0, [sp, #-4]!              //push height
-    mov     r0, #24
-    str     r0, [sp, #-4]!              //push width
-    mov     r0, #228
-    str     r0, [sp, #-4]!              //push y
-    ldr     r0, =678
-    str     r0, [sp, #-4]!              //push x
-    bl      drawRect
     
+    ldr     r4, =0xADB5                 //color
+    mov     r3, #20                     //height
+    mov     r2, #24                     //width
+    mov     r1, #228                    //y
+    ldr     r0, =678                    //x
+    stmfd   sp!,{r0-r4}                 //push all
+    bl      drawRect
+
     //prints the int stored in the score section
     ldr     r0, =scoreNumber            //loads the address of scoreNumber
     ldr     r1, [r0]                    //loads the int stored there
@@ -671,7 +663,7 @@ PrintScore:
     mov     r3, #230                     //load the y offset
     bl      WriteSentence               //write the sentence
     
-    pop {pc}
+    pop {r4, pc}
 
 /*
  *Sets the entire screen to black
@@ -1914,7 +1906,7 @@ tetrisGetGridBitmaskForBlock:
 TetrisGrid:	
 	.int		10			// tetrisGridCols
 	.int		19			// tetrisGridRows
-	.int		25			// tetrisGridBlockSize (n x n pixels)
+	.int		32			// tetrisGridBlockSize (n x n pixels)
 	.space		10 * 19 * 4	// tetrisGridData (cols x rows)
 TetrisGridEnd:
 
@@ -1988,10 +1980,7 @@ TetrisBlockG:
 .align 4
 font:		.incbin	"font.bin"
 
-.align 4
-createdHeader:
-    .int    55
-    .ascii  "Created by: Nathan Escandor, Charlie Roy, and Pat Sluth" //Length 55
+
 
 .align 4
 scoreHeader:
@@ -2006,25 +1995,13 @@ scoreText:
 .align 4
 scoreNumber:
     .int    0
-    
+
+.align 4
 QueueHeader:
     .int    8
     .ascii  "Upcoming" //Length 8
 
-.align 4
-startGameHeader:
-    .int    10
-    .ascii  "Start Game"
 
-.align 4
-quitGameHeader:
-    .int    9
-    .ascii  "Quit Game"
-
-.align 4
-restartGameHeader:
-    .int    12
-    .ascii  "Restart Game" //Length 12
 
 .end
 
