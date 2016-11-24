@@ -1133,6 +1133,8 @@ blockTypeOffset		.req r8
 //		--------
 tetrisCreateNewBlock:
 	
+	push	{ lr }
+	
 	ldr		r0, 	=TetrisBlock
 	ldmfd	r0,		{ blockX - blockTypeOffset }
 
@@ -1141,10 +1143,28 @@ tetrisCreateNewBlock:
 		mov 	blockX, 			#0				// randomize?
 		mov 	blockY,				#0
 		ldr 	blockColor,	 		=0x9999FF		// randomize?
-		ldr		blockTypeAddress, 	=TetrisBlockC	// randomize?
+		
+		bl		randomNumber
+		
+		ldr		blockTypeAddress, 	=TetrisBlockA	// randomize?
+		teq		r0, 				#1
+		ldreq	blockTypeAddress, 	=TetrisBlockB	// randomize
+		teq		r0, 				#2
+		ldreq	blockTypeAddress, 	=TetrisBlockC	// randomize?
+		teq		r0, 				#3
+		ldreq	blockTypeAddress, 	=TetrisBlockD	// randomize?
+		teq		r0, 				#4
+		ldreq	blockTypeAddress, 	=TetrisBlockE	// randomize?
+		teq		r0, 				#5
+		ldreq	blockTypeAddress, 	=TetrisBlockF	// randomize?
+		teq		r0, 				#6
+		ldreq	blockTypeAddress, 	=TetrisBlockG	// randomize?
+		
 		mov		blockTypeOffset,	#0				// randomize?
 
 	initializeTetrisBlockEnd:
+	
+	pop		{ lr }
 
 	stmfd	sp!,		{ blockX - blockTypeOffset }
 
@@ -1882,15 +1902,13 @@ tetrisGetGridBitmaskForBlock:
 //##############################################################//
 .section .data
 
-
 .align 4
 TetrisGrid:	
 	.int		10			// tetrisGridCols
 	.int		19			// tetrisGridRows
-	.int		32			// tetrisGridBlockSize (n x n pixels)
+	.int		17			// tetrisGridBlockSize (n x n pixels)
 	.space		10 * 19 * 4	// tetrisGridData (cols x rows)
 TetrisGridEnd:
-
 
 TetrisBlock:
 	.int		0			// blockX
@@ -1899,7 +1917,6 @@ TetrisBlock:
 	.word 		0			// blockTypeAddress
 	.int 		0			// blockTypeOffset (0 - 3)
 TetrisBlockEnd:
-
 
 .align 4
 TetrisBlockA:
@@ -1922,9 +1939,8 @@ TetrisBlockA:
 	//	1111
 	//	----
 	//	----
-	//	----u
+	//	----
 TetrisBlockAEnd:
-
 
 .align 4
 TetrisBlockB:
@@ -1950,7 +1966,6 @@ TetrisBlockB:
 	//	----
 TetrisBlockBEnd:
 
-
 .align 4
 TetrisBlockC:
 	.hword		0x2E00			// 0
@@ -1973,9 +1988,7 @@ TetrisBlockC:
 	//	1---
 	//	11--
 	//	----
-
 TetrisBlockCEnd:
-
 
 .align 4
 TetrisBlockD:
@@ -1999,8 +2012,79 @@ TetrisBlockD:
 	//	11--
 	//	----
 	//	----
-
 TetrisBlockDEnd:
+
+.align 4
+TetrisBlockE:
+	.hword		0x6C00			// 0
+	//	-11-
+	//	11--
+	//	----
+	//	----
+	.hword		0x8C40			// pi/2
+	//	1---
+	//	11--
+	//	-1--
+	//	----
+	.hword		0x6C00			// pi
+	//	-11-
+	//	11--
+	//	----
+	//	----
+	.hword		0x8C40			// 3pi/4
+	//	1---
+	//	11--
+	//	-1--
+	//	----
+TetrisBlockEEnd:
+
+.align 4
+TetrisBlockF:
+	.hword		0x4E00			// 0
+	//	-1--
+	//	111-
+	//	----
+	//	----
+	.hword		0x4C40			// pi/2
+	//	-1--
+	//	11--
+	//	-1--
+	//	----
+	.hword		0xE400			// pi
+	//	111-
+	//	-1--
+	//	----
+	//	----
+	.hword		0x8C80			// 3pi/4
+	//	1---
+	//	11--
+	//	1---
+	//	----
+TetrisBlockFEnd:
+
+.align 4
+TetrisBlockG:
+	.hword		0xC600			// 0
+	//	11--
+	//	-11-
+	//	----
+	//	----
+	.hword		0x4C80			// pi/2
+	//	-1--
+	//	11--
+	//	1---
+	//	----
+	.hword		0xC600			// pi
+	//	11--
+	//	-11-
+	//	----
+	//	----
+	.hword		0x4C80			// 3pi/4
+	//	-1--
+	//	11--
+	//	1---
+	//	----
+TetrisBlockGEnd:
 
 .align 4
 font:		.incbin	"font.bin"
@@ -2019,7 +2103,6 @@ scoreHeader:
 scoreText:
     .int    3
     .ascii  "000"
-    
     
 .align 4
 scoreNumber:
