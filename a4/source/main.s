@@ -127,6 +127,30 @@ StartGame:
 	
 	
 	// tetrisSetGridBlockColor(int x, int y, int color)
+	
+	mov		r0, #3
+	mov		r1, #8
+	ldr		r2, =0xABC777
+	stmfd	sp!, 	{ r0 - r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	mov		r0, #4
+	mov		r1, #8
+	ldr		r2, =0xABC777
+	stmfd	sp!, 	{ r0 - r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	
+	
+	
+	// BOTTOM ROW
+	
+	mov		r0, #2
+	mov		r1, #18
+	ldr		r2, =0xABC777
+	stmfd	sp!, 	{ r0 - r2 }
+	bl	 	tetrisSetGridBlockColor
+	
 	mov		r0, #3
 	mov		r1, #18
 	ldr		r2, =0xABC777
@@ -169,6 +193,63 @@ StartGame:
 	stmfd	sp!, 	{ r0 - r2 }
 	bl	 	tetrisSetGridBlockColor
 	
+	
+	
+	// BOTTOM ROW
+	
+	mov		r0, #2
+	mov		r1, #17
+	ldr		r2, =0xABC777
+	stmfd	sp!, 	{ r0 - r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	mov		r0, #3
+	mov		r1, #17
+	ldr		r2, =0xABC777
+	stmfd	sp!, 	{ r0 - r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	mov		r0, #4
+	mov		r1, #17
+	ldr		r2, =0xABC777
+	stmfd	sp!, 	{ r0 - r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	mov		r0, #5
+	mov		r1, #17
+	ldr		r2, =0xABC777
+	stmfd	sp!, 	{ r0 - r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	mov		r0, #6
+	mov		r1, #17
+	ldr		r2, =0xABC777
+	stmfd	sp!, 	{ r0 - r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	mov		r0, #7
+	mov		r1, #17
+	ldr		r2, =0xABC777
+	stmfd	sp!, 	{ r0 - r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	mov		r0, #8
+	mov		r1, #17
+	ldr		r2, =0xABC777
+	stmfd	sp!, 	{ r0 - r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	mov		r0, #9
+	mov		r1, #17
+	ldr		r2, =0xABC777
+	stmfd	sp!, 	{ r0 - r2 }
+	bl	 	tetrisSetGridBlockColor
+	
+	
+	
+	
+	
+	
 	mainLoop:
 	
 		//        ldr     r0, =scoreNumber
@@ -177,9 +258,16 @@ StartGame:
 		//        str     r10, [r0]
 		//        bl      UpdateScore
 		
-		bl	tetrisDrawBlock
-		bl	tetrisDrawGrid
-		
+		// TIMER
+		ldr		r0, =0x3F003004
+		ldr		r9, [r0]
+			bl 	tetrisUpdateGrid
+			bl	tetrisDrawBlock
+			bl	tetrisDrawGrid
+		ldr		r0, =0x3F003004
+		ldr		r10, [r0]
+		sub		r10, r9
+		nop
 		
 		applyUserTranslation:
 		
@@ -192,7 +280,7 @@ StartGame:
 		
 			// tetrisRotateBlock(right)
 			mov	r0, #1
-			bl	tetrisRotateBlock
+			//bl	tetrisRotateBlock
 			
 		applyGravityTranslation:
 		
@@ -203,25 +291,21 @@ StartGame:
 			
 			
 			
+		bl 	tetrisGridClearCompleteRows
+		pop	{ r0 }
+		teq	r0, #0
+		beq	teststestsetes
+		bne	testtest
+		
+		testtest:
+			nop
+		teststestsetes:
 			
-			
-		mov		r0, #18
-		push	{ r0 }
-		bl 		tetrisGridIsRowComplete
-		pop		{ r0 }
-		teq		r0, #0
-		bne 	rowClear
-		beq 	rowNotClear
-		
-		rowClear:
-			mov		r0, #18
-			push	{ r0 }
-			bl		tetrisGridClearRow
-		rowNotClear:
 		
 		
-		ldr	r0, =0xFF//FFF
-		bl 	startTimer
+		
+		//ldr	r0, =0xFF//FFF
+		//bl 	startTimer
 		
 		
 		
@@ -313,7 +397,7 @@ tetrisGridIsRowComplete:
 		mov		r3, #1
 		push	{ r3 }
 		
-		tetrisGridIsRowComplete_for_x_lessThan_cols_loop:
+		tetrisGridIsRowComplete_for_x_lt_cols_loop:
 		
 			// tetrisGetGridBlockColor(int x, int y)
 			push	{ x - y }
@@ -332,7 +416,7 @@ tetrisGridIsRowComplete:
 		
 			add		x, #1
 			cmp		x, tetrisGridCols
-			blt		tetrisGridIsRowComplete_for_x_lessThan_cols_loop
+			blt		tetrisGridIsRowComplete_for_x_lt_cols_loop
 		
 	tetrisGridIsRowCompleteEnd:
 		
@@ -362,10 +446,6 @@ tetrisGridIsRowComplete:
 //		0 = y (row)
 //		--------
 // OUTPUT
-//		--------
-//		On Stack
-//		--------
-//		--------
 //
 tetrisGridClearRow:
 
@@ -384,9 +464,10 @@ tetrisGridClearRow:
 		
 		mov		x, #0
 		
-		tetrisGridClearRow_for_x_lessThan_cols_loop:
+		tetrisGridClearRow_for_x_lt_cols_loop:
 		
 			// tetrisGetGridBlockColor(int x, int y)
+			push	{ x - y }
 			push	{ x - y }
 			bl 		tetrisClearGridBlock
 			pop		{ x - y }
@@ -395,12 +476,12 @@ tetrisGridClearRow:
 		
 			add		x, #1
 			cmp		x, tetrisGridCols
-			blt		tetrisGridClearRow_for_x_lessThan_cols_loop
+			blt		tetrisGridClearRow_for_x_lt_cols_loop
 		
 	tetrisGridClearRowEnd:
 		
 	pop		{ tetrisGrid - tetrisGridRows }
-	pop		{ lr }
+	
 	
 	.unreq 	x
 	.unreq 	y
@@ -408,6 +489,78 @@ tetrisGridClearRow:
 	.unreq	tetrisGridCols
 	.unreq	tetrisGridRows
 	
+	pop		{ pc }
+	
+	
+	
+	
+// INPUT
+//		--------
+//		On Stack
+//		--------
+//		--------
+// OUTPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = int rowsCleared
+//		--------
+//	
+tetrisGridClearCompleteRows:
+
+	y					.req r4
+	tetrisGrid			.req r5
+	tetrisGridCols		.req r6
+	tetrisGridRows		.req r7
+	tetrisGridBlockSize	.req r8
+	tetrisGridData		.req r9
+	rowsCleared			.req r10
+
+	push	{ lr }  
+	push	{ y - rowsCleared }
+	
+	ldr 	tetrisGrid, 	=TetrisGrid
+	ldmfd	tetrisGrid, 	{ tetrisGridCols - tetrisGridBlockSize }
+	ldr 	tetrisGridData, =TetrisGridEnd
+	
+	mov		y, 				tetrisGridRows
+	sub		y, 				#1
+	mov		rowsCleared, 	#0
+	
+	tetrisGridClearCompleteRows_for_curRow_ge_0_loop:
+
+		// tetrisGridIsRowComplete(int y)
+		push	{ y }
+		bl 		tetrisGridIsRowComplete
+		pop		{ r0 }
+		teq		r0, #0
+		beq 	tetrisGridClearCompleteRowsRowIsNotComplete
+		bne 	tetrisGridClearCompleteRowsRowIsComplete
+		
+		tetrisGridClearCompleteRowsRowIsComplete:
+		
+			add		rowsCleared, #1
+			push	{ y }
+			bl		tetrisGridClearRow
+		
+		tetrisGridClearCompleteRowsRowIsNotComplete:
+		
+		sub 	y, #1
+		cmp 	y, #0
+		bge 	tetrisGridClearCompleteRows_for_curRow_ge_0_loop
+	
+	mov		r0, rowsCleared
+	pop		{ y - rowsCleared }
+	pop		{ lr }
+	push	{ r0 }
+	
+	.unreq 	y
+	.unreq	tetrisGrid
+	.unreq	tetrisGridCols
+	.unreq	tetrisGridRows
+	.unreq	tetrisGridBlockSize
+	.unreq	tetrisGridData
+
 	mov 	pc, lr				// return
 	
 	
@@ -878,8 +1031,12 @@ tetrisGetGridBlockColorEnd:
 
 
 // INPUT
-// 		r0 = x
-// 		r1 = y
+//		--------
+//		On Stack
+//		--------
+// 		0 = x
+// 		1 = y
+//		--------
 // OUTPUT
 //
 tetrisClearGridBlock:
@@ -887,7 +1044,8 @@ tetrisClearGridBlock:
 	x					.req r0
 	y					.req r1
 	color				.req r2
-
+	
+	pop		{ x, y }
 	push 	{ lr }
 
 	// TODO: set background color of grid and load here
@@ -899,9 +1057,7 @@ tetrisClearGridBlock:
 	.unreq	y
 	.unreq 	color
 
-	pop 	{ lr }
-
-	mov 	pc, lr				// return
+	pop 	{ pc }
 	
 	
 	
@@ -946,11 +1102,11 @@ tetrisDrawGrid:
 	mov		curRow, 		#0
 	mov		curColor, 		#0
 
-	tetrisDrawGrid_for_curCol_lessThan_cols_loop:
+	tetrisDrawGrid_for_curCol_lt_cols_loop:
 
 		push 	{ curRow }
 
-		tetrisDrawGrid_for_curRow_lessThan_rows_loop:
+		tetrisDrawGrid_for_curRow_lt_rows_loop:
 
 			push 	{ curCol - tetrisGridOffset }
 			
@@ -1028,12 +1184,127 @@ tetrisDrawGrid:
 
 				add 	curRow, #1
 				cmp 	curRow, tetrisGridRows
-				blt 	tetrisDrawGrid_for_curRow_lessThan_rows_loop
+				blt 	tetrisDrawGrid_for_curRow_lt_rows_loop
 
 		pop 	{ curRow }
 		add 	curCol, #1
 		cmp 	curCol, tetrisGridCols
-		blt 	tetrisDrawGrid_for_curCol_lessThan_cols_loop
+		blt 	tetrisDrawGrid_for_curCol_lt_cols_loop
+
+	pop	{ curCol - tetrisGridOffset }
+	
+	.unreq 	curCol
+	.unreq 	curRow
+	.unreq 	curColor
+	.unreq	tetrisGrid
+	.unreq	tetrisGridCols
+	.unreq	tetrisGridRows
+	.unreq	tetrisGridBlockSize
+	.unreq	tetrisGridData
+	.unreq	tetrisGridOffset
+
+	pop 	{ lr }
+	mov 	pc, lr				// return
+	
+	
+	
+	
+// INPUT
+//		--------
+//		On Stack
+//		--------
+// 		0 = blockX
+// 		1 = blockY
+// 		2 = blockColor
+// 		3 = blockTypeAddress
+// 		4 = blockTypeOffset
+//		--------
+// OUTPUT
+//	
+tetrisUpdateGrid:
+
+	curCol				.req r4
+	curRow				.req r5
+	curColor			.req r6
+	tetrisGrid			.req r7
+	tetrisGridCols		.req r8
+	tetrisGridRows		.req r9
+	tetrisGridBlockSize	.req r10
+	tetrisGridData		.req r11
+	tetrisGridOffset	.req r12
+
+	push	{ lr }  
+	push	{ curCol - tetrisGridOffset }
+	
+	ldr 	tetrisGrid, 	=TetrisGrid
+	ldmfd	tetrisGrid, 	{ tetrisGridCols - tetrisGridBlockSize }
+	add 	tetrisGridData, tetrisGrid, #12
+	
+	mov		curCol, 		#0
+	mov		curRow, 		tetrisGridRows
+	mov		curColor, 		#0
+
+	tetrisUpdateGrid_for_curCol_lt_cols_loop:
+
+		push 	{ curRow }
+
+		tetrisUpdateGrid_for_curRow_ge_0_loop:
+
+			push 	{ curCol - tetrisGridOffset }
+			
+			// curColor = tetrisGetGridBlockColor(int x, int y)
+			push	{ curCol, curRow }
+			push	{ curCol, curRow }
+			bl 		tetrisGetGridBlockColor
+			pop		{ curColor }
+			teq		curColor, #0
+			pop		{ curCol, curRow }
+			beq tetrisUpdateGridCurrentBlockHasNoData
+			bne tetrisUpdateGridCurrentBlockHasData
+			
+				tetrisUpdateGridCurrentBlockHasData:
+				
+				x				.req r0
+				y				.req r1
+				blockBelowColor	.req r2
+				
+					// blockBelowColor = tetrisGetGridBlockColor(int x, int y)
+					mov		x, curCol
+					add		y, curRow, #1	
+					push	{ x, y }
+					push	{ x, y }
+					bl 		tetrisGetGridBlockColor
+					pop		{ blockBelowColor }
+					teq		blockBelowColor, #0
+					pop		{ x, y }
+					bne		tetrisUpdateGridBlockBelowHasData
+					
+						// tetrisSetGridBlockColor(int x, int y, int color)
+						push	{ x, y, curColor }
+						bl	 	tetrisSetGridBlockColor
+					
+						// block below is empty, move current block down
+						push	{ curCol, curRow }
+						bl 		tetrisClearGridBlock
+					
+					tetrisUpdateGridBlockBelowHasData:
+					
+				.unreq 	x
+				.unreq 	y
+				.unreq 	blockBelowColor
+			
+				tetrisUpdateGridCurrentBlockHasNoData:
+
+			pop 	{ curCol - tetrisGridOffset }
+
+			sub 	curRow, #1
+			cmp 	curRow, #0
+			bge 	tetrisUpdateGrid_for_curRow_ge_0_loop
+
+		pop 	{ curRow }
+		add 	curCol, #1
+		cmp 	curCol, tetrisGridCols
+		blt 	tetrisUpdateGrid_for_curCol_lt_cols_loop
 
 	pop	{ curCol - tetrisGridOffset }
 	
@@ -1156,18 +1427,19 @@ tetrisCreateNewBlock:
 		
 		ldr		blockTypeAddress, 	=TetrisBlockA
 		teq		r0, 				#1
-		//ldreq	blockTypeAddress, 	=TetrisBlockB	
+		ldreq	blockTypeAddress, 	=TetrisBlockB	
 		teq		r0, 				#2
-		//ldreq	blockTypeAddress, 	=TetrisBlockC	
+		ldreq	blockTypeAddress, 	=TetrisBlockC	
 		teq		r0, 				#3
-		//ldreq	blockTypeAddress, 	=TetrisBlockD	
+		ldreq	blockTypeAddress, 	=TetrisBlockD	
 		teq		r0, 				#4
-		//ldreq	blockTypeAddress, 	=TetrisBlockE	
+		ldreq	blockTypeAddress, 	=TetrisBlockE	
 		teq		r0, 				#5
-		//ldreq	blockTypeAddress, 	=TetrisBlockF	
+		ldreq	blockTypeAddress, 	=TetrisBlockF	
 		teq		r0, 				#6
-		//ldreq	blockTypeAddress, 	=TetrisBlockG	
+		ldreq	blockTypeAddress, 	=TetrisBlockG	
 		
+		ldr	blockTypeAddress, 	=TetrisBlockD
 		mov		blockTypeOffset,	#0				
 
 	initializeTetrisBlockEnd:
@@ -1209,11 +1481,11 @@ tetrisDrawBlock:
 	mov		i, #0
 	mov 	j, #0
 
-	for_i_lessThan_4_loop:
+	for_i_lt_4_loop:
 
 		push 	{ j }
 
-		for_j_lessThan_4_loop:
+		for_j_lt_4_loop:
 
 			push 	{ blockX - blockColor }
 
@@ -1284,12 +1556,12 @@ tetrisDrawBlock:
 
 			add 	j, #1
 			cmp 	j, #4
-			blt 	for_j_lessThan_4_loop
+			blt 	for_j_lt_4_loop
 
 		pop 	{ j }
 		add 	i, #1
 		cmp 	i, #4
-		blt 	for_i_lessThan_4_loop
+		blt 	for_i_lt_4_loop
 	
 	pop		{ i - j }
 		
@@ -1423,11 +1695,11 @@ writeBlockToGrid:
 	mov		i, #0
 	mov 	j, #0
 
-	writeBlockToGrid_for_i_lessThan_4_loop:
+	writeBlockToGrid_for_i_lt_4_loop:
 
 		push 	{ j }
 
-		writeBlockToGrid_for_j_lessThan_4_loop:
+		writeBlockToGrid_for_j_lt_4_loop:
 
 			push 	{ blockX - blockColor }
 
@@ -1465,12 +1737,12 @@ writeBlockToGrid:
 
 			add 	j, #1
 			cmp 	j, #4
-			blt 	writeBlockToGrid_for_j_lessThan_4_loop
+			blt 	writeBlockToGrid_for_j_lt_4_loop
 
 		pop 	{ j }
 		add 	i, #1
 		cmp 	i, #4
-		blt 	writeBlockToGrid_for_i_lessThan_4_loop
+		blt 	writeBlockToGrid_for_i_lt_4_loop
 	
 	pop		{ i - j }
 		
@@ -1791,11 +2063,11 @@ tetrisGetGridBitmaskForBlock:
 	mov		i, #0
 	mov 	j, #0
 
-	tetrisGetGridBitmaskForBlock_for_i_lessThan_4_loop:
+	tetrisGetGridBitmaskForBlock_for_i_lt_4_loop:
 
 		push 	{ j }
 
-		tetrisGetGridBitmaskForBlock_for_j_lessThan_4_loop:
+		tetrisGetGridBitmaskForBlock_for_j_lt_4_loop:
 
 			push 	{ blockX - blockColor }
 
@@ -1822,12 +2094,12 @@ tetrisGetGridBitmaskForBlock:
 
 			add 	j, #1
 			cmp 	j, #4
-			blt 	tetrisGetGridBitmaskForBlock_for_j_lessThan_4_loop
+			blt 	tetrisGetGridBitmaskForBlock_for_j_lt_4_loop
 
 		pop 	{ j }
 		add 	i, #1
 		cmp 	i, #4
-		blt 	tetrisGetGridBitmaskForBlock_for_i_lessThan_4_loop
+		blt 	tetrisGetGridBitmaskForBlock_for_i_lt_4_loop
 	
 	pop		{ i - j }
 		
