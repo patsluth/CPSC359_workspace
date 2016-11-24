@@ -187,7 +187,13 @@ StartGame:
 		//        bl      UpdateScore
 		
 		bl	tetrisDrawGrid
+		
+		
+		
 		bl	tetrisDrawBlock
+		
+		ldr	r0, =0xFFFF
+		bl 	startTimer
 		
 		applyUserTranslation:
 		
@@ -223,8 +229,9 @@ StartGame:
 			bl		tetrisGridClearRow
 		rowNotClear:
 		
-		ldr	r0, =0xFFFFF
-		bl 	startTimer
+		
+		
+		
 		
 		b	mainLoop
 
@@ -1139,12 +1146,15 @@ tetrisCreateNewBlock:
 	ldmfd	r0,		{ blockX - blockTypeOffset }
 
 	initializeTetrisBlock:
+	
+		bl		randomNumber
 
 		mov 	blockX, 			#0				// randomize?
 		mov 	blockY,				#0
-		ldr 	blockColor,	 		=0x9999FF		// randomize?
 		
-		bl		randomNumber
+		ldr 	blockColor,	 		=TetrisBlockColors
+		lsl		r1, 				r0, #2
+		ldr		blockColor,			[blockColor, r1]
 		
 		ldr		blockTypeAddress, 	=TetrisBlockA	// randomize?
 		teq		r0, 				#1
@@ -1906,7 +1916,7 @@ tetrisGetGridBitmaskForBlock:
 TetrisGrid:	
 	.int		10			// tetrisGridCols
 	.int		19			// tetrisGridRows
-	.int		17			// tetrisGridBlockSize (n x n pixels)
+	.int		25			// tetrisGridBlockSize (n x n pixels)
 	.space		10 * 19 * 4	// tetrisGridData (cols x rows)
 TetrisGridEnd:
 
@@ -1919,172 +1929,63 @@ TetrisBlock:
 TetrisBlockEnd:
 
 .align 4
+TetrisBlockColors:
+	.word		0xFFFFFF
+	.word		0xAAAAAA
+	.word		0xBBBBBB	
+	.word		0xCCCCCC	
+	.word		0xDDDDDD	
+	.word		0x112233	
+	.word		0x445566		
+
+.align 4
 TetrisBlockA:
 	.hword		0x8888			// 0
-	//	1---
-	//	1---
-	//	1---
-	//	1---
 	.hword		0xF000			// pi/2
-	//	1111
-	//	----
-	//	----
-	//	----
 	.hword		0x8888			// pi
-	//	1---
-	//	1---
-	//	1---
-	//	1---
 	.hword		0xF000			// 3pi/4
-	//	1111
-	//	----
-	//	----
-	//	----
-TetrisBlockAEnd:
 
 .align 4
 TetrisBlockB:
 	.hword		0x8E00			// 0
-	//	1---
-	//	111-
-	//	----
-	//	----
 	.hword		0x44C0			// pi/2
-	//	-1--
-	//	-1--
-	//	11--
-	//	----
 	.hword		0xE200			// pi
-	//	111-
-	//	--1-
-	//	----
-	//	----
 	.hword		0xC880			// 3pi/4
-	//	11--
-	//	1---
-	//	1---
-	//	----
-TetrisBlockBEnd:
 
 .align 4
 TetrisBlockC:
 	.hword		0x2E00			// 0
-	//	--1-
-	//	111-
-	//	----
-	//	----
 	.hword		0xC440			// pi/2
-	//	11--
-	//	-1--
-	//	-1--
-	//	----
 	.hword		0xE800			// pi
-	//	111-
-	//	1---
-	//	----
-	//	----
 	.hword		0x88C0			// 3pi/4
-	//	1---
-	//	1---
-	//	11--
-	//	----
-TetrisBlockCEnd:
 
 .align 4
 TetrisBlockD:
 	.hword		0xCC00			// 0
-	//	11--
-	//	11--
-	//	----
-	//	----
 	.hword		0xCC00			// pi/2
-	//	11--
-	//	11--
-	//	----
-	//	----
 	.hword		0xCC00			// pi
-	//	11--
-	//	11--
-	//	----
-	//	----
 	.hword		0xCC00			// 3pi/4
-	//	11--
-	//	11--
-	//	----
-	//	----
-TetrisBlockDEnd:
 
 .align 4
 TetrisBlockE:
 	.hword		0x6C00			// 0
-	//	-11-
-	//	11--
-	//	----
-	//	----
 	.hword		0x8C40			// pi/2
-	//	1---
-	//	11--
-	//	-1--
-	//	----
 	.hword		0x6C00			// pi
-	//	-11-
-	//	11--
-	//	----
-	//	----
 	.hword		0x8C40			// 3pi/4
-	//	1---
-	//	11--
-	//	-1--
-	//	----
-TetrisBlockEEnd:
 
 .align 4
 TetrisBlockF:
 	.hword		0x4E00			// 0
-	//	-1--
-	//	111-
-	//	----
-	//	----
 	.hword		0x4C40			// pi/2
-	//	-1--
-	//	11--
-	//	-1--
-	//	----
 	.hword		0xE400			// pi
-	//	111-
-	//	-1--
-	//	----
-	//	----
 	.hword		0x8C80			// 3pi/4
-	//	1---
-	//	11--
-	//	1---
-	//	----
-TetrisBlockFEnd:
 
 .align 4
 TetrisBlockG:
 	.hword		0xC600			// 0
-	//	11--
-	//	-11-
-	//	----
-	//	----
 	.hword		0x4C80			// pi/2
-	//	-1--
-	//	11--
-	//	1---
-	//	----
 	.hword		0xC600			// pi
-	//	11--
-	//	-11-
-	//	----
-	//	----
 	.hword		0x4C80			// 3pi/4
-	//	-1--
-	//	11--
-	//	1---
-	//	----
-TetrisBlockGEnd:
 
 .align 4
 font:		.incbin	"font.bin"
