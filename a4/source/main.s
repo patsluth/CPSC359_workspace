@@ -252,11 +252,7 @@ StartGame:
 	
 	mainLoop:
 	
-		//        ldr     r0, =scoreNumber
-		//        ldr     r10, [r0]
-		//        add     r10, #1
-		//        str     r10, [r0]
-		//        bl      UpdateScore
+	        
 		
 		// TIMER
 		ldr		r0, =0x3F003004
@@ -280,7 +276,7 @@ StartGame:
 		
 			// tetrisRotateBlock(right)
 			mov	r0, #1
-			//bl	tetrisRotateBlock
+			bl	tetrisRotateBlock
 			
 		applyGravityTranslation:
 		
@@ -294,12 +290,16 @@ StartGame:
 		bl 	tetrisGridClearCompleteRows
 		pop	{ r0 }
 		teq	r0, #0
-		beq	teststestsetes
-		bne	testtest
+		beq	noClearedRows
+		bne	clearedRows
 		
-		testtest:
-			nop
-		teststestsetes:
+		clearedRows:
+			ldr     r1, =scoreNumber
+			ldr     r10, [r1]
+			add     r10, r0
+			str     r10, [r1]
+			bl      UpdateScore
+		noClearedRows:
 			
 		
 		
@@ -1418,7 +1418,7 @@ tetrisCreateNewBlock:
 	
 		bl		randomNumber
 
-		mov 	blockX, 			#0//#4					// load from data section?
+		mov 	blockX, 			#4					// load from data section?
 		mov 	blockY,				#0
 		
 		ldr 	blockColor,	 		=TetrisBlockColors
@@ -1439,7 +1439,6 @@ tetrisCreateNewBlock:
 		teq		r0, 				#6
 		ldreq	blockTypeAddress, 	=TetrisBlockG	
 		
-		ldr	blockTypeAddress, 	=TetrisBlockD
 		mov		blockTypeOffset,	#0				
 
 	initializeTetrisBlockEnd:

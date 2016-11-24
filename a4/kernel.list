@@ -273,17 +273,17 @@ Disassembly of section .text:
     a890:	e3a0d902 	mov	sp, #32768	; 0x8000
     a894:	ebffff41 	bl	a5a0 <EnableJTAG>
     a898:	ebffff63 	bl	a62c <InitFrameBuffer>
-    a89c:	eb000711 	bl	c4e8 <clearScreen>
+    a89c:	eb000715 	bl	c4f8 <clearScreen>
     a8a0:	ea000027 	b	a944 <StartGame>
 
 0000a8a4 <MainMenu>:
-    a8a4:	eb00018f 	bl	aee8 <ClearScreenBlack>
-    a8a8:	eb0003a4 	bl	b740 <drawMainMenu>
+    a8a4:	eb000194 	bl	aefc <ClearScreenBlack>
+    a8a8:	eb0003a8 	bl	b750 <drawMainMenu>
     a8ac:	e3a09000 	mov	r9, #0
 
 0000a8b0 <MainMenuPrompt>:
-    a8b0:	e59f0d34 	ldr	r0, [pc, #3380]	; b5ec <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x70>
-    a8b4:	eb00073d 	bl	c5b0 <startTimer>
+    a8b0:	e59f0d44 	ldr	r0, [pc, #3396]	; b5fc <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x70>
+    a8b4:	eb000741 	bl	c5c0 <startTimer>
     a8b8:	ebffff7b 	bl	a6ac <sampleSNES>
     a8bc:	e1a0a000 	mov	sl, r0
     a8c0:	e3e01c01 	mvn	r1, #256	; 0x100
@@ -305,131 +305,131 @@ Disassembly of section .text:
 0000a8fc <MainMenuAPressed>:
     a8fc:	e3590000 	cmp	r9, #0
     a900:	0a00000f 	beq	a944 <StartGame>
-    a904:	eb000177 	bl	aee8 <ClearScreenBlack>
-    a908:	ea000083 	b	ab1c <mainEnd>
+    a904:	eb00017c 	bl	aefc <ClearScreenBlack>
+    a908:	ea000088 	b	ab30 <mainEnd>
 
 0000a90c <MainMenuUpPressed>:
     a90c:	e3590000 	cmp	r9, #0
     a910:	0affffe6 	beq	a8b0 <MainMenuPrompt>
     a914:	e3a09000 	mov	r9, #0
-    a918:	eb0003eb 	bl	b8cc <setMainMenuIndicatorStart>
+    a918:	eb0003ef 	bl	b8dc <setMainMenuIndicatorStart>
     a91c:	e3a00801 	mov	r0, #65536	; 0x10000
-    a920:	eb000722 	bl	c5b0 <startTimer>
+    a920:	eb000726 	bl	c5c0 <startTimer>
     a924:	eaffffe1 	b	a8b0 <MainMenuPrompt>
 
 0000a928 <MainMenuDownPressed>:
     a928:	e3590001 	cmp	r9, #1
     a92c:	0affffdf 	beq	a8b0 <MainMenuPrompt>
     a930:	e3a09001 	mov	r9, #1
-    a934:	eb0003f4 	bl	b90c <setMainMenuIndicatorQuit>
+    a934:	eb0003f8 	bl	b91c <setMainMenuIndicatorQuit>
     a938:	e3a00801 	mov	r0, #65536	; 0x10000
-    a93c:	eb00071b 	bl	c5b0 <startTimer>
+    a93c:	eb00071f 	bl	c5c0 <startTimer>
     a940:	eaffffda 	b	a8b0 <MainMenuPrompt>
 
 0000a944 <StartGame>:
     a944:	ebffff58 	bl	a6ac <sampleSNES>
-    a948:	eb000173 	bl	af1c <tetrisInitGrid>
-    a94c:	eb000165 	bl	aee8 <ClearScreenBlack>
-    a950:	eb0000ef 	bl	ad14 <DrawBoard>
-    a954:	eb000211 	bl	b1a0 <tetrisCreateNewBlock>
+    a948:	eb000178 	bl	af30 <tetrisInitGrid>
+    a94c:	eb00016a 	bl	aefc <ClearScreenBlack>
+    a950:	eb0000f4 	bl	ad28 <DrawBoard>
+    a954:	eb000216 	bl	b1b4 <tetrisCreateNewBlock>
     a958:	e3a00003 	mov	r0, #3
     a95c:	e3a01008 	mov	r1, #8
-    a960:	e59f2c88 	ldr	r2, [pc, #3208]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    a960:	e59f2c98 	ldr	r2, [pc, #3224]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     a964:	e92d0007 	push	{r0, r1, r2}
-    a968:	eb000175 	bl	af44 <tetrisSetGridBlockColor>
+    a968:	eb00017a 	bl	af58 <tetrisSetGridBlockColor>
     a96c:	e3a00004 	mov	r0, #4
     a970:	e3a01008 	mov	r1, #8
-    a974:	e59f2c74 	ldr	r2, [pc, #3188]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    a974:	e59f2c84 	ldr	r2, [pc, #3204]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     a978:	e92d0007 	push	{r0, r1, r2}
-    a97c:	eb000170 	bl	af44 <tetrisSetGridBlockColor>
+    a97c:	eb000175 	bl	af58 <tetrisSetGridBlockColor>
     a980:	e3a00002 	mov	r0, #2
     a984:	e3a01012 	mov	r1, #18
-    a988:	e59f2c60 	ldr	r2, [pc, #3168]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    a988:	e59f2c70 	ldr	r2, [pc, #3184]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     a98c:	e92d0007 	push	{r0, r1, r2}
-    a990:	eb00016b 	bl	af44 <tetrisSetGridBlockColor>
+    a990:	eb000170 	bl	af58 <tetrisSetGridBlockColor>
     a994:	e3a00003 	mov	r0, #3
     a998:	e3a01012 	mov	r1, #18
-    a99c:	e59f2c4c 	ldr	r2, [pc, #3148]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    a99c:	e59f2c5c 	ldr	r2, [pc, #3164]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     a9a0:	e92d0007 	push	{r0, r1, r2}
-    a9a4:	eb000166 	bl	af44 <tetrisSetGridBlockColor>
+    a9a4:	eb00016b 	bl	af58 <tetrisSetGridBlockColor>
     a9a8:	e3a00004 	mov	r0, #4
     a9ac:	e3a01012 	mov	r1, #18
-    a9b0:	e59f2c38 	ldr	r2, [pc, #3128]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    a9b0:	e59f2c48 	ldr	r2, [pc, #3144]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     a9b4:	e92d0007 	push	{r0, r1, r2}
-    a9b8:	eb000161 	bl	af44 <tetrisSetGridBlockColor>
+    a9b8:	eb000166 	bl	af58 <tetrisSetGridBlockColor>
     a9bc:	e3a00005 	mov	r0, #5
     a9c0:	e3a01012 	mov	r1, #18
-    a9c4:	e59f2c24 	ldr	r2, [pc, #3108]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    a9c4:	e59f2c34 	ldr	r2, [pc, #3124]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     a9c8:	e92d0007 	push	{r0, r1, r2}
-    a9cc:	eb00015c 	bl	af44 <tetrisSetGridBlockColor>
+    a9cc:	eb000161 	bl	af58 <tetrisSetGridBlockColor>
     a9d0:	e3a00006 	mov	r0, #6
     a9d4:	e3a01012 	mov	r1, #18
-    a9d8:	e59f2c10 	ldr	r2, [pc, #3088]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    a9d8:	e59f2c20 	ldr	r2, [pc, #3104]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     a9dc:	e92d0007 	push	{r0, r1, r2}
-    a9e0:	eb000157 	bl	af44 <tetrisSetGridBlockColor>
+    a9e0:	eb00015c 	bl	af58 <tetrisSetGridBlockColor>
     a9e4:	e3a00007 	mov	r0, #7
     a9e8:	e3a01012 	mov	r1, #18
-    a9ec:	e59f2bfc 	ldr	r2, [pc, #3068]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    a9ec:	e59f2c0c 	ldr	r2, [pc, #3084]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     a9f0:	e92d0007 	push	{r0, r1, r2}
-    a9f4:	eb000152 	bl	af44 <tetrisSetGridBlockColor>
+    a9f4:	eb000157 	bl	af58 <tetrisSetGridBlockColor>
     a9f8:	e3a00008 	mov	r0, #8
     a9fc:	e3a01012 	mov	r1, #18
-    aa00:	e59f2be8 	ldr	r2, [pc, #3048]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    aa00:	e59f2bf8 	ldr	r2, [pc, #3064]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     aa04:	e92d0007 	push	{r0, r1, r2}
-    aa08:	eb00014d 	bl	af44 <tetrisSetGridBlockColor>
+    aa08:	eb000152 	bl	af58 <tetrisSetGridBlockColor>
     aa0c:	e3a00009 	mov	r0, #9
     aa10:	e3a01012 	mov	r1, #18
-    aa14:	e59f2bd4 	ldr	r2, [pc, #3028]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    aa14:	e59f2be4 	ldr	r2, [pc, #3044]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     aa18:	e92d0007 	push	{r0, r1, r2}
-    aa1c:	eb000148 	bl	af44 <tetrisSetGridBlockColor>
+    aa1c:	eb00014d 	bl	af58 <tetrisSetGridBlockColor>
     aa20:	e3a00002 	mov	r0, #2
     aa24:	e3a01011 	mov	r1, #17
-    aa28:	e59f2bc0 	ldr	r2, [pc, #3008]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    aa28:	e59f2bd0 	ldr	r2, [pc, #3024]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     aa2c:	e92d0007 	push	{r0, r1, r2}
-    aa30:	eb000143 	bl	af44 <tetrisSetGridBlockColor>
+    aa30:	eb000148 	bl	af58 <tetrisSetGridBlockColor>
     aa34:	e3a00003 	mov	r0, #3
     aa38:	e3a01011 	mov	r1, #17
-    aa3c:	e59f2bac 	ldr	r2, [pc, #2988]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    aa3c:	e59f2bbc 	ldr	r2, [pc, #3004]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     aa40:	e92d0007 	push	{r0, r1, r2}
-    aa44:	eb00013e 	bl	af44 <tetrisSetGridBlockColor>
+    aa44:	eb000143 	bl	af58 <tetrisSetGridBlockColor>
     aa48:	e3a00004 	mov	r0, #4
     aa4c:	e3a01011 	mov	r1, #17
-    aa50:	e59f2b98 	ldr	r2, [pc, #2968]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    aa50:	e59f2ba8 	ldr	r2, [pc, #2984]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     aa54:	e92d0007 	push	{r0, r1, r2}
-    aa58:	eb000139 	bl	af44 <tetrisSetGridBlockColor>
+    aa58:	eb00013e 	bl	af58 <tetrisSetGridBlockColor>
     aa5c:	e3a00005 	mov	r0, #5
     aa60:	e3a01011 	mov	r1, #17
-    aa64:	e59f2b84 	ldr	r2, [pc, #2948]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    aa64:	e59f2b94 	ldr	r2, [pc, #2964]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     aa68:	e92d0007 	push	{r0, r1, r2}
-    aa6c:	eb000134 	bl	af44 <tetrisSetGridBlockColor>
+    aa6c:	eb000139 	bl	af58 <tetrisSetGridBlockColor>
     aa70:	e3a00006 	mov	r0, #6
     aa74:	e3a01011 	mov	r1, #17
-    aa78:	e59f2b70 	ldr	r2, [pc, #2928]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    aa78:	e59f2b80 	ldr	r2, [pc, #2944]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     aa7c:	e92d0007 	push	{r0, r1, r2}
-    aa80:	eb00012f 	bl	af44 <tetrisSetGridBlockColor>
+    aa80:	eb000134 	bl	af58 <tetrisSetGridBlockColor>
     aa84:	e3a00007 	mov	r0, #7
     aa88:	e3a01011 	mov	r1, #17
-    aa8c:	e59f2b5c 	ldr	r2, [pc, #2908]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    aa8c:	e59f2b6c 	ldr	r2, [pc, #2924]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     aa90:	e92d0007 	push	{r0, r1, r2}
-    aa94:	eb00012a 	bl	af44 <tetrisSetGridBlockColor>
+    aa94:	eb00012f 	bl	af58 <tetrisSetGridBlockColor>
     aa98:	e3a00008 	mov	r0, #8
     aa9c:	e3a01011 	mov	r1, #17
-    aaa0:	e59f2b48 	ldr	r2, [pc, #2888]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    aaa0:	e59f2b58 	ldr	r2, [pc, #2904]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     aaa4:	e92d0007 	push	{r0, r1, r2}
-    aaa8:	eb000125 	bl	af44 <tetrisSetGridBlockColor>
+    aaa8:	eb00012a 	bl	af58 <tetrisSetGridBlockColor>
     aaac:	e3a00009 	mov	r0, #9
     aab0:	e3a01011 	mov	r1, #17
-    aab4:	e59f2b34 	ldr	r2, [pc, #2868]	; b5f0 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
+    aab4:	e59f2b44 	ldr	r2, [pc, #2884]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x74>
     aab8:	e92d0007 	push	{r0, r1, r2}
-    aabc:	eb000120 	bl	af44 <tetrisSetGridBlockColor>
+    aabc:	eb000125 	bl	af58 <tetrisSetGridBlockColor>
 
 0000aac0 <mainLoop>:
-    aac0:	e59f0b2c 	ldr	r0, [pc, #2860]	; b5f4 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x78>
+    aac0:	e59f0b3c 	ldr	r0, [pc, #2876]	; b604 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x78>
     aac4:	e5909000 	ldr	r9, [r0]
-    aac8:	eb00017f 	bl	b0cc <tetrisUpdateGrid>
-    aacc:	eb0001ce 	bl	b20c <tetrisDrawBlock>
-    aad0:	eb00014a 	bl	b000 <tetrisDrawGrid>
-    aad4:	e59f0b18 	ldr	r0, [pc, #2840]	; b5f4 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x78>
+    aac8:	eb000184 	bl	b0e0 <tetrisUpdateGrid>
+    aacc:	eb0001d2 	bl	b21c <tetrisDrawBlock>
+    aad0:	eb00014f 	bl	b014 <tetrisDrawGrid>
+    aad4:	e59f0b28 	ldr	r0, [pc, #2856]	; b604 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x78>
     aad8:	e590a000 	ldr	sl, [r0]
     aadc:	e04aa009 	sub	sl, sl, r9
     aae0:	e320f000 	nop	{0}
@@ -437,1943 +437,1947 @@ Disassembly of section .text:
 0000aae4 <applyUserTranslation>:
     aae4:	e3a00000 	mov	r0, #0
     aae8:	e3a01000 	mov	r1, #0
-    aaec:	eb000252 	bl	b43c <tetrisTranslateBlock>
+    aaec:	eb000256 	bl	b44c <tetrisTranslateBlock>
 
 0000aaf0 <applyUserRotation>:
     aaf0:	e3a00001 	mov	r0, #1
+    aaf4:	eb000235 	bl	b3d0 <tetrisRotateBlock>
 
-0000aaf4 <applyGravityTranslation>:
-    aaf4:	e3a00000 	mov	r0, #0
-    aaf8:	e3a01001 	mov	r1, #1
-    aafc:	eb00024e 	bl	b43c <tetrisTranslateBlock>
-    ab00:	eb000031 	bl	abcc <tetrisGridClearCompleteRows>
-    ab04:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
-    ab08:	e3300000 	teq	r0, #0
-    ab0c:	0a000001 	beq	ab18 <teststestsetes>
-    ab10:	1affffff 	bne	ab14 <testtest>
+0000aaf8 <applyGravityTranslation>:
+    aaf8:	e3a00000 	mov	r0, #0
+    aafc:	e3a01001 	mov	r1, #1
+    ab00:	eb000251 	bl	b44c <tetrisTranslateBlock>
+    ab04:	eb000035 	bl	abe0 <tetrisGridClearCompleteRows>
+    ab08:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
+    ab0c:	e3300000 	teq	r0, #0
+    ab10:	0a000005 	beq	ab2c <noClearedRows>
+    ab14:	1affffff 	bne	ab18 <clearedRows>
 
-0000ab14 <testtest>:
-    ab14:	e320f000 	nop	{0}
+0000ab18 <clearedRows>:
+    ab18:	e59f1ae8 	ldr	r1, [pc, #2792]	; b608 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x7c>
+    ab1c:	e591a000 	ldr	sl, [r1]
+    ab20:	e08aa000 	add	sl, sl, r0
+    ab24:	e581a000 	str	sl, [r1]
+    ab28:	eb0000ca 	bl	ae58 <UpdateScore>
 
-0000ab18 <teststestsetes>:
-    ab18:	eaffffe8 	b	aac0 <mainLoop>
+0000ab2c <noClearedRows>:
+    ab2c:	eaffffe3 	b	aac0 <mainLoop>
 
-0000ab1c <mainEnd>:
-    ab1c:	eafffffe 	b	ab1c <mainEnd>
+0000ab30 <mainEnd>:
+    ab30:	eafffffe 	b	ab30 <mainEnd>
 
-0000ab20 <tetrisGridIsRowComplete>:
-    ab20:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
-    ab24:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    ab28:	e92d00f0 	push	{r4, r5, r6, r7}
-    ab2c:	e59f4ac4 	ldr	r4, [pc, #2756]	; b5f8 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x7c>
-    ab30:	e89400e0 	ldm	r4, {r5, r6, r7}
-    ab34:	e59f8ac0 	ldr	r8, [pc, #2752]	; b5fc <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x80>
-    ab38:	e3a00000 	mov	r0, #0
-    ab3c:	e3a03001 	mov	r3, #1
-    ab40:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
+0000ab34 <tetrisGridIsRowComplete>:
+    ab34:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
+    ab38:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    ab3c:	e92d00f0 	push	{r4, r5, r6, r7}
+    ab40:	e59f4ac4 	ldr	r4, [pc, #2756]	; b60c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x80>
+    ab44:	e89400e0 	ldm	r4, {r5, r6, r7}
+    ab48:	e59f8ac0 	ldr	r8, [pc, #2752]	; b610 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x84>
+    ab4c:	e3a00000 	mov	r0, #0
+    ab50:	e3a03001 	mov	r3, #1
+    ab54:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
 
-0000ab44 <tetrisGridIsRowComplete_for_x_lt_cols_loop>:
-    ab44:	e92d0003 	push	{r0, r1}
-    ab48:	e92d0003 	push	{r0, r1}
-    ab4c:	eb00010c 	bl	af84 <tetrisGetGridBlockColor>
-    ab50:	e49d3004 	pop	{r3}		; (ldr r3, [sp], #4)
-    ab54:	e3330000 	teq	r3, #0
-    ab58:	e8bd0003 	pop	{r0, r1}
-    ab5c:	049d3004 	popeq	{r3}		; (ldreq r3, [sp], #4)
-    ab60:	03a03000 	moveq	r3, #0
-    ab64:	052d3004 	pusheq	{r3}		; (streq r3, [sp, #-4]!)
-    ab68:	0a000002 	beq	ab78 <tetrisGridIsRowCompleteEnd>
-    ab6c:	e2800001 	add	r0, r0, #1
-    ab70:	e1500005 	cmp	r0, r5
-    ab74:	bafffff2 	blt	ab44 <tetrisGridIsRowComplete_for_x_lt_cols_loop>
+0000ab58 <tetrisGridIsRowComplete_for_x_lt_cols_loop>:
+    ab58:	e92d0003 	push	{r0, r1}
+    ab5c:	e92d0003 	push	{r0, r1}
+    ab60:	eb00010c 	bl	af98 <tetrisGetGridBlockColor>
+    ab64:	e49d3004 	pop	{r3}		; (ldr r3, [sp], #4)
+    ab68:	e3330000 	teq	r3, #0
+    ab6c:	e8bd0003 	pop	{r0, r1}
+    ab70:	049d3004 	popeq	{r3}		; (ldreq r3, [sp], #4)
+    ab74:	03a03000 	moveq	r3, #0
+    ab78:	052d3004 	pusheq	{r3}		; (streq r3, [sp, #-4]!)
+    ab7c:	0a000002 	beq	ab8c <tetrisGridIsRowCompleteEnd>
+    ab80:	e2800001 	add	r0, r0, #1
+    ab84:	e1500005 	cmp	r0, r5
+    ab88:	bafffff2 	blt	ab58 <tetrisGridIsRowComplete_for_x_lt_cols_loop>
 
-0000ab78 <tetrisGridIsRowCompleteEnd>:
-    ab78:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
-    ab7c:	e8bd00f0 	pop	{r4, r5, r6, r7}
-    ab80:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    ab84:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
-    ab88:	e1a0f00e 	mov	pc, lr
+0000ab8c <tetrisGridIsRowCompleteEnd>:
+    ab8c:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
+    ab90:	e8bd00f0 	pop	{r4, r5, r6, r7}
+    ab94:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    ab98:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
+    ab9c:	e1a0f00e 	mov	pc, lr
 
-0000ab8c <tetrisGridClearRow>:
-    ab8c:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
-    ab90:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    ab94:	e92d0070 	push	{r4, r5, r6}
-    ab98:	e59f4a58 	ldr	r4, [pc, #2648]	; b5f8 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x7c>
-    ab9c:	e8940060 	ldm	r4, {r5, r6}
-    aba0:	e3a00000 	mov	r0, #0
+0000aba0 <tetrisGridClearRow>:
+    aba0:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
+    aba4:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    aba8:	e92d0070 	push	{r4, r5, r6}
+    abac:	e59f4a58 	ldr	r4, [pc, #2648]	; b60c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x80>
+    abb0:	e8940060 	ldm	r4, {r5, r6}
+    abb4:	e3a00000 	mov	r0, #0
 
-0000aba4 <tetrisGridClearRow_for_x_lt_cols_loop>:
-    aba4:	e92d0003 	push	{r0, r1}
-    aba8:	e92d0003 	push	{r0, r1}
-    abac:	eb00010d 	bl	afe8 <tetrisClearGridBlock>
-    abb0:	e8bd0003 	pop	{r0, r1}
-    abb4:	0a000002 	beq	abc4 <tetrisGridClearRowEnd>
-    abb8:	e2800001 	add	r0, r0, #1
-    abbc:	e1500005 	cmp	r0, r5
-    abc0:	bafffff7 	blt	aba4 <tetrisGridClearRow_for_x_lt_cols_loop>
+0000abb8 <tetrisGridClearRow_for_x_lt_cols_loop>:
+    abb8:	e92d0003 	push	{r0, r1}
+    abbc:	e92d0003 	push	{r0, r1}
+    abc0:	eb00010d 	bl	affc <tetrisClearGridBlock>
+    abc4:	e8bd0003 	pop	{r0, r1}
+    abc8:	0a000002 	beq	abd8 <tetrisGridClearRowEnd>
+    abcc:	e2800001 	add	r0, r0, #1
+    abd0:	e1500005 	cmp	r0, r5
+    abd4:	bafffff7 	blt	abb8 <tetrisGridClearRow_for_x_lt_cols_loop>
 
-0000abc4 <tetrisGridClearRowEnd>:
-    abc4:	e8bd0070 	pop	{r4, r5, r6}
-    abc8:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+0000abd8 <tetrisGridClearRowEnd>:
+    abd8:	e8bd0070 	pop	{r4, r5, r6}
+    abdc:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
 
-0000abcc <tetrisGridClearCompleteRows>:
-    abcc:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    abd0:	e92d07f0 	push	{r4, r5, r6, r7, r8, r9, sl}
-    abd4:	e59f5a1c 	ldr	r5, [pc, #2588]	; b5f8 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x7c>
-    abd8:	e89501c0 	ldm	r5, {r6, r7, r8}
-    abdc:	e59f9a18 	ldr	r9, [pc, #2584]	; b5fc <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x80>
-    abe0:	e1a04007 	mov	r4, r7
-    abe4:	e2444001 	sub	r4, r4, #1
-    abe8:	e3a0a000 	mov	sl, #0
+0000abe0 <tetrisGridClearCompleteRows>:
+    abe0:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    abe4:	e92d07f0 	push	{r4, r5, r6, r7, r8, r9, sl}
+    abe8:	e59f5a1c 	ldr	r5, [pc, #2588]	; b60c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x80>
+    abec:	e89501c0 	ldm	r5, {r6, r7, r8}
+    abf0:	e59f9a18 	ldr	r9, [pc, #2584]	; b610 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x84>
+    abf4:	e1a04007 	mov	r4, r7
+    abf8:	e2444001 	sub	r4, r4, #1
+    abfc:	e3a0a000 	mov	sl, #0
 
-0000abec <tetrisGridClearCompleteRows_for_curRow_ge_0_loop>:
-    abec:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
-    abf0:	ebffffca 	bl	ab20 <tetrisGridIsRowComplete>
-    abf4:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
-    abf8:	e3300000 	teq	r0, #0
-    abfc:	0a000003 	beq	ac10 <tetrisGridClearCompleteRowsRowIsNotComplete>
-    ac00:	1affffff 	bne	ac04 <tetrisGridClearCompleteRowsRowIsComplete>
+0000ac00 <tetrisGridClearCompleteRows_for_curRow_ge_0_loop>:
+    ac00:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
+    ac04:	ebffffca 	bl	ab34 <tetrisGridIsRowComplete>
+    ac08:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
+    ac0c:	e3300000 	teq	r0, #0
+    ac10:	0a000003 	beq	ac24 <tetrisGridClearCompleteRowsRowIsNotComplete>
+    ac14:	1affffff 	bne	ac18 <tetrisGridClearCompleteRowsRowIsComplete>
 
-0000ac04 <tetrisGridClearCompleteRowsRowIsComplete>:
-    ac04:	e28aa001 	add	sl, sl, #1
-    ac08:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
-    ac0c:	ebffffde 	bl	ab8c <tetrisGridClearRow>
+0000ac18 <tetrisGridClearCompleteRowsRowIsComplete>:
+    ac18:	e28aa001 	add	sl, sl, #1
+    ac1c:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
+    ac20:	ebffffde 	bl	aba0 <tetrisGridClearRow>
 
-0000ac10 <tetrisGridClearCompleteRowsRowIsNotComplete>:
-    ac10:	e2444001 	sub	r4, r4, #1
-    ac14:	e3540000 	cmp	r4, #0
-    ac18:	aafffff3 	bge	abec <tetrisGridClearCompleteRows_for_curRow_ge_0_loop>
-    ac1c:	e1a0000a 	mov	r0, sl
-    ac20:	e8bd07f0 	pop	{r4, r5, r6, r7, r8, r9, sl}
-    ac24:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    ac28:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
-    ac2c:	e1a0f00e 	mov	pc, lr
+0000ac24 <tetrisGridClearCompleteRowsRowIsNotComplete>:
+    ac24:	e2444001 	sub	r4, r4, #1
+    ac28:	e3540000 	cmp	r4, #0
+    ac2c:	aafffff3 	bge	ac00 <tetrisGridClearCompleteRows_for_curRow_ge_0_loop>
+    ac30:	e1a0000a 	mov	r0, sl
+    ac34:	e8bd07f0 	pop	{r4, r5, r6, r7, r8, r9, sl}
+    ac38:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    ac3c:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
+    ac40:	e1a0f00e 	mov	pc, lr
 
-0000ac30 <PauseMenuStart>:
-    ac30:	e92d4610 	push	{r4, r9, sl, lr}
-    ac34:	eb00028a 	bl	b664 <drawPauseMenu>
-    ac38:	e3a09000 	mov	r9, #0
+0000ac44 <PauseMenuStart>:
+    ac44:	e92d4610 	push	{r4, r9, sl, lr}
+    ac48:	eb000289 	bl	b674 <drawPauseMenu>
+    ac4c:	e3a09000 	mov	r9, #0
 
-0000ac3c <PauseMenuPrompt>:
-    ac3c:	e59f09a8 	ldr	r0, [pc, #2472]	; b5ec <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x70>
-    ac40:	eb00065a 	bl	c5b0 <startTimer>
-    ac44:	ebfffe98 	bl	a6ac <sampleSNES>
-    ac48:	e1a0a000 	mov	sl, r0
-    ac4c:	e3e01008 	mvn	r1, #8
-    ac50:	e1c00001 	bic	r0, r0, r1
-    ac54:	e3500000 	cmp	r0, #0
-    ac58:	0a00000f 	beq	ac9c <PauseMenuStartPressed>
-    ac5c:	e1a0000a 	mov	r0, sl
-    ac60:	e3e01c01 	mvn	r1, #256	; 0x100
+0000ac50 <PauseMenuPrompt>:
+    ac50:	e59f09a4 	ldr	r0, [pc, #2468]	; b5fc <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x70>
+    ac54:	eb000659 	bl	c5c0 <startTimer>
+    ac58:	ebfffe93 	bl	a6ac <sampleSNES>
+    ac5c:	e1a0a000 	mov	sl, r0
+    ac60:	e3e01008 	mvn	r1, #8
     ac64:	e1c00001 	bic	r0, r0, r1
     ac68:	e3500000 	cmp	r0, #0
-    ac6c:	0a000013 	beq	acc0 <PauseMenuAPressed>
+    ac6c:	0a00000f 	beq	acb0 <PauseMenuStartPressed>
     ac70:	e1a0000a 	mov	r0, sl
-    ac74:	e3e01010 	mvn	r1, #16
+    ac74:	e3e01c01 	mvn	r1, #256	; 0x100
     ac78:	e1c00001 	bic	r0, r0, r1
     ac7c:	e3500000 	cmp	r0, #0
-    ac80:	0a000014 	beq	acd8 <PauseMenuUpPressed>
+    ac80:	0a000013 	beq	acd4 <PauseMenuAPressed>
     ac84:	e1a0000a 	mov	r0, sl
-    ac88:	e3e01020 	mvn	r1, #32
+    ac88:	e3e01010 	mvn	r1, #16
     ac8c:	e1c00001 	bic	r0, r0, r1
     ac90:	e3500000 	cmp	r0, #0
-    ac94:	0a000016 	beq	acf4 <PauseMenuDownPressed>
-    ac98:	eaffffe7 	b	ac3c <PauseMenuPrompt>
+    ac94:	0a000014 	beq	acec <PauseMenuUpPressed>
+    ac98:	e1a0000a 	mov	r0, sl
+    ac9c:	e3e01020 	mvn	r1, #32
+    aca0:	e1c00001 	bic	r0, r0, r1
+    aca4:	e3500000 	cmp	r0, #0
+    aca8:	0a000016 	beq	ad08 <PauseMenuDownPressed>
+    acac:	eaffffe7 	b	ac50 <PauseMenuPrompt>
 
-0000ac9c <PauseMenuStartPressed>:
-    ac9c:	e3a04000 	mov	r4, #0
-    aca0:	e3a03f9a 	mov	r3, #616	; 0x268
-    aca4:	e3a02fa2 	mov	r2, #648	; 0x288
-    aca8:	e3a0104c 	mov	r1, #76	; 0x4c
-    acac:	e3a000bc 	mov	r0, #188	; 0xbc
-    acb0:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    acb4:	eb000622 	bl	c544 <drawRect>
-    acb8:	eb000015 	bl	ad14 <DrawBoard>
-    acbc:	e8bd8610 	pop	{r4, r9, sl, pc}
+0000acb0 <PauseMenuStartPressed>:
+    acb0:	e3a04000 	mov	r4, #0
+    acb4:	e3a03f9a 	mov	r3, #616	; 0x268
+    acb8:	e3a02fa2 	mov	r2, #648	; 0x288
+    acbc:	e3a0104c 	mov	r1, #76	; 0x4c
+    acc0:	e3a000bc 	mov	r0, #188	; 0xbc
+    acc4:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    acc8:	eb000621 	bl	c554 <drawRect>
+    accc:	eb000015 	bl	ad28 <DrawBoard>
+    acd0:	e8bd8610 	pop	{r4, r9, sl, pc}
 
-0000acc0 <PauseMenuAPressed>:
-    acc0:	e3590000 	cmp	r9, #0
-    acc4:	e3a01000 	mov	r1, #0
-    acc8:	e59f0930 	ldr	r0, [pc, #2352]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x84>
-    accc:	e5801000 	str	r1, [r0]
-    acd0:	0affff1b 	beq	a944 <StartGame>
-    acd4:	eafffef2 	b	a8a4 <MainMenu>
+0000acd4 <PauseMenuAPressed>:
+    acd4:	e3590000 	cmp	r9, #0
+    acd8:	e3a01000 	mov	r1, #0
+    acdc:	e59f0924 	ldr	r0, [pc, #2340]	; b608 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x7c>
+    ace0:	e5801000 	str	r1, [r0]
+    ace4:	0affff16 	beq	a944 <StartGame>
+    ace8:	eafffeed 	b	a8a4 <MainMenu>
 
-0000acd8 <PauseMenuUpPressed>:
-    acd8:	e3590000 	cmp	r9, #0
-    acdc:	0affffd6 	beq	ac3c <PauseMenuPrompt>
-    ace0:	e3a09000 	mov	r9, #0
-    ace4:	eb0002d8 	bl	b84c <setPauseMenuIndicatorRestart>
-    ace8:	e3a00801 	mov	r0, #65536	; 0x10000
-    acec:	eb00062f 	bl	c5b0 <startTimer>
-    acf0:	eaffffd1 	b	ac3c <PauseMenuPrompt>
+0000acec <PauseMenuUpPressed>:
+    acec:	e3590000 	cmp	r9, #0
+    acf0:	0affffd6 	beq	ac50 <PauseMenuPrompt>
+    acf4:	e3a09000 	mov	r9, #0
+    acf8:	eb0002d7 	bl	b85c <setPauseMenuIndicatorRestart>
+    acfc:	e3a00801 	mov	r0, #65536	; 0x10000
+    ad00:	eb00062e 	bl	c5c0 <startTimer>
+    ad04:	eaffffd1 	b	ac50 <PauseMenuPrompt>
 
-0000acf4 <PauseMenuDownPressed>:
-    acf4:	e3590001 	cmp	r9, #1
-    acf8:	0affffcf 	beq	ac3c <PauseMenuPrompt>
-    acfc:	e3a09001 	mov	r9, #1
-    ad00:	eb0002e1 	bl	b88c <setPauseMenuIndicatorQuit>
-    ad04:	e3a00801 	mov	r0, #65536	; 0x10000
-    ad08:	eb000628 	bl	c5b0 <startTimer>
-    ad0c:	eaffffca 	b	ac3c <PauseMenuPrompt>
-    ad10:	e8bd8610 	pop	{r4, r9, sl, pc}
+0000ad08 <PauseMenuDownPressed>:
+    ad08:	e3590001 	cmp	r9, #1
+    ad0c:	0affffcf 	beq	ac50 <PauseMenuPrompt>
+    ad10:	e3a09001 	mov	r9, #1
+    ad14:	eb0002e0 	bl	b89c <setPauseMenuIndicatorQuit>
+    ad18:	e3a00801 	mov	r0, #65536	; 0x10000
+    ad1c:	eb000627 	bl	c5c0 <startTimer>
+    ad20:	eaffffca 	b	ac50 <PauseMenuPrompt>
+    ad24:	e8bd8610 	pop	{r4, r9, sl, pc}
 
-0000ad14 <DrawBoard>:
-    ad14:	e92d4010 	push	{r4, lr}
-    ad18:	e3a04a0e 	mov	r4, #57344	; 0xe000
-    ad1c:	e3a03004 	mov	r3, #4
-    ad20:	e3a02fa2 	mov	r2, #648	; 0x288
-    ad24:	e3a0104c 	mov	r1, #76	; 0x4c
-    ad28:	e3a000bc 	mov	r0, #188	; 0xbc
-    ad2c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    ad30:	eb000603 	bl	c544 <drawRect>
-    ad34:	e3a04a0e 	mov	r4, #57344	; 0xe000
-    ad38:	e3a03004 	mov	r3, #4
-    ad3c:	e3a02fa2 	mov	r2, #648	; 0x288
-    ad40:	e3a01e2b 	mov	r1, #688	; 0x2b0
-    ad44:	e3a000bc 	mov	r0, #188	; 0xbc
-    ad48:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    ad4c:	eb0005fc 	bl	c544 <drawRect>
-    ad50:	e3a04a0e 	mov	r4, #57344	; 0xe000
-    ad54:	e3a03e26 	mov	r3, #608	; 0x260
-    ad58:	e3a02004 	mov	r2, #4
-    ad5c:	e3a01050 	mov	r1, #80	; 0x50
-    ad60:	e3a000bc 	mov	r0, #188	; 0xbc
-    ad64:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    ad68:	eb0005f5 	bl	c544 <drawRect>
-    ad6c:	e3a04a0e 	mov	r4, #57344	; 0xe000
-    ad70:	e3a03e26 	mov	r3, #608	; 0x260
-    ad74:	e3a02004 	mov	r2, #4
-    ad78:	e3a01050 	mov	r1, #80	; 0x50
-    ad7c:	e3a00c02 	mov	r0, #512	; 0x200
-    ad80:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    ad84:	eb0005ee 	bl	c544 <drawRect>
-    ad88:	e3a04a0e 	mov	r4, #57344	; 0xe000
-    ad8c:	e3a03e26 	mov	r3, #608	; 0x260
-    ad90:	e3a02004 	mov	r2, #4
-    ad94:	e3a01050 	mov	r1, #80	; 0x50
-    ad98:	e3a00d0d 	mov	r0, #832	; 0x340
-    ad9c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    ada0:	eb0005e7 	bl	c544 <drawRect>
-    ada4:	e59f0858 	ldr	r0, [pc, #2136]	; b604 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x88>
-    ada8:	e59f1858 	ldr	r1, [pc, #2136]	; b608 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x8c>
-    adac:	e59f2858 	ldr	r2, [pc, #2136]	; b60c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x90>
-    adb0:	e3a030e6 	mov	r3, #230	; 0xe6
-    adb4:	eb000293 	bl	b808 <WriteSentence>
-    adb8:	e59f4848 	ldr	r4, [pc, #2120]	; b608 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x8c>
-    adbc:	e3a03036 	mov	r3, #54	; 0x36
-    adc0:	e3a02036 	mov	r2, #54	; 0x36
-    adc4:	e3a010d3 	mov	r1, #211	; 0xd3
-    adc8:	e59f0840 	ldr	r0, [pc, #2112]	; b610 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x94>
-    adcc:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    add0:	eb0005db 	bl	c544 <drawRect>
-    add4:	e59f4838 	ldr	r4, [pc, #2104]	; b614 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x98>
-    add8:	e3a03032 	mov	r3, #50	; 0x32
-    addc:	e3a02032 	mov	r2, #50	; 0x32
-    ade0:	e3a010d5 	mov	r1, #213	; 0xd5
-    ade4:	e59f082c 	ldr	r0, [pc, #2092]	; b618 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x9c>
-    ade8:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    adec:	eb0005d4 	bl	c544 <drawRect>
-    adf0:	e59f0824 	ldr	r0, [pc, #2084]	; b61c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xa0>
-    adf4:	e59f1824 	ldr	r1, [pc, #2084]	; b620 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xa4>
-    adf8:	e59f2824 	ldr	r2, [pc, #2084]	; b624 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xa8>
-    adfc:	e59f3824 	ldr	r3, [pc, #2084]	; b628 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xac>
-    ae00:	eb000280 	bl	b808 <WriteSentence>
-    ae04:	e59f4814 	ldr	r4, [pc, #2068]	; b620 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xa4>
-    ae08:	e3a03088 	mov	r3, #136	; 0x88
-    ae0c:	e3a02088 	mov	r2, #136	; 0x88
-    ae10:	e3a01e21 	mov	r1, #528	; 0x210
-    ae14:	e3a00fa1 	mov	r0, #644	; 0x284
-    ae18:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    ae1c:	eb0005c8 	bl	c544 <drawRect>
-    ae20:	e59f47ec 	ldr	r4, [pc, #2028]	; b614 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x98>
-    ae24:	e3a03084 	mov	r3, #132	; 0x84
-    ae28:	e3a02084 	mov	r2, #132	; 0x84
-    ae2c:	e59f17f8 	ldr	r1, [pc, #2040]	; b62c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xb0>
-    ae30:	e59f07f8 	ldr	r0, [pc, #2040]	; b630 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xb4>
-    ae34:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    ae38:	eb0005c1 	bl	c544 <drawRect>
-    ae3c:	eb000000 	bl	ae44 <UpdateScore>
-    ae40:	e8bd8010 	pop	{r4, pc}
+0000ad28 <DrawBoard>:
+    ad28:	e92d4010 	push	{r4, lr}
+    ad2c:	e3a04a0e 	mov	r4, #57344	; 0xe000
+    ad30:	e3a03004 	mov	r3, #4
+    ad34:	e3a02fa2 	mov	r2, #648	; 0x288
+    ad38:	e3a0104c 	mov	r1, #76	; 0x4c
+    ad3c:	e3a000bc 	mov	r0, #188	; 0xbc
+    ad40:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    ad44:	eb000602 	bl	c554 <drawRect>
+    ad48:	e3a04a0e 	mov	r4, #57344	; 0xe000
+    ad4c:	e3a03004 	mov	r3, #4
+    ad50:	e3a02fa2 	mov	r2, #648	; 0x288
+    ad54:	e3a01e2b 	mov	r1, #688	; 0x2b0
+    ad58:	e3a000bc 	mov	r0, #188	; 0xbc
+    ad5c:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    ad60:	eb0005fb 	bl	c554 <drawRect>
+    ad64:	e3a04a0e 	mov	r4, #57344	; 0xe000
+    ad68:	e3a03e26 	mov	r3, #608	; 0x260
+    ad6c:	e3a02004 	mov	r2, #4
+    ad70:	e3a01050 	mov	r1, #80	; 0x50
+    ad74:	e3a000bc 	mov	r0, #188	; 0xbc
+    ad78:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    ad7c:	eb0005f4 	bl	c554 <drawRect>
+    ad80:	e3a04a0e 	mov	r4, #57344	; 0xe000
+    ad84:	e3a03e26 	mov	r3, #608	; 0x260
+    ad88:	e3a02004 	mov	r2, #4
+    ad8c:	e3a01050 	mov	r1, #80	; 0x50
+    ad90:	e3a00c02 	mov	r0, #512	; 0x200
+    ad94:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    ad98:	eb0005ed 	bl	c554 <drawRect>
+    ad9c:	e3a04a0e 	mov	r4, #57344	; 0xe000
+    ada0:	e3a03e26 	mov	r3, #608	; 0x260
+    ada4:	e3a02004 	mov	r2, #4
+    ada8:	e3a01050 	mov	r1, #80	; 0x50
+    adac:	e3a00d0d 	mov	r0, #832	; 0x340
+    adb0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    adb4:	eb0005e6 	bl	c554 <drawRect>
+    adb8:	e59f0854 	ldr	r0, [pc, #2132]	; b614 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x88>
+    adbc:	e59f1854 	ldr	r1, [pc, #2132]	; b618 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x8c>
+    adc0:	e59f2854 	ldr	r2, [pc, #2132]	; b61c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x90>
+    adc4:	e3a030e6 	mov	r3, #230	; 0xe6
+    adc8:	eb000292 	bl	b818 <WriteSentence>
+    adcc:	e59f4844 	ldr	r4, [pc, #2116]	; b618 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x8c>
+    add0:	e3a03036 	mov	r3, #54	; 0x36
+    add4:	e3a02036 	mov	r2, #54	; 0x36
+    add8:	e3a010d3 	mov	r1, #211	; 0xd3
+    addc:	e59f083c 	ldr	r0, [pc, #2108]	; b620 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x94>
+    ade0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    ade4:	eb0005da 	bl	c554 <drawRect>
+    ade8:	e59f4834 	ldr	r4, [pc, #2100]	; b624 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x98>
+    adec:	e3a03032 	mov	r3, #50	; 0x32
+    adf0:	e3a02032 	mov	r2, #50	; 0x32
+    adf4:	e3a010d5 	mov	r1, #213	; 0xd5
+    adf8:	e59f0828 	ldr	r0, [pc, #2088]	; b628 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x9c>
+    adfc:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    ae00:	eb0005d3 	bl	c554 <drawRect>
+    ae04:	e59f0820 	ldr	r0, [pc, #2080]	; b62c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xa0>
+    ae08:	e59f1820 	ldr	r1, [pc, #2080]	; b630 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xa4>
+    ae0c:	e59f2820 	ldr	r2, [pc, #2080]	; b634 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xa8>
+    ae10:	e59f3820 	ldr	r3, [pc, #2080]	; b638 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xac>
+    ae14:	eb00027f 	bl	b818 <WriteSentence>
+    ae18:	e59f4810 	ldr	r4, [pc, #2064]	; b630 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xa4>
+    ae1c:	e3a03088 	mov	r3, #136	; 0x88
+    ae20:	e3a02088 	mov	r2, #136	; 0x88
+    ae24:	e3a01e21 	mov	r1, #528	; 0x210
+    ae28:	e3a00fa1 	mov	r0, #644	; 0x284
+    ae2c:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    ae30:	eb0005c7 	bl	c554 <drawRect>
+    ae34:	e59f47e8 	ldr	r4, [pc, #2024]	; b624 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x98>
+    ae38:	e3a03084 	mov	r3, #132	; 0x84
+    ae3c:	e3a02084 	mov	r2, #132	; 0x84
+    ae40:	e59f17f4 	ldr	r1, [pc, #2036]	; b63c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xb0>
+    ae44:	e59f07f4 	ldr	r0, [pc, #2036]	; b640 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xb4>
+    ae48:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    ae4c:	eb0005c0 	bl	c554 <drawRect>
+    ae50:	eb000000 	bl	ae58 <UpdateScore>
+    ae54:	e8bd8010 	pop	{r4, pc}
 
-0000ae44 <UpdateScore>:
-    ae44:	e92d4010 	push	{r4, lr}
-    ae48:	e59f47c4 	ldr	r4, [pc, #1988]	; b614 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x98>
-    ae4c:	e3a03014 	mov	r3, #20
-    ae50:	e3a02018 	mov	r2, #24
-    ae54:	e3a010e4 	mov	r1, #228	; 0xe4
-    ae58:	e59f07d4 	ldr	r0, [pc, #2004]	; b634 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xb8>
-    ae5c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    ae60:	eb0005b7 	bl	c544 <drawRect>
-    ae64:	e59f0794 	ldr	r0, [pc, #1940]	; b600 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x84>
-    ae68:	e5901000 	ldr	r1, [r0]
-    ae6c:	e3510063 	cmp	r1, #99	; 0x63
-    ae70:	ca000011 	bgt	aebc <threeDigitScore>
-    ae74:	e3510009 	cmp	r1, #9
-    ae78:	ca000003 	bgt	ae8c <twoDigitScore>
+0000ae58 <UpdateScore>:
+    ae58:	e92d4010 	push	{r4, lr}
+    ae5c:	e59f47c0 	ldr	r4, [pc, #1984]	; b624 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x98>
+    ae60:	e3a03014 	mov	r3, #20
+    ae64:	e3a02018 	mov	r2, #24
+    ae68:	e3a010e4 	mov	r1, #228	; 0xe4
+    ae6c:	e59f07d0 	ldr	r0, [pc, #2000]	; b644 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xb8>
+    ae70:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    ae74:	eb0005b6 	bl	c554 <drawRect>
+    ae78:	e59f0788 	ldr	r0, [pc, #1928]	; b608 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x7c>
+    ae7c:	e5901000 	ldr	r1, [r0]
+    ae80:	e3510063 	cmp	r1, #99	; 0x63
+    ae84:	ca000011 	bgt	aed0 <threeDigitScore>
+    ae88:	e3510009 	cmp	r1, #9
+    ae8c:	ca000003 	bgt	aea0 <twoDigitScore>
 
-0000ae7c <oneDigitScore>:
-    ae7c:	e59f07b4 	ldr	r0, [pc, #1972]	; b638 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xbc>
-    ae80:	e2811030 	add	r1, r1, #48	; 0x30
-    ae84:	e5c01006 	strb	r1, [r0, #6]
-    ae88:	ea000010 	b	aed0 <PrintScore>
+0000ae90 <oneDigitScore>:
+    ae90:	e59f07b0 	ldr	r0, [pc, #1968]	; b648 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xbc>
+    ae94:	e2811030 	add	r1, r1, #48	; 0x30
+    ae98:	e5c01006 	strb	r1, [r0, #6]
+    ae9c:	ea000010 	b	aee4 <PrintScore>
 
-0000ae8c <twoDigitScore>:
-    ae8c:	e59f07a4 	ldr	r0, [pc, #1956]	; b638 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xbc>
-    ae90:	e3a02000 	mov	r2, #0
+0000aea0 <twoDigitScore>:
+    aea0:	e59f07a0 	ldr	r0, [pc, #1952]	; b648 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xbc>
+    aea4:	e3a02000 	mov	r2, #0
 
-0000ae94 <twoDigitScoreLoop>:
-    ae94:	e351000a 	cmp	r1, #10
-    ae98:	ba000002 	blt	aea8 <twoDigitScoreLoopDone>
-    ae9c:	e241100a 	sub	r1, r1, #10
-    aea0:	e2822001 	add	r2, r2, #1
-    aea4:	eafffffa 	b	ae94 <twoDigitScoreLoop>
+0000aea8 <twoDigitScoreLoop>:
+    aea8:	e351000a 	cmp	r1, #10
+    aeac:	ba000002 	blt	aebc <twoDigitScoreLoopDone>
+    aeb0:	e241100a 	sub	r1, r1, #10
+    aeb4:	e2822001 	add	r2, r2, #1
+    aeb8:	eafffffa 	b	aea8 <twoDigitScoreLoop>
 
-0000aea8 <twoDigitScoreLoopDone>:
-    aea8:	e2811030 	add	r1, r1, #48	; 0x30
-    aeac:	e2822030 	add	r2, r2, #48	; 0x30
-    aeb0:	e5c02005 	strb	r2, [r0, #5]
-    aeb4:	e5c01006 	strb	r1, [r0, #6]
-    aeb8:	ea000004 	b	aed0 <PrintScore>
+0000aebc <twoDigitScoreLoopDone>:
+    aebc:	e2811030 	add	r1, r1, #48	; 0x30
+    aec0:	e2822030 	add	r2, r2, #48	; 0x30
+    aec4:	e5c02005 	strb	r2, [r0, #5]
+    aec8:	e5c01006 	strb	r1, [r0, #6]
+    aecc:	ea000004 	b	aee4 <PrintScore>
 
-0000aebc <threeDigitScore>:
-    aebc:	e2411064 	sub	r1, r1, #100	; 0x64
-    aec0:	e59f0770 	ldr	r0, [pc, #1904]	; b638 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xbc>
-    aec4:	e3a02031 	mov	r2, #49	; 0x31
-    aec8:	e5c02004 	strb	r2, [r0, #4]
-    aecc:	eaffffee 	b	ae8c <twoDigitScore>
+0000aed0 <threeDigitScore>:
+    aed0:	e2411064 	sub	r1, r1, #100	; 0x64
+    aed4:	e59f076c 	ldr	r0, [pc, #1900]	; b648 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xbc>
+    aed8:	e3a02031 	mov	r2, #49	; 0x31
+    aedc:	e5c02004 	strb	r2, [r0, #4]
+    aee0:	eaffffee 	b	aea0 <twoDigitScore>
 
-0000aed0 <PrintScore>:
-    aed0:	e59f0760 	ldr	r0, [pc, #1888]	; b638 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xbc>
-    aed4:	e3a01000 	mov	r1, #0
-    aed8:	e59f2754 	ldr	r2, [pc, #1876]	; b634 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xb8>
-    aedc:	e3a030e6 	mov	r3, #230	; 0xe6
-    aee0:	eb000248 	bl	b808 <WriteSentence>
-    aee4:	e8bd8010 	pop	{r4, pc}
+0000aee4 <PrintScore>:
+    aee4:	e59f075c 	ldr	r0, [pc, #1884]	; b648 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xbc>
+    aee8:	e3a01000 	mov	r1, #0
+    aeec:	e59f2750 	ldr	r2, [pc, #1872]	; b644 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xb8>
+    aef0:	e3a030e6 	mov	r3, #230	; 0xe6
+    aef4:	eb000247 	bl	b818 <WriteSentence>
+    aef8:	e8bd8010 	pop	{r4, pc}
 
-0000aee8 <ClearScreenBlack>:
-    aee8:	e92d4600 	push	{r9, sl, lr}
-    aeec:	e59f0748 	ldr	r0, [pc, #1864]	; b63c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xc0>
-    aef0:	e5909014 	ldr	r9, [r0, #20]
-    aef4:	e590a018 	ldr	sl, [r0, #24]
-    aef8:	e3a00000 	mov	r0, #0
-    aefc:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
-    af00:	e52da004 	push	{sl}		; (str sl, [sp, #-4]!)
-    af04:	e52d9004 	push	{r9}		; (str r9, [sp, #-4]!)
-    af08:	e3a00000 	mov	r0, #0
-    af0c:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
+0000aefc <ClearScreenBlack>:
+    aefc:	e92d4600 	push	{r9, sl, lr}
+    af00:	e59f0744 	ldr	r0, [pc, #1860]	; b64c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xc0>
+    af04:	e5909014 	ldr	r9, [r0, #20]
+    af08:	e590a018 	ldr	sl, [r0, #24]
+    af0c:	e3a00000 	mov	r0, #0
     af10:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
-    af14:	eb00058a 	bl	c544 <drawRect>
-    af18:	e8bd8600 	pop	{r9, sl, pc}
+    af14:	e52da004 	push	{sl}		; (str sl, [sp, #-4]!)
+    af18:	e52d9004 	push	{r9}		; (str r9, [sp, #-4]!)
+    af1c:	e3a00000 	mov	r0, #0
+    af20:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
+    af24:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
+    af28:	eb000589 	bl	c554 <drawRect>
+    af2c:	e8bd8600 	pop	{r9, sl, pc}
 
-0000af1c <tetrisInitGrid>:
-    af1c:	e59f06d4 	ldr	r0, [pc, #1748]	; b5f8 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x7c>
-    af20:	e280100c 	add	r1, r0, #12
-    af24:	e59f26d0 	ldr	r2, [pc, #1744]	; b5fc <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x80>
-    af28:	e3a03000 	mov	r3, #0
+0000af30 <tetrisInitGrid>:
+    af30:	e59f06d4 	ldr	r0, [pc, #1748]	; b60c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x80>
+    af34:	e280100c 	add	r1, r0, #12
+    af38:	e59f26d0 	ldr	r2, [pc, #1744]	; b610 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x84>
+    af3c:	e3a03000 	mov	r3, #0
 
-0000af2c <forEach_block_in_tetrisGrid_loop>:
-    af2c:	e5813000 	str	r3, [r1]
-    af30:	e2811004 	add	r1, r1, #4
-    af34:	e1510002 	cmp	r1, r2
-    af38:	aa000000 	bge	af40 <forEach_block_in_tetrisGrid_loopEnd>
-    af3c:	bafffffa 	blt	af2c <forEach_block_in_tetrisGrid_loop>
+0000af40 <forEach_block_in_tetrisGrid_loop>:
+    af40:	e5813000 	str	r3, [r1]
+    af44:	e2811004 	add	r1, r1, #4
+    af48:	e1510002 	cmp	r1, r2
+    af4c:	aa000000 	bge	af54 <forEach_block_in_tetrisGrid_loopEnd>
+    af50:	bafffffa 	blt	af40 <forEach_block_in_tetrisGrid_loop>
 
-0000af40 <forEach_block_in_tetrisGrid_loopEnd>:
-    af40:	e1a0f00e 	mov	pc, lr
+0000af54 <forEach_block_in_tetrisGrid_loopEnd>:
+    af54:	e1a0f00e 	mov	pc, lr
 
-0000af44 <tetrisSetGridBlockColor>:
-    af44:	e8bd0007 	pop	{r0, r1, r2}
-    af48:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    af4c:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    af50:	e59f36a0 	ldr	r3, [pc, #1696]	; b5f8 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x7c>
-    af54:	e8930070 	ldm	r3, {r4, r5, r6}
-    af58:	e283700c 	add	r7, r3, #12
-    af5c:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
-    af60:	e92d0013 	push	{r0, r1, r4}
-    af64:	eb00058c 	bl	c59c <positionToArrayOffset>
-    af68:	e49d8004 	pop	{r8}		; (ldr r8, [sp], #4)
-    af6c:	e1a08108 	lsl	r8, r8, #2
-    af70:	e49d2004 	pop	{r2}		; (ldr r2, [sp], #4)
-    af74:	e7872008 	str	r2, [r7, r8]
-    af78:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    af7c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    af80:	e1a0f00e 	mov	pc, lr
+0000af58 <tetrisSetGridBlockColor>:
+    af58:	e8bd0007 	pop	{r0, r1, r2}
+    af5c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    af60:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    af64:	e59f36a0 	ldr	r3, [pc, #1696]	; b60c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x80>
+    af68:	e8930070 	ldm	r3, {r4, r5, r6}
+    af6c:	e283700c 	add	r7, r3, #12
+    af70:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
+    af74:	e92d0013 	push	{r0, r1, r4}
+    af78:	eb00058b 	bl	c5ac <positionToArrayOffset>
+    af7c:	e49d8004 	pop	{r8}		; (ldr r8, [sp], #4)
+    af80:	e1a08108 	lsl	r8, r8, #2
+    af84:	e49d2004 	pop	{r2}		; (ldr r2, [sp], #4)
+    af88:	e7872008 	str	r2, [r7, r8]
+    af8c:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    af90:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    af94:	e1a0f00e 	mov	pc, lr
 
-0000af84 <tetrisGetGridBlockColor>:
-    af84:	e8bd0006 	pop	{r1, r2}
-    af88:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    af8c:	e92d03f0 	push	{r4, r5, r6, r7, r8, r9}
-    af90:	e59f3660 	ldr	r3, [pc, #1632]	; b5f8 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x7c>
-    af94:	e8930070 	ldm	r3, {r4, r5, r6}
-    af98:	e283700c 	add	r7, r3, #12
-    af9c:	e3e094ff 	mvn	r9, #-16777216	; 0xff000000
-    afa0:	e3510000 	cmp	r1, #0
-    afa4:	ba00000a 	blt	afd4 <tetrisGetGridBlockColorEnd>
-    afa8:	e1510004 	cmp	r1, r4
-    afac:	aa000008 	bge	afd4 <tetrisGetGridBlockColorEnd>
-    afb0:	e3520000 	cmp	r2, #0
-    afb4:	ba000006 	blt	afd4 <tetrisGetGridBlockColorEnd>
-    afb8:	e1520005 	cmp	r2, r5
-    afbc:	aa000004 	bge	afd4 <tetrisGetGridBlockColorEnd>
+0000af98 <tetrisGetGridBlockColor>:
+    af98:	e8bd0006 	pop	{r1, r2}
+    af9c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    afa0:	e92d03f0 	push	{r4, r5, r6, r7, r8, r9}
+    afa4:	e59f3660 	ldr	r3, [pc, #1632]	; b60c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x80>
+    afa8:	e8930070 	ldm	r3, {r4, r5, r6}
+    afac:	e283700c 	add	r7, r3, #12
+    afb0:	e3e094ff 	mvn	r9, #-16777216	; 0xff000000
+    afb4:	e3510000 	cmp	r1, #0
+    afb8:	ba00000a 	blt	afe8 <tetrisGetGridBlockColorEnd>
+    afbc:	e1510004 	cmp	r1, r4
+    afc0:	aa000008 	bge	afe8 <tetrisGetGridBlockColorEnd>
+    afc4:	e3520000 	cmp	r2, #0
+    afc8:	ba000006 	blt	afe8 <tetrisGetGridBlockColorEnd>
+    afcc:	e1520005 	cmp	r2, r5
+    afd0:	aa000004 	bge	afe8 <tetrisGetGridBlockColorEnd>
 
-0000afc0 <tetrisGetGridBlockColor_validInput>:
-    afc0:	e92d0016 	push	{r1, r2, r4}
-    afc4:	eb000574 	bl	c59c <positionToArrayOffset>
-    afc8:	e49d8004 	pop	{r8}		; (ldr r8, [sp], #4)
-    afcc:	e1a08108 	lsl	r8, r8, #2
-    afd0:	e7979008 	ldr	r9, [r7, r8]
+0000afd4 <tetrisGetGridBlockColor_validInput>:
+    afd4:	e92d0016 	push	{r1, r2, r4}
+    afd8:	eb000573 	bl	c5ac <positionToArrayOffset>
+    afdc:	e49d8004 	pop	{r8}		; (ldr r8, [sp], #4)
+    afe0:	e1a08108 	lsl	r8, r8, #2
+    afe4:	e7979008 	ldr	r9, [r7, r8]
 
-0000afd4 <tetrisGetGridBlockColorEnd>:
-    afd4:	e1a00009 	mov	r0, r9
-    afd8:	e8bd03f0 	pop	{r4, r5, r6, r7, r8, r9}
-    afdc:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    afe0:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
-    afe4:	e1a0f00e 	mov	pc, lr
+0000afe8 <tetrisGetGridBlockColorEnd>:
+    afe8:	e1a00009 	mov	r0, r9
+    afec:	e8bd03f0 	pop	{r4, r5, r6, r7, r8, r9}
+    aff0:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    aff4:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
+    aff8:	e1a0f00e 	mov	pc, lr
 
-0000afe8 <tetrisClearGridBlock>:
-    afe8:	e8bd0003 	pop	{r0, r1}
-    afec:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    aff0:	e3a02000 	mov	r2, #0
-    aff4:	e92d0007 	push	{r0, r1, r2}
-    aff8:	ebffffd1 	bl	af44 <tetrisSetGridBlockColor>
-    affc:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+0000affc <tetrisClearGridBlock>:
+    affc:	e8bd0003 	pop	{r0, r1}
+    b000:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    b004:	e3a02000 	mov	r2, #0
+    b008:	e92d0007 	push	{r0, r1, r2}
+    b00c:	ebffffd1 	bl	af58 <tetrisSetGridBlockColor>
+    b010:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
 
-0000b000 <tetrisDrawGrid>:
-    b000:	e1a0000d 	mov	r0, sp
-    b004:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    b008:	e92d1ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
-    b00c:	e59f75e4 	ldr	r7, [pc, #1508]	; b5f8 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x7c>
-    b010:	e8970700 	ldm	r7, {r8, r9, sl}
-    b014:	e287b00c 	add	fp, r7, #12
-    b018:	e1a07000 	mov	r7, r0
-    b01c:	e3a04000 	mov	r4, #0
-    b020:	e3a05000 	mov	r5, #0
-    b024:	e3a06000 	mov	r6, #0
+0000b014 <tetrisDrawGrid>:
+    b014:	e1a0000d 	mov	r0, sp
+    b018:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    b01c:	e92d1ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
+    b020:	e59f75e4 	ldr	r7, [pc, #1508]	; b60c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x80>
+    b024:	e8970700 	ldm	r7, {r8, r9, sl}
+    b028:	e287b00c 	add	fp, r7, #12
+    b02c:	e1a07000 	mov	r7, r0
+    b030:	e3a04000 	mov	r4, #0
+    b034:	e3a05000 	mov	r5, #0
+    b038:	e3a06000 	mov	r6, #0
 
-0000b028 <tetrisDrawGrid_for_curCol_lt_cols_loop>:
-    b028:	e52d5004 	push	{r5}		; (str r5, [sp, #-4]!)
+0000b03c <tetrisDrawGrid_for_curCol_lt_cols_loop>:
+    b03c:	e52d5004 	push	{r5}		; (str r5, [sp, #-4]!)
 
-0000b02c <tetrisDrawGrid_for_curRow_lt_rows_loop>:
-    b02c:	e92d1ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
-    b030:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    b034:	e92d1fff 	push	{r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip}
-    b038:	e89707c0 	ldm	r7, {r6, r7, r8, r9, sl}
-    b03c:	e92d07c0 	push	{r6, r7, r8, r9, sl}
-    b040:	e92d0030 	push	{r4, r5}
-    b044:	eb00011f 	bl	b4c8 <tetrisBlockHasDataForGridPoint>
-    b048:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
-    b04c:	e3300000 	teq	r0, #0
-    b050:	e8bd07c0 	pop	{r6, r7, r8, r9, sl}
-    b054:	e8bd1fff 	pop	{r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip}
-    b058:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    b05c:	0a000001 	beq	b068 <tetrisDrawGridBlock>
+0000b040 <tetrisDrawGrid_for_curRow_lt_rows_loop>:
+    b040:	e92d1ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
+    b044:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    b048:	e92d1fff 	push	{r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip}
+    b04c:	e89707c0 	ldm	r7, {r6, r7, r8, r9, sl}
+    b050:	e92d07c0 	push	{r6, r7, r8, r9, sl}
+    b054:	e92d0030 	push	{r4, r5}
+    b058:	eb00011e 	bl	b4d8 <tetrisBlockHasDataForGridPoint>
+    b05c:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
+    b060:	e3300000 	teq	r0, #0
+    b064:	e8bd07c0 	pop	{r6, r7, r8, r9, sl}
+    b068:	e8bd1fff 	pop	{r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip}
+    b06c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    b070:	0a000001 	beq	b07c <tetrisDrawGridBlock>
 
-0000b060 <tetrisDrawGridBlockSkip>:
-    b060:	e320f000 	nop	{0}
-    b064:	ea00000d 	b	b0a0 <tetrisDrawGridBlockEnd>
+0000b074 <tetrisDrawGridBlockSkip>:
+    b074:	e320f000 	nop	{0}
+    b078:	ea00000d 	b	b0b4 <tetrisDrawGridBlockEnd>
 
-0000b068 <tetrisDrawGridBlock>:
-    b068:	e92d0130 	push	{r4, r5, r8}
-    b06c:	eb00054a 	bl	c59c <positionToArrayOffset>
-    b070:	e49dc004 	pop	{ip}		; (ldr ip, [sp], #4)
-    b074:	e1a0c10c 	lsl	ip, ip, #2
-    b078:	e79b600c 	ldr	r6, [fp, ip]
-    b07c:	e92d000f 	push	{r0, r1, r2, r3}
-    b080:	e92d0030 	push	{r4, r5}
-    b084:	eb00003a 	bl	b174 <tetrisGetRectForGridPosition>
-    b088:	e8bd000f 	pop	{r0, r1, r2, r3}
-    b08c:	e28000c0 	add	r0, r0, #192	; 0xc0
-    b090:	e2811050 	add	r1, r1, #80	; 0x50
-    b094:	e92d004f 	push	{r0, r1, r2, r3, r6}
-    b098:	eb000529 	bl	c544 <drawRect>
+0000b07c <tetrisDrawGridBlock>:
+    b07c:	e92d0130 	push	{r4, r5, r8}
+    b080:	eb000549 	bl	c5ac <positionToArrayOffset>
+    b084:	e49dc004 	pop	{ip}		; (ldr ip, [sp], #4)
+    b088:	e1a0c10c 	lsl	ip, ip, #2
+    b08c:	e79b600c 	ldr	r6, [fp, ip]
+    b090:	e92d000f 	push	{r0, r1, r2, r3}
+    b094:	e92d0030 	push	{r4, r5}
+    b098:	eb00003a 	bl	b188 <tetrisGetRectForGridPosition>
     b09c:	e8bd000f 	pop	{r0, r1, r2, r3}
+    b0a0:	e28000c0 	add	r0, r0, #192	; 0xc0
+    b0a4:	e2811050 	add	r1, r1, #80	; 0x50
+    b0a8:	e92d004f 	push	{r0, r1, r2, r3, r6}
+    b0ac:	eb000528 	bl	c554 <drawRect>
+    b0b0:	e8bd000f 	pop	{r0, r1, r2, r3}
 
-0000b0a0 <tetrisDrawGridBlockEnd>:
-    b0a0:	e8bd1ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
-    b0a4:	e2855001 	add	r5, r5, #1
-    b0a8:	e1550009 	cmp	r5, r9
-    b0ac:	baffffde 	blt	b02c <tetrisDrawGrid_for_curRow_lt_rows_loop>
-    b0b0:	e49d5004 	pop	{r5}		; (ldr r5, [sp], #4)
-    b0b4:	e2844001 	add	r4, r4, #1
-    b0b8:	e1540008 	cmp	r4, r8
-    b0bc:	baffffd9 	blt	b028 <tetrisDrawGrid_for_curCol_lt_cols_loop>
-    b0c0:	e8bd1ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
-    b0c4:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    b0c8:	e1a0f00e 	mov	pc, lr
+0000b0b4 <tetrisDrawGridBlockEnd>:
+    b0b4:	e8bd1ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
+    b0b8:	e2855001 	add	r5, r5, #1
+    b0bc:	e1550009 	cmp	r5, r9
+    b0c0:	baffffde 	blt	b040 <tetrisDrawGrid_for_curRow_lt_rows_loop>
+    b0c4:	e49d5004 	pop	{r5}		; (ldr r5, [sp], #4)
+    b0c8:	e2844001 	add	r4, r4, #1
+    b0cc:	e1540008 	cmp	r4, r8
+    b0d0:	baffffd9 	blt	b03c <tetrisDrawGrid_for_curCol_lt_cols_loop>
+    b0d4:	e8bd1ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
+    b0d8:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    b0dc:	e1a0f00e 	mov	pc, lr
 
-0000b0cc <tetrisUpdateGrid>:
-    b0cc:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    b0d0:	e92d1ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
-    b0d4:	e59f751c 	ldr	r7, [pc, #1308]	; b5f8 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x7c>
-    b0d8:	e8970700 	ldm	r7, {r8, r9, sl}
-    b0dc:	e287b00c 	add	fp, r7, #12
-    b0e0:	e3a04000 	mov	r4, #0
-    b0e4:	e1a05009 	mov	r5, r9
-    b0e8:	e3a06000 	mov	r6, #0
+0000b0e0 <tetrisUpdateGrid>:
+    b0e0:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    b0e4:	e92d1ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
+    b0e8:	e59f751c 	ldr	r7, [pc, #1308]	; b60c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x80>
+    b0ec:	e8970700 	ldm	r7, {r8, r9, sl}
+    b0f0:	e287b00c 	add	fp, r7, #12
+    b0f4:	e3a04000 	mov	r4, #0
+    b0f8:	e1a05009 	mov	r5, r9
+    b0fc:	e3a06000 	mov	r6, #0
 
-0000b0ec <tetrisUpdateGrid_for_curCol_lt_cols_loop>:
-    b0ec:	e52d5004 	push	{r5}		; (str r5, [sp, #-4]!)
+0000b100 <tetrisUpdateGrid_for_curCol_lt_cols_loop>:
+    b100:	e52d5004 	push	{r5}		; (str r5, [sp, #-4]!)
 
-0000b0f0 <tetrisUpdateGrid_for_curRow_ge_0_loop>:
-    b0f0:	e92d1ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
-    b0f4:	e92d0030 	push	{r4, r5}
-    b0f8:	e92d0030 	push	{r4, r5}
-    b0fc:	ebffffa0 	bl	af84 <tetrisGetGridBlockColor>
-    b100:	e49d6004 	pop	{r6}		; (ldr r6, [sp], #4)
-    b104:	e3360000 	teq	r6, #0
-    b108:	e8bd0030 	pop	{r4, r5}
-    b10c:	0a00000d 	beq	b148 <tetrisUpdateGridBlockBelowHasData>
-    b110:	1affffff 	bne	b114 <tetrisUpdateGridCurrentBlockHasData>
+0000b104 <tetrisUpdateGrid_for_curRow_ge_0_loop>:
+    b104:	e92d1ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
+    b108:	e92d0030 	push	{r4, r5}
+    b10c:	e92d0030 	push	{r4, r5}
+    b110:	ebffffa0 	bl	af98 <tetrisGetGridBlockColor>
+    b114:	e49d6004 	pop	{r6}		; (ldr r6, [sp], #4)
+    b118:	e3360000 	teq	r6, #0
+    b11c:	e8bd0030 	pop	{r4, r5}
+    b120:	0a00000d 	beq	b15c <tetrisUpdateGridBlockBelowHasData>
+    b124:	1affffff 	bne	b128 <tetrisUpdateGridCurrentBlockHasData>
 
-0000b114 <tetrisUpdateGridCurrentBlockHasData>:
-    b114:	e1a00004 	mov	r0, r4
-    b118:	e2851001 	add	r1, r5, #1
-    b11c:	e92d0003 	push	{r0, r1}
-    b120:	e92d0003 	push	{r0, r1}
-    b124:	ebffff96 	bl	af84 <tetrisGetGridBlockColor>
-    b128:	e49d2004 	pop	{r2}		; (ldr r2, [sp], #4)
-    b12c:	e3320000 	teq	r2, #0
-    b130:	e8bd0003 	pop	{r0, r1}
-    b134:	1a000003 	bne	b148 <tetrisUpdateGridBlockBelowHasData>
-    b138:	e92d0043 	push	{r0, r1, r6}
-    b13c:	ebffff80 	bl	af44 <tetrisSetGridBlockColor>
-    b140:	e92d0030 	push	{r4, r5}
-    b144:	ebffffa7 	bl	afe8 <tetrisClearGridBlock>
+0000b128 <tetrisUpdateGridCurrentBlockHasData>:
+    b128:	e1a00004 	mov	r0, r4
+    b12c:	e2851001 	add	r1, r5, #1
+    b130:	e92d0003 	push	{r0, r1}
+    b134:	e92d0003 	push	{r0, r1}
+    b138:	ebffff96 	bl	af98 <tetrisGetGridBlockColor>
+    b13c:	e49d2004 	pop	{r2}		; (ldr r2, [sp], #4)
+    b140:	e3320000 	teq	r2, #0
+    b144:	e8bd0003 	pop	{r0, r1}
+    b148:	1a000003 	bne	b15c <tetrisUpdateGridBlockBelowHasData>
+    b14c:	e92d0043 	push	{r0, r1, r6}
+    b150:	ebffff80 	bl	af58 <tetrisSetGridBlockColor>
+    b154:	e92d0030 	push	{r4, r5}
+    b158:	ebffffa7 	bl	affc <tetrisClearGridBlock>
 
-0000b148 <tetrisUpdateGridBlockBelowHasData>:
-    b148:	e8bd1ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
-    b14c:	e2455001 	sub	r5, r5, #1
-    b150:	e3550000 	cmp	r5, #0
-    b154:	aaffffe5 	bge	b0f0 <tetrisUpdateGrid_for_curRow_ge_0_loop>
-    b158:	e49d5004 	pop	{r5}		; (ldr r5, [sp], #4)
-    b15c:	e2844001 	add	r4, r4, #1
-    b160:	e1540008 	cmp	r4, r8
-    b164:	baffffe0 	blt	b0ec <tetrisUpdateGrid_for_curCol_lt_cols_loop>
-    b168:	e8bd1ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
-    b16c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    b170:	e1a0f00e 	mov	pc, lr
+0000b15c <tetrisUpdateGridBlockBelowHasData>:
+    b15c:	e8bd1ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
+    b160:	e2455001 	sub	r5, r5, #1
+    b164:	e3550000 	cmp	r5, #0
+    b168:	aaffffe5 	bge	b104 <tetrisUpdateGrid_for_curRow_ge_0_loop>
+    b16c:	e49d5004 	pop	{r5}		; (ldr r5, [sp], #4)
+    b170:	e2844001 	add	r4, r4, #1
+    b174:	e1540008 	cmp	r4, r8
+    b178:	baffffe0 	blt	b100 <tetrisUpdateGrid_for_curCol_lt_cols_loop>
+    b17c:	e8bd1ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, ip}
+    b180:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    b184:	e1a0f00e 	mov	pc, lr
 
-0000b174 <tetrisGetRectForGridPosition>:
-    b174:	e8bd0003 	pop	{r0, r1}
-    b178:	e92d00f0 	push	{r4, r5, r6, r7}
-    b17c:	e59f4474 	ldr	r4, [pc, #1140]	; b5f8 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x7c>
-    b180:	e89400e0 	ldm	r4, {r5, r6, r7}
-    b184:	e1a02007 	mov	r2, r7
-    b188:	e1a03007 	mov	r3, r7
-    b18c:	e0000092 	mul	r0, r2, r0
-    b190:	e0010193 	mul	r1, r3, r1
-    b194:	e8bd00f0 	pop	{r4, r5, r6, r7}
-    b198:	e92d000f 	push	{r0, r1, r2, r3}
-    b19c:	e1a0f00e 	mov	pc, lr
+0000b188 <tetrisGetRectForGridPosition>:
+    b188:	e8bd0003 	pop	{r0, r1}
+    b18c:	e92d00f0 	push	{r4, r5, r6, r7}
+    b190:	e59f4474 	ldr	r4, [pc, #1140]	; b60c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0x80>
+    b194:	e89400e0 	ldm	r4, {r5, r6, r7}
+    b198:	e1a02007 	mov	r2, r7
+    b19c:	e1a03007 	mov	r3, r7
+    b1a0:	e0000092 	mul	r0, r2, r0
+    b1a4:	e0010193 	mul	r1, r3, r1
+    b1a8:	e8bd00f0 	pop	{r4, r5, r6, r7}
+    b1ac:	e92d000f 	push	{r0, r1, r2, r3}
+    b1b0:	e1a0f00e 	mov	pc, lr
 
-0000b1a0 <tetrisCreateNewBlock>:
-    b1a0:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    b1a4:	e59f0494 	ldr	r0, [pc, #1172]	; b640 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xc4>
-    b1a8:	e89001f0 	ldm	r0, {r4, r5, r6, r7, r8}
+0000b1b4 <tetrisCreateNewBlock>:
+    b1b4:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    b1b8:	e59f0490 	ldr	r0, [pc, #1168]	; b650 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xc4>
+    b1bc:	e89001f0 	ldm	r0, {r4, r5, r6, r7, r8}
 
-0000b1ac <initializeTetrisBlock>:
-    b1ac:	ebfffce7 	bl	a550 <randomNumber>
-    b1b0:	e3a04000 	mov	r4, #0
-    b1b4:	e3a05000 	mov	r5, #0
-    b1b8:	e59f6484 	ldr	r6, [pc, #1156]	; b644 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xc8>
-    b1bc:	e1a01100 	lsl	r1, r0, #2
-    b1c0:	e7966001 	ldr	r6, [r6, r1]
-    b1c4:	e59f747c 	ldr	r7, [pc, #1148]	; b648 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xcc>
-    b1c8:	e3300001 	teq	r0, #1
-    b1cc:	059f7478 	ldreq	r7, [pc, #1144]	; b64c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xd0>
-    b1d0:	e3300002 	teq	r0, #2
-    b1d4:	059f7474 	ldreq	r7, [pc, #1140]	; b650 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xd4>
-    b1d8:	e3300003 	teq	r0, #3
-    b1dc:	059f7470 	ldreq	r7, [pc, #1136]	; b654 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xd8>
-    b1e0:	e3300004 	teq	r0, #4
-    b1e4:	059f746c 	ldreq	r7, [pc, #1132]	; b658 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xdc>
-    b1e8:	e3300005 	teq	r0, #5
-    b1ec:	059f7468 	ldreq	r7, [pc, #1128]	; b65c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xe0>
-    b1f0:	e3300006 	teq	r0, #6
-    b1f4:	059f7464 	ldreq	r7, [pc, #1124]	; b660 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xe4>
-    b1f8:	e59f7454 	ldr	r7, [pc, #1108]	; b654 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xd8>
-    b1fc:	e3a08000 	mov	r8, #0
+0000b1c0 <initializeTetrisBlock>:
+    b1c0:	ebfffce2 	bl	a550 <randomNumber>
+    b1c4:	e3a04004 	mov	r4, #4
+    b1c8:	e3a05000 	mov	r5, #0
+    b1cc:	e59f6480 	ldr	r6, [pc, #1152]	; b654 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xc8>
+    b1d0:	e1a01100 	lsl	r1, r0, #2
+    b1d4:	e7966001 	ldr	r6, [r6, r1]
+    b1d8:	e59f7478 	ldr	r7, [pc, #1144]	; b658 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xcc>
+    b1dc:	e3300001 	teq	r0, #1
+    b1e0:	059f7474 	ldreq	r7, [pc, #1140]	; b65c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xd0>
+    b1e4:	e3300002 	teq	r0, #2
+    b1e8:	059f7470 	ldreq	r7, [pc, #1136]	; b660 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xd4>
+    b1ec:	e3300003 	teq	r0, #3
+    b1f0:	059f746c 	ldreq	r7, [pc, #1132]	; b664 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xd8>
+    b1f4:	e3300004 	teq	r0, #4
+    b1f8:	059f7468 	ldreq	r7, [pc, #1128]	; b668 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xdc>
+    b1fc:	e3300005 	teq	r0, #5
+    b200:	059f7464 	ldreq	r7, [pc, #1124]	; b66c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xe0>
+    b204:	e3300006 	teq	r0, #6
+    b208:	059f7460 	ldreq	r7, [pc, #1120]	; b670 <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop+0xe4>
+    b20c:	e3a08000 	mov	r8, #0
 
-0000b200 <initializeTetrisBlockEnd>:
-    b200:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    b204:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b208:	e1a0f00e 	mov	pc, lr
-
-0000b20c <tetrisDrawBlock>:
-    b20c:	e1a0000d 	mov	r0, sp
-    b210:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+0000b210 <initializeTetrisBlockEnd>:
+    b210:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
     b214:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b218:	e89001f0 	ldm	r0, {r4, r5, r6, r7, r8}
-    b21c:	e92d1800 	push	{fp, ip}
-    b220:	e3a0b000 	mov	fp, #0
-    b224:	e3a0c000 	mov	ip, #0
+    b218:	e1a0f00e 	mov	pc, lr
 
-0000b228 <for_i_lt_4_loop>:
-    b228:	e52dc004 	push	{ip}		; (str ip, [sp, #-4]!)
+0000b21c <tetrisDrawBlock>:
+    b21c:	e1a0000d 	mov	r0, sp
+    b220:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    b224:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    b228:	e89001f0 	ldm	r0, {r4, r5, r6, r7, r8}
+    b22c:	e92d1800 	push	{fp, ip}
+    b230:	e3a0b000 	mov	fp, #0
+    b234:	e3a0c000 	mov	ip, #0
 
-0000b22c <for_j_lt_4_loop>:
-    b22c:	e92d0070 	push	{r4, r5, r6}
-    b230:	e19720b8 	ldrh	r2, [r7, r8]
-    b234:	e084400b 	add	r4, r4, fp
-    b238:	e085500c 	add	r5, r5, ip
-    b23c:	e3a01004 	mov	r1, #4
-    b240:	e0010c91 	mul	r1, r1, ip
-    b244:	e081100b 	add	r1, r1, fp
-    b248:	e1a02112 	lsl	r2, r2, r1
-    b24c:	e3a01902 	mov	r1, #32768	; 0x8000
-    b250:	e0011002 	and	r1, r1, r2
-    b254:	e3310000 	teq	r1, #0
-    b258:	e52d6004 	push	{r6}		; (str r6, [sp, #-4]!)
-    b25c:	03a06000 	moveq	r6, #0
-    b260:	0a00000a 	beq	b290 <blockHasNoData>
+0000b238 <for_i_lt_4_loop>:
+    b238:	e52dc004 	push	{ip}		; (str ip, [sp, #-4]!)
 
-0000b264 <blockHasData>:
-    b264:	e92d000f 	push	{r0, r1, r2, r3}
-    b268:	e320f000 	nop	{0}
-    b26c:	e92d0030 	push	{r4, r5}
-    b270:	ebffffbf 	bl	b174 <tetrisGetRectForGridPosition>
-    b274:	e8bd000f 	pop	{r0, r1, r2, r3}
+0000b23c <for_j_lt_4_loop>:
+    b23c:	e92d0070 	push	{r4, r5, r6}
+    b240:	e19720b8 	ldrh	r2, [r7, r8]
+    b244:	e084400b 	add	r4, r4, fp
+    b248:	e085500c 	add	r5, r5, ip
+    b24c:	e3a01004 	mov	r1, #4
+    b250:	e0010c91 	mul	r1, r1, ip
+    b254:	e081100b 	add	r1, r1, fp
+    b258:	e1a02112 	lsl	r2, r2, r1
+    b25c:	e3a01902 	mov	r1, #32768	; 0x8000
+    b260:	e0011002 	and	r1, r1, r2
+    b264:	e3310000 	teq	r1, #0
+    b268:	e52d6004 	push	{r6}		; (str r6, [sp, #-4]!)
+    b26c:	03a06000 	moveq	r6, #0
+    b270:	0a00000a 	beq	b2a0 <blockHasNoData>
+
+0000b274 <blockHasData>:
+    b274:	e92d000f 	push	{r0, r1, r2, r3}
     b278:	e320f000 	nop	{0}
-    b27c:	e28000c0 	add	r0, r0, #192	; 0xc0
-    b280:	e2811050 	add	r1, r1, #80	; 0x50
-    b284:	e92d004f 	push	{r0, r1, r2, r3, r6}
-    b288:	eb0004ad 	bl	c544 <drawRect>
-    b28c:	e8bd000f 	pop	{r0, r1, r2, r3}
+    b27c:	e92d0030 	push	{r4, r5}
+    b280:	ebffffc0 	bl	b188 <tetrisGetRectForGridPosition>
+    b284:	e8bd000f 	pop	{r0, r1, r2, r3}
+    b288:	e320f000 	nop	{0}
+    b28c:	e28000c0 	add	r0, r0, #192	; 0xc0
+    b290:	e2811050 	add	r1, r1, #80	; 0x50
+    b294:	e92d004f 	push	{r0, r1, r2, r3, r6}
+    b298:	eb0004ad 	bl	c554 <drawRect>
+    b29c:	e8bd000f 	pop	{r0, r1, r2, r3}
 
-0000b290 <blockHasNoData>:
-    b290:	e49d6004 	pop	{r6}		; (ldr r6, [sp], #4)
-    b294:	e8bd0070 	pop	{r4, r5, r6}
-    b298:	e28cc001 	add	ip, ip, #1
-    b29c:	e35c0004 	cmp	ip, #4
-    b2a0:	baffffe1 	blt	b22c <for_j_lt_4_loop>
-    b2a4:	e49dc004 	pop	{ip}		; (ldr ip, [sp], #4)
-    b2a8:	e28bb001 	add	fp, fp, #1
-    b2ac:	e35b0004 	cmp	fp, #4
-    b2b0:	baffffdc 	blt	b228 <for_i_lt_4_loop>
-    b2b4:	e8bd1800 	pop	{fp, ip}
-    b2b8:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b2bc:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    b2c0:	e1a0f00e 	mov	pc, lr
+0000b2a0 <blockHasNoData>:
+    b2a0:	e49d6004 	pop	{r6}		; (ldr r6, [sp], #4)
+    b2a4:	e8bd0070 	pop	{r4, r5, r6}
+    b2a8:	e28cc001 	add	ip, ip, #1
+    b2ac:	e35c0004 	cmp	ip, #4
+    b2b0:	baffffe1 	blt	b23c <for_j_lt_4_loop>
+    b2b4:	e49dc004 	pop	{ip}		; (ldr ip, [sp], #4)
+    b2b8:	e28bb001 	add	fp, fp, #1
+    b2bc:	e35b0004 	cmp	fp, #4
+    b2c0:	baffffdc 	blt	b238 <for_i_lt_4_loop>
+    b2c4:	e8bd1800 	pop	{fp, ip}
+    b2c8:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    b2cc:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    b2d0:	e1a0f00e 	mov	pc, lr
 
-0000b2c4 <tetrisCheckBlockGridCollisions>:
-    b2c4:	e1a0000d 	mov	r0, sp
-    b2c8:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    b2cc:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b2d0:	e89001f0 	ldm	r0, {r4, r5, r6, r7, r8}
-    b2d4:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b2d8:	eb00009e 	bl	b558 <tetrisGetGridBitmaskForBlock>
-    b2dc:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
-    b2e0:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b2e4:	e320f000 	nop	{0}
-    b2e8:	e19710b8 	ldrh	r1, [r7, r8]
-    b2ec:	e0000001 	and	r0, r0, r1
-    b2f0:	e3500000 	cmp	r0, #0
-    b2f4:	13a00001 	movne	r0, #1
-    b2f8:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b2fc:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    b300:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
-    b304:	e1a0f00e 	mov	pc, lr
-
-0000b308 <tetrisOnBlockCollision>:
+0000b2d4 <tetrisCheckBlockGridCollisions>:
+    b2d4:	e1a0000d 	mov	r0, sp
+    b2d8:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    b2dc:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    b2e0:	e89001f0 	ldm	r0, {r4, r5, r6, r7, r8}
+    b2e4:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    b2e8:	eb00009e 	bl	b568 <tetrisGetGridBitmaskForBlock>
+    b2ec:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
+    b2f0:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    b2f4:	e320f000 	nop	{0}
+    b2f8:	e19710b8 	ldrh	r1, [r7, r8]
+    b2fc:	e0000001 	and	r0, r0, r1
+    b300:	e3500000 	cmp	r0, #0
+    b304:	13a00001 	movne	r0, #1
     b308:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b30c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    b310:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b314:	e19730b8 	ldrh	r3, [r7, r8]
-    b318:	e320f000 	nop	{0}
-    b31c:	eb000005 	bl	b338 <writeBlockToGrid>
-    b320:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b324:	ebffff9d 	bl	b1a0 <tetrisCreateNewBlock>
-    b328:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b32c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    b330:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b334:	e1a0f00e 	mov	pc, lr
+    b30c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    b310:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
+    b314:	e1a0f00e 	mov	pc, lr
 
-0000b338 <writeBlockToGrid>:
-    b338:	e1a0000d 	mov	r0, sp
-    b33c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+0000b318 <tetrisOnBlockCollision>:
+    b318:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    b31c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    b320:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    b324:	e19730b8 	ldrh	r3, [r7, r8]
+    b328:	e320f000 	nop	{0}
+    b32c:	eb000005 	bl	b348 <writeBlockToGrid>
+    b330:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    b334:	ebffff9e 	bl	b1b4 <tetrisCreateNewBlock>
+    b338:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    b33c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
     b340:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b344:	e89001f0 	ldm	r0, {r4, r5, r6, r7, r8}
-    b348:	e92d1800 	push	{fp, ip}
-    b34c:	e3a0b000 	mov	fp, #0
-    b350:	e3a0c000 	mov	ip, #0
+    b344:	e1a0f00e 	mov	pc, lr
 
-0000b354 <writeBlockToGrid_for_i_lt_4_loop>:
-    b354:	e52dc004 	push	{ip}		; (str ip, [sp, #-4]!)
+0000b348 <writeBlockToGrid>:
+    b348:	e1a0000d 	mov	r0, sp
+    b34c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    b350:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    b354:	e89001f0 	ldm	r0, {r4, r5, r6, r7, r8}
+    b358:	e92d1800 	push	{fp, ip}
+    b35c:	e3a0b000 	mov	fp, #0
+    b360:	e3a0c000 	mov	ip, #0
 
-0000b358 <writeBlockToGrid_for_j_lt_4_loop>:
-    b358:	e92d0070 	push	{r4, r5, r6}
-    b35c:	e19720b8 	ldrh	r2, [r7, r8]
-    b360:	e084400b 	add	r4, r4, fp
-    b364:	e085500c 	add	r5, r5, ip
-    b368:	e3a01004 	mov	r1, #4
-    b36c:	e0010c91 	mul	r1, r1, ip
-    b370:	e081100b 	add	r1, r1, fp
-    b374:	e1a02112 	lsl	r2, r2, r1
-    b378:	e3a01902 	mov	r1, #32768	; 0x8000
-    b37c:	e0011002 	and	r1, r1, r2
-    b380:	e3310000 	teq	r1, #0
-    b384:	0a000001 	beq	b390 <writeBlockToGrid_blockHasNoData>
+0000b364 <writeBlockToGrid_for_i_lt_4_loop>:
+    b364:	e52dc004 	push	{ip}		; (str ip, [sp, #-4]!)
 
-0000b388 <writeBlockToGrid_blockHasData>:
-    b388:	e92d0070 	push	{r4, r5, r6}
-    b38c:	ebfffeec 	bl	af44 <tetrisSetGridBlockColor>
+0000b368 <writeBlockToGrid_for_j_lt_4_loop>:
+    b368:	e92d0070 	push	{r4, r5, r6}
+    b36c:	e19720b8 	ldrh	r2, [r7, r8]
+    b370:	e084400b 	add	r4, r4, fp
+    b374:	e085500c 	add	r5, r5, ip
+    b378:	e3a01004 	mov	r1, #4
+    b37c:	e0010c91 	mul	r1, r1, ip
+    b380:	e081100b 	add	r1, r1, fp
+    b384:	e1a02112 	lsl	r2, r2, r1
+    b388:	e3a01902 	mov	r1, #32768	; 0x8000
+    b38c:	e0011002 	and	r1, r1, r2
+    b390:	e3310000 	teq	r1, #0
+    b394:	0a000001 	beq	b3a0 <writeBlockToGrid_blockHasNoData>
 
-0000b390 <writeBlockToGrid_blockHasNoData>:
-    b390:	e8bd0070 	pop	{r4, r5, r6}
-    b394:	e28cc001 	add	ip, ip, #1
-    b398:	e35c0004 	cmp	ip, #4
-    b39c:	baffffed 	blt	b358 <writeBlockToGrid_for_j_lt_4_loop>
-    b3a0:	e49dc004 	pop	{ip}		; (ldr ip, [sp], #4)
-    b3a4:	e28bb001 	add	fp, fp, #1
-    b3a8:	e35b0004 	cmp	fp, #4
-    b3ac:	baffffe8 	blt	b354 <writeBlockToGrid_for_i_lt_4_loop>
-    b3b0:	e8bd1800 	pop	{fp, ip}
-    b3b4:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b3b8:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    b3bc:	e1a0f00e 	mov	pc, lr
+0000b398 <writeBlockToGrid_blockHasData>:
+    b398:	e92d0070 	push	{r4, r5, r6}
+    b39c:	ebfffeed 	bl	af58 <tetrisSetGridBlockColor>
 
-0000b3c0 <tetrisRotateBlock>:
-    b3c0:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b3c4:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    b3c8:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b3cc:	e3300000 	teq	r0, #0
-    b3d0:	0a000000 	beq	b3d8 <handleRotateLeft>
-    b3d4:	1a000003 	bne	b3e8 <handleRotateRight>
+0000b3a0 <writeBlockToGrid_blockHasNoData>:
+    b3a0:	e8bd0070 	pop	{r4, r5, r6}
+    b3a4:	e28cc001 	add	ip, ip, #1
+    b3a8:	e35c0004 	cmp	ip, #4
+    b3ac:	baffffed 	blt	b368 <writeBlockToGrid_for_j_lt_4_loop>
+    b3b0:	e49dc004 	pop	{ip}		; (ldr ip, [sp], #4)
+    b3b4:	e28bb001 	add	fp, fp, #1
+    b3b8:	e35b0004 	cmp	fp, #4
+    b3bc:	baffffe8 	blt	b364 <writeBlockToGrid_for_i_lt_4_loop>
+    b3c0:	e8bd1800 	pop	{fp, ip}
+    b3c4:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    b3c8:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    b3cc:	e1a0f00e 	mov	pc, lr
 
-0000b3d8 <handleRotateLeft>:
-    b3d8:	e2888002 	add	r8, r8, #2
-    b3dc:	e3580006 	cmp	r8, #6
-    b3e0:	c3a08000 	movgt	r8, #0
-    b3e4:	ea000003 	b	b3f8 <handleRotateEnd>
+0000b3d0 <tetrisRotateBlock>:
+    b3d0:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    b3d4:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    b3d8:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    b3dc:	e3300000 	teq	r0, #0
+    b3e0:	0a000000 	beq	b3e8 <handleRotateLeft>
+    b3e4:	1a000003 	bne	b3f8 <handleRotateRight>
 
-0000b3e8 <handleRotateRight>:
-    b3e8:	e2488002 	sub	r8, r8, #2
-    b3ec:	e3580000 	cmp	r8, #0
-    b3f0:	b3a08006 	movlt	r8, #6
-    b3f4:	eaffffff 	b	b3f8 <handleRotateEnd>
+0000b3e8 <handleRotateLeft>:
+    b3e8:	e2888002 	add	r8, r8, #2
+    b3ec:	e3580006 	cmp	r8, #6
+    b3f0:	c3a08000 	movgt	r8, #0
+    b3f4:	ea000003 	b	b408 <handleRotateEnd>
 
-0000b3f8 <handleRotateEnd>:
-    b3f8:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b3fc:	ebffffb0 	bl	b2c4 <tetrisCheckBlockGridCollisions>
-    b400:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
-    b404:	e3300000 	teq	r0, #0
-    b408:	1a000000 	bne	b410 <onRotationCollision>
-    b40c:	0a000004 	beq	b424 <onNoRotationCollision>
+0000b3f8 <handleRotateRight>:
+    b3f8:	e2488002 	sub	r8, r8, #2
+    b3fc:	e3580000 	cmp	r8, #0
+    b400:	b3a08006 	movlt	r8, #6
+    b404:	eaffffff 	b	b408 <handleRotateEnd>
 
-0000b410 <onRotationCollision>:
-    b410:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b414:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b418:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    b41c:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b420:	ea000004 	b	b438 <tetrisRotateBlockEnd>
+0000b408 <handleRotateEnd>:
+    b408:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    b40c:	ebffffb0 	bl	b2d4 <tetrisCheckBlockGridCollisions>
+    b410:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
+    b414:	e3300000 	teq	r0, #0
+    b418:	1a000000 	bne	b420 <onRotationCollision>
+    b41c:	0a000004 	beq	b434 <onNoRotationCollision>
 
-0000b424 <onNoRotationCollision>:
+0000b420 <onRotationCollision>:
+    b420:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
     b424:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b428:	028dd014 	addeq	sp, sp, #20
-    b42c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    b430:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b434:	eaffffff 	b	b438 <tetrisRotateBlockEnd>
+    b428:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    b42c:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    b430:	ea000004 	b	b448 <tetrisRotateBlockEnd>
 
-0000b438 <tetrisRotateBlockEnd>:
-    b438:	e1a0f00e 	mov	pc, lr
+0000b434 <onNoRotationCollision>:
+    b434:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    b438:	028dd014 	addeq	sp, sp, #20
+    b43c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    b440:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    b444:	eaffffff 	b	b448 <tetrisRotateBlockEnd>
 
-0000b43c <tetrisTranslateBlock>:
-    b43c:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b440:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    b444:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b448:	e0844000 	add	r4, r4, r0
-    b44c:	e0855001 	add	r5, r5, r1
-    b450:	e92d0003 	push	{r0, r1}
+0000b448 <tetrisRotateBlockEnd>:
+    b448:	e1a0f00e 	mov	pc, lr
+
+0000b44c <tetrisTranslateBlock>:
+    b44c:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    b450:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
     b454:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b458:	ebffff99 	bl	b2c4 <tetrisCheckBlockGridCollisions>
-    b45c:	e49d3004 	pop	{r3}		; (ldr r3, [sp], #4)
-    b460:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b464:	e8bd0003 	pop	{r0, r1}
-    b468:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b46c:	e3330000 	teq	r3, #0
-    b470:	1a000000 	bne	b478 <onTranslationCollision>
-    b474:	0a00000d 	beq	b4b0 <onNoTranslationCollision>
+    b458:	e0844000 	add	r4, r4, r0
+    b45c:	e0855001 	add	r5, r5, r1
+    b460:	e92d0003 	push	{r0, r1}
+    b464:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    b468:	ebffff99 	bl	b2d4 <tetrisCheckBlockGridCollisions>
+    b46c:	e49d3004 	pop	{r3}		; (ldr r3, [sp], #4)
+    b470:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    b474:	e8bd0003 	pop	{r0, r1}
+    b478:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    b47c:	e3330000 	teq	r3, #0
+    b480:	1a000000 	bne	b488 <onTranslationCollision>
+    b484:	0a00000d 	beq	b4c0 <onNoTranslationCollision>
 
-0000b478 <onTranslationCollision>:
-    b478:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b47c:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b480:	e3310000 	teq	r1, #0
-    b484:	0a000000 	beq	b48c <onTranslationCollision_Horizontal>
-    b488:	1a000002 	bne	b498 <onTranslationCollision_Vertical>
+0000b488 <onTranslationCollision>:
+    b488:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    b48c:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    b490:	e3310000 	teq	r1, #0
+    b494:	0a000000 	beq	b49c <onTranslationCollision_Horizontal>
+    b498:	1a000002 	bne	b4a8 <onTranslationCollision_Vertical>
 
-0000b48c <onTranslationCollision_Horizontal>:
-    b48c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    b490:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b494:	ea00000a 	b	b4c4 <tetrisTranslateBlockEnd>
+0000b49c <onTranslationCollision_Horizontal>:
+    b49c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    b4a0:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    b4a4:	ea00000a 	b	b4d4 <tetrisTranslateBlockEnd>
 
-0000b498 <onTranslationCollision_Vertical>:
-    b498:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b49c:	ebffff99 	bl	b308 <tetrisOnBlockCollision>
-    b4a0:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b4a4:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+0000b4a8 <onTranslationCollision_Vertical>:
     b4a8:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b4ac:	ea000004 	b	b4c4 <tetrisTranslateBlockEnd>
-
-0000b4b0 <onNoTranslationCollision>:
+    b4ac:	ebffff99 	bl	b318 <tetrisOnBlockCollision>
     b4b0:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b4b4:	028dd014 	addeq	sp, sp, #20
-    b4b8:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    b4bc:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b4c0:	eaffffff 	b	b4c4 <tetrisTranslateBlockEnd>
+    b4b4:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    b4b8:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    b4bc:	ea000004 	b	b4d4 <tetrisTranslateBlockEnd>
 
-0000b4c4 <tetrisTranslateBlockEnd>:
-    b4c4:	e1a0f00e 	mov	pc, lr
+0000b4c0 <onNoTranslationCollision>:
+    b4c0:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    b4c4:	028dd014 	addeq	sp, sp, #20
+    b4c8:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    b4cc:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    b4d0:	eaffffff 	b	b4d4 <tetrisTranslateBlockEnd>
 
-0000b4c8 <tetrisBlockHasDataForGridPoint>:
-    b4c8:	e8bd0003 	pop	{r0, r1}
-    b4cc:	e89d01f0 	ldm	sp, {r4, r5, r6, r7, r8}
-    b4d0:	e1500004 	cmp	r0, r4
-    b4d4:	b3a02000 	movlt	r2, #0
-    b4d8:	ba00001c 	blt	b550 <tetrisBlockHasDataForGridPointEnd>
-    b4dc:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
-    b4e0:	e2844004 	add	r4, r4, #4
-    b4e4:	e1500004 	cmp	r0, r4
-    b4e8:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
-    b4ec:	a3a02000 	movge	r2, #0
-    b4f0:	aa000016 	bge	b550 <tetrisBlockHasDataForGridPointEnd>
-    b4f4:	e1510005 	cmp	r1, r5
-    b4f8:	b3a02000 	movlt	r2, #0
-    b4fc:	ba000013 	blt	b550 <tetrisBlockHasDataForGridPointEnd>
-    b500:	e52d5004 	push	{r5}		; (str r5, [sp, #-4]!)
-    b504:	e2855004 	add	r5, r5, #4
-    b508:	e1510005 	cmp	r1, r5
-    b50c:	e49d5004 	pop	{r5}		; (ldr r5, [sp], #4)
-    b510:	a3a02000 	movge	r2, #0
-    b514:	aa00000d 	bge	b550 <tetrisBlockHasDataForGridPointEnd>
-    b518:	e0400004 	sub	r0, r0, r4
-    b51c:	e0411005 	sub	r1, r1, r5
-    b520:	e52d8004 	push	{r8}		; (str r8, [sp, #-4]!)
-    b524:	e19790b8 	ldrh	r9, [r7, r8]
-    b528:	e3a08004 	mov	r8, #4
-    b52c:	e0080198 	mul	r8, r8, r1
-    b530:	e0888000 	add	r8, r8, r0
-    b534:	e1a09819 	lsl	r9, r9, r8
-    b538:	e3a08902 	mov	r8, #32768	; 0x8000
-    b53c:	e0088009 	and	r8, r8, r9
-    b540:	e3380000 	teq	r8, #0
-    b544:	03a02000 	moveq	r2, #0
-    b548:	13a02001 	movne	r2, #1
-    b54c:	e49d8004 	pop	{r8}		; (ldr r8, [sp], #4)
+0000b4d4 <tetrisTranslateBlockEnd>:
+    b4d4:	e1a0f00e 	mov	pc, lr
 
-0000b550 <tetrisBlockHasDataForGridPointEnd>:
-    b550:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
-    b554:	e1a0f00e 	mov	pc, lr
+0000b4d8 <tetrisBlockHasDataForGridPoint>:
+    b4d8:	e8bd0003 	pop	{r0, r1}
+    b4dc:	e89d01f0 	ldm	sp, {r4, r5, r6, r7, r8}
+    b4e0:	e1500004 	cmp	r0, r4
+    b4e4:	b3a02000 	movlt	r2, #0
+    b4e8:	ba00001c 	blt	b560 <tetrisBlockHasDataForGridPointEnd>
+    b4ec:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
+    b4f0:	e2844004 	add	r4, r4, #4
+    b4f4:	e1500004 	cmp	r0, r4
+    b4f8:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+    b4fc:	a3a02000 	movge	r2, #0
+    b500:	aa000016 	bge	b560 <tetrisBlockHasDataForGridPointEnd>
+    b504:	e1510005 	cmp	r1, r5
+    b508:	b3a02000 	movlt	r2, #0
+    b50c:	ba000013 	blt	b560 <tetrisBlockHasDataForGridPointEnd>
+    b510:	e52d5004 	push	{r5}		; (str r5, [sp, #-4]!)
+    b514:	e2855004 	add	r5, r5, #4
+    b518:	e1510005 	cmp	r1, r5
+    b51c:	e49d5004 	pop	{r5}		; (ldr r5, [sp], #4)
+    b520:	a3a02000 	movge	r2, #0
+    b524:	aa00000d 	bge	b560 <tetrisBlockHasDataForGridPointEnd>
+    b528:	e0400004 	sub	r0, r0, r4
+    b52c:	e0411005 	sub	r1, r1, r5
+    b530:	e52d8004 	push	{r8}		; (str r8, [sp, #-4]!)
+    b534:	e19790b8 	ldrh	r9, [r7, r8]
+    b538:	e3a08004 	mov	r8, #4
+    b53c:	e0080198 	mul	r8, r8, r1
+    b540:	e0888000 	add	r8, r8, r0
+    b544:	e1a09819 	lsl	r9, r9, r8
+    b548:	e3a08902 	mov	r8, #32768	; 0x8000
+    b54c:	e0088009 	and	r8, r8, r9
+    b550:	e3380000 	teq	r8, #0
+    b554:	03a02000 	moveq	r2, #0
+    b558:	13a02001 	movne	r2, #1
+    b55c:	e49d8004 	pop	{r8}		; (ldr r8, [sp], #4)
 
-0000b558 <tetrisGetGridBitmaskForBlock>:
-    b558:	e1a0000d 	mov	r0, sp
-    b55c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    b560:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    b564:	e89001f0 	ldm	r0, {r4, r5, r6, r7, r8}
-    b568:	e92d1800 	push	{fp, ip}
-    b56c:	e3a00000 	mov	r0, #0
-    b570:	e3a0b000 	mov	fp, #0
-    b574:	e3a0c000 	mov	ip, #0
+0000b560 <tetrisBlockHasDataForGridPointEnd>:
+    b560:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
+    b564:	e1a0f00e 	mov	pc, lr
 
-0000b578 <tetrisGetGridBitmaskForBlock_for_i_lt_4_loop>:
-    b578:	e52dc004 	push	{ip}		; (str ip, [sp, #-4]!)
+0000b568 <tetrisGetGridBitmaskForBlock>:
+    b568:	e1a0000d 	mov	r0, sp
+    b56c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    b570:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    b574:	e89001f0 	ldm	r0, {r4, r5, r6, r7, r8}
+    b578:	e92d1800 	push	{fp, ip}
+    b57c:	e3a00000 	mov	r0, #0
+    b580:	e3a0b000 	mov	fp, #0
+    b584:	e3a0c000 	mov	ip, #0
 
-0000b57c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop>:
-    b57c:	e92d0070 	push	{r4, r5, r6}
-    b580:	e084400b 	add	r4, r4, fp
-    b584:	e085500c 	add	r5, r5, ip
-    b588:	e92d1801 	push	{r0, fp, ip}
-    b58c:	e92d0030 	push	{r4, r5}
-    b590:	ebfffe7b 	bl	af84 <tetrisGetGridBlockColor>
-    b594:	e49d6004 	pop	{r6}		; (ldr r6, [sp], #4)
-    b598:	e8bd1801 	pop	{r0, fp, ip}
-    b59c:	e3360000 	teq	r6, #0
-    b5a0:	13a01004 	movne	r1, #4
-    b5a4:	1001019c 	mulne	r1, ip, r1
-    b5a8:	1081100b 	addne	r1, r1, fp
-    b5ac:	13a02902 	movne	r2, #32768	; 0x8000
-    b5b0:	11a02132 	lsrne	r2, r2, r1
-    b5b4:	11800002 	orrne	r0, r0, r2
-    b5b8:	e8bd0070 	pop	{r4, r5, r6}
-    b5bc:	e28cc001 	add	ip, ip, #1
-    b5c0:	e35c0004 	cmp	ip, #4
-    b5c4:	baffffec 	blt	b57c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop>
-    b5c8:	e49dc004 	pop	{ip}		; (ldr ip, [sp], #4)
-    b5cc:	e28bb001 	add	fp, fp, #1
-    b5d0:	e35b0004 	cmp	fp, #4
-    b5d4:	baffffe7 	blt	b578 <tetrisGetGridBitmaskForBlock_for_i_lt_4_loop>
-    b5d8:	e8bd1800 	pop	{fp, ip}
-    b5dc:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    b5e0:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    b5e4:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
-    b5e8:	e1a0f00e 	mov	pc, lr
-    b5ec:	00002710 	.word	0x00002710
-    b5f0:	00abc777 	.word	0x00abc777
-    b5f4:	3f003004 	.word	0x3f003004
-    b5f8:	000090f0 	.word	0x000090f0
-    b5fc:	000093f4 	.word	0x000093f4
-    b600:	00009cc0 	.word	0x00009cc0
-    b604:	00009ca0 	.word	0x00009ca0
-    b608:	000034a0 	.word	0x000034a0
-    b60c:	00000269 	.word	0x00000269
-    b610:	00000297 	.word	0x00000297
-    b614:	0000adb5 	.word	0x0000adb5
-    b618:	00000299 	.word	0x00000299
-    b61c:	00009cd0 	.word	0x00009cd0
-    b620:	00000618 	.word	0x00000618
-    b624:	0000023e 	.word	0x0000023e
-    b628:	0000024a 	.word	0x0000024a
-    b62c:	00000212 	.word	0x00000212
-    b630:	00000286 	.word	0x00000286
-    b634:	000002a6 	.word	0x000002a6
-    b638:	00009cb0 	.word	0x00009cb0
-    b63c:	00009080 	.word	0x00009080
-    b640:	000093f4 	.word	0x000093f4
-    b644:	00009410 	.word	0x00009410
-    b648:	00009430 	.word	0x00009430
-    b64c:	00009440 	.word	0x00009440
-    b650:	00009450 	.word	0x00009450
-    b654:	00009460 	.word	0x00009460
-    b658:	00009470 	.word	0x00009470
-    b65c:	00009480 	.word	0x00009480
-    b660:	00009490 	.word	0x00009490
+0000b588 <tetrisGetGridBitmaskForBlock_for_i_lt_4_loop>:
+    b588:	e52dc004 	push	{ip}		; (str ip, [sp, #-4]!)
 
-0000b664 <drawPauseMenu>:
-    b664:	e92d4010 	push	{r4, lr}
-    b668:	e59f4d84 	ldr	r4, [pc, #3460]	; c3f4 <noPixel$+0x20>
-    b66c:	e3a03f7d 	mov	r3, #500	; 0x1f4
-    b670:	e3a02f96 	mov	r2, #600	; 0x258
-    b674:	e3a01086 	mov	r1, #134	; 0x86
-    b678:	e3a000d0 	mov	r0, #208	; 0xd0
-    b67c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b680:	eb0003af 	bl	c544 <drawRect>
-    b684:	e3a04902 	mov	r4, #32768	; 0x8000
-    b688:	e3a03004 	mov	r3, #4
-    b68c:	e3a02e26 	mov	r2, #608	; 0x260
-    b690:	e3a01082 	mov	r1, #130	; 0x82
-    b694:	e3a000cc 	mov	r0, #204	; 0xcc
-    b698:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b69c:	eb0003a8 	bl	c544 <drawRect>
-    b6a0:	e3a04902 	mov	r4, #32768	; 0x8000
-    b6a4:	e3a03004 	mov	r3, #4
-    b6a8:	e3a02e26 	mov	r2, #608	; 0x260
-    b6ac:	e59f1d44 	ldr	r1, [pc, #3396]	; c3f8 <noPixel$+0x24>
-    b6b0:	e3a000cc 	mov	r0, #204	; 0xcc
-    b6b4:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b6b8:	eb0003a1 	bl	c544 <drawRect>
-    b6bc:	e3a04902 	mov	r4, #32768	; 0x8000
-    b6c0:	e3a03f7d 	mov	r3, #500	; 0x1f4
-    b6c4:	e3a02004 	mov	r2, #4
-    b6c8:	e3a01086 	mov	r1, #134	; 0x86
-    b6cc:	e3a000cc 	mov	r0, #204	; 0xcc
-    b6d0:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b6d4:	eb00039a 	bl	c544 <drawRect>
-    b6d8:	e3a04902 	mov	r4, #32768	; 0x8000
-    b6dc:	e3a03f7d 	mov	r3, #500	; 0x1f4
-    b6e0:	e3a02004 	mov	r2, #4
-    b6e4:	e3a01086 	mov	r1, #134	; 0x86
-    b6e8:	e3a00fca 	mov	r0, #808	; 0x328
-    b6ec:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b6f0:	eb000393 	bl	c544 <drawRect>
-    b6f4:	eb000213 	bl	bf48 <drawPaused>
-    b6f8:	e59f0cfc 	ldr	r0, [pc, #3324]	; c3fc <noPixel$+0x28>
-    b6fc:	e3a01e1d 	mov	r1, #464	; 0x1d0
-    b700:	eb0001f3 	bl	bed4 <drawMenuButton>
-    b704:	e59f0cf4 	ldr	r0, [pc, #3316]	; c400 <noPixel$+0x2c>
-    b708:	e3a01000 	mov	r1, #0
-    b70c:	e59f2cf0 	ldr	r2, [pc, #3312]	; c404 <noPixel$+0x30>
-    b710:	e59f3cec 	ldr	r3, [pc, #3308]	; c404 <noPixel$+0x30>
-    b714:	eb00003b 	bl	b808 <WriteSentence>
-    b718:	e59f0cdc 	ldr	r0, [pc, #3292]	; c3fc <noPixel$+0x28>
-    b71c:	e59f1ce4 	ldr	r1, [pc, #3300]	; c408 <noPixel$+0x34>
-    b720:	eb0001eb 	bl	bed4 <drawMenuButton>
-    b724:	e59f0ce0 	ldr	r0, [pc, #3296]	; c40c <noPixel$+0x38>
-    b728:	e3a01000 	mov	r1, #0
-    b72c:	e59f2cdc 	ldr	r2, [pc, #3292]	; c410 <noPixel$+0x3c>
-    b730:	e3a03f8d 	mov	r3, #564	; 0x234
-    b734:	eb000033 	bl	b808 <WriteSentence>
-    b738:	eb000043 	bl	b84c <setPauseMenuIndicatorRestart>
-    b73c:	e8bd8010 	pop	{r4, pc}
+0000b58c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop>:
+    b58c:	e92d0070 	push	{r4, r5, r6}
+    b590:	e084400b 	add	r4, r4, fp
+    b594:	e085500c 	add	r5, r5, ip
+    b598:	e92d1801 	push	{r0, fp, ip}
+    b59c:	e92d0030 	push	{r4, r5}
+    b5a0:	ebfffe7c 	bl	af98 <tetrisGetGridBlockColor>
+    b5a4:	e49d6004 	pop	{r6}		; (ldr r6, [sp], #4)
+    b5a8:	e8bd1801 	pop	{r0, fp, ip}
+    b5ac:	e3360000 	teq	r6, #0
+    b5b0:	13a01004 	movne	r1, #4
+    b5b4:	1001019c 	mulne	r1, ip, r1
+    b5b8:	1081100b 	addne	r1, r1, fp
+    b5bc:	13a02902 	movne	r2, #32768	; 0x8000
+    b5c0:	11a02132 	lsrne	r2, r2, r1
+    b5c4:	11800002 	orrne	r0, r0, r2
+    b5c8:	e8bd0070 	pop	{r4, r5, r6}
+    b5cc:	e28cc001 	add	ip, ip, #1
+    b5d0:	e35c0004 	cmp	ip, #4
+    b5d4:	baffffec 	blt	b58c <tetrisGetGridBitmaskForBlock_for_j_lt_4_loop>
+    b5d8:	e49dc004 	pop	{ip}		; (ldr ip, [sp], #4)
+    b5dc:	e28bb001 	add	fp, fp, #1
+    b5e0:	e35b0004 	cmp	fp, #4
+    b5e4:	baffffe7 	blt	b588 <tetrisGetGridBitmaskForBlock_for_i_lt_4_loop>
+    b5e8:	e8bd1800 	pop	{fp, ip}
+    b5ec:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    b5f0:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    b5f4:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
+    b5f8:	e1a0f00e 	mov	pc, lr
+    b5fc:	00002710 	.word	0x00002710
+    b600:	00abc777 	.word	0x00abc777
+    b604:	3f003004 	.word	0x3f003004
+    b608:	00009cc0 	.word	0x00009cc0
+    b60c:	000090f0 	.word	0x000090f0
+    b610:	000093f4 	.word	0x000093f4
+    b614:	00009ca0 	.word	0x00009ca0
+    b618:	000034a0 	.word	0x000034a0
+    b61c:	00000269 	.word	0x00000269
+    b620:	00000297 	.word	0x00000297
+    b624:	0000adb5 	.word	0x0000adb5
+    b628:	00000299 	.word	0x00000299
+    b62c:	00009cd0 	.word	0x00009cd0
+    b630:	00000618 	.word	0x00000618
+    b634:	0000023e 	.word	0x0000023e
+    b638:	0000024a 	.word	0x0000024a
+    b63c:	00000212 	.word	0x00000212
+    b640:	00000286 	.word	0x00000286
+    b644:	000002a6 	.word	0x000002a6
+    b648:	00009cb0 	.word	0x00009cb0
+    b64c:	00009080 	.word	0x00009080
+    b650:	000093f4 	.word	0x000093f4
+    b654:	00009410 	.word	0x00009410
+    b658:	00009430 	.word	0x00009430
+    b65c:	00009440 	.word	0x00009440
+    b660:	00009450 	.word	0x00009450
+    b664:	00009460 	.word	0x00009460
+    b668:	00009470 	.word	0x00009470
+    b66c:	00009480 	.word	0x00009480
+    b670:	00009490 	.word	0x00009490
 
-0000b740 <drawMainMenu>:
-    b740:	e92d4610 	push	{r4, r9, sl, lr}
-    b744:	e59f0cc8 	ldr	r0, [pc, #3272]	; c414 <noPixel$+0x40>
-    b748:	e5909014 	ldr	r9, [r0, #20]
-    b74c:	e590a018 	ldr	sl, [r0, #24]
-    b750:	e59f0c9c 	ldr	r0, [pc, #3228]	; c3f4 <noPixel$+0x20>
-    b754:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
-    b758:	e52da004 	push	{sl}		; (str sl, [sp, #-4]!)
-    b75c:	e52d9004 	push	{r9}		; (str r9, [sp, #-4]!)
-    b760:	e3a00000 	mov	r0, #0
+0000b674 <drawPauseMenu>:
+    b674:	e92d4010 	push	{r4, lr}
+    b678:	e59f4d84 	ldr	r4, [pc, #3460]	; c404 <noPixel$+0x20>
+    b67c:	e3a03f7d 	mov	r3, #500	; 0x1f4
+    b680:	e3a02f96 	mov	r2, #600	; 0x258
+    b684:	e3a01086 	mov	r1, #134	; 0x86
+    b688:	e3a000d0 	mov	r0, #208	; 0xd0
+    b68c:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b690:	eb0003af 	bl	c554 <drawRect>
+    b694:	e3a04902 	mov	r4, #32768	; 0x8000
+    b698:	e3a03004 	mov	r3, #4
+    b69c:	e3a02e26 	mov	r2, #608	; 0x260
+    b6a0:	e3a01082 	mov	r1, #130	; 0x82
+    b6a4:	e3a000cc 	mov	r0, #204	; 0xcc
+    b6a8:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b6ac:	eb0003a8 	bl	c554 <drawRect>
+    b6b0:	e3a04902 	mov	r4, #32768	; 0x8000
+    b6b4:	e3a03004 	mov	r3, #4
+    b6b8:	e3a02e26 	mov	r2, #608	; 0x260
+    b6bc:	e59f1d44 	ldr	r1, [pc, #3396]	; c408 <noPixel$+0x24>
+    b6c0:	e3a000cc 	mov	r0, #204	; 0xcc
+    b6c4:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b6c8:	eb0003a1 	bl	c554 <drawRect>
+    b6cc:	e3a04902 	mov	r4, #32768	; 0x8000
+    b6d0:	e3a03f7d 	mov	r3, #500	; 0x1f4
+    b6d4:	e3a02004 	mov	r2, #4
+    b6d8:	e3a01086 	mov	r1, #134	; 0x86
+    b6dc:	e3a000cc 	mov	r0, #204	; 0xcc
+    b6e0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b6e4:	eb00039a 	bl	c554 <drawRect>
+    b6e8:	e3a04902 	mov	r4, #32768	; 0x8000
+    b6ec:	e3a03f7d 	mov	r3, #500	; 0x1f4
+    b6f0:	e3a02004 	mov	r2, #4
+    b6f4:	e3a01086 	mov	r1, #134	; 0x86
+    b6f8:	e3a00fca 	mov	r0, #808	; 0x328
+    b6fc:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b700:	eb000393 	bl	c554 <drawRect>
+    b704:	eb000213 	bl	bf58 <drawPaused>
+    b708:	e59f0cfc 	ldr	r0, [pc, #3324]	; c40c <noPixel$+0x28>
+    b70c:	e3a01e1d 	mov	r1, #464	; 0x1d0
+    b710:	eb0001f3 	bl	bee4 <drawMenuButton>
+    b714:	e59f0cf4 	ldr	r0, [pc, #3316]	; c410 <noPixel$+0x2c>
+    b718:	e3a01000 	mov	r1, #0
+    b71c:	e59f2cf0 	ldr	r2, [pc, #3312]	; c414 <noPixel$+0x30>
+    b720:	e59f3cec 	ldr	r3, [pc, #3308]	; c414 <noPixel$+0x30>
+    b724:	eb00003b 	bl	b818 <WriteSentence>
+    b728:	e59f0cdc 	ldr	r0, [pc, #3292]	; c40c <noPixel$+0x28>
+    b72c:	e59f1ce4 	ldr	r1, [pc, #3300]	; c418 <noPixel$+0x34>
+    b730:	eb0001eb 	bl	bee4 <drawMenuButton>
+    b734:	e59f0ce0 	ldr	r0, [pc, #3296]	; c41c <noPixel$+0x38>
+    b738:	e3a01000 	mov	r1, #0
+    b73c:	e59f2cdc 	ldr	r2, [pc, #3292]	; c420 <noPixel$+0x3c>
+    b740:	e3a03f8d 	mov	r3, #564	; 0x234
+    b744:	eb000033 	bl	b818 <WriteSentence>
+    b748:	eb000043 	bl	b85c <setPauseMenuIndicatorRestart>
+    b74c:	e8bd8010 	pop	{r4, pc}
+
+0000b750 <drawMainMenu>:
+    b750:	e92d4610 	push	{r4, r9, sl, lr}
+    b754:	e59f0cc8 	ldr	r0, [pc, #3272]	; c424 <noPixel$+0x40>
+    b758:	e5909014 	ldr	r9, [r0, #20]
+    b75c:	e590a018 	ldr	sl, [r0, #24]
+    b760:	e59f0c9c 	ldr	r0, [pc, #3228]	; c404 <noPixel$+0x20>
     b764:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
-    b768:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
-    b76c:	eb000374 	bl	c544 <drawRect>
-    b770:	e59f4ca0 	ldr	r4, [pc, #3232]	; c418 <noPixel$+0x44>
-    b774:	e3a030c8 	mov	r3, #200	; 0xc8
-    b778:	e3a02f96 	mov	r2, #600	; 0x258
-    b77c:	e3a01054 	mov	r1, #84	; 0x54
-    b780:	e3a000d4 	mov	r0, #212	; 0xd4
-    b784:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b788:	eb00036d 	bl	c544 <drawRect>
-    b78c:	e59f4c84 	ldr	r4, [pc, #3204]	; c418 <noPixel$+0x44>
-    b790:	e3a030c8 	mov	r3, #200	; 0xc8
-    b794:	e3a020c8 	mov	r2, #200	; 0xc8
-    b798:	e3a01f47 	mov	r1, #284	; 0x11c
-    b79c:	e3a00f67 	mov	r0, #412	; 0x19c
-    b7a0:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b7a4:	eb000366 	bl	c544 <drawRect>
-    b7a8:	eb00027b 	bl	c19c <drawTitle>
-    b7ac:	e59f0c68 	ldr	r0, [pc, #3176]	; c41c <noPixel$+0x48>
-    b7b0:	e3a01000 	mov	r1, #0
-    b7b4:	e59f2c64 	ldr	r2, [pc, #3172]	; c420 <noPixel$+0x4c>
-    b7b8:	e3a03044 	mov	r3, #68	; 0x44
-    b7bc:	eb000011 	bl	b808 <WriteSentence>
-    b7c0:	e59f0c34 	ldr	r0, [pc, #3124]	; c3fc <noPixel$+0x28>
-    b7c4:	e3a01f8d 	mov	r1, #564	; 0x234
-    b7c8:	eb0001c1 	bl	bed4 <drawMenuButton>
-    b7cc:	e59f0c50 	ldr	r0, [pc, #3152]	; c424 <noPixel$+0x50>
-    b7d0:	e3a01000 	mov	r1, #0
-    b7d4:	e59f2c4c 	ldr	r2, [pc, #3148]	; c428 <noPixel$+0x54>
-    b7d8:	e59f3c4c 	ldr	r3, [pc, #3148]	; c42c <noPixel$+0x58>
-    b7dc:	eb000009 	bl	b808 <WriteSentence>
-    b7e0:	e59f0c14 	ldr	r0, [pc, #3092]	; c3fc <noPixel$+0x28>
-    b7e4:	e59f1c44 	ldr	r1, [pc, #3140]	; c430 <noPixel$+0x5c>
-    b7e8:	eb0001b9 	bl	bed4 <drawMenuButton>
-    b7ec:	e59f0c18 	ldr	r0, [pc, #3096]	; c40c <noPixel$+0x38>
-    b7f0:	e3a01000 	mov	r1, #0
-    b7f4:	e59f2c14 	ldr	r2, [pc, #3092]	; c410 <noPixel$+0x3c>
-    b7f8:	e3a03fa6 	mov	r3, #664	; 0x298
-    b7fc:	eb000001 	bl	b808 <WriteSentence>
-    b800:	eb000031 	bl	b8cc <setMainMenuIndicatorStart>
-    b804:	e8bd8610 	pop	{r4, r9, sl, pc}
+    b768:	e52da004 	push	{sl}		; (str sl, [sp, #-4]!)
+    b76c:	e52d9004 	push	{r9}		; (str r9, [sp, #-4]!)
+    b770:	e3a00000 	mov	r0, #0
+    b774:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
+    b778:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
+    b77c:	eb000374 	bl	c554 <drawRect>
+    b780:	e59f4ca0 	ldr	r4, [pc, #3232]	; c428 <noPixel$+0x44>
+    b784:	e3a030c8 	mov	r3, #200	; 0xc8
+    b788:	e3a02f96 	mov	r2, #600	; 0x258
+    b78c:	e3a01054 	mov	r1, #84	; 0x54
+    b790:	e3a000d4 	mov	r0, #212	; 0xd4
+    b794:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b798:	eb00036d 	bl	c554 <drawRect>
+    b79c:	e59f4c84 	ldr	r4, [pc, #3204]	; c428 <noPixel$+0x44>
+    b7a0:	e3a030c8 	mov	r3, #200	; 0xc8
+    b7a4:	e3a020c8 	mov	r2, #200	; 0xc8
+    b7a8:	e3a01f47 	mov	r1, #284	; 0x11c
+    b7ac:	e3a00f67 	mov	r0, #412	; 0x19c
+    b7b0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b7b4:	eb000366 	bl	c554 <drawRect>
+    b7b8:	eb00027b 	bl	c1ac <drawTitle>
+    b7bc:	e59f0c68 	ldr	r0, [pc, #3176]	; c42c <noPixel$+0x48>
+    b7c0:	e3a01000 	mov	r1, #0
+    b7c4:	e59f2c64 	ldr	r2, [pc, #3172]	; c430 <noPixel$+0x4c>
+    b7c8:	e3a03044 	mov	r3, #68	; 0x44
+    b7cc:	eb000011 	bl	b818 <WriteSentence>
+    b7d0:	e59f0c34 	ldr	r0, [pc, #3124]	; c40c <noPixel$+0x28>
+    b7d4:	e3a01f8d 	mov	r1, #564	; 0x234
+    b7d8:	eb0001c1 	bl	bee4 <drawMenuButton>
+    b7dc:	e59f0c50 	ldr	r0, [pc, #3152]	; c434 <noPixel$+0x50>
+    b7e0:	e3a01000 	mov	r1, #0
+    b7e4:	e59f2c4c 	ldr	r2, [pc, #3148]	; c438 <noPixel$+0x54>
+    b7e8:	e59f3c4c 	ldr	r3, [pc, #3148]	; c43c <noPixel$+0x58>
+    b7ec:	eb000009 	bl	b818 <WriteSentence>
+    b7f0:	e59f0c14 	ldr	r0, [pc, #3092]	; c40c <noPixel$+0x28>
+    b7f4:	e59f1c44 	ldr	r1, [pc, #3140]	; c440 <noPixel$+0x5c>
+    b7f8:	eb0001b9 	bl	bee4 <drawMenuButton>
+    b7fc:	e59f0c18 	ldr	r0, [pc, #3096]	; c41c <noPixel$+0x38>
+    b800:	e3a01000 	mov	r1, #0
+    b804:	e59f2c14 	ldr	r2, [pc, #3092]	; c420 <noPixel$+0x3c>
+    b808:	e3a03fa6 	mov	r3, #664	; 0x298
+    b80c:	eb000001 	bl	b818 <WriteSentence>
+    b810:	eb000031 	bl	b8dc <setMainMenuIndicatorStart>
+    b814:	e8bd8610 	pop	{r4, r9, sl, pc}
 
-0000b808 <WriteSentence>:
-    b808:	e92d43f0 	push	{r4, r5, r6, r7, r8, r9, lr}
-    b80c:	e1a05000 	mov	r5, r0
-    b810:	e5954000 	ldr	r4, [r5]
-    b814:	e2855004 	add	r5, r5, #4
-    b818:	e1a06001 	mov	r6, r1
-    b81c:	e1a08002 	mov	r8, r2
-    b820:	e1a07003 	mov	r7, r3
+0000b818 <WriteSentence>:
+    b818:	e92d43f0 	push	{r4, r5, r6, r7, r8, r9, lr}
+    b81c:	e1a05000 	mov	r5, r0
+    b820:	e5954000 	ldr	r4, [r5]
+    b824:	e2855004 	add	r5, r5, #4
+    b828:	e1a06001 	mov	r6, r1
+    b82c:	e1a08002 	mov	r8, r2
+    b830:	e1a07003 	mov	r7, r3
 
-0000b824 <LoadChar>:
-    b824:	e4d50001 	ldrb	r0, [r5], #1
-    b828:	e1a01006 	mov	r1, r6
-    b82c:	e1a02007 	mov	r2, r7
-    b830:	e1a03008 	mov	r3, r8
-    b834:	eb0002d8 	bl	c39c <DrawChar>
-    b838:	e2888008 	add	r8, r8, #8
-    b83c:	e2444001 	sub	r4, r4, #1
-    b840:	e3540000 	cmp	r4, #0
-    b844:	cafffff6 	bgt	b824 <LoadChar>
-    b848:	e8bd83f0 	pop	{r4, r5, r6, r7, r8, r9, pc}
+0000b834 <LoadChar>:
+    b834:	e4d50001 	ldrb	r0, [r5], #1
+    b838:	e1a01006 	mov	r1, r6
+    b83c:	e1a02007 	mov	r2, r7
+    b840:	e1a03008 	mov	r3, r8
+    b844:	eb0002d8 	bl	c3ac <DrawChar>
+    b848:	e2888008 	add	r8, r8, #8
+    b84c:	e2444001 	sub	r4, r4, #1
+    b850:	e3540000 	cmp	r4, #0
+    b854:	cafffff6 	bgt	b834 <LoadChar>
+    b858:	e8bd83f0 	pop	{r4, r5, r6, r7, r8, r9, pc}
 
-0000b84c <setPauseMenuIndicatorRestart>:
-    b84c:	e92d4010 	push	{r4, lr}
-    b850:	e59f4bdc 	ldr	r4, [pc, #3036]	; c434 <noPixel$+0x60>
-    b854:	e3a03014 	mov	r3, #20
-    b858:	e3a02014 	mov	r2, #20
-    b85c:	e3a01e23 	mov	r1, #560	; 0x230
-    b860:	e3a00f71 	mov	r0, #452	; 0x1c4
-    b864:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b868:	eb000335 	bl	c544 <drawRect>
-    b86c:	e3a04000 	mov	r4, #0
-    b870:	e3a03014 	mov	r3, #20
-    b874:	e3a02014 	mov	r2, #20
-    b878:	e59f1bb8 	ldr	r1, [pc, #3000]	; c438 <noPixel$+0x64>
-    b87c:	e3a00f71 	mov	r0, #452	; 0x1c4
-    b880:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b884:	eb00032e 	bl	c544 <drawRect>
-    b888:	e8bd8010 	pop	{r4, pc}
+0000b85c <setPauseMenuIndicatorRestart>:
+    b85c:	e92d4010 	push	{r4, lr}
+    b860:	e59f4bdc 	ldr	r4, [pc, #3036]	; c444 <noPixel$+0x60>
+    b864:	e3a03014 	mov	r3, #20
+    b868:	e3a02014 	mov	r2, #20
+    b86c:	e3a01e23 	mov	r1, #560	; 0x230
+    b870:	e3a00f71 	mov	r0, #452	; 0x1c4
+    b874:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b878:	eb000335 	bl	c554 <drawRect>
+    b87c:	e3a04000 	mov	r4, #0
+    b880:	e3a03014 	mov	r3, #20
+    b884:	e3a02014 	mov	r2, #20
+    b888:	e59f1bb8 	ldr	r1, [pc, #3000]	; c448 <noPixel$+0x64>
+    b88c:	e3a00f71 	mov	r0, #452	; 0x1c4
+    b890:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b894:	eb00032e 	bl	c554 <drawRect>
+    b898:	e8bd8010 	pop	{r4, pc}
 
-0000b88c <setPauseMenuIndicatorQuit>:
-    b88c:	e92d4010 	push	{r4, lr}
-    b890:	e59f4b9c 	ldr	r4, [pc, #2972]	; c434 <noPixel$+0x60>
-    b894:	e3a03014 	mov	r3, #20
-    b898:	e3a02014 	mov	r2, #20
-    b89c:	e59f1b94 	ldr	r1, [pc, #2964]	; c438 <noPixel$+0x64>
-    b8a0:	e3a00f71 	mov	r0, #452	; 0x1c4
-    b8a4:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b8a8:	eb000325 	bl	c544 <drawRect>
-    b8ac:	e3a04000 	mov	r4, #0
-    b8b0:	e3a03014 	mov	r3, #20
-    b8b4:	e3a02014 	mov	r2, #20
-    b8b8:	e3a01e23 	mov	r1, #560	; 0x230
-    b8bc:	e3a00f71 	mov	r0, #452	; 0x1c4
-    b8c0:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b8c4:	eb00031e 	bl	c544 <drawRect>
-    b8c8:	e8bd8010 	pop	{r4, pc}
+0000b89c <setPauseMenuIndicatorQuit>:
+    b89c:	e92d4010 	push	{r4, lr}
+    b8a0:	e59f4b9c 	ldr	r4, [pc, #2972]	; c444 <noPixel$+0x60>
+    b8a4:	e3a03014 	mov	r3, #20
+    b8a8:	e3a02014 	mov	r2, #20
+    b8ac:	e59f1b94 	ldr	r1, [pc, #2964]	; c448 <noPixel$+0x64>
+    b8b0:	e3a00f71 	mov	r0, #452	; 0x1c4
+    b8b4:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b8b8:	eb000325 	bl	c554 <drawRect>
+    b8bc:	e3a04000 	mov	r4, #0
+    b8c0:	e3a03014 	mov	r3, #20
+    b8c4:	e3a02014 	mov	r2, #20
+    b8c8:	e3a01e23 	mov	r1, #560	; 0x230
+    b8cc:	e3a00f71 	mov	r0, #452	; 0x1c4
+    b8d0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b8d4:	eb00031e 	bl	c554 <drawRect>
+    b8d8:	e8bd8010 	pop	{r4, pc}
 
-0000b8cc <setMainMenuIndicatorStart>:
-    b8cc:	e92d4010 	push	{r4, lr}
-    b8d0:	e59f4b5c 	ldr	r4, [pc, #2908]	; c434 <noPixel$+0x60>
-    b8d4:	e3a03014 	mov	r3, #20
-    b8d8:	e3a02014 	mov	r2, #20
-    b8dc:	e3a01fa5 	mov	r1, #660	; 0x294
-    b8e0:	e3a00f71 	mov	r0, #452	; 0x1c4
-    b8e4:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b8e8:	eb000315 	bl	c544 <drawRect>
-    b8ec:	e3a04000 	mov	r4, #0
-    b8f0:	e3a03014 	mov	r3, #20
-    b8f4:	e3a02014 	mov	r2, #20
-    b8f8:	e59f1b3c 	ldr	r1, [pc, #2876]	; c43c <noPixel$+0x68>
-    b8fc:	e3a00f71 	mov	r0, #452	; 0x1c4
-    b900:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b904:	eb00030e 	bl	c544 <drawRect>
-    b908:	e8bd8010 	pop	{r4, pc}
+0000b8dc <setMainMenuIndicatorStart>:
+    b8dc:	e92d4010 	push	{r4, lr}
+    b8e0:	e59f4b5c 	ldr	r4, [pc, #2908]	; c444 <noPixel$+0x60>
+    b8e4:	e3a03014 	mov	r3, #20
+    b8e8:	e3a02014 	mov	r2, #20
+    b8ec:	e3a01fa5 	mov	r1, #660	; 0x294
+    b8f0:	e3a00f71 	mov	r0, #452	; 0x1c4
+    b8f4:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b8f8:	eb000315 	bl	c554 <drawRect>
+    b8fc:	e3a04000 	mov	r4, #0
+    b900:	e3a03014 	mov	r3, #20
+    b904:	e3a02014 	mov	r2, #20
+    b908:	e59f1b3c 	ldr	r1, [pc, #2876]	; c44c <noPixel$+0x68>
+    b90c:	e3a00f71 	mov	r0, #452	; 0x1c4
+    b910:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b914:	eb00030e 	bl	c554 <drawRect>
+    b918:	e8bd8010 	pop	{r4, pc}
 
-0000b90c <setMainMenuIndicatorQuit>:
-    b90c:	e92d4010 	push	{r4, lr}
-    b910:	e59f4b1c 	ldr	r4, [pc, #2844]	; c434 <noPixel$+0x60>
-    b914:	e3a03014 	mov	r3, #20
-    b918:	e3a02014 	mov	r2, #20
-    b91c:	e59f1b18 	ldr	r1, [pc, #2840]	; c43c <noPixel$+0x68>
-    b920:	e3a00f71 	mov	r0, #452	; 0x1c4
-    b924:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b928:	eb000305 	bl	c544 <drawRect>
-    b92c:	e3a04000 	mov	r4, #0
-    b930:	e3a03014 	mov	r3, #20
-    b934:	e3a02014 	mov	r2, #20
-    b938:	e3a01fa5 	mov	r1, #660	; 0x294
-    b93c:	e3a00f71 	mov	r0, #452	; 0x1c4
-    b940:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b944:	eb0002fe 	bl	c544 <drawRect>
-    b948:	e8bd8010 	pop	{r4, pc}
+0000b91c <setMainMenuIndicatorQuit>:
+    b91c:	e92d4010 	push	{r4, lr}
+    b920:	e59f4b1c 	ldr	r4, [pc, #2844]	; c444 <noPixel$+0x60>
+    b924:	e3a03014 	mov	r3, #20
+    b928:	e3a02014 	mov	r2, #20
+    b92c:	e59f1b18 	ldr	r1, [pc, #2840]	; c44c <noPixel$+0x68>
+    b930:	e3a00f71 	mov	r0, #452	; 0x1c4
+    b934:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b938:	eb000305 	bl	c554 <drawRect>
+    b93c:	e3a04000 	mov	r4, #0
+    b940:	e3a03014 	mov	r3, #20
+    b944:	e3a02014 	mov	r2, #20
+    b948:	e3a01fa5 	mov	r1, #660	; 0x294
+    b94c:	e3a00f71 	mov	r0, #452	; 0x1c4
+    b950:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b954:	eb0002fe 	bl	c554 <drawRect>
+    b958:	e8bd8010 	pop	{r4, pc}
 
-0000b94c <drawVictoryScreen>:
-    b94c:	e92d4010 	push	{r4, lr}
-    b950:	e59f4ae8 	ldr	r4, [pc, #2792]	; c440 <noPixel$+0x6c>
-    b954:	e3a0305a 	mov	r3, #90	; 0x5a
-    b958:	e3a0201e 	mov	r2, #30
-    b95c:	e3a010c8 	mov	r1, #200	; 0xc8
-    b960:	e3a00057 	mov	r0, #87	; 0x57
-    b964:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b968:	eb0002f5 	bl	c544 <drawRect>
-    b96c:	e59f4acc 	ldr	r4, [pc, #2764]	; c440 <noPixel$+0x6c>
-    b970:	e3a0305a 	mov	r3, #90	; 0x5a
-    b974:	e3a0201e 	mov	r2, #30
-    b978:	e3a010c8 	mov	r1, #200	; 0xc8
-    b97c:	e3a00093 	mov	r0, #147	; 0x93
-    b980:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b984:	eb0002ee 	bl	c544 <drawRect>
-    b988:	e59f4ab0 	ldr	r4, [pc, #2736]	; c440 <noPixel$+0x6c>
-    b98c:	e3a0305a 	mov	r3, #90	; 0x5a
-    b990:	e3a0201e 	mov	r2, #30
-    b994:	e3a01f41 	mov	r1, #260	; 0x104
-    b998:	e3a00075 	mov	r0, #117	; 0x75
-    b99c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b9a0:	eb0002e7 	bl	c544 <drawRect>
-    b9a4:	e59f4a94 	ldr	r4, [pc, #2708]	; c440 <noPixel$+0x6c>
-    b9a8:	e3a0305a 	mov	r3, #90	; 0x5a
-    b9ac:	e3a0201e 	mov	r2, #30
-    b9b0:	e3a010e6 	mov	r1, #230	; 0xe6
-    b9b4:	e3a000bb 	mov	r0, #187	; 0xbb
-    b9b8:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b9bc:	eb0002e0 	bl	c544 <drawRect>
-    b9c0:	e59f4a78 	ldr	r4, [pc, #2680]	; c440 <noPixel$+0x6c>
-    b9c4:	e3a0305a 	mov	r3, #90	; 0x5a
-    b9c8:	e3a0201e 	mov	r2, #30
-    b9cc:	e3a010e6 	mov	r1, #230	; 0xe6
-    b9d0:	e3a000f7 	mov	r0, #247	; 0xf7
-    b9d4:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b9d8:	eb0002d9 	bl	c544 <drawRect>
-    b9dc:	e59f4a5c 	ldr	r4, [pc, #2652]	; c440 <noPixel$+0x6c>
-    b9e0:	e3a0301e 	mov	r3, #30
-    b9e4:	e3a0201e 	mov	r2, #30
-    b9e8:	e3a010c8 	mov	r1, #200	; 0xc8
-    b9ec:	e3a000d9 	mov	r0, #217	; 0xd9
-    b9f0:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    b9f4:	eb0002d2 	bl	c544 <drawRect>
-    b9f8:	e59f4a40 	ldr	r4, [pc, #2624]	; c440 <noPixel$+0x6c>
-    b9fc:	e3a0301e 	mov	r3, #30
-    ba00:	e3a0201e 	mov	r2, #30
-    ba04:	e3a01d05 	mov	r1, #320	; 0x140
-    ba08:	e3a000d9 	mov	r0, #217	; 0xd9
-    ba0c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    ba10:	eb0002cb 	bl	c544 <drawRect>
-    ba14:	e59f4a24 	ldr	r4, [pc, #2596]	; c440 <noPixel$+0x6c>
-    ba18:	e3a03078 	mov	r3, #120	; 0x78
-    ba1c:	e3a0201e 	mov	r2, #30
-    ba20:	e3a010c8 	mov	r1, #200	; 0xc8
-    ba24:	e59f0a18 	ldr	r0, [pc, #2584]	; c444 <noPixel$+0x70>
-    ba28:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    ba2c:	eb0002c4 	bl	c544 <drawRect>
-    ba30:	e59f4a08 	ldr	r4, [pc, #2568]	; c440 <noPixel$+0x6c>
-    ba34:	e3a03078 	mov	r3, #120	; 0x78
-    ba38:	e3a0201e 	mov	r2, #30
-    ba3c:	e3a010c8 	mov	r1, #200	; 0xc8
-    ba40:	e59f0a00 	ldr	r0, [pc, #2560]	; c448 <noPixel$+0x74>
-    ba44:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    ba48:	eb0002bd 	bl	c544 <drawRect>
-    ba4c:	e59f49ec 	ldr	r4, [pc, #2540]	; c440 <noPixel$+0x6c>
-    ba50:	e3a0301e 	mov	r3, #30
-    ba54:	e3a0201e 	mov	r2, #30
-    ba58:	e3a01d05 	mov	r1, #320	; 0x140
-    ba5c:	e59f09e8 	ldr	r0, [pc, #2536]	; c44c <noPixel$+0x78>
-    ba60:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    ba64:	eb0002b6 	bl	c544 <drawRect>
-    ba68:	e59f49d0 	ldr	r4, [pc, #2512]	; c440 <noPixel$+0x6c>
-    ba6c:	e3a03078 	mov	r3, #120	; 0x78
-    ba70:	e3a0201e 	mov	r2, #30
-    ba74:	e3a010c8 	mov	r1, #200	; 0xc8
-    ba78:	e59f09a8 	ldr	r0, [pc, #2472]	; c428 <noPixel$+0x54>
-    ba7c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    ba80:	eb0002af 	bl	c544 <drawRect>
-    ba84:	e59f49b4 	ldr	r4, [pc, #2484]	; c440 <noPixel$+0x6c>
-    ba88:	e3a03078 	mov	r3, #120	; 0x78
-    ba8c:	e3a0201e 	mov	r2, #30
-    ba90:	e3a010c8 	mov	r1, #200	; 0xc8
-    ba94:	e59f09b4 	ldr	r0, [pc, #2484]	; c450 <noPixel$+0x7c>
-    ba98:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    ba9c:	eb0002a8 	bl	c544 <drawRect>
-    baa0:	e59f4998 	ldr	r4, [pc, #2456]	; c440 <noPixel$+0x6c>
-    baa4:	e3a03078 	mov	r3, #120	; 0x78
-    baa8:	e3a0201e 	mov	r2, #30
-    baac:	e3a010c8 	mov	r1, #200	; 0xc8
-    bab0:	e59f099c 	ldr	r0, [pc, #2460]	; c454 <noPixel$+0x80>
-    bab4:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bab8:	eb0002a1 	bl	c544 <drawRect>
-    babc:	e59f497c 	ldr	r4, [pc, #2428]	; c440 <noPixel$+0x6c>
-    bac0:	e3a0301e 	mov	r3, #30
-    bac4:	e3a0201e 	mov	r2, #30
-    bac8:	e3a01d05 	mov	r1, #320	; 0x140
-    bacc:	e59f0984 	ldr	r0, [pc, #2436]	; c458 <noPixel$+0x84>
-    bad0:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bad4:	eb00029a 	bl	c544 <drawRect>
-    bad8:	e59f4960 	ldr	r4, [pc, #2400]	; c440 <noPixel$+0x6c>
-    badc:	e3a0301e 	mov	r3, #30
-    bae0:	e3a0201e 	mov	r2, #30
-    bae4:	e3a01d05 	mov	r1, #320	; 0x140
-    bae8:	e59f096c 	ldr	r0, [pc, #2412]	; c45c <noPixel$+0x88>
-    baec:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    baf0:	eb000293 	bl	c544 <drawRect>
-    baf4:	e59f4944 	ldr	r4, [pc, #2372]	; c440 <noPixel$+0x6c>
-    baf8:	e3a0301e 	mov	r3, #30
-    bafc:	e3a0205a 	mov	r2, #90	; 0x5a
-    bb00:	e3a010c8 	mov	r1, #200	; 0xc8
-    bb04:	e59f0954 	ldr	r0, [pc, #2388]	; c460 <noPixel$+0x8c>
-    bb08:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bb0c:	eb00028c 	bl	c544 <drawRect>
-    bb10:	e59f4928 	ldr	r4, [pc, #2344]	; c440 <noPixel$+0x6c>
-    bb14:	e3a0301e 	mov	r3, #30
-    bb18:	e3a0205a 	mov	r2, #90	; 0x5a
-    bb1c:	e3a01d05 	mov	r1, #320	; 0x140
-    bb20:	e59f0938 	ldr	r0, [pc, #2360]	; c460 <noPixel$+0x8c>
-    bb24:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bb28:	eb000285 	bl	c544 <drawRect>
-    bb2c:	e59f490c 	ldr	r4, [pc, #2316]	; c440 <noPixel$+0x6c>
-    bb30:	e3a0305a 	mov	r3, #90	; 0x5a
-    bb34:	e3a0201e 	mov	r2, #30
-    bb38:	e3a010e6 	mov	r1, #230	; 0xe6
-    bb3c:	e59f0920 	ldr	r0, [pc, #2336]	; c464 <noPixel$+0x90>
-    bb40:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bb44:	eb00027e 	bl	c544 <drawRect>
-    bb48:	e59f48f0 	ldr	r4, [pc, #2288]	; c440 <noPixel$+0x6c>
-    bb4c:	e3a03096 	mov	r3, #150	; 0x96
-    bb50:	e3a0201e 	mov	r2, #30
-    bb54:	e3a010c8 	mov	r1, #200	; 0xc8
-    bb58:	e59f0908 	ldr	r0, [pc, #2312]	; c468 <noPixel$+0x94>
-    bb5c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bb60:	eb000277 	bl	c544 <drawRect>
-    bb64:	e59f48d4 	ldr	r4, [pc, #2260]	; c440 <noPixel$+0x6c>
-    bb68:	e3a0301e 	mov	r3, #30
-    bb6c:	e3a0201e 	mov	r2, #30
-    bb70:	e3a010e6 	mov	r1, #230	; 0xe6
-    bb74:	e59f08f0 	ldr	r0, [pc, #2288]	; c46c <noPixel$+0x98>
-    bb78:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bb7c:	eb000270 	bl	c544 <drawRect>
-    bb80:	e59f48b8 	ldr	r4, [pc, #2232]	; c440 <noPixel$+0x6c>
-    bb84:	e3a0301e 	mov	r3, #30
-    bb88:	e3a0201e 	mov	r2, #30
-    bb8c:	e3a01f41 	mov	r1, #260	; 0x104
-    bb90:	e59f08d8 	ldr	r0, [pc, #2264]	; c470 <noPixel$+0x9c>
-    bb94:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bb98:	eb000269 	bl	c544 <drawRect>
-    bb9c:	e59f489c 	ldr	r4, [pc, #2204]	; c440 <noPixel$+0x6c>
-    bba0:	e3a0301e 	mov	r3, #30
-    bba4:	e3a0201e 	mov	r2, #30
-    bba8:	e59f18c4 	ldr	r1, [pc, #2244]	; c474 <noPixel$+0xa0>
-    bbac:	e59f08c4 	ldr	r0, [pc, #2244]	; c478 <noPixel$+0xa4>
-    bbb0:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bbb4:	eb000262 	bl	c544 <drawRect>
-    bbb8:	e59f4880 	ldr	r4, [pc, #2176]	; c440 <noPixel$+0x6c>
-    bbbc:	e3a03096 	mov	r3, #150	; 0x96
-    bbc0:	e3a0201e 	mov	r2, #30
-    bbc4:	e3a010c8 	mov	r1, #200	; 0xc8
-    bbc8:	e59f08ac 	ldr	r0, [pc, #2220]	; c47c <noPixel$+0xa8>
-    bbcc:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bbd0:	eb00025b 	bl	c544 <drawRect>
-    bbd4:	e59f4864 	ldr	r4, [pc, #2148]	; c440 <noPixel$+0x6c>
-    bbd8:	e3a0305a 	mov	r3, #90	; 0x5a
-    bbdc:	e3a0201e 	mov	r2, #30
-    bbe0:	e3a010c8 	mov	r1, #200	; 0xc8
-    bbe4:	e59f0894 	ldr	r0, [pc, #2196]	; c480 <noPixel$+0xac>
-    bbe8:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bbec:	eb000254 	bl	c544 <drawRect>
-    bbf0:	e59f4848 	ldr	r4, [pc, #2120]	; c440 <noPixel$+0x6c>
-    bbf4:	e3a0301e 	mov	r3, #30
-    bbf8:	e3a0201e 	mov	r2, #30
-    bbfc:	e3a01d05 	mov	r1, #320	; 0x140
-    bc00:	e59f0878 	ldr	r0, [pc, #2168]	; c480 <noPixel$+0xac>
-    bc04:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bc08:	eb00024d 	bl	c544 <drawRect>
-    bc0c:	e8bd8010 	pop	{r4, pc}
+0000b95c <drawVictoryScreen>:
+    b95c:	e92d4010 	push	{r4, lr}
+    b960:	e59f4ae8 	ldr	r4, [pc, #2792]	; c450 <noPixel$+0x6c>
+    b964:	e3a0305a 	mov	r3, #90	; 0x5a
+    b968:	e3a0201e 	mov	r2, #30
+    b96c:	e3a010c8 	mov	r1, #200	; 0xc8
+    b970:	e3a00057 	mov	r0, #87	; 0x57
+    b974:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b978:	eb0002f5 	bl	c554 <drawRect>
+    b97c:	e59f4acc 	ldr	r4, [pc, #2764]	; c450 <noPixel$+0x6c>
+    b980:	e3a0305a 	mov	r3, #90	; 0x5a
+    b984:	e3a0201e 	mov	r2, #30
+    b988:	e3a010c8 	mov	r1, #200	; 0xc8
+    b98c:	e3a00093 	mov	r0, #147	; 0x93
+    b990:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b994:	eb0002ee 	bl	c554 <drawRect>
+    b998:	e59f4ab0 	ldr	r4, [pc, #2736]	; c450 <noPixel$+0x6c>
+    b99c:	e3a0305a 	mov	r3, #90	; 0x5a
+    b9a0:	e3a0201e 	mov	r2, #30
+    b9a4:	e3a01f41 	mov	r1, #260	; 0x104
+    b9a8:	e3a00075 	mov	r0, #117	; 0x75
+    b9ac:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b9b0:	eb0002e7 	bl	c554 <drawRect>
+    b9b4:	e59f4a94 	ldr	r4, [pc, #2708]	; c450 <noPixel$+0x6c>
+    b9b8:	e3a0305a 	mov	r3, #90	; 0x5a
+    b9bc:	e3a0201e 	mov	r2, #30
+    b9c0:	e3a010e6 	mov	r1, #230	; 0xe6
+    b9c4:	e3a000bb 	mov	r0, #187	; 0xbb
+    b9c8:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b9cc:	eb0002e0 	bl	c554 <drawRect>
+    b9d0:	e59f4a78 	ldr	r4, [pc, #2680]	; c450 <noPixel$+0x6c>
+    b9d4:	e3a0305a 	mov	r3, #90	; 0x5a
+    b9d8:	e3a0201e 	mov	r2, #30
+    b9dc:	e3a010e6 	mov	r1, #230	; 0xe6
+    b9e0:	e3a000f7 	mov	r0, #247	; 0xf7
+    b9e4:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    b9e8:	eb0002d9 	bl	c554 <drawRect>
+    b9ec:	e59f4a5c 	ldr	r4, [pc, #2652]	; c450 <noPixel$+0x6c>
+    b9f0:	e3a0301e 	mov	r3, #30
+    b9f4:	e3a0201e 	mov	r2, #30
+    b9f8:	e3a010c8 	mov	r1, #200	; 0xc8
+    b9fc:	e3a000d9 	mov	r0, #217	; 0xd9
+    ba00:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    ba04:	eb0002d2 	bl	c554 <drawRect>
+    ba08:	e59f4a40 	ldr	r4, [pc, #2624]	; c450 <noPixel$+0x6c>
+    ba0c:	e3a0301e 	mov	r3, #30
+    ba10:	e3a0201e 	mov	r2, #30
+    ba14:	e3a01d05 	mov	r1, #320	; 0x140
+    ba18:	e3a000d9 	mov	r0, #217	; 0xd9
+    ba1c:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    ba20:	eb0002cb 	bl	c554 <drawRect>
+    ba24:	e59f4a24 	ldr	r4, [pc, #2596]	; c450 <noPixel$+0x6c>
+    ba28:	e3a03078 	mov	r3, #120	; 0x78
+    ba2c:	e3a0201e 	mov	r2, #30
+    ba30:	e3a010c8 	mov	r1, #200	; 0xc8
+    ba34:	e59f0a18 	ldr	r0, [pc, #2584]	; c454 <noPixel$+0x70>
+    ba38:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    ba3c:	eb0002c4 	bl	c554 <drawRect>
+    ba40:	e59f4a08 	ldr	r4, [pc, #2568]	; c450 <noPixel$+0x6c>
+    ba44:	e3a03078 	mov	r3, #120	; 0x78
+    ba48:	e3a0201e 	mov	r2, #30
+    ba4c:	e3a010c8 	mov	r1, #200	; 0xc8
+    ba50:	e59f0a00 	ldr	r0, [pc, #2560]	; c458 <noPixel$+0x74>
+    ba54:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    ba58:	eb0002bd 	bl	c554 <drawRect>
+    ba5c:	e59f49ec 	ldr	r4, [pc, #2540]	; c450 <noPixel$+0x6c>
+    ba60:	e3a0301e 	mov	r3, #30
+    ba64:	e3a0201e 	mov	r2, #30
+    ba68:	e3a01d05 	mov	r1, #320	; 0x140
+    ba6c:	e59f09e8 	ldr	r0, [pc, #2536]	; c45c <noPixel$+0x78>
+    ba70:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    ba74:	eb0002b6 	bl	c554 <drawRect>
+    ba78:	e59f49d0 	ldr	r4, [pc, #2512]	; c450 <noPixel$+0x6c>
+    ba7c:	e3a03078 	mov	r3, #120	; 0x78
+    ba80:	e3a0201e 	mov	r2, #30
+    ba84:	e3a010c8 	mov	r1, #200	; 0xc8
+    ba88:	e59f09a8 	ldr	r0, [pc, #2472]	; c438 <noPixel$+0x54>
+    ba8c:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    ba90:	eb0002af 	bl	c554 <drawRect>
+    ba94:	e59f49b4 	ldr	r4, [pc, #2484]	; c450 <noPixel$+0x6c>
+    ba98:	e3a03078 	mov	r3, #120	; 0x78
+    ba9c:	e3a0201e 	mov	r2, #30
+    baa0:	e3a010c8 	mov	r1, #200	; 0xc8
+    baa4:	e59f09b4 	ldr	r0, [pc, #2484]	; c460 <noPixel$+0x7c>
+    baa8:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    baac:	eb0002a8 	bl	c554 <drawRect>
+    bab0:	e59f4998 	ldr	r4, [pc, #2456]	; c450 <noPixel$+0x6c>
+    bab4:	e3a03078 	mov	r3, #120	; 0x78
+    bab8:	e3a0201e 	mov	r2, #30
+    babc:	e3a010c8 	mov	r1, #200	; 0xc8
+    bac0:	e59f099c 	ldr	r0, [pc, #2460]	; c464 <noPixel$+0x80>
+    bac4:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bac8:	eb0002a1 	bl	c554 <drawRect>
+    bacc:	e59f497c 	ldr	r4, [pc, #2428]	; c450 <noPixel$+0x6c>
+    bad0:	e3a0301e 	mov	r3, #30
+    bad4:	e3a0201e 	mov	r2, #30
+    bad8:	e3a01d05 	mov	r1, #320	; 0x140
+    badc:	e59f0984 	ldr	r0, [pc, #2436]	; c468 <noPixel$+0x84>
+    bae0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bae4:	eb00029a 	bl	c554 <drawRect>
+    bae8:	e59f4960 	ldr	r4, [pc, #2400]	; c450 <noPixel$+0x6c>
+    baec:	e3a0301e 	mov	r3, #30
+    baf0:	e3a0201e 	mov	r2, #30
+    baf4:	e3a01d05 	mov	r1, #320	; 0x140
+    baf8:	e59f096c 	ldr	r0, [pc, #2412]	; c46c <noPixel$+0x88>
+    bafc:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bb00:	eb000293 	bl	c554 <drawRect>
+    bb04:	e59f4944 	ldr	r4, [pc, #2372]	; c450 <noPixel$+0x6c>
+    bb08:	e3a0301e 	mov	r3, #30
+    bb0c:	e3a0205a 	mov	r2, #90	; 0x5a
+    bb10:	e3a010c8 	mov	r1, #200	; 0xc8
+    bb14:	e59f0954 	ldr	r0, [pc, #2388]	; c470 <noPixel$+0x8c>
+    bb18:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bb1c:	eb00028c 	bl	c554 <drawRect>
+    bb20:	e59f4928 	ldr	r4, [pc, #2344]	; c450 <noPixel$+0x6c>
+    bb24:	e3a0301e 	mov	r3, #30
+    bb28:	e3a0205a 	mov	r2, #90	; 0x5a
+    bb2c:	e3a01d05 	mov	r1, #320	; 0x140
+    bb30:	e59f0938 	ldr	r0, [pc, #2360]	; c470 <noPixel$+0x8c>
+    bb34:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bb38:	eb000285 	bl	c554 <drawRect>
+    bb3c:	e59f490c 	ldr	r4, [pc, #2316]	; c450 <noPixel$+0x6c>
+    bb40:	e3a0305a 	mov	r3, #90	; 0x5a
+    bb44:	e3a0201e 	mov	r2, #30
+    bb48:	e3a010e6 	mov	r1, #230	; 0xe6
+    bb4c:	e59f0920 	ldr	r0, [pc, #2336]	; c474 <noPixel$+0x90>
+    bb50:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bb54:	eb00027e 	bl	c554 <drawRect>
+    bb58:	e59f48f0 	ldr	r4, [pc, #2288]	; c450 <noPixel$+0x6c>
+    bb5c:	e3a03096 	mov	r3, #150	; 0x96
+    bb60:	e3a0201e 	mov	r2, #30
+    bb64:	e3a010c8 	mov	r1, #200	; 0xc8
+    bb68:	e59f0908 	ldr	r0, [pc, #2312]	; c478 <noPixel$+0x94>
+    bb6c:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bb70:	eb000277 	bl	c554 <drawRect>
+    bb74:	e59f48d4 	ldr	r4, [pc, #2260]	; c450 <noPixel$+0x6c>
+    bb78:	e3a0301e 	mov	r3, #30
+    bb7c:	e3a0201e 	mov	r2, #30
+    bb80:	e3a010e6 	mov	r1, #230	; 0xe6
+    bb84:	e59f08f0 	ldr	r0, [pc, #2288]	; c47c <noPixel$+0x98>
+    bb88:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bb8c:	eb000270 	bl	c554 <drawRect>
+    bb90:	e59f48b8 	ldr	r4, [pc, #2232]	; c450 <noPixel$+0x6c>
+    bb94:	e3a0301e 	mov	r3, #30
+    bb98:	e3a0201e 	mov	r2, #30
+    bb9c:	e3a01f41 	mov	r1, #260	; 0x104
+    bba0:	e59f08d8 	ldr	r0, [pc, #2264]	; c480 <noPixel$+0x9c>
+    bba4:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bba8:	eb000269 	bl	c554 <drawRect>
+    bbac:	e59f489c 	ldr	r4, [pc, #2204]	; c450 <noPixel$+0x6c>
+    bbb0:	e3a0301e 	mov	r3, #30
+    bbb4:	e3a0201e 	mov	r2, #30
+    bbb8:	e59f18c4 	ldr	r1, [pc, #2244]	; c484 <noPixel$+0xa0>
+    bbbc:	e59f08c4 	ldr	r0, [pc, #2244]	; c488 <noPixel$+0xa4>
+    bbc0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bbc4:	eb000262 	bl	c554 <drawRect>
+    bbc8:	e59f4880 	ldr	r4, [pc, #2176]	; c450 <noPixel$+0x6c>
+    bbcc:	e3a03096 	mov	r3, #150	; 0x96
+    bbd0:	e3a0201e 	mov	r2, #30
+    bbd4:	e3a010c8 	mov	r1, #200	; 0xc8
+    bbd8:	e59f08ac 	ldr	r0, [pc, #2220]	; c48c <noPixel$+0xa8>
+    bbdc:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bbe0:	eb00025b 	bl	c554 <drawRect>
+    bbe4:	e59f4864 	ldr	r4, [pc, #2148]	; c450 <noPixel$+0x6c>
+    bbe8:	e3a0305a 	mov	r3, #90	; 0x5a
+    bbec:	e3a0201e 	mov	r2, #30
+    bbf0:	e3a010c8 	mov	r1, #200	; 0xc8
+    bbf4:	e59f0894 	ldr	r0, [pc, #2196]	; c490 <noPixel$+0xac>
+    bbf8:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bbfc:	eb000254 	bl	c554 <drawRect>
+    bc00:	e59f4848 	ldr	r4, [pc, #2120]	; c450 <noPixel$+0x6c>
+    bc04:	e3a0301e 	mov	r3, #30
+    bc08:	e3a0201e 	mov	r2, #30
+    bc0c:	e3a01d05 	mov	r1, #320	; 0x140
+    bc10:	e59f0878 	ldr	r0, [pc, #2168]	; c490 <noPixel$+0xac>
+    bc14:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bc18:	eb00024d 	bl	c554 <drawRect>
+    bc1c:	e8bd8010 	pop	{r4, pc}
 
-0000bc10 <drawLossScreen>:
-    bc10:	e92d4010 	push	{r4, lr}
-    bc14:	e59f4868 	ldr	r4, [pc, #2152]	; c484 <noPixel$+0xb0>
-    bc18:	e3a0305a 	mov	r3, #90	; 0x5a
-    bc1c:	e3a0201e 	mov	r2, #30
-    bc20:	e3a010c8 	mov	r1, #200	; 0xc8
-    bc24:	e3a00075 	mov	r0, #117	; 0x75
-    bc28:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bc2c:	eb000244 	bl	c544 <drawRect>
-    bc30:	e59f484c 	ldr	r4, [pc, #2124]	; c484 <noPixel$+0xb0>
-    bc34:	e3a0305a 	mov	r3, #90	; 0x5a
-    bc38:	e3a0201e 	mov	r2, #30
-    bc3c:	e3a010c8 	mov	r1, #200	; 0xc8
-    bc40:	e3a000b1 	mov	r0, #177	; 0xb1
-    bc44:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bc48:	eb00023d 	bl	c544 <drawRect>
-    bc4c:	e59f4830 	ldr	r4, [pc, #2096]	; c484 <noPixel$+0xb0>
-    bc50:	e3a0305a 	mov	r3, #90	; 0x5a
-    bc54:	e3a0201e 	mov	r2, #30
-    bc58:	e3a01f41 	mov	r1, #260	; 0x104
-    bc5c:	e3a00093 	mov	r0, #147	; 0x93
-    bc60:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bc64:	eb000236 	bl	c544 <drawRect>
-    bc68:	e59f4814 	ldr	r4, [pc, #2068]	; c484 <noPixel$+0xb0>
-    bc6c:	e3a0305a 	mov	r3, #90	; 0x5a
-    bc70:	e3a0201e 	mov	r2, #30
-    bc74:	e3a010e6 	mov	r1, #230	; 0xe6
-    bc78:	e3a000d9 	mov	r0, #217	; 0xd9
-    bc7c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bc80:	eb00022f 	bl	c544 <drawRect>
-    bc84:	e59f47f8 	ldr	r4, [pc, #2040]	; c484 <noPixel$+0xb0>
-    bc88:	e3a0305a 	mov	r3, #90	; 0x5a
-    bc8c:	e3a0201e 	mov	r2, #30
-    bc90:	e3a010e6 	mov	r1, #230	; 0xe6
-    bc94:	e59f07ec 	ldr	r0, [pc, #2028]	; c488 <noPixel$+0xb4>
-    bc98:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bc9c:	eb000228 	bl	c544 <drawRect>
-    bca0:	e59f47dc 	ldr	r4, [pc, #2012]	; c484 <noPixel$+0xb0>
-    bca4:	e3a0301e 	mov	r3, #30
-    bca8:	e3a0201e 	mov	r2, #30
-    bcac:	e3a010c8 	mov	r1, #200	; 0xc8
-    bcb0:	e3a000f7 	mov	r0, #247	; 0xf7
-    bcb4:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bcb8:	eb000221 	bl	c544 <drawRect>
-    bcbc:	e59f47c0 	ldr	r4, [pc, #1984]	; c484 <noPixel$+0xb0>
-    bcc0:	e3a0301e 	mov	r3, #30
-    bcc4:	e3a0201e 	mov	r2, #30
-    bcc8:	e3a01d05 	mov	r1, #320	; 0x140
-    bccc:	e3a000f7 	mov	r0, #247	; 0xf7
-    bcd0:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bcd4:	eb00021a 	bl	c544 <drawRect>
-    bcd8:	e59f47a4 	ldr	r4, [pc, #1956]	; c484 <noPixel$+0xb0>
-    bcdc:	e3a03078 	mov	r3, #120	; 0x78
-    bce0:	e3a0201e 	mov	r2, #30
-    bce4:	e3a010c8 	mov	r1, #200	; 0xc8
-    bce8:	e59f075c 	ldr	r0, [pc, #1884]	; c44c <noPixel$+0x78>
-    bcec:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bcf0:	eb000213 	bl	c544 <drawRect>
-    bcf4:	e59f4788 	ldr	r4, [pc, #1928]	; c484 <noPixel$+0xb0>
-    bcf8:	e3a03078 	mov	r3, #120	; 0x78
-    bcfc:	e3a0201e 	mov	r2, #30
-    bd00:	e3a010c8 	mov	r1, #200	; 0xc8
-    bd04:	e59f0780 	ldr	r0, [pc, #1920]	; c48c <noPixel$+0xb8>
-    bd08:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bd0c:	eb00020c 	bl	c544 <drawRect>
-    bd10:	e59f476c 	ldr	r4, [pc, #1900]	; c484 <noPixel$+0xb0>
-    bd14:	e3a0301e 	mov	r3, #30
-    bd18:	e3a0201e 	mov	r2, #30
-    bd1c:	e3a01d05 	mov	r1, #320	; 0x140
-    bd20:	e59f0720 	ldr	r0, [pc, #1824]	; c448 <noPixel$+0x74>
-    bd24:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bd28:	eb000205 	bl	c544 <drawRect>
-    bd2c:	e59f4750 	ldr	r4, [pc, #1872]	; c484 <noPixel$+0xb0>
-    bd30:	e3a03096 	mov	r3, #150	; 0x96
-    bd34:	e3a0201e 	mov	r2, #30
-    bd38:	e3a010c8 	mov	r1, #200	; 0xc8
-    bd3c:	e59f0714 	ldr	r0, [pc, #1812]	; c458 <noPixel$+0x84>
-    bd40:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bd44:	eb0001fe 	bl	c544 <drawRect>
-    bd48:	e59f4734 	ldr	r4, [pc, #1844]	; c484 <noPixel$+0xb0>
-    bd4c:	e3a0301e 	mov	r3, #30
-    bd50:	e3a0203c 	mov	r2, #60	; 0x3c
-    bd54:	e3a01d05 	mov	r1, #320	; 0x140
-    bd58:	e59f06f0 	ldr	r0, [pc, #1776]	; c450 <noPixel$+0x7c>
-    bd5c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bd60:	eb0001f7 	bl	c544 <drawRect>
-    bd64:	e59f4718 	ldr	r4, [pc, #1816]	; c484 <noPixel$+0xb0>
-    bd68:	e3a0305a 	mov	r3, #90	; 0x5a
-    bd6c:	e3a0201e 	mov	r2, #30
-    bd70:	e3a010e6 	mov	r1, #230	; 0xe6
-    bd74:	e59f0714 	ldr	r0, [pc, #1812]	; c490 <noPixel$+0xbc>
-    bd78:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bd7c:	eb0001f0 	bl	c544 <drawRect>
-    bd80:	e59f46fc 	ldr	r4, [pc, #1788]	; c484 <noPixel$+0xb0>
-    bd84:	e3a0305a 	mov	r3, #90	; 0x5a
-    bd88:	e3a0201e 	mov	r2, #30
-    bd8c:	e3a010e6 	mov	r1, #230	; 0xe6
-    bd90:	e59f06cc 	ldr	r0, [pc, #1740]	; c464 <noPixel$+0x90>
-    bd94:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bd98:	eb0001e9 	bl	c544 <drawRect>
-    bd9c:	e59f46e0 	ldr	r4, [pc, #1760]	; c484 <noPixel$+0xb0>
-    bda0:	e3a0301e 	mov	r3, #30
-    bda4:	e3a0201e 	mov	r2, #30
-    bda8:	e3a010c8 	mov	r1, #200	; 0xc8
-    bdac:	e59f06ac 	ldr	r0, [pc, #1708]	; c460 <noPixel$+0x8c>
-    bdb0:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bdb4:	eb0001e2 	bl	c544 <drawRect>
-    bdb8:	e59f46c4 	ldr	r4, [pc, #1732]	; c484 <noPixel$+0xb0>
-    bdbc:	e3a0301e 	mov	r3, #30
-    bdc0:	e3a0201e 	mov	r2, #30
-    bdc4:	e3a01d05 	mov	r1, #320	; 0x140
-    bdc8:	e59f0690 	ldr	r0, [pc, #1680]	; c460 <noPixel$+0x8c>
-    bdcc:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bdd0:	eb0001db 	bl	c544 <drawRect>
-    bdd4:	e59f46a8 	ldr	r4, [pc, #1704]	; c484 <noPixel$+0xb0>
-    bdd8:	e3a0301e 	mov	r3, #30
-    bddc:	e3a0205a 	mov	r2, #90	; 0x5a
-    bde0:	e3a010c8 	mov	r1, #200	; 0xc8
-    bde4:	e59f06a8 	ldr	r0, [pc, #1704]	; c494 <noPixel$+0xc0>
-    bde8:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bdec:	eb0001d4 	bl	c544 <drawRect>
-    bdf0:	e59f468c 	ldr	r4, [pc, #1676]	; c484 <noPixel$+0xb0>
-    bdf4:	e3a0301e 	mov	r3, #30
-    bdf8:	e3a0201e 	mov	r2, #30
-    bdfc:	e3a010e6 	mov	r1, #230	; 0xe6
-    be00:	e59f068c 	ldr	r0, [pc, #1676]	; c494 <noPixel$+0xc0>
-    be04:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    be08:	eb0001cd 	bl	c544 <drawRect>
-    be0c:	e59f4670 	ldr	r4, [pc, #1648]	; c484 <noPixel$+0xb0>
-    be10:	e3a0301e 	mov	r3, #30
-    be14:	e3a0205a 	mov	r2, #90	; 0x5a
-    be18:	e3a01f41 	mov	r1, #260	; 0x104
-    be1c:	e59f0670 	ldr	r0, [pc, #1648]	; c494 <noPixel$+0xc0>
-    be20:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    be24:	eb0001c6 	bl	c544 <drawRect>
-    be28:	e59f4654 	ldr	r4, [pc, #1620]	; c484 <noPixel$+0xb0>
-    be2c:	e3a0301e 	mov	r3, #30
-    be30:	e3a0201e 	mov	r2, #30
-    be34:	e59f1638 	ldr	r1, [pc, #1592]	; c474 <noPixel$+0xa0>
-    be38:	e59f062c 	ldr	r0, [pc, #1580]	; c46c <noPixel$+0x98>
-    be3c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    be40:	eb0001bf 	bl	c544 <drawRect>
-    be44:	e59f4638 	ldr	r4, [pc, #1592]	; c484 <noPixel$+0xb0>
-    be48:	e3a0301e 	mov	r3, #30
-    be4c:	e3a0205a 	mov	r2, #90	; 0x5a
-    be50:	e3a01d05 	mov	r1, #320	; 0x140
-    be54:	e59f0638 	ldr	r0, [pc, #1592]	; c494 <noPixel$+0xc0>
-    be58:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    be5c:	eb0001b8 	bl	c544 <drawRect>
-    be60:	e59f461c 	ldr	r4, [pc, #1564]	; c484 <noPixel$+0xb0>
-    be64:	e3a03096 	mov	r3, #150	; 0x96
-    be68:	e3a0201e 	mov	r2, #30
-    be6c:	e3a010c8 	mov	r1, #200	; 0xc8
-    be70:	e59f0620 	ldr	r0, [pc, #1568]	; c498 <noPixel$+0xc4>
-    be74:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    be78:	eb0001b1 	bl	c544 <drawRect>
-    be7c:	e59f4600 	ldr	r4, [pc, #1536]	; c484 <noPixel$+0xb0>
-    be80:	e3a0301e 	mov	r3, #30
-    be84:	e3a0203c 	mov	r2, #60	; 0x3c
-    be88:	e3a010c8 	mov	r1, #200	; 0xc8
-    be8c:	e59f0608 	ldr	r0, [pc, #1544]	; c49c <noPixel$+0xc8>
-    be90:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    be94:	eb0001aa 	bl	c544 <drawRect>
-    be98:	e59f45e4 	ldr	r4, [pc, #1508]	; c484 <noPixel$+0xb0>
-    be9c:	e3a0301e 	mov	r3, #30
-    bea0:	e3a0203c 	mov	r2, #60	; 0x3c
-    bea4:	e3a01f41 	mov	r1, #260	; 0x104
-    bea8:	e59f05ec 	ldr	r0, [pc, #1516]	; c49c <noPixel$+0xc8>
-    beac:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    beb0:	eb0001a3 	bl	c544 <drawRect>
-    beb4:	e59f45c8 	ldr	r4, [pc, #1480]	; c484 <noPixel$+0xb0>
-    beb8:	e3a0301e 	mov	r3, #30
-    bebc:	e3a0203c 	mov	r2, #60	; 0x3c
-    bec0:	e3a01d05 	mov	r1, #320	; 0x140
-    bec4:	e59f05d0 	ldr	r0, [pc, #1488]	; c49c <noPixel$+0xc8>
-    bec8:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    becc:	eb00019c 	bl	c544 <drawRect>
-    bed0:	e8bd8010 	pop	{r4, pc}
+0000bc20 <drawLossScreen>:
+    bc20:	e92d4010 	push	{r4, lr}
+    bc24:	e59f4868 	ldr	r4, [pc, #2152]	; c494 <noPixel$+0xb0>
+    bc28:	e3a0305a 	mov	r3, #90	; 0x5a
+    bc2c:	e3a0201e 	mov	r2, #30
+    bc30:	e3a010c8 	mov	r1, #200	; 0xc8
+    bc34:	e3a00075 	mov	r0, #117	; 0x75
+    bc38:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bc3c:	eb000244 	bl	c554 <drawRect>
+    bc40:	e59f484c 	ldr	r4, [pc, #2124]	; c494 <noPixel$+0xb0>
+    bc44:	e3a0305a 	mov	r3, #90	; 0x5a
+    bc48:	e3a0201e 	mov	r2, #30
+    bc4c:	e3a010c8 	mov	r1, #200	; 0xc8
+    bc50:	e3a000b1 	mov	r0, #177	; 0xb1
+    bc54:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bc58:	eb00023d 	bl	c554 <drawRect>
+    bc5c:	e59f4830 	ldr	r4, [pc, #2096]	; c494 <noPixel$+0xb0>
+    bc60:	e3a0305a 	mov	r3, #90	; 0x5a
+    bc64:	e3a0201e 	mov	r2, #30
+    bc68:	e3a01f41 	mov	r1, #260	; 0x104
+    bc6c:	e3a00093 	mov	r0, #147	; 0x93
+    bc70:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bc74:	eb000236 	bl	c554 <drawRect>
+    bc78:	e59f4814 	ldr	r4, [pc, #2068]	; c494 <noPixel$+0xb0>
+    bc7c:	e3a0305a 	mov	r3, #90	; 0x5a
+    bc80:	e3a0201e 	mov	r2, #30
+    bc84:	e3a010e6 	mov	r1, #230	; 0xe6
+    bc88:	e3a000d9 	mov	r0, #217	; 0xd9
+    bc8c:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bc90:	eb00022f 	bl	c554 <drawRect>
+    bc94:	e59f47f8 	ldr	r4, [pc, #2040]	; c494 <noPixel$+0xb0>
+    bc98:	e3a0305a 	mov	r3, #90	; 0x5a
+    bc9c:	e3a0201e 	mov	r2, #30
+    bca0:	e3a010e6 	mov	r1, #230	; 0xe6
+    bca4:	e59f07ec 	ldr	r0, [pc, #2028]	; c498 <noPixel$+0xb4>
+    bca8:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bcac:	eb000228 	bl	c554 <drawRect>
+    bcb0:	e59f47dc 	ldr	r4, [pc, #2012]	; c494 <noPixel$+0xb0>
+    bcb4:	e3a0301e 	mov	r3, #30
+    bcb8:	e3a0201e 	mov	r2, #30
+    bcbc:	e3a010c8 	mov	r1, #200	; 0xc8
+    bcc0:	e3a000f7 	mov	r0, #247	; 0xf7
+    bcc4:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bcc8:	eb000221 	bl	c554 <drawRect>
+    bccc:	e59f47c0 	ldr	r4, [pc, #1984]	; c494 <noPixel$+0xb0>
+    bcd0:	e3a0301e 	mov	r3, #30
+    bcd4:	e3a0201e 	mov	r2, #30
+    bcd8:	e3a01d05 	mov	r1, #320	; 0x140
+    bcdc:	e3a000f7 	mov	r0, #247	; 0xf7
+    bce0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bce4:	eb00021a 	bl	c554 <drawRect>
+    bce8:	e59f47a4 	ldr	r4, [pc, #1956]	; c494 <noPixel$+0xb0>
+    bcec:	e3a03078 	mov	r3, #120	; 0x78
+    bcf0:	e3a0201e 	mov	r2, #30
+    bcf4:	e3a010c8 	mov	r1, #200	; 0xc8
+    bcf8:	e59f075c 	ldr	r0, [pc, #1884]	; c45c <noPixel$+0x78>
+    bcfc:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bd00:	eb000213 	bl	c554 <drawRect>
+    bd04:	e59f4788 	ldr	r4, [pc, #1928]	; c494 <noPixel$+0xb0>
+    bd08:	e3a03078 	mov	r3, #120	; 0x78
+    bd0c:	e3a0201e 	mov	r2, #30
+    bd10:	e3a010c8 	mov	r1, #200	; 0xc8
+    bd14:	e59f0780 	ldr	r0, [pc, #1920]	; c49c <noPixel$+0xb8>
+    bd18:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bd1c:	eb00020c 	bl	c554 <drawRect>
+    bd20:	e59f476c 	ldr	r4, [pc, #1900]	; c494 <noPixel$+0xb0>
+    bd24:	e3a0301e 	mov	r3, #30
+    bd28:	e3a0201e 	mov	r2, #30
+    bd2c:	e3a01d05 	mov	r1, #320	; 0x140
+    bd30:	e59f0720 	ldr	r0, [pc, #1824]	; c458 <noPixel$+0x74>
+    bd34:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bd38:	eb000205 	bl	c554 <drawRect>
+    bd3c:	e59f4750 	ldr	r4, [pc, #1872]	; c494 <noPixel$+0xb0>
+    bd40:	e3a03096 	mov	r3, #150	; 0x96
+    bd44:	e3a0201e 	mov	r2, #30
+    bd48:	e3a010c8 	mov	r1, #200	; 0xc8
+    bd4c:	e59f0714 	ldr	r0, [pc, #1812]	; c468 <noPixel$+0x84>
+    bd50:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bd54:	eb0001fe 	bl	c554 <drawRect>
+    bd58:	e59f4734 	ldr	r4, [pc, #1844]	; c494 <noPixel$+0xb0>
+    bd5c:	e3a0301e 	mov	r3, #30
+    bd60:	e3a0203c 	mov	r2, #60	; 0x3c
+    bd64:	e3a01d05 	mov	r1, #320	; 0x140
+    bd68:	e59f06f0 	ldr	r0, [pc, #1776]	; c460 <noPixel$+0x7c>
+    bd6c:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bd70:	eb0001f7 	bl	c554 <drawRect>
+    bd74:	e59f4718 	ldr	r4, [pc, #1816]	; c494 <noPixel$+0xb0>
+    bd78:	e3a0305a 	mov	r3, #90	; 0x5a
+    bd7c:	e3a0201e 	mov	r2, #30
+    bd80:	e3a010e6 	mov	r1, #230	; 0xe6
+    bd84:	e59f0714 	ldr	r0, [pc, #1812]	; c4a0 <noPixel$+0xbc>
+    bd88:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bd8c:	eb0001f0 	bl	c554 <drawRect>
+    bd90:	e59f46fc 	ldr	r4, [pc, #1788]	; c494 <noPixel$+0xb0>
+    bd94:	e3a0305a 	mov	r3, #90	; 0x5a
+    bd98:	e3a0201e 	mov	r2, #30
+    bd9c:	e3a010e6 	mov	r1, #230	; 0xe6
+    bda0:	e59f06cc 	ldr	r0, [pc, #1740]	; c474 <noPixel$+0x90>
+    bda4:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bda8:	eb0001e9 	bl	c554 <drawRect>
+    bdac:	e59f46e0 	ldr	r4, [pc, #1760]	; c494 <noPixel$+0xb0>
+    bdb0:	e3a0301e 	mov	r3, #30
+    bdb4:	e3a0201e 	mov	r2, #30
+    bdb8:	e3a010c8 	mov	r1, #200	; 0xc8
+    bdbc:	e59f06ac 	ldr	r0, [pc, #1708]	; c470 <noPixel$+0x8c>
+    bdc0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bdc4:	eb0001e2 	bl	c554 <drawRect>
+    bdc8:	e59f46c4 	ldr	r4, [pc, #1732]	; c494 <noPixel$+0xb0>
+    bdcc:	e3a0301e 	mov	r3, #30
+    bdd0:	e3a0201e 	mov	r2, #30
+    bdd4:	e3a01d05 	mov	r1, #320	; 0x140
+    bdd8:	e59f0690 	ldr	r0, [pc, #1680]	; c470 <noPixel$+0x8c>
+    bddc:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bde0:	eb0001db 	bl	c554 <drawRect>
+    bde4:	e59f46a8 	ldr	r4, [pc, #1704]	; c494 <noPixel$+0xb0>
+    bde8:	e3a0301e 	mov	r3, #30
+    bdec:	e3a0205a 	mov	r2, #90	; 0x5a
+    bdf0:	e3a010c8 	mov	r1, #200	; 0xc8
+    bdf4:	e59f06a8 	ldr	r0, [pc, #1704]	; c4a4 <noPixel$+0xc0>
+    bdf8:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bdfc:	eb0001d4 	bl	c554 <drawRect>
+    be00:	e59f468c 	ldr	r4, [pc, #1676]	; c494 <noPixel$+0xb0>
+    be04:	e3a0301e 	mov	r3, #30
+    be08:	e3a0201e 	mov	r2, #30
+    be0c:	e3a010e6 	mov	r1, #230	; 0xe6
+    be10:	e59f068c 	ldr	r0, [pc, #1676]	; c4a4 <noPixel$+0xc0>
+    be14:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    be18:	eb0001cd 	bl	c554 <drawRect>
+    be1c:	e59f4670 	ldr	r4, [pc, #1648]	; c494 <noPixel$+0xb0>
+    be20:	e3a0301e 	mov	r3, #30
+    be24:	e3a0205a 	mov	r2, #90	; 0x5a
+    be28:	e3a01f41 	mov	r1, #260	; 0x104
+    be2c:	e59f0670 	ldr	r0, [pc, #1648]	; c4a4 <noPixel$+0xc0>
+    be30:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    be34:	eb0001c6 	bl	c554 <drawRect>
+    be38:	e59f4654 	ldr	r4, [pc, #1620]	; c494 <noPixel$+0xb0>
+    be3c:	e3a0301e 	mov	r3, #30
+    be40:	e3a0201e 	mov	r2, #30
+    be44:	e59f1638 	ldr	r1, [pc, #1592]	; c484 <noPixel$+0xa0>
+    be48:	e59f062c 	ldr	r0, [pc, #1580]	; c47c <noPixel$+0x98>
+    be4c:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    be50:	eb0001bf 	bl	c554 <drawRect>
+    be54:	e59f4638 	ldr	r4, [pc, #1592]	; c494 <noPixel$+0xb0>
+    be58:	e3a0301e 	mov	r3, #30
+    be5c:	e3a0205a 	mov	r2, #90	; 0x5a
+    be60:	e3a01d05 	mov	r1, #320	; 0x140
+    be64:	e59f0638 	ldr	r0, [pc, #1592]	; c4a4 <noPixel$+0xc0>
+    be68:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    be6c:	eb0001b8 	bl	c554 <drawRect>
+    be70:	e59f461c 	ldr	r4, [pc, #1564]	; c494 <noPixel$+0xb0>
+    be74:	e3a03096 	mov	r3, #150	; 0x96
+    be78:	e3a0201e 	mov	r2, #30
+    be7c:	e3a010c8 	mov	r1, #200	; 0xc8
+    be80:	e59f0620 	ldr	r0, [pc, #1568]	; c4a8 <noPixel$+0xc4>
+    be84:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    be88:	eb0001b1 	bl	c554 <drawRect>
+    be8c:	e59f4600 	ldr	r4, [pc, #1536]	; c494 <noPixel$+0xb0>
+    be90:	e3a0301e 	mov	r3, #30
+    be94:	e3a0203c 	mov	r2, #60	; 0x3c
+    be98:	e3a010c8 	mov	r1, #200	; 0xc8
+    be9c:	e59f0608 	ldr	r0, [pc, #1544]	; c4ac <noPixel$+0xc8>
+    bea0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bea4:	eb0001aa 	bl	c554 <drawRect>
+    bea8:	e59f45e4 	ldr	r4, [pc, #1508]	; c494 <noPixel$+0xb0>
+    beac:	e3a0301e 	mov	r3, #30
+    beb0:	e3a0203c 	mov	r2, #60	; 0x3c
+    beb4:	e3a01f41 	mov	r1, #260	; 0x104
+    beb8:	e59f05ec 	ldr	r0, [pc, #1516]	; c4ac <noPixel$+0xc8>
+    bebc:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bec0:	eb0001a3 	bl	c554 <drawRect>
+    bec4:	e59f45c8 	ldr	r4, [pc, #1480]	; c494 <noPixel$+0xb0>
+    bec8:	e3a0301e 	mov	r3, #30
+    becc:	e3a0203c 	mov	r2, #60	; 0x3c
+    bed0:	e3a01d05 	mov	r1, #320	; 0x140
+    bed4:	e59f05d0 	ldr	r0, [pc, #1488]	; c4ac <noPixel$+0xc8>
+    bed8:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bedc:	eb00019c 	bl	c554 <drawRect>
+    bee0:	e8bd8010 	pop	{r4, pc}
 
-0000bed4 <drawMenuButton>:
-    bed4:	e92d4610 	push	{r4, r9, sl, lr}
-    bed8:	e1a09000 	mov	r9, r0
-    bedc:	e1a0a001 	mov	sl, r1
-    bee0:	e3a04000 	mov	r4, #0
-    bee4:	e3a03032 	mov	r3, #50	; 0x32
-    bee8:	e3a02096 	mov	r2, #150	; 0x96
-    beec:	e1a0100a 	mov	r1, sl
-    bef0:	e1a00009 	mov	r0, r9
-    bef4:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bef8:	eb000191 	bl	c544 <drawRect>
-    befc:	e2899005 	add	r9, r9, #5
-    bf00:	e28aa005 	add	sl, sl, #5
-    bf04:	e59f4594 	ldr	r4, [pc, #1428]	; c4a0 <noPixel$+0xcc>
-    bf08:	e3a03028 	mov	r3, #40	; 0x28
-    bf0c:	e3a0208c 	mov	r2, #140	; 0x8c
-    bf10:	e1a0100a 	mov	r1, sl
-    bf14:	e1a00009 	mov	r0, r9
-    bf18:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bf1c:	eb000188 	bl	c544 <drawRect>
-    bf20:	e2899005 	add	r9, r9, #5
-    bf24:	e28aa005 	add	sl, sl, #5
-    bf28:	e59f4504 	ldr	r4, [pc, #1284]	; c434 <noPixel$+0x60>
-    bf2c:	e3a0301e 	mov	r3, #30
-    bf30:	e3a0201e 	mov	r2, #30
-    bf34:	e1a0100a 	mov	r1, sl
-    bf38:	e1a00009 	mov	r0, r9
-    bf3c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bf40:	eb00017f 	bl	c544 <drawRect>
-    bf44:	e8bd8610 	pop	{r4, r9, sl, pc}
+0000bee4 <drawMenuButton>:
+    bee4:	e92d4610 	push	{r4, r9, sl, lr}
+    bee8:	e1a09000 	mov	r9, r0
+    beec:	e1a0a001 	mov	sl, r1
+    bef0:	e3a04000 	mov	r4, #0
+    bef4:	e3a03032 	mov	r3, #50	; 0x32
+    bef8:	e3a02096 	mov	r2, #150	; 0x96
+    befc:	e1a0100a 	mov	r1, sl
+    bf00:	e1a00009 	mov	r0, r9
+    bf04:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bf08:	eb000191 	bl	c554 <drawRect>
+    bf0c:	e2899005 	add	r9, r9, #5
+    bf10:	e28aa005 	add	sl, sl, #5
+    bf14:	e59f4594 	ldr	r4, [pc, #1428]	; c4b0 <noPixel$+0xcc>
+    bf18:	e3a03028 	mov	r3, #40	; 0x28
+    bf1c:	e3a0208c 	mov	r2, #140	; 0x8c
+    bf20:	e1a0100a 	mov	r1, sl
+    bf24:	e1a00009 	mov	r0, r9
+    bf28:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bf2c:	eb000188 	bl	c554 <drawRect>
+    bf30:	e2899005 	add	r9, r9, #5
+    bf34:	e28aa005 	add	sl, sl, #5
+    bf38:	e59f4504 	ldr	r4, [pc, #1284]	; c444 <noPixel$+0x60>
+    bf3c:	e3a0301e 	mov	r3, #30
+    bf40:	e3a0201e 	mov	r2, #30
+    bf44:	e1a0100a 	mov	r1, sl
+    bf48:	e1a00009 	mov	r0, r9
+    bf4c:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bf50:	eb00017f 	bl	c554 <drawRect>
+    bf54:	e8bd8610 	pop	{r4, r9, sl, pc}
 
-0000bf48 <drawPaused>:
-    bf48:	e92d4010 	push	{r4, lr}
-    bf4c:	e3a04000 	mov	r4, #0
-    bf50:	e3a03096 	mov	r3, #150	; 0x96
-    bf54:	e3a0201e 	mov	r2, #30
-    bf58:	e3a010ae 	mov	r1, #174	; 0xae
-    bf5c:	e3a000e4 	mov	r0, #228	; 0xe4
-    bf60:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bf64:	eb000176 	bl	c544 <drawRect>
-    bf68:	e3a04000 	mov	r4, #0
-    bf6c:	e3a0301e 	mov	r3, #30
-    bf70:	e3a0203c 	mov	r2, #60	; 0x3c
-    bf74:	e3a010ae 	mov	r1, #174	; 0xae
-    bf78:	e59f0524 	ldr	r0, [pc, #1316]	; c4a4 <noPixel$+0xd0>
-    bf7c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bf80:	eb00016f 	bl	c544 <drawRect>
-    bf84:	e3a04000 	mov	r4, #0
-    bf88:	e3a0301e 	mov	r3, #30
-    bf8c:	e3a0203c 	mov	r2, #60	; 0x3c
-    bf90:	e3a010ea 	mov	r1, #234	; 0xea
-    bf94:	e59f0508 	ldr	r0, [pc, #1288]	; c4a4 <noPixel$+0xd0>
-    bf98:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bf9c:	eb000168 	bl	c544 <drawRect>
-    bfa0:	e3a04000 	mov	r4, #0
-    bfa4:	e3a0301e 	mov	r3, #30
-    bfa8:	e3a0201e 	mov	r2, #30
-    bfac:	e3a010cc 	mov	r1, #204	; 0xcc
-    bfb0:	e3a00e12 	mov	r0, #288	; 0x120
-    bfb4:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bfb8:	eb000161 	bl	c544 <drawRect>
-    bfbc:	e3a04000 	mov	r4, #0
-    bfc0:	e3a03078 	mov	r3, #120	; 0x78
-    bfc4:	e3a0201e 	mov	r2, #30
-    bfc8:	e3a010cc 	mov	r1, #204	; 0xcc
-    bfcc:	e3a00f52 	mov	r0, #328	; 0x148
-    bfd0:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bfd4:	eb00015a 	bl	c544 <drawRect>
-    bfd8:	e3a04000 	mov	r4, #0
-    bfdc:	e3a03078 	mov	r3, #120	; 0x78
-    bfe0:	e3a0201e 	mov	r2, #30
-    bfe4:	e3a010cc 	mov	r1, #204	; 0xcc
-    bfe8:	e3a00f61 	mov	r0, #388	; 0x184
-    bfec:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    bff0:	eb000153 	bl	c544 <drawRect>
-    bff4:	e3a04000 	mov	r4, #0
-    bff8:	e3a0301e 	mov	r3, #30
-    bffc:	e3a0201e 	mov	r2, #30
-    c000:	e3a010ae 	mov	r1, #174	; 0xae
-    c004:	e59f049c 	ldr	r0, [pc, #1180]	; c4a8 <noPixel$+0xd4>
-    c008:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c00c:	eb00014c 	bl	c544 <drawRect>
-    c010:	e3a04000 	mov	r4, #0
-    c014:	e3a0301e 	mov	r3, #30
-    c018:	e3a0201e 	mov	r2, #30
-    c01c:	e3a010ea 	mov	r1, #234	; 0xea
-    c020:	e59f0480 	ldr	r0, [pc, #1152]	; c4a8 <noPixel$+0xd4>
-    c024:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c028:	eb000145 	bl	c544 <drawRect>
-    c02c:	e3a04000 	mov	r4, #0
-    c030:	e3a03078 	mov	r3, #120	; 0x78
-    c034:	e3a0201e 	mov	r2, #30
-    c038:	e3a010ae 	mov	r1, #174	; 0xae
-    c03c:	e3a00f6b 	mov	r0, #428	; 0x1ac
-    c040:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c044:	eb00013e 	bl	c544 <drawRect>
-    c048:	e3a04000 	mov	r4, #0
-    c04c:	e3a03078 	mov	r3, #120	; 0x78
-    c050:	e3a0201e 	mov	r2, #30
-    c054:	e3a010ae 	mov	r1, #174	; 0xae
-    c058:	e3a00f7a 	mov	r0, #488	; 0x1e8
-    c05c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c060:	eb000137 	bl	c544 <drawRect>
-    c064:	e3a04000 	mov	r4, #0
-    c068:	e3a0301e 	mov	r3, #30
-    c06c:	e3a0201e 	mov	r2, #30
-    c070:	e59f1434 	ldr	r1, [pc, #1076]	; c4ac <noPixel$+0xd8>
-    c074:	e59f0434 	ldr	r0, [pc, #1076]	; c4b0 <noPixel$+0xdc>
-    c078:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c07c:	eb000130 	bl	c544 <drawRect>
-    c080:	e3a04000 	mov	r4, #0
-    c084:	e3a03096 	mov	r3, #150	; 0x96
-    c088:	e3a0204b 	mov	r2, #75	; 0x4b
-    c08c:	e3a010ae 	mov	r1, #174	; 0xae
-    c090:	e3a00e21 	mov	r0, #528	; 0x210
-    c094:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c098:	eb000129 	bl	c544 <drawRect>
-    c09c:	e59f4350 	ldr	r4, [pc, #848]	; c3f4 <noPixel$+0x20>
-    c0a0:	e3a0301e 	mov	r3, #30
-    c0a4:	e3a0202d 	mov	r2, #45	; 0x2d
-    c0a8:	e3a01f42 	mov	r1, #264	; 0x108
-    c0ac:	e3a00e21 	mov	r0, #528	; 0x210
-    c0b0:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c0b4:	eb000122 	bl	c544 <drawRect>
-    c0b8:	e59f4334 	ldr	r4, [pc, #820]	; c3f4 <noPixel$+0x20>
-    c0bc:	e3a0301e 	mov	r3, #30
-    c0c0:	e3a0202d 	mov	r2, #45	; 0x2d
-    c0c4:	e3a010cc 	mov	r1, #204	; 0xcc
-    c0c8:	e59f03e4 	ldr	r0, [pc, #996]	; c4b4 <noPixel$+0xe0>
-    c0cc:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c0d0:	eb00011b 	bl	c544 <drawRect>
-    c0d4:	e3a04000 	mov	r4, #0
-    c0d8:	e3a03096 	mov	r3, #150	; 0x96
-    c0dc:	e3a0204b 	mov	r2, #75	; 0x4b
-    c0e0:	e3a010ae 	mov	r1, #174	; 0xae
-    c0e4:	e59f03cc 	ldr	r0, [pc, #972]	; c4b8 <noPixel$+0xe4>
-    c0e8:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c0ec:	eb000114 	bl	c544 <drawRect>
-    c0f0:	e59f42fc 	ldr	r4, [pc, #764]	; c3f4 <noPixel$+0x20>
-    c0f4:	e3a0301e 	mov	r3, #30
-    c0f8:	e3a0202d 	mov	r2, #45	; 0x2d
-    c0fc:	e3a01f42 	mov	r1, #264	; 0x108
-    c100:	e59f03b4 	ldr	r0, [pc, #948]	; c4bc <noPixel$+0xe8>
-    c104:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c108:	eb00010d 	bl	c544 <drawRect>
-    c10c:	e59f42e0 	ldr	r4, [pc, #736]	; c3f4 <noPixel$+0x20>
-    c110:	e3a0301e 	mov	r3, #30
-    c114:	e3a0202d 	mov	r2, #45	; 0x2d
-    c118:	e3a010cc 	mov	r1, #204	; 0xcc
-    c11c:	e59f0398 	ldr	r0, [pc, #920]	; c4bc <noPixel$+0xe8>
-    c120:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c124:	eb000106 	bl	c544 <drawRect>
-    c128:	e3a04000 	mov	r4, #0
-    c12c:	e3a03096 	mov	r3, #150	; 0x96
-    c130:	e3a0201e 	mov	r2, #30
-    c134:	e3a010ae 	mov	r1, #174	; 0xae
-    c138:	e59f0380 	ldr	r0, [pc, #896]	; c4c0 <noPixel$+0xec>
-    c13c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c140:	eb0000ff 	bl	c544 <drawRect>
-    c144:	e3a04000 	mov	r4, #0
-    c148:	e3a0301e 	mov	r3, #30
-    c14c:	e3a0201e 	mov	r2, #30
-    c150:	e3a010ae 	mov	r1, #174	; 0xae
-    c154:	e3a00fb6 	mov	r0, #728	; 0x2d8
-    c158:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c15c:	eb0000f8 	bl	c544 <drawRect>
-    c160:	e3a04000 	mov	r4, #0
-    c164:	e3a0301e 	mov	r3, #30
-    c168:	e3a0201e 	mov	r2, #30
-    c16c:	e59f1338 	ldr	r1, [pc, #824]	; c4ac <noPixel$+0xd8>
-    c170:	e3a00fb6 	mov	r0, #728	; 0x2d8
-    c174:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c178:	eb0000f1 	bl	c544 <drawRect>
-    c17c:	e3a04000 	mov	r4, #0
-    c180:	e3a0305a 	mov	r3, #90	; 0x5a
-    c184:	e3a0201e 	mov	r2, #30
-    c188:	e3a010cc 	mov	r1, #204	; 0xcc
-    c18c:	e59f0330 	ldr	r0, [pc, #816]	; c4c4 <noPixel$+0xf0>
-    c190:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c194:	eb0000ea 	bl	c544 <drawRect>
-    c198:	e8bd8010 	pop	{r4, pc}
+0000bf58 <drawPaused>:
+    bf58:	e92d4010 	push	{r4, lr}
+    bf5c:	e3a04000 	mov	r4, #0
+    bf60:	e3a03096 	mov	r3, #150	; 0x96
+    bf64:	e3a0201e 	mov	r2, #30
+    bf68:	e3a010ae 	mov	r1, #174	; 0xae
+    bf6c:	e3a000e4 	mov	r0, #228	; 0xe4
+    bf70:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bf74:	eb000176 	bl	c554 <drawRect>
+    bf78:	e3a04000 	mov	r4, #0
+    bf7c:	e3a0301e 	mov	r3, #30
+    bf80:	e3a0203c 	mov	r2, #60	; 0x3c
+    bf84:	e3a010ae 	mov	r1, #174	; 0xae
+    bf88:	e59f0524 	ldr	r0, [pc, #1316]	; c4b4 <noPixel$+0xd0>
+    bf8c:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bf90:	eb00016f 	bl	c554 <drawRect>
+    bf94:	e3a04000 	mov	r4, #0
+    bf98:	e3a0301e 	mov	r3, #30
+    bf9c:	e3a0203c 	mov	r2, #60	; 0x3c
+    bfa0:	e3a010ea 	mov	r1, #234	; 0xea
+    bfa4:	e59f0508 	ldr	r0, [pc, #1288]	; c4b4 <noPixel$+0xd0>
+    bfa8:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bfac:	eb000168 	bl	c554 <drawRect>
+    bfb0:	e3a04000 	mov	r4, #0
+    bfb4:	e3a0301e 	mov	r3, #30
+    bfb8:	e3a0201e 	mov	r2, #30
+    bfbc:	e3a010cc 	mov	r1, #204	; 0xcc
+    bfc0:	e3a00e12 	mov	r0, #288	; 0x120
+    bfc4:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bfc8:	eb000161 	bl	c554 <drawRect>
+    bfcc:	e3a04000 	mov	r4, #0
+    bfd0:	e3a03078 	mov	r3, #120	; 0x78
+    bfd4:	e3a0201e 	mov	r2, #30
+    bfd8:	e3a010cc 	mov	r1, #204	; 0xcc
+    bfdc:	e3a00f52 	mov	r0, #328	; 0x148
+    bfe0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    bfe4:	eb00015a 	bl	c554 <drawRect>
+    bfe8:	e3a04000 	mov	r4, #0
+    bfec:	e3a03078 	mov	r3, #120	; 0x78
+    bff0:	e3a0201e 	mov	r2, #30
+    bff4:	e3a010cc 	mov	r1, #204	; 0xcc
+    bff8:	e3a00f61 	mov	r0, #388	; 0x184
+    bffc:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c000:	eb000153 	bl	c554 <drawRect>
+    c004:	e3a04000 	mov	r4, #0
+    c008:	e3a0301e 	mov	r3, #30
+    c00c:	e3a0201e 	mov	r2, #30
+    c010:	e3a010ae 	mov	r1, #174	; 0xae
+    c014:	e59f049c 	ldr	r0, [pc, #1180]	; c4b8 <noPixel$+0xd4>
+    c018:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c01c:	eb00014c 	bl	c554 <drawRect>
+    c020:	e3a04000 	mov	r4, #0
+    c024:	e3a0301e 	mov	r3, #30
+    c028:	e3a0201e 	mov	r2, #30
+    c02c:	e3a010ea 	mov	r1, #234	; 0xea
+    c030:	e59f0480 	ldr	r0, [pc, #1152]	; c4b8 <noPixel$+0xd4>
+    c034:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c038:	eb000145 	bl	c554 <drawRect>
+    c03c:	e3a04000 	mov	r4, #0
+    c040:	e3a03078 	mov	r3, #120	; 0x78
+    c044:	e3a0201e 	mov	r2, #30
+    c048:	e3a010ae 	mov	r1, #174	; 0xae
+    c04c:	e3a00f6b 	mov	r0, #428	; 0x1ac
+    c050:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c054:	eb00013e 	bl	c554 <drawRect>
+    c058:	e3a04000 	mov	r4, #0
+    c05c:	e3a03078 	mov	r3, #120	; 0x78
+    c060:	e3a0201e 	mov	r2, #30
+    c064:	e3a010ae 	mov	r1, #174	; 0xae
+    c068:	e3a00f7a 	mov	r0, #488	; 0x1e8
+    c06c:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c070:	eb000137 	bl	c554 <drawRect>
+    c074:	e3a04000 	mov	r4, #0
+    c078:	e3a0301e 	mov	r3, #30
+    c07c:	e3a0201e 	mov	r2, #30
+    c080:	e59f1434 	ldr	r1, [pc, #1076]	; c4bc <noPixel$+0xd8>
+    c084:	e59f0434 	ldr	r0, [pc, #1076]	; c4c0 <noPixel$+0xdc>
+    c088:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c08c:	eb000130 	bl	c554 <drawRect>
+    c090:	e3a04000 	mov	r4, #0
+    c094:	e3a03096 	mov	r3, #150	; 0x96
+    c098:	e3a0204b 	mov	r2, #75	; 0x4b
+    c09c:	e3a010ae 	mov	r1, #174	; 0xae
+    c0a0:	e3a00e21 	mov	r0, #528	; 0x210
+    c0a4:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c0a8:	eb000129 	bl	c554 <drawRect>
+    c0ac:	e59f4350 	ldr	r4, [pc, #848]	; c404 <noPixel$+0x20>
+    c0b0:	e3a0301e 	mov	r3, #30
+    c0b4:	e3a0202d 	mov	r2, #45	; 0x2d
+    c0b8:	e3a01f42 	mov	r1, #264	; 0x108
+    c0bc:	e3a00e21 	mov	r0, #528	; 0x210
+    c0c0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c0c4:	eb000122 	bl	c554 <drawRect>
+    c0c8:	e59f4334 	ldr	r4, [pc, #820]	; c404 <noPixel$+0x20>
+    c0cc:	e3a0301e 	mov	r3, #30
+    c0d0:	e3a0202d 	mov	r2, #45	; 0x2d
+    c0d4:	e3a010cc 	mov	r1, #204	; 0xcc
+    c0d8:	e59f03e4 	ldr	r0, [pc, #996]	; c4c4 <noPixel$+0xe0>
+    c0dc:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c0e0:	eb00011b 	bl	c554 <drawRect>
+    c0e4:	e3a04000 	mov	r4, #0
+    c0e8:	e3a03096 	mov	r3, #150	; 0x96
+    c0ec:	e3a0204b 	mov	r2, #75	; 0x4b
+    c0f0:	e3a010ae 	mov	r1, #174	; 0xae
+    c0f4:	e59f03cc 	ldr	r0, [pc, #972]	; c4c8 <noPixel$+0xe4>
+    c0f8:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c0fc:	eb000114 	bl	c554 <drawRect>
+    c100:	e59f42fc 	ldr	r4, [pc, #764]	; c404 <noPixel$+0x20>
+    c104:	e3a0301e 	mov	r3, #30
+    c108:	e3a0202d 	mov	r2, #45	; 0x2d
+    c10c:	e3a01f42 	mov	r1, #264	; 0x108
+    c110:	e59f03b4 	ldr	r0, [pc, #948]	; c4cc <noPixel$+0xe8>
+    c114:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c118:	eb00010d 	bl	c554 <drawRect>
+    c11c:	e59f42e0 	ldr	r4, [pc, #736]	; c404 <noPixel$+0x20>
+    c120:	e3a0301e 	mov	r3, #30
+    c124:	e3a0202d 	mov	r2, #45	; 0x2d
+    c128:	e3a010cc 	mov	r1, #204	; 0xcc
+    c12c:	e59f0398 	ldr	r0, [pc, #920]	; c4cc <noPixel$+0xe8>
+    c130:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c134:	eb000106 	bl	c554 <drawRect>
+    c138:	e3a04000 	mov	r4, #0
+    c13c:	e3a03096 	mov	r3, #150	; 0x96
+    c140:	e3a0201e 	mov	r2, #30
+    c144:	e3a010ae 	mov	r1, #174	; 0xae
+    c148:	e59f0380 	ldr	r0, [pc, #896]	; c4d0 <noPixel$+0xec>
+    c14c:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c150:	eb0000ff 	bl	c554 <drawRect>
+    c154:	e3a04000 	mov	r4, #0
+    c158:	e3a0301e 	mov	r3, #30
+    c15c:	e3a0201e 	mov	r2, #30
+    c160:	e3a010ae 	mov	r1, #174	; 0xae
+    c164:	e3a00fb6 	mov	r0, #728	; 0x2d8
+    c168:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c16c:	eb0000f8 	bl	c554 <drawRect>
+    c170:	e3a04000 	mov	r4, #0
+    c174:	e3a0301e 	mov	r3, #30
+    c178:	e3a0201e 	mov	r2, #30
+    c17c:	e59f1338 	ldr	r1, [pc, #824]	; c4bc <noPixel$+0xd8>
+    c180:	e3a00fb6 	mov	r0, #728	; 0x2d8
+    c184:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c188:	eb0000f1 	bl	c554 <drawRect>
+    c18c:	e3a04000 	mov	r4, #0
+    c190:	e3a0305a 	mov	r3, #90	; 0x5a
+    c194:	e3a0201e 	mov	r2, #30
+    c198:	e3a010cc 	mov	r1, #204	; 0xcc
+    c19c:	e59f0330 	ldr	r0, [pc, #816]	; c4d4 <noPixel$+0xf0>
+    c1a0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c1a4:	eb0000ea 	bl	c554 <drawRect>
+    c1a8:	e8bd8010 	pop	{r4, pc}
 
-0000c19c <drawTitle>:
-    c19c:	e92d4010 	push	{r4, lr}
-    c1a0:	e3a04000 	mov	r4, #0
-    c1a4:	e3a0301e 	mov	r3, #30
-    c1a8:	e3a0205a 	mov	r2, #90	; 0x5a
-    c1ac:	e3a0106d 	mov	r1, #109	; 0x6d
-    c1b0:	e3a000e3 	mov	r0, #227	; 0xe3
-    c1b4:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c1b8:	eb0000e1 	bl	c544 <drawRect>
-    c1bc:	e3a04000 	mov	r4, #0
-    c1c0:	e3a03078 	mov	r3, #120	; 0x78
-    c1c4:	e3a0201e 	mov	r2, #30
-    c1c8:	e3a0108b 	mov	r1, #139	; 0x8b
-    c1cc:	e59f02f4 	ldr	r0, [pc, #756]	; c4c8 <noPixel$+0xf4>
-    c1d0:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c1d4:	eb0000da 	bl	c544 <drawRect>
-    c1d8:	e3a04000 	mov	r4, #0
-    c1dc:	e3a03096 	mov	r3, #150	; 0x96
-    c1e0:	e3a0204b 	mov	r2, #75	; 0x4b
-    c1e4:	e3a0106d 	mov	r1, #109	; 0x6d
-    c1e8:	e59f02dc 	ldr	r0, [pc, #732]	; c4cc <noPixel$+0xf8>
-    c1ec:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c1f0:	eb0000d3 	bl	c544 <drawRect>
-    c1f4:	e59f421c 	ldr	r4, [pc, #540]	; c418 <noPixel$+0x44>
-    c1f8:	e3a0301e 	mov	r3, #30
-    c1fc:	e3a0202d 	mov	r2, #45	; 0x2d
-    c200:	e3a0108b 	mov	r1, #139	; 0x8b
-    c204:	e59f02c4 	ldr	r0, [pc, #708]	; c4d0 <noPixel$+0xfc>
-    c208:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c20c:	eb0000cc 	bl	c544 <drawRect>
-    c210:	e59f4200 	ldr	r4, [pc, #512]	; c418 <noPixel$+0x44>
-    c214:	e3a0301e 	mov	r3, #30
-    c218:	e3a0202d 	mov	r2, #45	; 0x2d
-    c21c:	e3a010c7 	mov	r1, #199	; 0xc7
-    c220:	e59f02a8 	ldr	r0, [pc, #680]	; c4d0 <noPixel$+0xfc>
-    c224:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c228:	eb0000c5 	bl	c544 <drawRect>
-    c22c:	e3a04000 	mov	r4, #0
-    c230:	e3a0301e 	mov	r3, #30
-    c234:	e3a0205a 	mov	r2, #90	; 0x5a
-    c238:	e3a0106d 	mov	r1, #109	; 0x6d
-    c23c:	e3a00f67 	mov	r0, #412	; 0x19c
-    c240:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c244:	eb0000be 	bl	c544 <drawRect>
-    c248:	e3a04000 	mov	r4, #0
-    c24c:	e3a03078 	mov	r3, #120	; 0x78
-    c250:	e3a0201e 	mov	r2, #30
-    c254:	e3a0108b 	mov	r1, #139	; 0x8b
-    c258:	e59f0274 	ldr	r0, [pc, #628]	; c4d4 <noPixel$+0x100>
-    c25c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c260:	eb0000b7 	bl	c544 <drawRect>
-    c264:	e3a04000 	mov	r4, #0
-    c268:	e3a0305a 	mov	r3, #90	; 0x5a
-    c26c:	e3a0205a 	mov	r2, #90	; 0x5a
-    c270:	e3a0106d 	mov	r1, #109	; 0x6d
-    c274:	e3a00c02 	mov	r0, #512	; 0x200
-    c278:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c27c:	eb0000b0 	bl	c544 <drawRect>
-    c280:	e59f4190 	ldr	r4, [pc, #400]	; c418 <noPixel$+0x44>
-    c284:	e3a0301e 	mov	r3, #30
-    c288:	e3a0201e 	mov	r2, #30
-    c28c:	e3a0108b 	mov	r1, #139	; 0x8b
-    c290:	e59f0240 	ldr	r0, [pc, #576]	; c4d8 <noPixel$+0x104>
-    c294:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c298:	eb0000a9 	bl	c544 <drawRect>
-    c29c:	e3a04000 	mov	r4, #0
-    c2a0:	e3a0303c 	mov	r3, #60	; 0x3c
-    c2a4:	e3a0201e 	mov	r2, #30
-    c2a8:	e3a010c7 	mov	r1, #199	; 0xc7
-    c2ac:	e3a00c02 	mov	r0, #512	; 0x200
-    c2b0:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c2b4:	eb0000a2 	bl	c544 <drawRect>
-    c2b8:	e3a04000 	mov	r4, #0
-    c2bc:	e3a0301e 	mov	r3, #30
-    c2c0:	e3a0201e 	mov	r2, #30
-    c2c4:	e3a010c7 	mov	r1, #199	; 0xc7
-    c2c8:	e59f0208 	ldr	r0, [pc, #520]	; c4d8 <noPixel$+0x104>
-    c2cc:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c2d0:	eb00009b 	bl	c544 <drawRect>
-    c2d4:	e3a04000 	mov	r4, #0
-    c2d8:	e3a0301e 	mov	r3, #30
-    c2dc:	e3a0201e 	mov	r2, #30
-    c2e0:	e3a010e5 	mov	r1, #229	; 0xe5
-    c2e4:	e3a00f8f 	mov	r0, #572	; 0x23c
-    c2e8:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c2ec:	eb000094 	bl	c544 <drawRect>
-    c2f0:	e3a04000 	mov	r4, #0
-    c2f4:	e3a0301e 	mov	r3, #30
-    c2f8:	e3a0205a 	mov	r2, #90	; 0x5a
-    c2fc:	e3a0106d 	mov	r1, #109	; 0x6d
-    c300:	e3a00f99 	mov	r0, #612	; 0x264
-    c304:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c308:	eb00008d 	bl	c544 <drawRect>
-    c30c:	e3a04000 	mov	r4, #0
-    c310:	e3a0301e 	mov	r3, #30
-    c314:	e3a0205a 	mov	r2, #90	; 0x5a
-    c318:	e3a010e5 	mov	r1, #229	; 0xe5
-    c31c:	e3a00f99 	mov	r0, #612	; 0x264
-    c320:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c324:	eb000086 	bl	c544 <drawRect>
-    c328:	e3a04000 	mov	r4, #0
-    c32c:	e3a0305a 	mov	r3, #90	; 0x5a
-    c330:	e3a0201e 	mov	r2, #30
-    c334:	e3a0108b 	mov	r1, #139	; 0x8b
-    c338:	e59f019c 	ldr	r0, [pc, #412]	; c4dc <noPixel$+0x108>
-    c33c:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c340:	eb00007f 	bl	c544 <drawRect>
-    c344:	e3a04000 	mov	r4, #0
-    c348:	e3a03096 	mov	r3, #150	; 0x96
-    c34c:	e3a02050 	mov	r2, #80	; 0x50
-    c350:	e3a0106d 	mov	r1, #109	; 0x6d
-    c354:	e3a00fb2 	mov	r0, #712	; 0x2c8
-    c358:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c35c:	eb000078 	bl	c544 <drawRect>
-    c360:	e59f40b0 	ldr	r4, [pc, #176]	; c418 <noPixel$+0x44>
-    c364:	e3a0301e 	mov	r3, #30
-    c368:	e3a02032 	mov	r2, #50	; 0x32
-    c36c:	e3a0108b 	mov	r1, #139	; 0x8b
-    c370:	e59f0168 	ldr	r0, [pc, #360]	; c4e0 <noPixel$+0x10c>
-    c374:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c378:	eb000071 	bl	c544 <drawRect>
-    c37c:	e59f4094 	ldr	r4, [pc, #148]	; c418 <noPixel$+0x44>
-    c380:	e3a0301e 	mov	r3, #30
-    c384:	e3a02032 	mov	r2, #50	; 0x32
-    c388:	e3a010c7 	mov	r1, #199	; 0xc7
-    c38c:	e3a00fb2 	mov	r0, #712	; 0x2c8
-    c390:	e92d001f 	push	{r0, r1, r2, r3, r4}
-    c394:	eb00006a 	bl	c544 <drawRect>
-    c398:	e8bd8010 	pop	{r4, pc}
+0000c1ac <drawTitle>:
+    c1ac:	e92d4010 	push	{r4, lr}
+    c1b0:	e3a04000 	mov	r4, #0
+    c1b4:	e3a0301e 	mov	r3, #30
+    c1b8:	e3a0205a 	mov	r2, #90	; 0x5a
+    c1bc:	e3a0106d 	mov	r1, #109	; 0x6d
+    c1c0:	e3a000e3 	mov	r0, #227	; 0xe3
+    c1c4:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c1c8:	eb0000e1 	bl	c554 <drawRect>
+    c1cc:	e3a04000 	mov	r4, #0
+    c1d0:	e3a03078 	mov	r3, #120	; 0x78
+    c1d4:	e3a0201e 	mov	r2, #30
+    c1d8:	e3a0108b 	mov	r1, #139	; 0x8b
+    c1dc:	e59f02f4 	ldr	r0, [pc, #756]	; c4d8 <noPixel$+0xf4>
+    c1e0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c1e4:	eb0000da 	bl	c554 <drawRect>
+    c1e8:	e3a04000 	mov	r4, #0
+    c1ec:	e3a03096 	mov	r3, #150	; 0x96
+    c1f0:	e3a0204b 	mov	r2, #75	; 0x4b
+    c1f4:	e3a0106d 	mov	r1, #109	; 0x6d
+    c1f8:	e59f02dc 	ldr	r0, [pc, #732]	; c4dc <noPixel$+0xf8>
+    c1fc:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c200:	eb0000d3 	bl	c554 <drawRect>
+    c204:	e59f421c 	ldr	r4, [pc, #540]	; c428 <noPixel$+0x44>
+    c208:	e3a0301e 	mov	r3, #30
+    c20c:	e3a0202d 	mov	r2, #45	; 0x2d
+    c210:	e3a0108b 	mov	r1, #139	; 0x8b
+    c214:	e59f02c4 	ldr	r0, [pc, #708]	; c4e0 <noPixel$+0xfc>
+    c218:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c21c:	eb0000cc 	bl	c554 <drawRect>
+    c220:	e59f4200 	ldr	r4, [pc, #512]	; c428 <noPixel$+0x44>
+    c224:	e3a0301e 	mov	r3, #30
+    c228:	e3a0202d 	mov	r2, #45	; 0x2d
+    c22c:	e3a010c7 	mov	r1, #199	; 0xc7
+    c230:	e59f02a8 	ldr	r0, [pc, #680]	; c4e0 <noPixel$+0xfc>
+    c234:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c238:	eb0000c5 	bl	c554 <drawRect>
+    c23c:	e3a04000 	mov	r4, #0
+    c240:	e3a0301e 	mov	r3, #30
+    c244:	e3a0205a 	mov	r2, #90	; 0x5a
+    c248:	e3a0106d 	mov	r1, #109	; 0x6d
+    c24c:	e3a00f67 	mov	r0, #412	; 0x19c
+    c250:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c254:	eb0000be 	bl	c554 <drawRect>
+    c258:	e3a04000 	mov	r4, #0
+    c25c:	e3a03078 	mov	r3, #120	; 0x78
+    c260:	e3a0201e 	mov	r2, #30
+    c264:	e3a0108b 	mov	r1, #139	; 0x8b
+    c268:	e59f0274 	ldr	r0, [pc, #628]	; c4e4 <noPixel$+0x100>
+    c26c:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c270:	eb0000b7 	bl	c554 <drawRect>
+    c274:	e3a04000 	mov	r4, #0
+    c278:	e3a0305a 	mov	r3, #90	; 0x5a
+    c27c:	e3a0205a 	mov	r2, #90	; 0x5a
+    c280:	e3a0106d 	mov	r1, #109	; 0x6d
+    c284:	e3a00c02 	mov	r0, #512	; 0x200
+    c288:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c28c:	eb0000b0 	bl	c554 <drawRect>
+    c290:	e59f4190 	ldr	r4, [pc, #400]	; c428 <noPixel$+0x44>
+    c294:	e3a0301e 	mov	r3, #30
+    c298:	e3a0201e 	mov	r2, #30
+    c29c:	e3a0108b 	mov	r1, #139	; 0x8b
+    c2a0:	e59f0240 	ldr	r0, [pc, #576]	; c4e8 <noPixel$+0x104>
+    c2a4:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c2a8:	eb0000a9 	bl	c554 <drawRect>
+    c2ac:	e3a04000 	mov	r4, #0
+    c2b0:	e3a0303c 	mov	r3, #60	; 0x3c
+    c2b4:	e3a0201e 	mov	r2, #30
+    c2b8:	e3a010c7 	mov	r1, #199	; 0xc7
+    c2bc:	e3a00c02 	mov	r0, #512	; 0x200
+    c2c0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c2c4:	eb0000a2 	bl	c554 <drawRect>
+    c2c8:	e3a04000 	mov	r4, #0
+    c2cc:	e3a0301e 	mov	r3, #30
+    c2d0:	e3a0201e 	mov	r2, #30
+    c2d4:	e3a010c7 	mov	r1, #199	; 0xc7
+    c2d8:	e59f0208 	ldr	r0, [pc, #520]	; c4e8 <noPixel$+0x104>
+    c2dc:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c2e0:	eb00009b 	bl	c554 <drawRect>
+    c2e4:	e3a04000 	mov	r4, #0
+    c2e8:	e3a0301e 	mov	r3, #30
+    c2ec:	e3a0201e 	mov	r2, #30
+    c2f0:	e3a010e5 	mov	r1, #229	; 0xe5
+    c2f4:	e3a00f8f 	mov	r0, #572	; 0x23c
+    c2f8:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c2fc:	eb000094 	bl	c554 <drawRect>
+    c300:	e3a04000 	mov	r4, #0
+    c304:	e3a0301e 	mov	r3, #30
+    c308:	e3a0205a 	mov	r2, #90	; 0x5a
+    c30c:	e3a0106d 	mov	r1, #109	; 0x6d
+    c310:	e3a00f99 	mov	r0, #612	; 0x264
+    c314:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c318:	eb00008d 	bl	c554 <drawRect>
+    c31c:	e3a04000 	mov	r4, #0
+    c320:	e3a0301e 	mov	r3, #30
+    c324:	e3a0205a 	mov	r2, #90	; 0x5a
+    c328:	e3a010e5 	mov	r1, #229	; 0xe5
+    c32c:	e3a00f99 	mov	r0, #612	; 0x264
+    c330:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c334:	eb000086 	bl	c554 <drawRect>
+    c338:	e3a04000 	mov	r4, #0
+    c33c:	e3a0305a 	mov	r3, #90	; 0x5a
+    c340:	e3a0201e 	mov	r2, #30
+    c344:	e3a0108b 	mov	r1, #139	; 0x8b
+    c348:	e59f019c 	ldr	r0, [pc, #412]	; c4ec <noPixel$+0x108>
+    c34c:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c350:	eb00007f 	bl	c554 <drawRect>
+    c354:	e3a04000 	mov	r4, #0
+    c358:	e3a03096 	mov	r3, #150	; 0x96
+    c35c:	e3a02050 	mov	r2, #80	; 0x50
+    c360:	e3a0106d 	mov	r1, #109	; 0x6d
+    c364:	e3a00fb2 	mov	r0, #712	; 0x2c8
+    c368:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c36c:	eb000078 	bl	c554 <drawRect>
+    c370:	e59f40b0 	ldr	r4, [pc, #176]	; c428 <noPixel$+0x44>
+    c374:	e3a0301e 	mov	r3, #30
+    c378:	e3a02032 	mov	r2, #50	; 0x32
+    c37c:	e3a0108b 	mov	r1, #139	; 0x8b
+    c380:	e59f0168 	ldr	r0, [pc, #360]	; c4f0 <noPixel$+0x10c>
+    c384:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c388:	eb000071 	bl	c554 <drawRect>
+    c38c:	e59f4094 	ldr	r4, [pc, #148]	; c428 <noPixel$+0x44>
+    c390:	e3a0301e 	mov	r3, #30
+    c394:	e3a02032 	mov	r2, #50	; 0x32
+    c398:	e3a010c7 	mov	r1, #199	; 0xc7
+    c39c:	e3a00fb2 	mov	r0, #712	; 0x2c8
+    c3a0:	e92d001f 	push	{r0, r1, r2, r3, r4}
+    c3a4:	eb00006a 	bl	c554 <drawRect>
+    c3a8:	e8bd8010 	pop	{r4, pc}
 
-0000c39c <DrawChar>:
-    c39c:	e92d43f0 	push	{r4, r5, r6, r7, r8, r9, lr}
-    c3a0:	e1a09001 	mov	r9, r1
-    c3a4:	e59f4138 	ldr	r4, [pc, #312]	; c4e4 <noPixel$+0x110>
-    c3a8:	e0844200 	add	r4, r4, r0, lsl #4
-    c3ac:	e1a06002 	mov	r6, r2
+0000c3ac <DrawChar>:
+    c3ac:	e92d43f0 	push	{r4, r5, r6, r7, r8, r9, lr}
+    c3b0:	e1a09001 	mov	r9, r1
+    c3b4:	e59f4138 	ldr	r4, [pc, #312]	; c4f4 <noPixel$+0x110>
+    c3b8:	e0844200 	add	r4, r4, r0, lsl #4
+    c3bc:	e1a06002 	mov	r6, r2
 
-0000c3b0 <charLoop$>:
-    c3b0:	e1a05003 	mov	r5, r3
-    c3b4:	e3a08001 	mov	r8, #1
-    c3b8:	e4d47001 	ldrb	r7, [r4], #1
+0000c3c0 <charLoop$>:
+    c3c0:	e1a05003 	mov	r5, r3
+    c3c4:	e3a08001 	mov	r8, #1
+    c3c8:	e4d47001 	ldrb	r7, [r4], #1
 
-0000c3bc <rowLoop$>:
-    c3bc:	e1170008 	tst	r7, r8
-    c3c0:	0a000003 	beq	c3d4 <noPixel$>
-    c3c4:	e1a00005 	mov	r0, r5
-    c3c8:	e1a01006 	mov	r1, r6
-    c3cc:	e1a02009 	mov	r2, r9
-    c3d0:	eb000051 	bl	c51c <drawPixel>
+0000c3cc <rowLoop$>:
+    c3cc:	e1170008 	tst	r7, r8
+    c3d0:	0a000003 	beq	c3e4 <noPixel$>
+    c3d4:	e1a00005 	mov	r0, r5
+    c3d8:	e1a01006 	mov	r1, r6
+    c3dc:	e1a02009 	mov	r2, r9
+    c3e0:	eb000051 	bl	c52c <drawPixel>
 
-0000c3d4 <noPixel$>:
-    c3d4:	e2855001 	add	r5, r5, #1
-    c3d8:	e1a08088 	lsl	r8, r8, #1
-    c3dc:	e3180c01 	tst	r8, #256	; 0x100
-    c3e0:	0afffff5 	beq	c3bc <rowLoop$>
-    c3e4:	e2866001 	add	r6, r6, #1
-    c3e8:	e314000f 	tst	r4, #15
-    c3ec:	1affffef 	bne	c3b0 <charLoop$>
-    c3f0:	e8bd83f0 	pop	{r4, r5, r6, r7, r8, r9, pc}
-    c3f4:	0000967f 	.word	0x0000967f
-    c3f8:	0000027a 	.word	0x0000027a
-    c3fc:	000001b5 	.word	0x000001b5
-    c400:	0000a540 	.word	0x0000a540
-    c404:	000001e3 	.word	0x000001e3
-    c408:	00000221 	.word	0x00000221
-    c40c:	0000a530 	.word	0x0000a530
-    c410:	000001eb 	.word	0x000001eb
-    c414:	00009080 	.word	0x00009080
-    c418:	0000297e 	.word	0x0000297e
-    c41c:	0000a4e0 	.word	0x0000a4e0
-    c420:	00000172 	.word	0x00000172
-    c424:	0000a520 	.word	0x0000a520
-    c428:	000001e7 	.word	0x000001e7
-    c42c:	00000247 	.word	0x00000247
-    c430:	00000285 	.word	0x00000285
-    c434:	0000ffff 	.word	0x0000ffff
-    c438:	000001df 	.word	0x000001df
-    c43c:	00000243 	.word	0x00000243
-    c440:	00003707 	.word	0x00003707
-    c444:	0000011f 	.word	0x0000011f
-    c448:	0000015b 	.word	0x0000015b
-    c44c:	0000013d 	.word	0x0000013d
-    c450:	00000223 	.word	0x00000223
-    c454:	0000025f 	.word	0x0000025f
-    c458:	00000205 	.word	0x00000205
-    c45c:	00000241 	.word	0x00000241
-    c460:	00000287 	.word	0x00000287
-    c464:	000002a5 	.word	0x000002a5
-    c468:	000002eb 	.word	0x000002eb
-    c46c:	00000309 	.word	0x00000309
-    c470:	00000327 	.word	0x00000327
-    c474:	00000122 	.word	0x00000122
-    c478:	00000345 	.word	0x00000345
-    c47c:	00000363 	.word	0x00000363
-    c480:	0000038b 	.word	0x0000038b
-    c484:	0000ff27 	.word	0x0000ff27
-    c488:	00000115 	.word	0x00000115
-    c48c:	00000179 	.word	0x00000179
-    c490:	00000269 	.word	0x00000269
-    c494:	000002cd 	.word	0x000002cd
-    c498:	00000331 	.word	0x00000331
-    c49c:	0000034f 	.word	0x0000034f
-    c4a0:	00000d7f 	.word	0x00000d7f
-    c4a4:	00000102 	.word	0x00000102
-    c4a8:	00000166 	.word	0x00000166
-    c4ac:	00000126 	.word	0x00000126
-    c4b0:	000001ca 	.word	0x000001ca
-    c4b4:	0000022e 	.word	0x0000022e
-    c4b8:	00000265 	.word	0x00000265
-    c4bc:	00000283 	.word	0x00000283
-    c4c0:	000002ba 	.word	0x000002ba
-    c4c4:	000002f6 	.word	0x000002f6
-    c4c8:	00000101 	.word	0x00000101
-    c4cc:	00000147 	.word	0x00000147
-    c4d0:	00000165 	.word	0x00000165
-    c4d4:	000001ba 	.word	0x000001ba
-    c4d8:	0000021e 	.word	0x0000021e
-    c4dc:	00000282 	.word	0x00000282
-    c4e0:	000002e6 	.word	0x000002e6
-    c4e4:	00009ce0 	.word	0x00009ce0
+0000c3e4 <noPixel$>:
+    c3e4:	e2855001 	add	r5, r5, #1
+    c3e8:	e1a08088 	lsl	r8, r8, #1
+    c3ec:	e3180c01 	tst	r8, #256	; 0x100
+    c3f0:	0afffff5 	beq	c3cc <rowLoop$>
+    c3f4:	e2866001 	add	r6, r6, #1
+    c3f8:	e314000f 	tst	r4, #15
+    c3fc:	1affffef 	bne	c3c0 <charLoop$>
+    c400:	e8bd83f0 	pop	{r4, r5, r6, r7, r8, r9, pc}
+    c404:	0000967f 	.word	0x0000967f
+    c408:	0000027a 	.word	0x0000027a
+    c40c:	000001b5 	.word	0x000001b5
+    c410:	0000a540 	.word	0x0000a540
+    c414:	000001e3 	.word	0x000001e3
+    c418:	00000221 	.word	0x00000221
+    c41c:	0000a530 	.word	0x0000a530
+    c420:	000001eb 	.word	0x000001eb
+    c424:	00009080 	.word	0x00009080
+    c428:	0000297e 	.word	0x0000297e
+    c42c:	0000a4e0 	.word	0x0000a4e0
+    c430:	00000172 	.word	0x00000172
+    c434:	0000a520 	.word	0x0000a520
+    c438:	000001e7 	.word	0x000001e7
+    c43c:	00000247 	.word	0x00000247
+    c440:	00000285 	.word	0x00000285
+    c444:	0000ffff 	.word	0x0000ffff
+    c448:	000001df 	.word	0x000001df
+    c44c:	00000243 	.word	0x00000243
+    c450:	00003707 	.word	0x00003707
+    c454:	0000011f 	.word	0x0000011f
+    c458:	0000015b 	.word	0x0000015b
+    c45c:	0000013d 	.word	0x0000013d
+    c460:	00000223 	.word	0x00000223
+    c464:	0000025f 	.word	0x0000025f
+    c468:	00000205 	.word	0x00000205
+    c46c:	00000241 	.word	0x00000241
+    c470:	00000287 	.word	0x00000287
+    c474:	000002a5 	.word	0x000002a5
+    c478:	000002eb 	.word	0x000002eb
+    c47c:	00000309 	.word	0x00000309
+    c480:	00000327 	.word	0x00000327
+    c484:	00000122 	.word	0x00000122
+    c488:	00000345 	.word	0x00000345
+    c48c:	00000363 	.word	0x00000363
+    c490:	0000038b 	.word	0x0000038b
+    c494:	0000ff27 	.word	0x0000ff27
+    c498:	00000115 	.word	0x00000115
+    c49c:	00000179 	.word	0x00000179
+    c4a0:	00000269 	.word	0x00000269
+    c4a4:	000002cd 	.word	0x000002cd
+    c4a8:	00000331 	.word	0x00000331
+    c4ac:	0000034f 	.word	0x0000034f
+    c4b0:	00000d7f 	.word	0x00000d7f
+    c4b4:	00000102 	.word	0x00000102
+    c4b8:	00000166 	.word	0x00000166
+    c4bc:	00000126 	.word	0x00000126
+    c4c0:	000001ca 	.word	0x000001ca
+    c4c4:	0000022e 	.word	0x0000022e
+    c4c8:	00000265 	.word	0x00000265
+    c4cc:	00000283 	.word	0x00000283
+    c4d0:	000002ba 	.word	0x000002ba
+    c4d4:	000002f6 	.word	0x000002f6
+    c4d8:	00000101 	.word	0x00000101
+    c4dc:	00000147 	.word	0x00000147
+    c4e0:	00000165 	.word	0x00000165
+    c4e4:	000001ba 	.word	0x000001ba
+    c4e8:	0000021e 	.word	0x0000021e
+    c4ec:	00000282 	.word	0x00000282
+    c4f0:	000002e6 	.word	0x000002e6
+    c4f4:	00009ce0 	.word	0x00009ce0
 
-0000c4e8 <clearScreen>:
-    c4e8:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    c4ec:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    c4f0:	e3a04000 	mov	r4, #0
-    c4f4:	e3a05000 	mov	r5, #0
-    c4f8:	e59f00d0 	ldr	r0, [pc, #208]	; c5d0 <waitLoop+0x10>
-    c4fc:	e5906014 	ldr	r6, [r0, #20]
-    c500:	e5907018 	ldr	r7, [r0, #24]
-    c504:	e3a08000 	mov	r8, #0
-    c508:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    c50c:	eb00000c 	bl	c544 <drawRect>
-    c510:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    c514:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    c518:	e1a0f00e 	mov	pc, lr
+0000c4f8 <clearScreen>:
+    c4f8:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    c4fc:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    c500:	e3a04000 	mov	r4, #0
+    c504:	e3a05000 	mov	r5, #0
+    c508:	e59f00d0 	ldr	r0, [pc, #208]	; c5e0 <waitLoop+0x10>
+    c50c:	e5906014 	ldr	r6, [r0, #20]
+    c510:	e5907018 	ldr	r7, [r0, #24]
+    c514:	e3a08000 	mov	r8, #0
+    c518:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    c51c:	eb00000c 	bl	c554 <drawRect>
+    c520:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    c524:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    c528:	e1a0f00e 	mov	pc, lr
 
-0000c51c <drawPixel>:
-    c51c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    c520:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
-    c524:	e0804501 	add	r4, r0, r1, lsl #10
-    c528:	e1a04084 	lsl	r4, r4, #1
-    c52c:	e59f00a0 	ldr	r0, [pc, #160]	; c5d4 <waitLoop+0x14>
-    c530:	e5900000 	ldr	r0, [r0]
-    c534:	e18020b4 	strh	r2, [r0, r4]
-    c538:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
-    c53c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    c540:	e1a0f00e 	mov	pc, lr
+0000c52c <drawPixel>:
+    c52c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    c530:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
+    c534:	e0804501 	add	r4, r0, r1, lsl #10
+    c538:	e1a04084 	lsl	r4, r4, #1
+    c53c:	e59f00a0 	ldr	r0, [pc, #160]	; c5e4 <waitLoop+0x14>
+    c540:	e5900000 	ldr	r0, [r0]
+    c544:	e18020b4 	strh	r2, [r0, r4]
+    c548:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+    c54c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    c550:	e1a0f00e 	mov	pc, lr
 
-0000c544 <drawRect>:
-    c544:	e1a0000d 	mov	r0, sp
-    c548:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    c54c:	e92d01f0 	push	{r4, r5, r6, r7, r8}
-    c550:	e89001f0 	ldm	r0, {r4, r5, r6, r7, r8}
-    c554:	e0866004 	add	r6, r6, r4
-    c558:	e0877005 	add	r7, r7, r5
+0000c554 <drawRect>:
+    c554:	e1a0000d 	mov	r0, sp
+    c558:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    c55c:	e92d01f0 	push	{r4, r5, r6, r7, r8}
+    c560:	e89001f0 	ldm	r0, {r4, r5, r6, r7, r8}
+    c564:	e0866004 	add	r6, r6, r4
+    c568:	e0877005 	add	r7, r7, r5
 
-0000c55c <drawRectForLoopX>:
-    c55c:	e52d5004 	push	{r5}		; (str r5, [sp, #-4]!)
+0000c56c <drawRectForLoopX>:
+    c56c:	e52d5004 	push	{r5}		; (str r5, [sp, #-4]!)
 
-0000c560 <drawRectForLoopY>:
-    c560:	e1a00004 	mov	r0, r4
-    c564:	e1a01005 	mov	r1, r5
-    c568:	e1a02008 	mov	r2, r8
-    c56c:	ebffffea 	bl	c51c <drawPixel>
-    c570:	e2855001 	add	r5, r5, #1
-    c574:	e1550007 	cmp	r5, r7
-    c578:	bafffff8 	blt	c560 <drawRectForLoopY>
-    c57c:	e49d5004 	pop	{r5}		; (ldr r5, [sp], #4)
-    c580:	e2844001 	add	r4, r4, #1
-    c584:	e1540006 	cmp	r4, r6
-    c588:	bafffff3 	blt	c55c <drawRectForLoopX>
-    c58c:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
-    c590:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
-    c594:	e28dd014 	add	sp, sp, #20
-    c598:	e1a0f00e 	mov	pc, lr
+0000c570 <drawRectForLoopY>:
+    c570:	e1a00004 	mov	r0, r4
+    c574:	e1a01005 	mov	r1, r5
+    c578:	e1a02008 	mov	r2, r8
+    c57c:	ebffffea 	bl	c52c <drawPixel>
+    c580:	e2855001 	add	r5, r5, #1
+    c584:	e1550007 	cmp	r5, r7
+    c588:	bafffff8 	blt	c570 <drawRectForLoopY>
+    c58c:	e49d5004 	pop	{r5}		; (ldr r5, [sp], #4)
+    c590:	e2844001 	add	r4, r4, #1
+    c594:	e1540006 	cmp	r4, r6
+    c598:	bafffff3 	blt	c56c <drawRectForLoopX>
+    c59c:	e8bd01f0 	pop	{r4, r5, r6, r7, r8}
+    c5a0:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+    c5a4:	e28dd014 	add	sp, sp, #20
+    c5a8:	e1a0f00e 	mov	pc, lr
 
-0000c59c <positionToArrayOffset>:
-    c59c:	e8bd0007 	pop	{r0, r1, r2}
-    c5a0:	e0030192 	mul	r3, r2, r1
-    c5a4:	e0833000 	add	r3, r3, r0
-    c5a8:	e92d0008 	stmfd	sp!, {r3}
-    c5ac:	e1a0f00e 	mov	pc, lr
+0000c5ac <positionToArrayOffset>:
+    c5ac:	e8bd0007 	pop	{r0, r1, r2}
+    c5b0:	e0030192 	mul	r3, r2, r1
+    c5b4:	e0833000 	add	r3, r3, r0
+    c5b8:	e92d0008 	stmfd	sp!, {r3}
+    c5bc:	e1a0f00e 	mov	pc, lr
 
-0000c5b0 <startTimer>:
-    c5b0:	e1a03000 	mov	r3, r0
-    c5b4:	e59f001c 	ldr	r0, [pc, #28]	; c5d8 <waitLoop+0x18>
-    c5b8:	e5901000 	ldr	r1, [r0]
-    c5bc:	e0811003 	add	r1, r1, r3
+0000c5c0 <startTimer>:
+    c5c0:	e1a03000 	mov	r3, r0
+    c5c4:	e59f001c 	ldr	r0, [pc, #28]	; c5e8 <waitLoop+0x18>
+    c5c8:	e5901000 	ldr	r1, [r0]
+    c5cc:	e0811003 	add	r1, r1, r3
 
-0000c5c0 <waitLoop>:
-    c5c0:	e5902000 	ldr	r2, [r0]
-    c5c4:	e1510002 	cmp	r1, r2
-    c5c8:	8afffffc 	bhi	c5c0 <waitLoop>
-    c5cc:	e1a0f00e 	mov	pc, lr
-    c5d0:	00009080 	.word	0x00009080
-    c5d4:	000090e0 	.word	0x000090e0
-    c5d8:	3f003004 	.word	0x3f003004
+0000c5d0 <waitLoop>:
+    c5d0:	e5902000 	ldr	r2, [r0]
+    c5d4:	e1510002 	cmp	r1, r2
+    c5d8:	8afffffc 	bhi	c5d0 <waitLoop>
+    c5dc:	e1a0f00e 	mov	pc, lr
+    c5e0:	00009080 	.word	0x00009080
+    c5e4:	000090e0 	.word	0x000090e0
+    c5e8:	3f003004 	.word	0x3f003004
