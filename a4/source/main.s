@@ -186,14 +186,11 @@ StartGame:
 		//        str     r10, [r0]
 		//        bl      UpdateScore
 		
+		bl	tetrisDrawBlock
 		bl	tetrisDrawGrid
-		
-		
-		
 		bl	tetrisDrawBlock
 		
-		ldr	r0, =0xFFFF
-		bl 	startTimer
+		
 		
 		applyUserTranslation:
 		
@@ -230,7 +227,8 @@ StartGame:
 		rowNotClear:
 		
 		
-		
+		ldr	r0, =0xFFFFF
+		bl 	startTimer
 		
 		
 		b	mainLoop
