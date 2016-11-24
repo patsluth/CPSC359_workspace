@@ -129,7 +129,7 @@ StartGame:
 	
 	// tetrisSetGridBlockColor(int x, int y, int color)
 	
-
+/*
 	mov		r0, #3
 	mov		r1, #18
 	ldr		r2, =0xABC777
@@ -226,8 +226,8 @@ StartGame:
 		
 		
 		b	mainLoop
+*/
 
-/*
 newBlock:
         //Increment Score by 1
 		ldr     r0, =scoreNumber
@@ -236,6 +236,8 @@ newBlock:
 		str     r1, [r0]
 		bl      UpdateScore
         
+        bl	tetrisDrawGrid
+        
         nextDropTime    .req    r4
         sample          .req    r5
         dropLoop:
@@ -243,21 +245,99 @@ newBlock:
             ldr     nextDropTime, [r0]                      //loads the current time into nextDropTime
             ldr     r0, =1000000                            //loads 1mil into r0
             add     nextDropTime, r0                        //increments nextDropTime by 1mil microseconds. (1 second)
+            
+            debug:
                 rotateLoop:
+                ldr     r0, =10000                          //delay
+                bl      startTimer
                 bl      sampleSNES                          //query the SNES
                 
                 mov     sample, r0                          //backs up the sample
+                
+                //Checks if start is pressed
+                mvn     r1, #0x8                            //moves 1 to every bit except bit 3
+                bic     r0, r1                              //clears every bit of r0 except 3
+                cmp     r0, #0                              //compares masked sample (r0) to 0
+                beq     mainLoopStartPressed                //if equal, then A was pressed, so branch
+                                                            //else fall through
+                mov     r0, sample                          //move sample to r0
+                mvn     r1, #0x10                           //moves 1 to every bit except bit 4
+                bic     r0, r1                              //clears every bit except bit 4
+                cmp     r0, #0                              //compares masked sample (r0) to 0
+                beq     mainLoopUpPressed                   //if equal, then Up was pressed, so branch
+                                                            //else fall through
+                mov     r0, sample                          //move sample to r0
+                mvn     r1, #0x20                           //moves 1 to every bit except bit 5
+                bic     r0, r1                              //clears every bit except bit 5
+                cmp     r0, #0                              //compares masked sample (r0) to 0
+                beq     mainLoopDownPressed                 //if equal, then Down was pressed, so branch
+                                                            //else fall through
+                mov     r0, sample                          //move sample to r0
+                mvn     r1, #0x40                           //moves 1 to every bit except bit 6
+                bic     r0, r1                              //clears every bit except bit 6
+                cmp     r0, #0                              //compares masked sample (r0) to 0
+                beq     mainLoopLeftPressed                 //if equal, then Left was pressed, so branch
+                                                            //else fall through 
+                mov     r0, sample                          //move sample to r0
+                mvn     r1, #0x80                           //moves 1 to every bit except bit 7
+                bic     r0, r1                              //clears every bit except bit 7
+                cmp     r0, #0                              //compares masked sample (r0) to 0
+                beq     mainLoopRightPressed                //if equal, then Right was pressed, so branch
+                                                            //else fall through
+                b       userTranslationsDone                                            
         
+                mainLoopStartPressed:
+                    bl      PauseMenuStart
+                    b       userTranslationsDone
+                mainLoopUpPressed:
+                                                            // tetrisRotateBlock(left)
+                    mov	    r0, #0
+                    bl	    tetrisRotateBlock
+                    b       userTranslationsDone
+                mainLoopDownPressed:
+                                                            // tetrisRotateBlock(right)
+                    mov	    r0, #1
+                    bl	    tetrisRotateBlock                    
+                    b       userTranslationsDone
+                mainLoopLeftPressed:
+                                                            // tetrisTranslateBlock(int dx, int dy)
+                    mov		r0, #-1
+                    mov		r1, #0
+                    bl		tetrisTranslateBlock                   
+                    b       userTranslationsDone
+                mainLoopRightPressed:        
+                                                            // tetrisTranslateBlock(int dx, int dy)
+                    mov		r0, #1
+                    mov		r1, #0
+                    bl		tetrisTranslateBlock                     
+                    b       userTranslationsDone
+                    
+                    
+                userTranslationsDone:
+                
+                ldr     r0, =200000
+                bl      startTimer
+                
+                bl	tetrisDrawGrid                
+                bl	tetrisDrawBlock
+
+                ldr     r0, =0x3F003004                         //loads the address for the timer into r0
+                ldr     r1, [r0]                                //loads the current time into r1
+                
+                debug2:                
+                cmp     nextDropTime, r1                        //checks if it is time to drop down
+                blt     rotateLoop                              //if not, check for more transitions
+                
+            // tetrisTranslateBlock(int dx, int dy)             //apply gravity transition
+            mov		r0, #0
+            mov		r1, #1
+            bl		tetrisTranslateBlock
         
-        
-        
-        
-        
-        
-        
+            b       dropLoop
+            
         
         .unreq  nextDropTime
-*/
+        .unreq  sample
 
 
 
@@ -1636,7 +1716,8 @@ tetrisTranslateBlock:
 			pop		{ lr }
 			push	{ blockX - blockTypeOffset }	// push new block
 			
-			b 		tetrisTranslateBlockEnd
+//			b 		tetrisTranslateBlockEnd
+            b       newBlock
 		
 	onNoTranslationCollision:
 	
