@@ -1427,7 +1427,7 @@ drawQueue:
     beq     QueueG
 
 QueueA:
-    ldr     r4, =0xFFFF                 //color
+    ldr     r4, =0x27DF                 //color
     mov     r3, #128                    //height
     mov     r2, #32                     //width
     ldr     r1, =532                    //y
@@ -1436,14 +1436,14 @@ QueueA:
     bl      drawRect
     b       QueueDone
 QueueB:
-    ldr     r4, =0xAAAA                 //color
+    ldr     r4, =0x29FF                 //color
     mov     r3, #64                     //height
     mov     r2, #32                     //width
     ldr     r1, =564                    //y
     ldr     r0, =664                    //x
     stmfd   sp!,{r0-r4}                 //push all
     bl      drawRect
-    ldr     r4, =0xAAAA                 //color
+    ldr     r4, =0x29FF                 //color
     mov     r3, #32                     //height
     mov     r2, #64                     //width
     ldr     r1, =596                    //y
@@ -1452,14 +1452,14 @@ QueueB:
     bl      drawRect
     b       QueueDone
 QueueC:
-    ldr     r4, =0xBBBB                 //color
+    ldr     r4, =0xFCA2                 //color
     mov     r3, #32                     //height
     mov     r2, #96                     //width
     ldr     r1, =596                    //y
     ldr     r0, =664                    //x
     stmfd   sp!,{r0-r4}                 //push all
     bl      drawRect
-    ldr     r4, =0xBBBB                 //color
+    ldr     r4, =0xFCA2                 //color
     mov     r3, #32                     //height
     mov     r2, #32                     //width
     ldr     r1, =564                    //y
@@ -1468,7 +1468,7 @@ QueueC:
     bl      drawRect
     b       QueueDone
 QueueD:
-    ldr     r4, =0xCCCC                 //color
+    ldr     r4, =0xFFE8                 //color
     mov     r3, #64                     //height
     mov     r2, #64                     //width
     ldr     r1, =564                    //y
@@ -1477,14 +1477,14 @@ QueueD:
     bl      drawRect
     b   QueueDone
 QueueE:
-    ldr     r4, =0xDDDD                 //color
+    ldr     r4, =0x57E5                 //color
     mov     r3, #32                     //height
     mov     r2, #64                     //width
     ldr     r1, =564                    //y
     ldr     r0, =696                    //x
     stmfd   sp!,{r0-r4}                 //push all
     bl      drawRect
-    ldr     r4, =0xDDDD                 //color
+    ldr     r4, =0x57E5                 //color
     mov     r3, #32                     //height
     mov     r2, #64                     //width
     ldr     r1, =596                    //y
@@ -1493,14 +1493,14 @@ QueueE:
     bl      drawRect
     b   QueueDone
 QueueF:
-    ldr     r4, =0x112233               //color
+    ldr     r4, =0xC99F                 //color
     mov     r3, #32                     //height
     mov     r2, #32                     //width
     ldr     r1, =564                    //y
     ldr     r0, =696                    //x
     stmfd   sp!,{r0-r4}                 //push all
     bl      drawRect
-    ldr     r4, =0x112233               //color
+    ldr     r4, =0xC99F                 //color
     mov     r3, #32                     //height
     mov     r2, #96                     //width
     ldr     r1, =596                    //y
@@ -1509,14 +1509,14 @@ QueueF:
     bl      drawRect
     b   QueueDone
 QueueG:
-    ldr     r4, =0x445566               //color
+    ldr     r4, =0xF8E4                 //color
     mov     r3, #32                     //height
     mov     r2, #64                     //width
     ldr     r1, =564                    //y
     ldr     r0, =664                    //x
     stmfd   sp!,{r0-r4}                 //push all
     bl      drawRect
-    ldr     r4, =0x445566               //color
+    ldr     r4, =0xF8E4                 //color
     mov     r3, #32                     //height
     mov     r2, #64                     //width
     ldr     r1, =596                    //y
@@ -2214,7 +2214,7 @@ GameState:
 TetrisGrid:	
 	.int		10			// tetrisGridCols
 	.int		19			// tetrisGridRows
-	.int		15			// tetrisGridBlockSize (n x n pixels)
+	.int		32			// tetrisGridBlockSize (n x n pixels)
 	.space		10 * 19 * 4	// tetrisGridData (cols x rows)
 TetrisGridEnd:
 
@@ -2242,13 +2242,13 @@ TetrisBlockEnd:
 
 .align 4
 TetrisBlockColors:
-	.word		0xFFFFFF
-	.word		0xAAAAAA
-	.word		0xBBBBBB	
-	.word		0xCCCCCC	
-	.word		0xDDDDDD	
-	.word		0x112233	
-	.word		0x445566		
+	.word		0x27DF
+	.word		0x29FF
+	.word		0xFCA2	
+	.word		0xFFE8	
+	.word		0x57E5	
+	.word		0xC99F	
+	.word		0xF8E4		
 
 .align 4
 TetrisBlockA:

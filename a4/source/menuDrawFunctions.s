@@ -1049,7 +1049,7 @@ drawTitle:
     mov     r3, #30                     //height
     mov     r2, #30                     //width
     mov     r1, #199                    //y
-    ldr     r0, =542                    //x
+    ldr     r0, =557                    //x
     stmfd   sp!,{r0-r4}                 //push all
     bl      drawRect
     ldr     r4, =0x0                    //color

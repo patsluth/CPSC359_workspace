@@ -35,7 +35,7 @@ LOAD build/utils.o
 .igot.plt       0x0000a590        0x0
  .igot.plt      0x00000000        0x0 build/main.o
 
-.text           0x0000a590     0x2280
+.text           0x0000a590     0x2284
  *.c.o(.text)
  *(.text)
  .text          0x0000a590      0xfc8 build/main.o
@@ -47,7 +47,7 @@ LOAD build/utils.o
                 0x0000b634                InitFrameBuffer
  .text          0x0000b6b4      0x1e4 build/sampleSNES.o
                 0x0000b6b4                sampleSNES
- .text          0x0000b898      0xe84 build/menuDrawFunctions.o
+ .text          0x0000b898      0xe88 build/menuDrawFunctions.o
                 0x0000b898                drawPauseMenu
                 0x0000b974                drawMainMenu
                 0x0000ba3c                WriteSentence
@@ -59,40 +59,40 @@ LOAD build/utils.o
                 0x0000be44                drawLossScreen
                 0x0000c17c                drawPaused
                 0x0000c3d0                drawTitle
- .text          0x0000c71c       0xf4 build/utils.o
-                0x0000c71c                clearScreen
-                0x0000c750                drawPixel
-                0x0000c778                drawRect
-                0x0000c7d0                positionToArrayOffset
-                0x0000c7e4                startTimer
+ .text          0x0000c720       0xf4 build/utils.o
+                0x0000c720                clearScreen
+                0x0000c754                drawPixel
+                0x0000c77c                drawRect
+                0x0000c7d4                positionToArrayOffset
+                0x0000c7e8                startTimer
 OUTPUT(build/output.elf elf32-littlearm)
 
-.glue_7         0x0000c810        0x0
+.glue_7         0x0000c814        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x0000c810        0x0
+.glue_7t        0x0000c814        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x0000c810        0x0
+.vfp11_veneer   0x0000c814        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x0000c810        0x0
+.v4_bx          0x0000c814        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x0000c810        0x0
+.iplt           0x0000c814        0x0
  .iplt          0x00000000        0x0 build/main.o
 
-.rel.dyn        0x0000c810        0x0
+.rel.dyn        0x0000c814        0x0
  .rel.iplt      0x00000000        0x0 build/main.o
 
-.bss            0x0000c810        0x0
- .bss           0x0000c810        0x0 build/main.o
- .bss           0x0000c810        0x0 build/randomNumber.o
- .bss           0x0000c810        0x0 build/jtag.o
- .bss           0x0000c810        0x0 build/framebuffer.o
- .bss           0x0000c810        0x0 build/sampleSNES.o
- .bss           0x0000c810        0x0 build/menuDrawFunctions.o
- .bss           0x0000c810        0x0 build/utils.o
+.bss            0x0000c814        0x0
+ .bss           0x0000c814        0x0 build/main.o
+ .bss           0x0000c814        0x0 build/randomNumber.o
+ .bss           0x0000c814        0x0 build/jtag.o
+ .bss           0x0000c814        0x0 build/framebuffer.o
+ .bss           0x0000c814        0x0 build/sampleSNES.o
+ .bss           0x0000c814        0x0 build/menuDrawFunctions.o
+ .bss           0x0000c814        0x0 build/utils.o
 
 .ARM.attributes
                 0x00000000       0x29
@@ -111,23 +111,23 @@ OUTPUT(build/output.elf elf32-littlearm)
  .ARM.attributes
                 0x000000f6       0x29 build/utils.o
 
-.debug_line     0x00000000      0xb64
- .debug_line    0x00000000      0x4b2 build/main.o
- .debug_line    0x000004b2       0x5a build/randomNumber.o
- .debug_line    0x0000050c       0x61 build/jtag.o
- .debug_line    0x0000056d       0x67 build/framebuffer.o
- .debug_line    0x000005d4       0xc9 build/sampleSNES.o
- .debug_line    0x0000069d      0x43d build/menuDrawFunctions.o
- .debug_line    0x00000ada       0x8a build/utils.o
+.debug_line     0x00000000      0xb69
+ .debug_line    0x00000000      0x4b4 build/main.o
+ .debug_line    0x000004b4       0x5a build/randomNumber.o
+ .debug_line    0x0000050e       0x61 build/jtag.o
+ .debug_line    0x0000056f       0x67 build/framebuffer.o
+ .debug_line    0x000005d6       0xc9 build/sampleSNES.o
+ .debug_line    0x0000069f      0x440 build/menuDrawFunctions.o
+ .debug_line    0x00000adf       0x8a build/utils.o
 
-.debug_info     0x00000000      0x2e6
+.debug_info     0x00000000      0x313
  .debug_info    0x00000000       0x68 build/main.o
  .debug_info    0x00000068       0x74 build/randomNumber.o
- .debug_info    0x000000dc       0x63 build/jtag.o
- .debug_info    0x0000013f       0x6a build/framebuffer.o
- .debug_info    0x000001a9       0x69 build/sampleSNES.o
- .debug_info    0x00000212       0x70 build/menuDrawFunctions.o
- .debug_info    0x00000282       0x64 build/utils.o
+ .debug_info    0x000000dc       0x6c build/jtag.o
+ .debug_info    0x00000148       0x73 build/framebuffer.o
+ .debug_info    0x000001bb       0x72 build/sampleSNES.o
+ .debug_info    0x0000022d       0x79 build/menuDrawFunctions.o
+ .debug_info    0x000002a6       0x6d build/utils.o
 
 .debug_abbrev   0x00000000       0x8a
  .debug_abbrev  0x00000000       0x12 build/main.o
