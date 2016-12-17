@@ -25,7 +25,7 @@ main:
 
 
 //	bl		clearScreen
-//	b		StartGame
+	b		StartGame
 
 
 
@@ -126,17 +126,25 @@ newBlock:
 		add     r1, #1
 		str     r1, [r0]
 		bl      UpdateScore
+		
+		
 
         
         nextDropTime    .req    r10
         sample          .req    r5
         dropLoop:
+        
+        
+			
+        
+        
             ldr     r0, =0x3F003004                         //loads the address for the timer into r0
             ldr     nextDropTime, [r0]                      //loads the current time into nextDropTime
 
-            ldr     r0, =300000                            //loads 1mil into r0
+            ldr     r0, =400000                            //loads 1mil into r0
             add     nextDropTime, r0                        //increments nextDropTime by 1mil microseconds. (1 second)
             
+  
                 rotateLoop:
                 bl      sampleSNES                          //query the SNES
                 
@@ -181,31 +189,45 @@ newBlock:
                                                             // tetrisRotateBlock(left)
                     mov	    r0, #0
                     bl	    tetrisRotateBlock
+                    
+                    bl	tetrisDrawGrid
+					bl  tetrisDrawBlock
+                    
                     b       userTranslationsDone
                 mainLoopRTPressed:
                                                             // tetrisRotateBlock(right)
                     mov	    r0, #1
-                    bl	    tetrisRotateBlock                    
+                    bl	    tetrisRotateBlock      
+                    
+                    bl	tetrisDrawGrid
+					bl  tetrisDrawBlock
+                                  
                     b       userTranslationsDone
                 mainLoopLeftPressed:
                                                             // tetrisTranslateBlock(int dx, int dy)
                     mov		r0, #-1
                     mov		r1, #0
-                    bl		tetrisTranslateBlock                   
+                    bl		tetrisTranslateBlock  
+                    
+                    bl	tetrisDrawGrid
+					bl  tetrisDrawBlock
+                                     
                     b       userTranslationsDone
                 mainLoopRightPressed:        
                                                             // tetrisTranslateBlock(int dx, int dy)
                     mov		r0, #1
                     mov		r1, #0
-                    bl		tetrisTranslateBlock                     
-                    b       userTranslationsDone
+                    bl		tetrisTranslateBlock   
                     
+                    bl	tetrisDrawGrid
+					bl  tetrisDrawBlock
+                                      
+                    b       userTranslationsDone
                     
                 userTranslationsDone:
                 
-					bl  tetrisDrawBlock
-					bl	tetrisDrawGrid
-
+					
+					
                 ldr     r0, =0x3F003004                         //loads the address for the timer into r0
                 ldr     r1, [r0]                                //loads the current time into r1
               
@@ -218,6 +240,9 @@ newBlock:
             bl		tetrisTranslateBlock
             
             bl 		tetrisGridClearCompleteRows
+            
+            bl	tetrisDrawGrid
+			bl  tetrisDrawBlock
             
             ldr     r0, =loseFlag                               //loads the lose flag address
             ldr     r0, [r0]                                    //loads the lose flag
@@ -871,6 +896,27 @@ tetrisSetGridBlockColor:
 	// write color to tetrisGridData
 	str		blockColor, 		[tetrisGridData, tetrisGridOffset]
 	
+	
+	
+	
+	// TEMP PAT
+	mul		r0, tetrisGridCols, tetrisGridRows
+	lsl		r0, #2	
+	add		r0, tetrisGridData, r0
+	//teq		blockColor, #0
+	add	blockColor, #10
+	str		blockColor, 				[r0, tetrisGridOffset]
+	//teq		r1, curColor
+	//str		r1, [r0, tetrisGridOffset]
+	//beq		tetrisDrawGridBlockEnd
+	
+	
+	
+	
+	
+	
+	
+	
 	pop		{ tetrisGridCols - tetrisGridOffset }
 	pop 	{ lr }
 	
@@ -1073,7 +1119,6 @@ tetrisDrawGrid:
 			
 			tetrisDrawGridBlockSkip:
 			
-				nop
 				b		tetrisDrawGridBlockEnd
 			
 			tetrisDrawGridBlock:
@@ -1085,7 +1130,20 @@ tetrisDrawGrid:
 				lsl		tetrisGridOffset, #2
 			
 				ldr		curColor, 				[tetrisGridData, tetrisGridOffset]
-
+				
+				
+				
+				// TEMP PAT
+				mul		r0, tetrisGridCols, tetrisGridRows
+				lsl		r0, #2	
+				add		r0, tetrisGridData, r0
+				ldr		r1, 				[r0, tetrisGridOffset]
+				teq		r1, #0
+				str		r1, [r0, tetrisGridOffset]
+				beq		tetrisDrawGridBlockEnd
+				
+				
+				
 
 				x		.req r0
 				y		.req r1
@@ -1858,6 +1916,17 @@ tetrisRotateBlock:
 	// copy block in current state
 	push 	{ blockX - blockTypeOffset }
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// update block values
 	//
 	teq		rotationDirection, 	#0
@@ -1901,7 +1970,17 @@ tetrisRotateBlock:
 	onNoRotationCollision:
 	
 		pop		{ blockX - blockTypeOffset }	// pop updated block
+		
+		// TEMP PAT
+		mov		r12, blockColor
+		mov		blockColor, #0
+		str		blockColor, [sp, #8]
+		bl writeBlockToGrid
+		mov		blockColor, r12
+		
+		
 		addeq	sp, #20							// delete previous block copy
+		
 		pop		{ lr }
 		push	{ blockX - blockTypeOffset }	// push updated bloc
 		b 		tetrisRotateBlockEnd
@@ -1998,6 +2077,18 @@ tetrisTranslateBlock:
 	onNoTranslationCollision:
 	
 		pop		{ blockX - blockTypeOffset }	// pop updated block
+		
+		
+		
+		mov		r0, #0
+		str		r0, [sp, #8]
+		
+		bl  tetrisDrawBlock
+		
+		
+		
+		
+		
 		addeq	sp, #20							// delete previous block copy
 		pop		{ lr }
 		push	{ blockX - blockTypeOffset }	// push updated block
@@ -2215,6 +2306,7 @@ TetrisGrid:
 	.int		10			// tetrisGridCols
 	.int		19			// tetrisGridRows
 	.int		32			// tetrisGridBlockSize (n x n pixels)
+	.space		10 * 19 * 4	// tetrisGridData (cols x rows)
 	.space		10 * 19 * 4	// tetrisGridData (cols x rows)
 TetrisGridEnd:
 

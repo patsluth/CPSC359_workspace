@@ -1,0 +1,200 @@
+// CPSC 359, Assignment 5 Question 2
+// By: Patrick Sluth
+// Tutorial 3
+// Submitted: Dec 8, 2016
+
+
+
+
+
+.constant
+	OBJREF	0x40
+.end-constant
+
+
+
+
+
+.main
+
+.var
+.end-var
+
+start:
+
+
+
+	// abs(5)
+	BIPUSH			2
+	BIPUSH			3
+	IPOW
+	//POP
+	
+	IRETURN
+
+
+
+
+	// 7 % 3
+	BIPUSH			3
+	BIPUSH			7
+	IMOD
+	//POP
+	
+	// 7 / 3
+	BIPUSH			3
+	BIPUSH			7
+	IDIV
+	//POP
+	
+	// 7 * 3
+	BIPUSH			3
+	BIPUSH			7
+	IMUL
+	//POP
+	
+	// abs(-5)
+	BIPUSH			-5
+	IABS
+	//POP
+	
+	// abs(5)
+	BIPUSH			5
+	IABS
+	//POP
+	
+	
+	
+	
+	
+	// 2.1
+	BIPUSH			7
+	IPRIME
+	//POP
+	
+	BIPUSH			8
+	IPRIME
+	//POP
+		
+		
+		
+		
+	
+	// 2.2
+	BIPUSH			2
+	BIPUSH			3
+	IPOW
+	//POP
+		
+
+
+
+
+	IRETURN
+		
+.end-main
+
+
+
+
+
+// print converts a number into a string of
+// characters and prints them.  All of the characters
+// are pushed onto the stack, least significant
+// digit first, then popped off and printed.
+.method print( total ) 		
+				
+.var
+	place
+	index
+.end-var
+
+print: 	BIPUSH 0x9		// there are 8 nibbles in each integer--setting
+				//   this as nine pushes 10 characters onto the
+ 				//   stack, thus a total of ten printed digits,
+				//   but setting this less does not remove the
+				//   two leading zeros, just removes significant
+				//   digits
+	ISTORE index
+	BIPUSH 0x1		// comparison bit
+	ISTORE place
+print1:	BIPUSH 0x0
+	ILOAD index		// index = index - 1
+	BIPUSH 0x1
+	ISUB
+	DUP
+	IFEQ pall		// if index = 0  goto pall
+	ISTORE index
+	ILOAD total		// else
+	ILOAD place		//
+	IAND			//   if 1st bit of current nibble is zero (total & place)
+	IFEQ print2		//     goto print2
+	BIPUSH 0x1		//   else set first bit of character
+	IADD
+print2: ILOAD place		//   place = place << 1 
+	DUP
+	IADD
+	ISTORE place
+	ILOAD total
+	ILOAD place
+	IAND			//   if 2nd bit of current nibble is zero (total & place)
+	IFEQ print3		//     goto print3
+	BIPUSH 0x2		//   else set second bit of character
+	IADD	
+print3: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	ILOAD total
+	ILOAD place
+	IAND			//   if 3rd bit of current nibble is zero (total & place)
+	IFEQ print4		//     goto print4
+	BIPUSH 0x4		//   else set second bit of character
+	IADD	
+print4: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	ILOAD total
+	ILOAD place
+	IAND			//   if 4th bit of current nibble is zero (total & place)
+	IFEQ print5		//     goto print5
+	BIPUSH 0x8		//   else set second bit of character
+	IADD	
+print5: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	GOTO print1
+	
+pall:   POP			// Pop off leading 0's
+	POP
+	BIPUSH 0x9
+	ISTORE index
+pall1:	ILOAD index		// index = index - 1
+	BIPUSH 0x1
+	ISUB
+	DUP
+	IFEQ return		// if index = 0  return
+	ISTORE index
+	DUP
+	BIPUSH 0xa		// else if character < 0xa goto pall1
+	ISUB
+	IFLT pall2
+	BIPUSH 0x37		// else convert character to "A"-"F"
+	IADD
+	OUT			// print character
+	GOTO pall1		// goto pall (prepare & print next character)
+pall2:	BIPUSH 0x30		// convert character to "0"-"9"
+	IADD
+	OUT			// print character
+	GOTO pall1		// goto pall1 (prepare & print next character)
+return:	
+	//BIPUSH 0xa		// print newline
+	//OUT
+	IRETURN			// no return value
+.end-method
+
+
+
+

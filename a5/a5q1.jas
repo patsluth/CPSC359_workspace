@@ -1,0 +1,784 @@
+// CPSC 359, Assignment 5 Question 1
+// By: Patrick Sluth
+// Tutorial 3
+// Submitted: Dec 8, 2016
+
+
+
+
+
+.constant
+	OBJREF	0x40
+.end-constant
+
+
+
+
+
+.main
+
+.var
+.end-var
+
+start:
+
+	// 1B.1
+	LDC_W			OBJREF
+	BIPUSH			-5
+	BIPUSH			100
+	INVOKEVIRTUAL	isPrimeFromTo
+	
+	
+	// 1B.2
+	LDC_W			OBJREF
+	BIPUSH			-5
+	BIPUSH			5
+	BIPUSH			3
+	INVOKEVIRTUAL	isPowerFromTo
+
+
+	LDC_W 			OBJREF
+	BIPUSH			-5
+	BIPUSH			5
+	INVOKEVIRTUAL 	printNumbersFromTo
+
+
+	IRETURN
+		
+.end-main
+
+
+
+
+
+.method isPrime(n)
+
+.var
+	i
+	returnVal
+.end-var
+
+isPrime:
+
+	// if n < 0
+	ILOAD			n
+	IFLT			isPrime_nLT_zero
+
+	// if n == 0
+	BIPUSH			0
+	ILOAD			n
+	ISUB
+	IFEQ			isPrime_nEQ_zero
+	
+	// if n == 1
+	BIPUSH			1
+	ILOAD			n
+	ISUB
+	IFEQ			isPrime_nEQ_one
+	
+	// if n == 2
+	BIPUSH			2
+	ILOAD			n
+	ISUB
+	IFEQ			isPrime_nEQ_two
+	
+	// if n == 3
+	BIPUSH			3
+	ILOAD			n
+	ISUB
+	IFEQ			isPrime_nEQ_three
+	
+	GOTO			isPrime_nGT_three
+	
+isPrime_nLT_zero:
+	
+	GOTO			isPrimeEnd_false
+		
+isPrime_nEQ_zero:
+	
+	GOTO			isPrimeEnd_false
+	
+isPrime_nEQ_one:
+	
+	GOTO			isPrimeEnd_false
+	
+isPrime_nEQ_two:
+	
+	GOTO			isPrimeEnd_true
+	
+isPrime_nEQ_three:
+	
+	GOTO			isPrimeEnd_true
+	
+isPrime_nGT_three:
+
+	// if (n % 2 == 0) == 0
+	//		return false
+	LDC_W			OBJREF
+	BIPUSH			2
+	ILOAD			n
+	INVOKEVIRTUAL	mod
+	IFEQ			isPrimeEnd_false
+	
+	// if (n % 3 == 0) == 0
+	//		return false
+	LDC_W			OBJREF
+	BIPUSH			3
+	ILOAD			n
+	INVOKEVIRTUAL	mod
+	IFEQ			isPrimeEnd_false
+	
+	// i = 5
+	BIPUSH			5
+	ISTORE			i
+	
+	// while i*i <= n
+	isPrime_nGT_two_while:
+		
+		BIPUSH			6
+		BIPUSH			7
+		BIPUSH			8
+		POP
+		POP
+		POP
+		
+		// i*i
+		LDC_W			OBJREF
+		ILOAD			i
+		ILOAD			i
+		INVOKEVIRTUAL	multiply
+		
+		// i*i <= n
+		ILOAD 			n
+		SWAP
+		ISUB
+		IFLT			isPrimeEnd_true
+		
+		// if (n % i == 0) == 0
+		// 		return false
+		LDC_W			OBJREF
+		ILOAD			i
+		ILOAD			n
+		INVOKEVIRTUAL	mod
+		IFEQ			isPrimeEnd_false
+		
+		// if (n % (i + 2) == 0)
+		// 		return false
+		LDC_W			OBJREF
+		// i += 2
+		ILOAD			i
+		BIPUSH			2
+		IADD
+		ILOAD			n
+		INVOKEVIRTUAL	mod
+		IFEQ			isPrimeEnd_false
+		
+		// i += 6
+		ILOAD			i
+		BIPUSH			6
+		IADD
+		ISTORE			i
+		GOTO			isPrime_nGT_two_while
+	
+isPrimeEnd_true:
+
+	BIPUSH			1
+	ISTORE			returnVal
+	GOTO			isPrimeReturn
+
+isPrimeEnd_false:
+
+	BIPUSH			0
+	ISTORE			returnVal
+	GOTO			isPrimeReturn
+	
+isPrimeReturn:
+		
+	ILOAD			returnVal
+	IRETURN
+	
+.end-method
+
+
+
+
+
+// isPrime testing method
+.method isPrimeFromTo(n, m)
+
+.var
+.end-var
+
+isPrimeFromTo:
+
+	BIPUSH			0x0A	// \n
+	BIPUSH			0x65	// e
+	BIPUSH			0x6D	// m
+	BIPUSH			0x69	// i
+	BIPUSH			0x72	// r
+	BIPUSH			0x50	// P
+	BIPUSH			0x73	// s
+	BIPUSH			0x69	// i
+	OUT
+	OUT
+	OUT
+	OUT
+	OUT
+	OUT
+	OUT
+	OUT
+
+	isPrimeFromToLoop:
+	
+		BIPUSH			0x09	// \t
+		OUT
+	
+		// Print n
+		LDC_W 			OBJREF
+		ILOAD			n
+		INVOKEVIRTUAL 	print
+		
+		BIPUSH			0x20	// space
+		OUT
+		
+		LDC_W 			OBJREF
+		ILOAD			n
+		INVOKEVIRTUAL 	isPrime
+		IFEQ			isPrimeFromTo_nIsNotPrime
+		GOTO			isPrimeFromTo_nIsPrime
+		
+		isPrimeFromTo_nIsPrime:
+		
+			BIPUSH			0x5D	// ]
+			BIPUSH			0x45	// E
+			BIPUSH			0x4D	// M
+			BIPUSH			0x49	// I
+			BIPUSH			0x52	// R
+			BIPUSH			0x50	// P
+			BIPUSH			0x5B	// [
+			OUT
+			OUT
+			OUT
+			OUT
+			OUT
+			OUT
+			OUT
+			
+		isPrimeFromTo_nIsNotPrime:
+		
+		BIPUSH			0x0A	// \n
+		OUT
+	
+		// if n == m
+		ILOAD			m
+		ILOAD			n
+		ISUB
+		IFEQ			isPrimeFromToEnd
+	
+		// n += 1
+		ILOAD			n
+		BIPUSH			1
+		IADD
+		ISTORE			n
+		GOTO			isPrimeFromToLoop
+		
+isPrimeFromToEnd:
+
+	BIPUSH			0x0A	// \n
+	OUT
+	
+	IRETURN
+	
+.end-method
+
+
+
+
+
+// returns n ^ m
+.method power(n, m)
+
+.var
+	returnVal
+.end-var
+
+power:
+
+	// n = abs(n)
+	LDC_W			OBJREF
+	ILOAD			n
+	INVOKEVIRTUAL	abs
+	ISTORE			n
+	
+	// m = abs(m)
+	LDC_W			OBJREF
+	ILOAD			m
+	INVOKEVIRTUAL	abs
+	ISTORE			m
+	
+	// if (m == 0)
+	ILOAD			m
+	IFEQ			power_mEQ_zero
+	GOTO			power_mNEQ_zero
+	
+	power_mEQ_zero:
+	
+		BIPUSH			1
+		GOTO			powerEnd
+		
+	power_mNEQ_zero:
+	
+		ILOAD			n
+		ISTORE			returnVal
+	
+		powerLoop:
+
+			// if (m == 1)
+			ILOAD			m
+			BIPUSH			1
+			IF_ICMPEQ		powerLoopEnd
+			
+			LDC_W			OBJREF
+			ILOAD			returnVal
+			ILOAD			n
+			INVOKEVIRTUAL	multiply
+			
+			// n * n
+			ISTORE			returnVal
+			
+			// m -= 1
+			ILOAD			m
+			BIPUSH			1
+			ISUB
+			ISTORE			m
+			
+			GOTO			powerLoop
+			
+		powerLoopEnd:
+
+			ILOAD			returnVal
+			GOTO			powerEnd
+		
+powerEnd:
+	
+	IRETURN
+	
+.end-method
+
+
+
+
+
+// isPower testing method (n0 to n) ^ m
+.method isPowerFromTo(n0, n, m)
+
+.var
+.end-var
+
+isPowerFromTo:
+
+	BIPUSH			0x0A	// \n
+	BIPUSH			0x72	// r
+	BIPUSH			0x65	// e
+	BIPUSH			0x77	// w
+	BIPUSH			0x6F	// o
+	BIPUSH			0x50	// P
+	OUT
+	OUT
+	OUT
+	OUT
+	OUT
+	OUT
+
+	isPowerFromToLoop:
+	
+		BIPUSH			0x09	// \t
+		OUT
+	
+		LDC_W 			OBJREF
+		ILOAD			n0
+		INVOKEVIRTUAL 	printNumber
+		
+		BIPUSH			0x20	// space
+		BIPUSH			0x5E	// ^
+		BIPUSH			0x20	// space
+		OUT
+		OUT
+		OUT
+		
+		LDC_W 			OBJREF
+		ILOAD			m
+		INVOKEVIRTUAL 	printNumber
+		
+		BIPUSH			0x20	// space
+		BIPUSH			0x3D	// =
+		BIPUSH			0x20	// space
+		OUT
+		OUT
+		OUT
+		
+		LDC_W 			OBJREF
+		ILOAD			n0
+		ILOAD			m
+		INVOKEVIRTUAL 	power
+		LDC_W 			OBJREF
+		SWAP
+		INVOKEVIRTUAL 	printNumber
+			
+		BIPUSH			0x0A	// \n
+		OUT
+		
+		// if n0 == n
+		ILOAD			n
+		ILOAD			n0
+		ISUB
+		IFEQ			isPowerFromToEnd
+	
+		// n0 += 1
+		ILOAD			n0
+		BIPUSH			1
+		IADD
+		ISTORE			n0
+		GOTO			isPowerFromToLoop
+		
+isPowerFromToEnd:
+
+	BIPUSH			0x0A	// \n
+	OUT
+	
+	IRETURN
+	
+.end-method
+
+
+
+
+
+// returns n / m
+.method divide(n, m)
+
+.var
+.end-var
+
+divide:
+
+	BIPUSH			0	// quotient
+	
+	divideLoop:
+
+		ILOAD			m
+		ILOAD			n
+		ISUB	
+		DUP
+	
+		IFLT			divideLoopEnd
+		
+		// TOS = m - n
+		ISTORE			m
+		// TOS = quotient
+		BIPUSH			1
+		iADD		
+		
+		GOTO			divideLoop
+
+	divideLoopEnd:
+	
+		// TOS = m - n
+		POP
+
+		IRETURN
+
+.end-method
+
+
+
+
+
+// returns n % m
+.method mod(n, m)
+
+.var
+.end-var
+
+mod:
+
+	BIPUSH			0	// quotient
+	
+	modLoop:
+
+		ILOAD			m
+		ILOAD			n
+		ISUB	
+		DUP
+	
+		IFLT			modLoopEnd
+		
+		// TOS = m - n
+		ISTORE			m
+		// TOS = quotient
+		BIPUSH			1
+		iADD		
+		
+		GOTO			modLoop
+
+	modLoopEnd:
+	
+		// TOS = m - n
+		POP
+		POP
+		ILOAD			m
+
+		IRETURN
+
+.end-method
+
+
+
+
+
+// returns n * m
+.method multiply(n, m)
+
+.var
+.end-var
+
+multiply:
+
+	BIPUSH			0	// returnVal
+
+	multiplyLoop:
+
+		ILOAD			n
+		IFEQ			multiplyLoopEnd
+		
+		// n -= 1
+		ILOAD			n
+		BIPUSH			1
+		ISUB
+		ISTORE			n
+			
+		ILOAD			m
+		IADD
+		
+		GOTO			multiplyLoop
+		
+multiplyLoopEnd:
+
+	IRETURN
+	
+.end-method
+
+
+
+
+
+// returns abs(n)
+.method abs(n)
+
+.var
+.end-var
+
+abs:
+
+	// if (n < 0)
+	ILOAD			n
+	IFLT			abs_nLT_zero
+	GOTO			absEnd
+		
+	abs_nLT_zero:
+	
+		ILOAD			n
+		INEG
+		ISTORE			n
+		GOTO			absEnd
+		
+absEnd:
+
+	ILOAD			n
+	IRETURN
+	
+.end-method
+
+
+
+
+
+.method printNumber(n)
+
+.var
+.end-var
+
+printNumber:
+
+	// if (n < 0)
+	ILOAD			n
+	IFLT			printNumber_nLT_zero
+	GOTO			printNumberEnd
+		
+	printNumber_nLT_zero:
+	
+		ILOAD			n
+		INEG
+		ISTORE			n
+	
+		BIPUSH			0x2D	// -
+		OUT
+		
+printNumberEnd:
+	
+	// Print m
+	LDC_W 			OBJREF
+	ILOAD			n
+	INVOKEVIRTUAL 	print
+	
+	IRETURN
+	
+.end-method
+
+
+
+
+
+// print numbers n to m
+.method printNumbersFromTo(n, m)
+
+.var
+.end-var
+
+printNumbersFromTo:
+
+	printNumbersFromToLoop:
+	
+		LDC_W 			OBJREF
+		ILOAD			n
+		INVOKEVIRTUAL 	printNumber
+		
+		BIPUSH			0x0A	// \n
+		OUT
+	
+		// if n == 5
+		ILOAD			m
+		ILOAD			n
+		ISUB
+		IFEQ			printNumbersFromToEnd
+	
+		// n += 1
+		ILOAD			n
+		BIPUSH			1
+		IADD
+		ISTORE			n
+		GOTO			printNumbersFromToLoop
+		
+printNumbersFromToEnd:
+	
+	BIPUSH			0x0A	// \n
+	OUT
+	
+	IRETURN
+	
+.end-method
+
+
+
+
+
+// print converts a number into a string of
+// characters and prints them.  All of the characters
+// are pushed onto the stack, least significant
+// digit first, then popped off and printed.
+.method print( total ) 		
+				
+.var
+	place
+	index
+.end-var
+
+print: 	BIPUSH 0x9		// there are 8 nibbles in each integer--setting
+				//   this as nine pushes 10 characters onto the
+ 				//   stack, thus a total of ten printed digits,
+				//   but setting this less does not remove the
+				//   two leading zeros, just removes significant
+				//   digits
+	ISTORE index
+	BIPUSH 0x1		// comparison bit
+	ISTORE place
+print1:	BIPUSH 0x0
+	ILOAD index		// index = index - 1
+	BIPUSH 0x1
+	ISUB
+	DUP
+	IFEQ pall		// if index = 0  goto pall
+	ISTORE index
+	ILOAD total		// else
+	ILOAD place		//
+	IAND			//   if 1st bit of current nibble is zero (total & place)
+	IFEQ print2		//     goto print2
+	BIPUSH 0x1		//   else set first bit of character
+	IADD
+print2: ILOAD place		//   place = place << 1 
+	DUP
+	IADD
+	ISTORE place
+	ILOAD total
+	ILOAD place
+	IAND			//   if 2nd bit of current nibble is zero (total & place)
+	IFEQ print3		//     goto print3
+	BIPUSH 0x2		//   else set second bit of character
+	IADD	
+print3: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	ILOAD total
+	ILOAD place
+	IAND			//   if 3rd bit of current nibble is zero (total & place)
+	IFEQ print4		//     goto print4
+	BIPUSH 0x4		//   else set second bit of character
+	IADD	
+print4: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	ILOAD total
+	ILOAD place
+	IAND			//   if 4th bit of current nibble is zero (total & place)
+	IFEQ print5		//     goto print5
+	BIPUSH 0x8		//   else set second bit of character
+	IADD	
+print5: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	GOTO print1
+	
+pall:   POP			// Pop off leading 0's
+	POP
+	BIPUSH 0x9
+	ISTORE index
+pall1:	ILOAD index		// index = index - 1
+	BIPUSH 0x1
+	ISUB
+	DUP
+	IFEQ return		// if index = 0  return
+	ISTORE index
+	DUP
+	BIPUSH 0xa		// else if character < 0xa goto pall1
+	ISUB
+	IFLT pall2
+	BIPUSH 0x37		// else convert character to "A"-"F"
+	IADD
+	OUT			// print character
+	GOTO pall1		// goto pall (prepare & print next character)
+pall2:	BIPUSH 0x30		// convert character to "0"-"9"
+	IADD
+	OUT			// print character
+	GOTO pall1		// goto pall1 (prepare & print next character)
+return:	
+	//BIPUSH 0xa		// print newline
+	//OUT
+	IRETURN			// no return value
+.end-method
+
+
+
+
